@@ -28,11 +28,11 @@
             min-height: 100vh;
         }
 
-        /* --- SECCIÓN 1: HEADER (Estilo blanco limpio como "Laundry Services") --- */
+        /* --- SECCIÓN 1: HEADER --- */
         header {
             background-color: white;
             padding: 3rem 2rem;
-            text-align: left; /* Alineación izquierda como en la imagen */
+            text-align: left;
             width: 100%;
             box-sizing: border-box;
             max-width: 1200px;
@@ -55,7 +55,7 @@
             max-width: 600px;
         }
 
-        /* --- SECCIÓN 2: FILTROS (La franja turquesa) --- */
+        /* --- SECCIÓN 2: FILTROS --- */
         .filter-section {
             background-color: var(--primary-teal);
             padding: 3rem 1rem;
@@ -82,7 +82,6 @@
             margin: 0 auto;
         }
 
-        /* Botones estilo "Píldora" */
         .filter-btn {
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
@@ -110,7 +109,7 @@
 
         /* --- SECCIÓN 3: GRID DE CONTENIDO --- */
         .content-wrapper {
-            flex: 1; /* Empuja el footer hacia abajo */
+            flex: 1;
             padding: 4rem 2rem;
             background-color: var(--bg-light);
             display: flex;
@@ -127,7 +126,7 @@
 
         .card {
             background: white;
-            border-radius: 20px; /* Bordes muy redondeados como en la imagen */
+            border-radius: 20px;
             padding: 2rem;
             box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
@@ -144,7 +143,6 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        /* Pequeña linea de color superior en las cards */
         .card::before {
             content: '';
             position: absolute;
@@ -152,7 +150,7 @@
             left: 0;
             width: 100%;
             height: 6px;
-            background: var(--bg-light); /* Default */
+            background: var(--bg-light);
         }
         
         /* Colores específicos por categoría */
@@ -187,7 +185,7 @@
         .card-link {
             display: inline-block;
             text-align: center;
-            background-color: var(--accent-coral); /* Botón color salmón */
+            background-color: var(--accent-coral);
             color: white;
             text-decoration: none;
             padding: 12px 24px;
@@ -204,7 +202,7 @@
             transform: scale(1.05);
         }
 
-        /* --- FOOTER (El bloque color salmón del final) --- */
+        /* --- FOOTER --- */
         footer {
             background-color: var(--accent-coral);
             color: white;
@@ -213,7 +211,6 @@
             position: relative;
         }
 
-        /* Efecto decorativo simple en el top del footer */
         footer::before {
             content: '';
             position: absolute;
@@ -222,7 +219,7 @@
             width: 100%;
             height: 20px;
             background: white;
-            border-radius: 0 0 50% 50%; /* Curva suave */
+            border-radius: 0 0 50% 50%;
         }
 
         .footer-content h2 {
@@ -270,51 +267,16 @@
     <div class="content-wrapper">
         <div class="grid-container">
 
-            <div class="card category-grammar filter-item">
-                <div>
-                    <span class="card-tag">Grammar Lesson</span>
-                    <h3>Present Simple</h3>
-                    <p>Estructuras básicas, reglas de tercera persona y auxiliares do/does.</p>
-                </div>
-                <a href="grammar_lesson_1.html" class="card-link">Abrir Lección</a>
-            </div>
-
-            <div class="card category-writing filter-item">
-                <div>
-                    <span class="card-tag">Writing Practice</span>
-                    <h3>My Daily Routine</h3>
-                    <p>Redacta un texto sobre tu día a día utilizando conectores de secuencia.</p>
-                </div>
-                <a href="writing_practice_1.html" class="card-link">Empezar</a>
-            </div>
-
-            <div class="card category-media filter-item">
-                <div>
-                    <span class="card-tag">Media & Listening</span>
-                    <h3>Video: UK History</h3>
-                    <p>Video documental interactivo con preguntas de comprensión auditiva.</p>
-                </div>
-                <a href="media_uk_history.html" class="card-link">Ver Video</a>
-            </div>
-
-            <div class="card category-reading filter-item">
-                <div>
-                    <span class="card-tag">Reading Practice</span>
-                    <h3>Sherlock Holmes</h3>
-                    <p>Lectura adaptada nivel intermedio con vocabulario clave resaltado.</p>
-                </div>
-                <a href="reading_sherlock.html" class="card-link">Leer</a>
-            </div>
-
             <div class="card category-games filter-item">
                 <div>
-                    <span class="card-tag">Games</span>
-                    <h3>Verb Race</h3>
-                    <p>Juego contrarreloj para conjugar verbos irregulares.</p>
+                    <span class="card-tag">Interactive Game</span>
+                    <h3>Grammaropoly</h3>
+                    <p>¡El juego de mesa definitivo! Compite con tus compañeros, conjuga verbos y gana dinero para ser el campeón.</p>
                 </div>
-                <a href="game_verbs.html" class="card-link">Jugar</a>
+                <a href="TI_Grammarpoly.html" class="card-link">Jugar Ahora</a>
             </div>
-<div class="card category-grammar filter-item">
+
+            <div class="card category-grammar filter-item">
                 <div>
                     <span class="card-tag">Grammar Lesson</span>
                     <h3>Conditionals Master Class</h3>
@@ -331,7 +293,8 @@
                 </div>
                 <a href="practice_conditionals.html" class="card-link">Iniciar Examen</a>
             </div>
-             </div>
+
+        </div>
     </div>
 
     <footer>
@@ -354,7 +317,6 @@
             var btns = document.getElementsByClassName("filter-btn");
             for (i = 0; i < btns.length; i++) {
                 btns[i].classList.remove("active");
-                // Comprobación simple para resaltar el botón clickeado
                 if (btns[i].getAttribute("onclick").includes("'" + c + "'")) {
                     btns[i].classList.add("active");
                 }
@@ -365,8 +327,7 @@
             for (i = 0; i < x.length; i++) {
                 removeClass(x[i], "show");
                 if (x[i].className.indexOf(c) > -1) {
-                    x[i].style.display = "flex"; // Usamos flex para mantener el diseño de la card
-                    // Pequeño timeout para la animación
+                    x[i].style.display = "flex"; 
                     setTimeout((el) => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, 10, x[i]);
                 } else {
                     x[i].style.display = "none";
@@ -392,5 +353,3 @@
 
 </body>
 </html>
-
-
