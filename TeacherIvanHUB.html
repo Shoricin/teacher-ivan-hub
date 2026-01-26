@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de colores extraída de la imagen */
+            --primary-teal: #5dcbc3;      /* El color turquesa de la sección media */
+            --accent-coral: #ff9a8b;      /* El color salmón/rosado del footer y botones */
+            --accent-yellow: #fmd58a;     /* Un amarillo suave para detalles (opcional) */
+            --text-dark: #2d2d2d;         /* Color de texto principal (casi negro) */
+            --text-light: #ffffff;
+            --bg-light: #f9f9f9;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- SECCIÓN 1: HEADER (Estilo blanco limpio como "Laundry Services") --- */
+        header {
+            background-color: white;
+            padding: 3rem 2rem;
+            text-align: left; /* Alineación izquierda como en la imagen */
+            width: 100%;
+            box-sizing: border-box;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #777;
+            margin-top: 1rem;
+            font-weight: 300;
+            max-width: 600px;
+        }
+
+        /* --- SECCIÓN 2: FILTROS (La franja turquesa) --- */
+        .filter-section {
+            background-color: var(--primary-teal);
+            padding: 3rem 1rem;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(93, 203, 195, 0.3);
+        }
+
+        .section-title {
+            color: white;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Botones estilo "Píldora" */
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .filter-btn:hover {
+            background: white;
+            color: var(--primary-teal);
+            transform: translateY(-3px);
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: var(--primary-teal);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- SECCIÓN 3: GRID DE CONTENIDO --- */
+        .content-wrapper {
+            flex: 1; /* Empuja el footer hacia abajo */
+            padding: 4rem 2rem;
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px; /* Bordes muy redondeados como en la imagen */
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        /* Pequeña linea de color superior en las cards */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--bg-light); /* Default */
+        }
+        
+        /* Colores específicos por categoría */
+        .category-grammar::before { background: var(--primary-teal); }
+        .category-writing::before { background: var(--accent-coral); }
+        .category-media::before { background: #f59e0b; }
+        .category-reading::before { background: #8b5cf6; }
+        .category-games::before { background: #ec4899; }
+
+        .card h3 {
+            margin-top: 10px;
+            color: var(--text-dark);
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+        }
+
+        .card-link {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--accent-coral); /* Botón color salmón */
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.2s;
+            align-self: flex-start;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(255, 154, 139, 0.4);
+        }
+
+        .card-link:hover {
+            background-color: #ff7e6b;
+            transform: scale(1.05);
+        }
+
+        /* --- FOOTER (El bloque color salmón del final) --- */
+        footer {
+            background-color: var(--accent-coral);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Efecto decorativo simple en el top del footer */
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: white;
+            border-radius: 0 0 50% 50%; /* Curva suave */
+        }
+
+        .footer-content h2 {
+            margin: 0 0 1rem 0;
+            font-size: 2rem;
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 1rem;
+            display: inline-block;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card { animation: fadeIn 0.5s ease-out forwards; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teacher Ivan HUB: <br> Educative Resources</h1>
+        <p class="subtitle">Bienvenido a tu centro de aprendizaje. Selecciona una categoría abajo para empezar.</p>
+    </header>
+
+    <div class="filter-section">
+        <div class="section-title">Categorías de Estudio</div>
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterSelection('all')">Ver Todo</button>
+            <button class="filter-btn" onclick="filterSelection('grammar')">Grammar</button>
+            <button class="filter-btn" onclick="filterSelection('writing')">Writing</button>
+            <button class="filter-btn" onclick="filterSelection('media')">Media</button>
+            <button class="filter-btn" onclick="filterSelection('reading')">Reading</button>
+            <button class="filter-btn" onclick="filterSelection('games')">Games</button>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="grid-container">
+
+            <div class="card category-grammar filter-item">
+                <div>
+                    <span class="card-tag">Grammar Lesson</span>
+                    <h3>Present Simple</h3>
+                    <p>Estructuras básicas, reglas de tercera persona y auxiliares do/does.</p>
+                </div>
+                <a href="grammar_lesson_1.html" class="card-link">Abrir Lección</a>
+            </div>
+
+            <div class="card category-writing filter-item">
+                <div>
+                    <span class="card-tag">Writing Practice</span>
+                    <h3>My Daily Routine</h3>
+                    <p>Redacta un texto sobre tu día a día utilizando conectores de secuencia.</p>
+                </div>
+                <a href="writing_practice_1.html" class="card-link">Empezar</a>
+            </div>
+
+            <div class="card category-media filter-item">
+                <div>
+                    <span class="card-tag">Media & Listening</span>
+                    <h3>Video: UK History</h3>
+                    <p>Video documental interactivo con preguntas de comprensión auditiva.</p>
+                </div>
+                <a href="media_uk_history.html" class="card-link">Ver Video</a>
+            </div>
+
+            <div class="card category-reading filter-item">
+                <div>
+                    <span class="card-tag">Reading Practice</span>
+                    <h3>Sherlock Holmes</h3>
+                    <p>Lectura adaptada nivel intermedio con vocabulario clave resaltado.</p>
+                </div>
+                <a href="reading_sherlock.html" class="card-link">Leer</a>
+            </div>
+
+            <div class="card category-games filter-item">
+                <div>
+                    <span class="card-tag">Games</span>
+                    <h3>Verb Race</h3>
+                    <p>Juego contrarreloj para conjugar verbos irregulares.</p>
+                </div>
+                <a href="game_verbs.html" class="card-link">Jugar</a>
+            </div>
+
+             </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h2>Keep Learning!</h2>
+            <p>La consistencia es la clave del éxito.</p>
+            
+            <div class="copyright">
+                &copy; 2026 Teacher Ivan. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("filter-item");
+            
+            // Gestión de botones activos
+            var btns = document.getElementsByClassName("filter-btn");
+            for (i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+                // Comprobación simple para resaltar el botón clickeado
+                if (btns[i].getAttribute("onclick").includes("'" + c + "'")) {
+                    btns[i].classList.add("active");
+                }
+            }
+
+            // Lógica de filtrado
+            if (c == "all") c = "";
+            for (i = 0; i < x.length; i++) {
+                removeClass(x[i], "show");
+                if (x[i].className.indexOf(c) > -1) {
+                    x[i].style.display = "flex"; // Usamos flex para mantener el diseño de la card
+                    // Pequeño timeout para la animación
+                    setTimeout((el) => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, 10, x[i]);
+                } else {
+                    x[i].style.display = "none";
+                }
+            }
+        }
+
+        function removeClass(element, name) {
+            var arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (var i = 0; i < arr2.length; i++) {
+                while (arr1.indexOf(arr2[i]) > -1) {
+                    arr1.splice(arr1.indexOf(arr2[i]), 1);     
+                }
+            }
+            element.className = arr1.join(" ");
+        }
+
+        // Inicializar
+        filterSelection("all");
+    </script>
+
+</body>
+</html>
