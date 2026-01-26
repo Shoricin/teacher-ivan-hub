@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Ivan Grammaropoly 🎩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700;900&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* MONOPOLY PALETTE */
+            --board-bg: #CDE6D0;
+            --card-white: #ffffff;
+            --border-black: #000000;
+            
+            --prop-blue: #0072bb; 
+            --prop-brown: #955436; 
+            --prop-red: #ed1b24;   
+            --prop-orange: #f7941d; 
+            --prop-yellow: #fef200;
+            --prop-green: #1fb25a;
+            
+            --shadow: 6px 6px 0px rgba(0,0,0,0.25);
+        }
+
+        body {
+            font-family: 'Kumbh Sans', sans-serif;
+            background-color: var(--board-bg);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: black;
+            border: 12px solid #bce0bc;
+            box-sizing: border-box;
+        }
+
+        /* --- HEADER --- */
+        .main-header {
+            background: var(--prop-red);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid black;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 20;
+        }
+
+        .logo-box {
+            background: white;
+            border: 3px solid black;
+            padding: 5px 15px;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            transform: rotate(-3deg);
+            box-shadow: 4px 4px 0 black;
+        }
+
+        .header-title {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 4px 4px 0 black;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .music-btn {
+            background: black;
+            color: white;
+            border: 2px solid white;
+            padding: 8px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Work Sans', sans-serif;
+            box-shadow: 2px 2px 0 #555;
+        }
+        .music-btn:hover { background: #333; transform: translateY(-2px); }
+
+        /* --- LAYOUT --- */
+        .main-layout { display: flex; flex: 1; height: calc(100vh - 90px); }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 320px;
+            background: #fff;
+            border-right: 4px solid black;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 { 
+            font-family: 'Work Sans', sans-serif; 
+            text-transform: uppercase;
+            text-align: center;
+            border: 3px solid black;
+            padding: 12px;
+            margin-top: 0;
+            background: var(--prop-yellow);
+            box-shadow: 4px 4px 0 black;
+            font-size: 1.5rem;
+        }
+
+        .input-group { display: flex; gap: 8px; margin-bottom: 20px; }
+        
+        input { 
+            flex: 1; padding: 12px; border: 3px solid black; 
+            font-family: 'Kumbh Sans', sans-serif; font-weight: bold; font-size: 1rem;
+        }
+        
+        .btn-add { 
+            background: var(--prop-green); color: white; border: 3px solid black; 
+            width: 50px; cursor: pointer; font-weight: bold; font-size: 1.8rem;
+            box-shadow: 3px 3px 0 black;
+        }
+        .btn-add:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 black; }
+
+        .player-list { list-style: none; padding: 0; overflow-y: auto; flex: 1; }
+        
+        .player-item {
+            border: 3px solid black; margin-bottom: 12px; padding: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #fdfdfd;
+            font-weight: 800;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .player-item.penalty {
+            background: #ffcccc;
+            animation: shake 0.5s;
+        }
+
+        .score-badge { 
+            background: black; color: white; 
+            padding: 5px 12px; border-radius: 20px; font-size: 1rem;
+            font-family: 'Work Sans', sans-serif;
+        }
+        .score-badge.negative { background: var(--prop-red); }
+
+        /* GAME AREA */
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* TOP BAR */
+        .top-bar { display: flex; align-items: center; gap: 40px; margin-bottom: 30px; }
+
+        .timer-badge {
+            width: 90px; height: 90px;
+            background: white; border: 5px solid black; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Work Sans', sans-serif; font-size: 3rem; font-weight: 900;
+            box-shadow: 6px 6px 0 black;
+        }
+        .timer-badge.urgent { background: var(--prop-red); color: white; animation: shake 0.5s infinite; }
+
+        .turn-box {
+            background: white; border: 4px solid black;
+            padding: 15px 40px; font-size: 1.8rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.15);
+        }
+
+        .goal-display {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--prop-yellow); border: 3px solid black;
+            padding: 10px; font-weight: bold; font-family: 'Work Sans';
+            box-shadow: 4px 4px 0 black;
+        }
+
+        /* CARD */
+        .card-container { perspective: 1000px; width: 550px; height: 600px; margin-bottom: 20px; }
+        .card {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s;
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.2);
+        }
+        .card.flipped { transform: rotateY(180deg); }
+        
+        .card-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; 
+            display: flex; flex-direction: column; background: white;
+            border: 4px solid black;
+        }
+
+        /* FRONT */
+        .card-front {
+            background: var(--prop-orange); 
+            background-image: repeating-linear-gradient(45deg, #ffa502 0, #ffa502 10px, #ffbe42 10px, #ffbe42 20px);
+            justify-content: center; align-items: center; cursor: pointer;
+        }
+        .card-front .chance-label {
+            font-family: 'Work Sans', sans-serif; font-size: 4.5rem; font-weight: 900;
+            letter-spacing: 2px; text-shadow: 5px 5px 0 white;
+            transform: rotate(-5deg); margin-bottom: 10px;
+        }
+        .card-front p { font-weight: bold; background: black; color: white; padding: 5px 15px; font-size: 1.2rem; }
+        
+        /* Deck Count Label on Front */
+        .deck-count {
+            position: absolute; bottom: 20px; font-size: 1rem; font-weight: bold; opacity: 0.6;
+        }
+
+        /* BACK */
+        .card-back { transform: rotateY(180deg); padding: 25px; box-sizing: border-box; }
+        
+        .deed-header {
+            height: 110px; border: 4px solid black; margin-bottom: 15px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; text-align: center;
+        }
+        .bg-blue { background: var(--prop-blue); }
+        .bg-brown { background: var(--prop-brown); }
+
+        .deed-title { font-family: 'Work Sans', sans-serif; font-weight: 900; font-size: 2.5rem; text-transform: uppercase; line-height: 0.9; text-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+        .deed-sub { font-size: 1rem; font-weight: bold; margin-top: 5px; opacity: 0.9; }
+
+        .deed-body {
+            flex: 1; border: 3px solid black; padding: 20px;
+            display: flex; flex-direction: column; gap: 15px; background: #fff;
+        }
+
+        .info-row {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #eee; padding-bottom: 8px;
+        }
+        .info-label { font-size: 0.9rem; text-transform: uppercase; font-weight: 900; color: #555; }
+        .info-val { font-weight: 900; font-size: 1.3rem; color: black; }
+
+        /* WHO ANSWERED AREA */
+        .options-box {
+            background: #fff8e1; padding: 15px; border: 3px solid black; flex: 1;
+            display: flex; flex-direction: column; justify-content: flex-start;
+            margin-top: 10px; overflow-y: auto;
+        }
+        .opt-title { 
+            text-align: center; font-weight: 900; text-transform: uppercase; 
+            border-bottom: 2px solid black; padding-bottom: 5px; margin-bottom: 10px;
+            font-size: 0.9rem; letter-spacing: 1px; color: #d35400;
+        }
+        
+        .option-item {
+            cursor: pointer; padding: 10px; border: 2px solid #ccc; font-weight: bold;
+            transition: 0.2s; background: white; text-align: center; font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .option-item:hover { background: var(--prop-green); color:white; border-color: black; transform: scale(1.02); }
+
+        /* CONTROLS (Only for Skip) */
+        .controls { display: flex; gap: 20px; width: 100%; max-width: 500px; opacity: 0; pointer-events: none; transition: 0.3s; margin-top:10px; }
+        .controls.active { opacity: 1; pointer-events: auto; }
+        
+        .btn-game {
+            flex: 1; border: 4px solid black; padding: 15px; 
+            font-family: 'Work Sans', sans-serif; font-size: 1.3rem; color: white; font-weight: 900;
+            cursor: pointer; text-transform: uppercase; box-shadow: 6px 6px 0 black;
+            transition: transform 0.1s;
+        }
+        .btn-game:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 black; }
+        
+        .btn-wrong { background: var(--prop-red); }
+        .btn-next { 
+            background: var(--prop-blue); color: white; border: 4px solid black;
+            width: 100%; max-width: 500px; display: none; margin-top: 20px; 
+            padding: 18px; font-weight: 900; font-size: 1.6rem; text-transform: uppercase;
+            box-shadow: 6px 6px 0 black; cursor: pointer;
+        }
+
+        /* WINNER OVERLAY */
+        .winner-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 100;
+            display: none; justify-content: center; align-items: center;
+        }
+        .winner-card {
+            background: var(--prop-yellow); border: 10px solid black;
+            padding: 40px; text-align: center; width: 600px;
+            box-shadow: 20px 20px 0 white;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .winner-card h1 { 
+            font-family: 'Work Sans', sans-serif; font-size: 4rem; margin: 0; 
+            color: black; text-transform: uppercase; text-shadow: 4px 4px 0 white;
+        }
+        .winner-icon { font-size: 5rem; margin: 20px 0; }
+        .winner-name { font-size: 3rem; font-weight: 900; color: var(--prop-red); margin: 10px 0; }
+        .btn-reset {
+            background: black; color: white; border: none; padding: 20px 40px;
+            font-size: 1.5rem; font-weight: bold; cursor: pointer; margin-top: 20px;
+            box-shadow: 5px 5px 0 white;
+        }
+
+        @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(5deg); } 75% { transform: rotate(-5deg); } 100% { transform: rotate(0deg); } }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+    </style>
+</head>
+<body>
+
+    <div id="winnerOverlay" class="winner-overlay">
+        <div class="winner-card">
+            <h1>CONGRATULATIONS!</h1>
+            <div class="winner-icon">🎩🏆💰</div>
+            <div>The winner is:</div>
+            <div class="winner-name" id="winnerNameDisplay">PLAYER</div>
+            <p style="font-weight:bold; font-size:1.5rem;">TOTAL: $2,000</p>
+            <button class="btn-reset" onclick="location.reload()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="logo-box">TI</div>
+        <h1 class="header-title">Teacher Ivan Grammaropoly</h1>
+        <div class="music-controls">
+            <button class="music-btn" onclick="toggleMusic()">🎵 Music: On/Off</button>
+            <audio id="bgMusic" loop>
+                <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/WFMU/Scott_Joplin/Frogs_Legs_Rag/Scott_Joplin_-_04_-_The_Entertainer_1902.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div class="sidebar">
+            <h2>Players</h2>
+            <div class="input-group">
+                <input type="text" id="playerName" placeholder="Name..." onkeypress="handleEnter(event)">
+                <button class="btn-add" onclick="addPlayer()">+</button>
+            </div>
+            <ul class="player-list" id="playerList"></ul>
+        </div>
+
+        <div class="game-area">
+            <div class="goal-display">GOAL: $2,000</div>
+            
+            <div class="top-bar">
+                <div class="turn-box">RACE MODE 🏁</div>
+                <div class="timer-badge" id="timerDisplay">60</div>
+            </div>
+
+            <div class="card-container">
+                <div class="card" id="gameCard">
+                    
+                    <div class="card-face card-front" onclick="startTurn()">
+                        <div style="font-size:6rem; margin-bottom:20px;">🎲</div>
+                        <div class="chance-label">CHANCE</div>
+                        <p>TAP TO START ROUND</p>
+                        <div class="deck-count" id="deckCount">Verbs Left: 120</div>
+                    </div>
+
+                    <div class="card-face card-back">
+                        
+                        <div class="deed-header" id="deedHeader">
+                            <div style="font-size:0.7rem; margin-bottom:5px; font-weight:bold;">TITLE DEED</div>
+                            <div class="deed-title" id="cardVerb">GO</div>
+                            <div class="deed-sub" id="cardMeaning">(Ir)</div>
+                        </div>
+
+                        <div class="deed-body">
+                            <div class="info-row">
+                                <span class="info-label">Type</span>
+                                <span class="info-val" id="cardType">Irregular</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Tense</span>
+                                <span class="info-val" id="cardTense">Past Simple</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Form</span>
+                                <span class="info-val" id="cardForm">Affirmative</span>
+                            </div>
+
+                            <div class="options-box">
+                                <div class="opt-title">Who answered first?</div>
+                                <div id="winnerButtonsArea">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls" id="judgeControls">
+                <button class="btn-game btn-wrong" onclick="skipTurn()">NOBODY ANSWERED (Skip)</button>
+            </div>
+
+            <button class="btn-next" id="btnNext" onclick="resetCard()">NEXT ROUND ➡️</button>
+
+        </div>
+    </div>
+
+    <script>
+        // --- EXPANDED VERB DATABASE (120 VERBS) ---
+        const masterVerbsDB = [
+            // --- IRREGULAR (60 Verbs) ---
+            { w: "Be", m: "Ser/Estar", t: "Irregular" }, { w: "Become", m: "Convertirse", t: "Irregular" },
+            { w: "Begin", m: "Empezar", t: "Irregular" }, { w: "Bet", m: "Apostar", t: "Irregular" },
+            { w: "Bite", m: "Morder", t: "Irregular" }, { w: "Blow", m: "Soplar", t: "Irregular" },
+            { w: "Break", m: "Romper", t: "Irregular" }, { w: "Bring", m: "Traer", t: "Irregular" },
+            { w: "Build", m: "Construir", t: "Irregular" }, { w: "Buy", m: "Comprar", t: "Irregular" },
+            { w: "Catch", m: "Atrapar", t: "Irregular" }, { w: "Choose", m: "Elegir", t: "Irregular" },
+            { w: "Come", m: "Venir", t: "Irregular" }, { w: "Cost", m: "Costar", t: "Irregular" },
+            { w: "Cut", m: "Cortar", t: "Irregular" }, { w: "Do", m: "Hacer", t: "Irregular" },
+            { w: "Draw", m: "Dibujar", t: "Irregular" }, { w: "Drink", m: "Beber", t: "Irregular" },
+            { w: "Drive", m: "Conducir", t: "Irregular" }, { w: "Eat", m: "Comer", t: "Irregular" },
+            { w: "Fall", m: "Caer", t: "Irregular" }, { w: "Feed", m: "Alimentar", t: "Irregular" },
+            { w: "Feel", m: "Sentir", t: "Irregular" }, { w: "Fight", m: "Pelear", t: "Irregular" },
+            { w: "Find", m: "Encontrar", t: "Irregular" }, { w: "Fly", m: "Volar", t: "Irregular" },
+            { w: "Forget", m: "Olvidar", t: "Irregular" }, { w: "Forgive", m: "Perdonar", t: "Irregular" },
+            { w: "Freeze", m: "Congelar", t: "Irregular" }, { w: "Get", m: "Obtener", t: "Irregular" },
+            { w: "Give", m: "Dar", t: "Irregular" }, { w: "Go", m: "Ir", t: "Irregular" },
+            { w: "Grow", m: "Crecer", t: "Irregular" }, { w: "Have", m: "Tener", t: "Irregular" },
+            { w: "Hear", m: "Oír", t: "Irregular" }, { w: "Hide", m: "Esconder", t: "Irregular" },
+            { w: "Hit", m: "Golpear", t: "Irregular" }, { w: "Hold", m: "Sostener", t: "Irregular" },
+            { w: "Hurt", m: "Herir", t: "Irregular" }, { w: "Keep", m: "Guardar/Mantener", t: "Irregular" },
+            { w: "Know", m: "Saber/Conocer", t: "Irregular" }, { w: "Leave", m: "Salir/Dejar", t: "Irregular" },
+            { w: "Lend", m: "Prestar", t: "Irregular" }, { w: "Lose", m: "Perder", t: "Irregular" },
+            { w: "Make", m: "Hacer (Crear)", t: "Irregular" }, { w: "Meet", m: "Conocer/Reunirse", t: "Irregular" },
+            { w: "Pay", m: "Pagar", t: "Irregular" }, { w: "Put", m: "Poner", t: "Irregular" },
+            { w: "Read", m: "Leer", t: "Irregular" }, { w: "Ride", m: "Montar", t: "Irregular" },
+            { w: "Run", m: "Correr", t: "Irregular" }, { w: "Say", m: "Decir", t: "Irregular" },
+            { w: "See", m: "Ver", t: "Irregular" }, { w: "Sell", m: "Vender", t: "Irregular" },
+            { w: "Send", m: "Enviar", t: "Irregular" }, { w: "Sing", m: "Cantar", t: "Irregular" },
+            { w: "Sit", m: "Sentarse", t: "Irregular" }, { w: "Sleep", m: "Dormir", t: "Irregular" },
+            { w: "Speak", m: "Hablar", t: "Irregular" }, { w: "Spend", m: "Gastar", t: "Irregular" },
+            { w: "Stand", m: "Ponerse de pie", t: "Irregular" }, { w: "Steal", m: "Robar", t: "Irregular" },
+            { w: "Swim", m: "Nadar", t: "Irregular" }, { w: "Take", m: "Tomar", t: "Irregular" },
+            { w: "Teach", m: "Enseñar", t: "Irregular" }, { w: "Tell", m: "Decir/Contar", t: "Irregular" },
+            { w: "Think", m: "Pensar", t: "Irregular" }, { w: "Understand", m: "Entender", t: "Irregular" },
+            { w: "Wake", m: "Despertar", t: "Irregular" }, { w: "Wear", m: "Vestir", t: "Irregular" },
+            { w: "Win", m: "Ganar", t: "Irregular" }, { w: "Write", m: "Escribir", t: "Irregular" },
+
+            // --- REGULAR (60 Verbs) ---
+            { w: "Accept", m: "Aceptar", t: "Regular" }, { w: "Add", m: "Añadir", t: "Regular" },
+            { w: "Answer", m: "Responder", t: "Regular" }, { w: "Arrive", m: "Llegar", t: "Regular" },
+            { w: "Ask", m: "Preguntar", t: "Regular" }, { w: "Believe", m: "Creer", t: "Regular" },
+            { w: "Call", m: "Llamar", t: "Regular" }, { w: "Change", m: "Cambiar", t: "Regular" },
+            { w: "Clean", m: "Limpiar", t: "Regular" }, { w: "Close", m: "Cerrar", t: "Regular" },
+            { w: "Cook", m: "Cocinar", t: "Regular" }, { w: "Copy", m: "Copiar", t: "Regular" },
+            { w: "Cry", m: "Llorar", t: "Regular" }, { w: "Dance", m: "Bailar", t: "Regular" },
+            { w: "Decide", m: "Decidir", t: "Regular" }, { w: "Die", m: "Morir", t: "Regular" },
+            { w: "Enjoy", m: "Disfrutar", t: "Regular" }, { w: "Explain", m: "Explicar", t: "Regular" },
+            { w: "Finish", m: "Terminar", t: "Regular" }, { w: "Follow", m: "Seguir", t: "Regular" },
+            { w: "Happen", m: "Suceder", t: "Regular" }, { w: "Hate", m: "Odiar", t: "Regular" },
+            { w: "Help", m: "Ayudar", t: "Regular" }, { w: "Hope", m: "Esperar (deseo)", t: "Regular" },
+            { w: "Invite", m: "Invitar", t: "Regular" }, { w: "Jump", m: "Saltar", t: "Regular" },
+            { w: "Kill", m: "Matar", t: "Regular" }, { w: "Kiss", m: "Besar", t: "Regular" },
+            { w: "Laugh", m: "Reír", t: "Regular" }, { w: "Learn", m: "Aprender", t: "Regular" },
+            { w: "Like", m: "Gustar", t: "Regular" }, { w: "Listen", m: "Escuchar", t: "Regular" },
+            { w: "Live", m: "Vivir", t: "Regular" }, { w: "Look", m: "Mirar", t: "Regular" },
+            { w: "Love", m: "Amar", t: "Regular" }, { w: "Miss", m: "Extrañar/Perder", t: "Regular" },
+            { w: "Move", m: "Mover/Mudar", t: "Regular" }, { w: "Need", m: "Necesitar", t: "Regular" },
+            { w: "Open", m: "Abrir", t: "Regular" }, { w: "Paint", m: "Pintar", t: "Regular" },
+            { w: "Play", m: "Jugar", t: "Regular" }, { w: "Prefer", m: "Preferir", t: "Regular" },
+            { w: "Prepare", m: "Preparar", t: "Regular" }, { w: "Promise", m: "Prometer", t: "Regular" },
+            { w: "Rain", m: "Llover", t: "Regular" }, { w: "Remember", m: "Recordar", t: "Regular" },
+            { w: "Return", m: "Volver", t: "Regular" }, { w: "Save", m: "Guardar/Salvar", t: "Regular" },
+            { w: "Search", m: "Buscar", t: "Regular" }, { w: "Share", m: "Compartir", t: "Regular" },
+            { w: "Smile", m: "Sonreír", t: "Regular" }, { w: "Start", m: "Empezar", t: "Regular" },
+            { w: "Stop", m: "Parar", t: "Regular" }, { w: "Study", m: "Estudiar", t: "Regular" },
+            { w: "Talk", m: "Hablar", t: "Regular" }, { w: "Travel", m: "Viajar", t: "Regular" },
+            { w: "Try", m: "Intentar", t: "Regular" }, { w: "Use", m: "Usar", t: "Regular" },
+            { w: "Visit", m: "Visitar", t: "Regular" }, { w: "Wait", m: "Esperar", t: "Regular" },
+            { w: "Walk", m: "Caminar", t: "Regular" }, { w: "Want", m: "Querer", t: "Regular" },
+            { w: "Wash", m: "Lavar", t: "Regular" }, { w: "Watch", m: "Mirar", t: "Regular" },
+            { w: "Work", m: "Trabajar", t: "Regular" }, { w: "Worry", m: "Preocuparse", t: "Regular" }
+        ];
+
+        // LOGIC FOR NO REPETITION
+        let availableVerbs = [...masterVerbsDB];
+
+        const tensesDB = ["Present Simple", "Present Continuous", "Past Simple", "Future (Will)", "Future (Going to)", "Present Perfect"];
+        const formsDB = ["Affirmative ✅", "Negative ❌", "Interrogative ❓"];
+
+        // --- AUDIO ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const musicPlayer = document.getElementById('bgMusic');
+        musicPlayer.volume = 0.3; 
+
+        function toggleMusic() {
+            if (musicPlayer.paused) {
+                musicPlayer.play().catch(e => alert("Please interact with the page first to play audio"));
+            } else {
+                musicPlayer.pause();
+            }
+        }
+
+        function playTick(isUrgent) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.type = 'triangle';
+            oscillator.frequency.value = isUrgent ? 800 : 500; 
+            
+            const now = audioCtx.currentTime;
+            gainNode.gain.setValueAtTime(0.1, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            
+            oscillator.start(now);
+            oscillator.stop(now + 0.1);
+        }
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (type === 'good') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); 
+                oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gainNode.gain.value = 0.2;
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 300);
+            } else if (type === 'bad') {
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                gainNode.gain.value = 0.2;
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 500);
+            }
+        }
+
+        // --- GAME STATE ---
+        let players = [];
+        let timerInterval = null;
+        let timeLeft = 60;
+        let isCardActive = false;
+        const WINNING_SCORE = 2000;
+
+        // --- LOGIC ---
+        function addPlayer() {
+            const name = document.getElementById('playerName').value.trim();
+            if(!name) return;
+            players.push({ id: Date.now(), name: name, score: 0 });
+            document.getElementById('playerName').value = "";
+            renderPlayers();
+        }
+
+        function renderPlayers() {
+            const list = document.getElementById('playerList');
+            list.innerHTML = "";
+            players.forEach((p, idx) => {
+                const li = document.createElement('li');
+                li.className = `player-item`;
+                li.id = `player-row-${p.id}`;
+                li.innerHTML = `<span>${p.name}</span><span class="score-badge ${p.score < 0 ? 'negative' : ''}">$${p.score}</span>`;
+                list.appendChild(li);
+            });
+        }
+
+        function startTurn() {
+            if(players.length === 0) return alert("Add players to the board!");
+            if(isCardActive) return;
+
+            // --- SELECTION LOGIC (NO REPETITION) ---
+            if(availableVerbs.length === 0) {
+                alert("All verbs used! Reshuffling deck...");
+                availableVerbs = [...masterVerbsDB];
+            }
+
+            // Pick random index from available verbs
+            const randomIndex = Math.floor(Math.random() * availableVerbs.length);
+            const verb = availableVerbs[randomIndex];
+            
+            // Remove from array so it doesn't repeat
+            availableVerbs.splice(randomIndex, 1);
+            
+            // Update Deck Count Display
+            document.getElementById('deckCount').innerText = `Verbs Left: ${availableVerbs.length}`;
+            
+            // --- END SELECTION LOGIC ---
+
+            const tense = tensesDB[Math.floor(Math.random() * tensesDB.length)];
+            const form = formsDB[Math.floor(Math.random() * formsDB.length)];
+
+            // Populate Card
+            document.getElementById('cardVerb').innerText = verb.w;
+            document.getElementById('cardMeaning').innerText = `(${verb.m})`;
+            document.getElementById('cardType').innerText = verb.t;
+            
+            const header = document.getElementById('deedHeader');
+            if(verb.t === 'Irregular') header.className = 'deed-header bg-blue';
+            else header.className = 'deed-header bg-brown';
+
+            document.getElementById('cardTense').innerText = tense;
+            document.getElementById('cardForm').innerText = form;
+            
+            // Generate Buttons for WHO ANSWERED
+            const buttonArea = document.getElementById('winnerButtonsArea');
+            buttonArea.innerHTML = "";
+            players.forEach(p => {
+                const btn = document.createElement('div');
+                btn.className = "option-item";
+                btn.innerText = `Winner: ${p.name}`;
+                btn.onclick = () => confirmWinner(p.id);
+                buttonArea.appendChild(btn);
+            });
+
+            // Action
+            document.getElementById('gameCard').classList.add('flipped');
+            document.getElementById('judgeControls').classList.add('active');
+            isCardActive = true;
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 60;
+            const timerEl = document.getElementById('timerDisplay');
+            timerEl.innerText = timeLeft;
+            timerEl.classList.remove('urgent');
+
+            if(timerInterval) clearInterval(timerInterval);
+            playTick(false);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if(timeLeft > 0) playTick(timeLeft <= 10);
+                if(timeLeft <= 10) timerEl.classList.add('urgent');
+                if(timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    applyMassPenalty(); // Time ran out!
+                }
+            }, 1000);
+        }
+
+        function applyMassPenalty() {
+            playSound('bad');
+            players.forEach(p => {
+                p.score -= 100;
+                // Visual effect on list
+                const row = document.getElementById(`player-row-${p.id}`);
+                if(row) {
+                    row.classList.add('penalty');
+                    setTimeout(() => row.classList.remove('penalty'), 800);
+                }
+            });
+            renderPlayers();
+            document.getElementById('timerDisplay').innerText = "0";
+            document.getElementById('judgeControls').classList.remove('active');
+            document.getElementById('btnNext').style.display = 'block';
+        }
+
+        function confirmWinner(id) {
+            clearInterval(timerInterval);
+            playSound('good');
+            const p = players.find(x => x.id === id);
+            if(p) {
+                p.score += 200;
+                if(p.score >= WINNING_SCORE) {
+                    showWinner(p);
+                    return;
+                }
+            }
+            renderPlayers();
+            document.getElementById('judgeControls').classList.remove('active');
+            document.getElementById('btnNext').style.display = 'block';
+        }
+
+        function skipTurn() {
+            clearInterval(timerInterval);
+            renderPlayers();
+            document.getElementById('judgeControls').classList.remove('active');
+            document.getElementById('btnNext').style.display = 'block';
+        }
+
+        function resetCard() {
+            document.getElementById('gameCard').classList.remove('flipped');
+            document.getElementById('btnNext').style.display = 'none';
+            document.getElementById('timerDisplay').innerText = "60";
+            document.getElementById('timerDisplay').classList.remove('urgent');
+            isCardActive = false;
+        }
+
+        function showWinner(player) {
+            document.getElementById('winnerNameDisplay').innerText = player.name;
+            document.getElementById('winnerOverlay').style.display = 'flex';
+            playSound('good');
+        }
+
+        function handleEnter(e) { if(e.key === 'Enter') addPlayer(); }
+
+    </script>
+</body>
+</html>
