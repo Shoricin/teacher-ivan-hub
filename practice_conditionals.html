@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditionals Exam - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --teal: #4ECDC4;
+            --coral: #FF6B6B;
+            --dark: #2D3436;
+            --light: #F7F9FC;
+            --white: #FFFFFF;
+            --shadow: 0 10px 20px rgba(0,0,0,0.05);
+            --radius: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding-top: 80px; /* Space for fixed header */
+        }
+
+        /* FIXED HEADER WITH TIMER */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: var(--white);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .brand h1 {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0; font-size: 1.2rem; color: var(--dark);
+        }
+        .brand span { color: var(--teal); font-weight: bold; }
+
+        .timer-box {
+            background: var(--dark);
+            color: var(--white);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .timer-box.urgent { background: var(--coral); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px 100px;
+        }
+
+        .intro-card {
+            background: var(--teal);
+            color: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .intro-card h2 { margin: 0 0 10px; font-family: 'Quicksand', sans-serif; }
+
+        /* STUDENT FORM */
+        .student-form {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            box-shadow: var(--shadow);
+        }
+        .name-input {
+            flex: 1; padding: 12px 20px;
+            border: 2px solid #eee; border-radius: 50px;
+            font-size: 1rem; outline: none;
+        }
+        .name-input:focus { border-color: var(--teal); }
+        
+        .start-btn {
+            background: var(--coral); color: white; border: none;
+            padding: 12px 30px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+        }
+        .start-btn:hover { transform: scale(1.05); }
+
+        /* QUESTIONS LIST */
+        .exam-area { display: none; } /* Hidden until start */
+
+        .q-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            border-left: 5px solid transparent;
+            transition: 0.3s;
+        }
+        .q-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .q-card.answered { border-left-color: var(--teal); }
+
+        .q-num { font-weight: bold; color: var(--teal); margin-right: 5px; }
+        .q-text { font-size: 1.05rem; line-height: 1.6; }
+        
+        .q-input {
+            border: none; border-bottom: 2px solid #ddd;
+            padding: 5px 10px; width: 150px; font-family: inherit;
+            font-size: 1rem; color: var(--coral); font-weight: bold;
+            text-align: center; background: #fafafa;
+        }
+        .q-input:focus { border-bottom-color: var(--coral); outline: none; background: white; }
+
+        /* RESULTS OVERLAY */
+        .finish-panel {
+            text-align: center; margin-top: 40px;
+            background: var(--white); padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-finish {
+            background: var(--dark); color: white;
+            padding: 15px 40px; border-radius: 50px;
+            border: none; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-finish:hover { background: #000; }
+
+        /* FEEDBACK STYLES (After submit) */
+        .feedback { display: block; margin-top: 5px; font-size: 0.9rem; font-weight: bold; }
+        .correct { color: #27ae60; }
+        .incorrect { color: var(--coral); }
+        .correct-ans-show { color: #7f8c8d; font-size: 0.85rem; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <h1>Teacher <span>Ivan</span></h1>
+    </div>
+    <div class="timer-box" id="timerDisplay">
+        <span class="material-icons-round">timer</span>
+        30:00
+    </div>
+</header>
+
+<div class="container">
+
+    <div id="startScreen">
+        <div class="intro-card">
+            <h2>Conditionals Assessment</h2>
+            <p>50 Questions • 30 Minutes</p>
+            <p style="font-size:0.9rem; opacity:0.9;">Covers: Zero, First, Second & Third Conditionals.</p>
+        </div>
+
+        <div class="student-form">
+            <input type="text" id="studentName" class="name-input" placeholder="Enter your full name...">
+            <button class="start-btn" onclick="startExam()">START EXAM</button>
+        </div>
+    </div>
+
+    <div id="examArea" class="exam-area">
+        <div id="questionsList">
+            </div>
+
+        <div class="finish-panel">
+            <p style="margin-bottom:15px; color:#777;">Once you finish, you can download your report.</p>
+            <button class="btn-finish" onclick="finishExam()">
+                <span class="material-icons-round">task_alt</span>
+                FINISH & SAVE PDF
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- DATABASE: 50 QUESTIONS ---
+    const questionsDB = [
+        // ZERO CONDITIONAL
+        { q: "If you heat ice, it _____ (melt).", a: "melts" },
+        { q: "If it rains, the grass _____ (get) wet.", a: "gets" },
+        { q: "Snakes _____ (bite) if they are scared.", a: "bite" },
+        { q: "If babies are hungry, they _____ (cry).", a: "cry" },
+        { q: "If you mix red and blue, you _____ (get) purple.", a: "get" },
+        { q: "Water _____ (boil) if you heat it to 100°C.", a: "boils" },
+        { q: "If I drink coffee at night, I _____ (not sleep).", a: "don't sleep" },
+        { q: "Plants die if they _____ (not get) water.", a: "don't get" },
+        { q: "If you touch fire, you _____ (get) burned.", a: "get" },
+        { q: "Ice _____ (float) if you put it in water.", a: "floats" },
+
+        // FIRST CONDITIONAL
+        { q: "If it rains tomorrow, I _____ (stay) at home.", a: "will stay" },
+        { q: "If you study hard, you _____ (pass) the exam.", a: "will pass" },
+        { q: "She _____ (be) angry if you are late.", a: "will be" },
+        { q: "If we hurry, we _____ (catch) the bus.", a: "will catch" },
+        { q: "I _____ (call) you if I have time.", a: "will call" },
+        { q: "If he _____ (come) today, I will be surprised.", a: "comes" },
+        { q: "You won't succeed if you _____ (not try).", a: "don't try" },
+        { q: "If I see her, I _____ (tell) her the news.", a: "will tell" },
+        { q: "We _____ (go) to the park if the weather is good.", a: "will go" },
+        { q: "If you don't leave now, you _____ (miss) the train.", a: "will miss" },
+        { q: "If she _____ (finish) work early, she will go home.", a: "finishes" },
+        { q: "I _____ (buy) a new car if I save enough money.", a: "will buy" },
+        { q: "If they invite me, I _____ (go) to the party.", a: "will go" },
+        { q: "He _____ (not help) you if you don't ask.", a: "won't help" },
+        { q: "If you eat too much, you _____ (feel) sick.", a: "will feel" },
+
+        // SECOND CONDITIONAL
+        { q: "If I _____ (be) you, I would accept the offer.", a: "were" },
+        { q: "If I won the lottery, I _____ (travel) the world.", a: "would travel" },
+        { q: "If he _____ (have) more time, he would learn French.", a: "had" },
+        { q: "They would buy a big house if they _____ (be) rich.", a: "were" },
+        { q: "If I _____ (know) the answer, I would tell you.", a: "knew" },
+        { q: "She _____ (not be) happy if she lost her job.", a: "wouldn't be" },
+        { q: "If we _____ (live) in Spain, we would go to the beach every day.", a: "lived" },
+        { q: "I _____ (help) you if I could.", a: "would help" },
+        { q: "If I saw a ghost, I _____ (run) away.", a: "would run" },
+        { q: "He would lose weight if he _____ (exercise) more.", a: "exercised" },
+        { q: "If I _____ (have) a car, I would drive to work.", a: "had" },
+        { q: "What would you do if you _____ (find) a wallet?", a: "found" },
+        { q: "If she studied harder, she _____ (get) better grades.", a: "would get" },
+        { q: "I would call him if I _____ (have) his number.", a: "had" },
+        { q: "If it _____ (not rain), we could go out.", a: "didn't rain" },
+
+        // THIRD CONDITIONAL
+        { q: "If I had known, I _____ (tell) you.", a: "would have told" },
+        { q: "She would have passed if she _____ (study).", a: "had studied" },
+        { q: "If we _____ (leave) earlier, we wouldn't have missed the flight.", a: "had left" },
+        { q: "I would have bought it if I _____ (have) the money.", a: "had had" },
+        { q: "If you hadn't helped me, I _____ (fail).", a: "would have failed" },
+        { q: "They _____ (arrive) on time if there hadn't been traffic.", a: "would have arrived" },
+        { q: "If I had seen him, I _____ (say) hello.", a: "would have said" },
+        { q: "We would have gone if it _____ (not rain).", a: "hadn't rained" },
+        { q: "If she _____ (listen), she wouldn't have made that mistake.", a: "had listened" },
+        { q: "He would have been happy if you _____ (call) him.", a: "had called" }
+    ];
+
+    let timerInterval;
+    let secondsLeft = 1800; // 30 minutes
+    let isExamActive = false;
+
+    // --- INITIALIZE EXAM ---
+    function startExam() {
+        const name = document.getElementById('studentName').value.trim();
+        if(!name) { alert("Please enter your name first."); return; }
+
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('examArea').style.display = 'block';
+        
+        renderQuestions();
+        startTimer();
+        isExamActive = true;
+    }
+
+    function renderQuestions() {
+        const list = document.getElementById('questionsList');
+        list.innerHTML = "";
+        
+        questionsDB.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'q-card';
+            div.innerHTML = `
+                <span class="q-num">${index + 1}.</span>
+                <span class="q-text">${item.q.replace('_____', `<input type="text" class="q-input" id="q${index}" oninput="markAnswered(this)">`)}</span>
+                <span id="fb${index}" class="feedback"></span>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function markAnswered(input) {
+        if(input.value.length > 0) input.parentElement.parentElement.classList.add('answered');
+        else input.parentElement.parentElement.classList.remove('answered');
+    }
+
+    // --- TIMER LOGIC ---
+    function startTimer() {
+        const display = document.getElementById('timerDisplay');
+        
+        timerInterval = setInterval(() => {
+            secondsLeft--;
+            
+            const m = Math.floor(secondsLeft / 60);
+            const s = secondsLeft % 60;
+            display.innerHTML = `<span class="material-icons-round">timer</span> ${m}:${s < 10 ? '0' : ''}${s}`;
+
+            if(secondsLeft <= 60) display.classList.add('urgent');
+
+            if(secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                finishExam(true);
+            }
+        }, 1000);
+    }
+
+    // --- FINISH & REPORT LOGIC ---
+    async function finishExam(timeOut = false) {
+        if(!isExamActive) return;
+        isExamActive = false;
+        clearInterval(timerInterval);
+
+        if(timeOut) alert("Time is up! Generating report...");
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const studentName = document.getElementById('studentName').value;
+        let score = 0;
+        let wrongAnswers = [];
+
+        // Grade Exam
+        questionsDB.forEach((item, index) => {
+            const input = document.getElementById(`q${index}`);
+            const feedback = document.getElementById(`fb${index}`);
+            const userAns = input.value.trim().toLowerCase();
+            const correctAns = item.a.toLowerCase();
+
+            input.disabled = true; // Lock input
+
+            if(userAns === correctAns) {
+                score++;
+                feedback.innerHTML = "Correct";
+                feedback.className = "feedback correct";
+                input.style.borderBottomColor = "#27ae60";
+            } else {
+                feedback.innerHTML = `Incorrect. Ans: ${item.a}`;
+                feedback.className = "feedback incorrect";
+                input.style.borderBottomColor = "#ff6b6b";
+                wrongAnswers.push({ q: index+1, text: item.q, user: userAns, correct: item.a });
+            }
+        });
+
+        // Generate PDF
+        // Header
+        doc.setFillColor(78, 205, 196); // Teal
+        doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.text("Conditionals Assessment Report", 105, 20, null, null, "center");
+        doc.setFontSize(12);
+        doc.text("Teacher Ivan - Educational Services", 105, 30, null, null, "center");
+
+        // Info
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(14);
+        doc.text(`Student: ${studentName}`, 20, 55);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 65);
+        doc.text(`Time Remaining: ${Math.floor(secondsLeft / 60)}:${secondsLeft % 60 < 10 ? '0' : ''}${secondsLeft % 60}`, 20, 75);
+
+        // Score Box
+        doc.setDrawColor(0);
+        doc.setFillColor(240, 240, 240);
+        doc.rect(140, 50, 50, 25, 'FD');
+        doc.setTextColor(255, 107, 107); // Coral
+        doc.setFontSize(20);
+        doc.text(`${score} / 50`, 165, 66, null, null, "center");
+
+        // Breakdown
+        let y = 95;
+        doc.setTextColor(0);
+        doc.setFontSize(14);
+        doc.text("Correction Report (Incorrect Answers):", 20, 90);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+
+        if(wrongAnswers.length === 0) {
+            doc.setTextColor(39, 174, 96);
+            doc.text("Perfect Score! Outstanding job.", 20, 105);
+        } else {
+            wrongAnswers.forEach(err => {
+                if(y > 270) { doc.addPage(); y = 20; }
+                
+                const qClean = err.text.replace('_____', '_______');
+                doc.setTextColor(50);
+                doc.text(`${err.q}. ${qClean}`, 20, y);
+                y += 5;
+                doc.setTextColor(255, 107, 107); // Red
+                doc.text(`   Student: ${err.user || "(Empty)"}`, 20, y);
+                doc.setTextColor(39, 174, 96); // Green
+                doc.text(`   Correct: ${err.correct}`, 100, y);
+                y += 10;
+            });
+        }
+
+        doc.save(`Exam_Conditionals_${studentName.replace(/\s/g,'_')}.pdf`);
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+</script>
+
+</body>
+</html>
