@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Lesson: Job Interviews</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--primary-teal);
+        }
+
+        h1 { margin: 0; color: var(--text-dark); }
+        .subtitle { color: #777; font-weight: 300; margin-top: 5px; }
+
+        /* VIDEO SECTION */
+        .video-container {
+            max-width: 800px;
+            width: 90%;
+            margin: 30px auto;
+            background: black;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* QUIZ SECTION */
+        .quiz-section {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto 50px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .quiz-title { font-size: 1.5rem; font-weight: 700; color: var(--primary-teal); }
+        .score-box { background: var(--text-dark); color: white; padding: 5px 15px; border-radius: 50px; font-weight: bold; }
+
+        /* Preguntas */
+        .question-block {
+            margin-bottom: 40px;
+            display: none; /* Se muestran una por una */
+        }
+        .question-block.active { display: block; animation: fadeIn 0.5s; }
+
+        .q-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
+
+        .options-grid { display: grid; gap: 15px; }
+
+        .option-btn {
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .option-btn:hover { background: #e0f2f1; border-color: var(--primary-teal); }
+        
+        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        /* Feedback y Navegación */
+        .feedback-msg { margin-top: 15px; font-weight: bold; min-height: 24px; }
+        
+        .next-btn {
+            background: var(--accent-coral);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* Oculto hasta responder */
+        }
+
+        /* Pantalla Final */
+        .results-screen { text-align: center; display: none; }
+        .final-score { font-size: 4rem; font-weight: 700; color: var(--primary-teal); }
+        
+        .home-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent-coral);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            background: var(--accent-coral);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Job Interview Vocabulary</h1>
+        <div class="subtitle">Watch the video and answer the questions below.</div>
+    </header>
+
+    <div class="video-container">
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/pic6A4Xwe-k" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        
+        <div id="quizContent">
+            <div class="quiz-header">
+                <div class="quiz-title">Video Comprehension Quiz</div>
+                <div class="score-box">Score: <span id="currentScore">0</span>/10</div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div class="feedback-msg" id="feedback"></div>
+            <button class="next-btn" id="btnNext" onclick="nextQuestion()">Next Question ➜</button>
+        </div>
+
+        <div id="resultsScreen" class="results-screen">
+            <h2>Great Job!</h2>
+            <p>You have completed the lesson.</p>
+            <div class="final-score" id="finalScoreDisplay">0%</div>
+            <p id="finalMessage"></p>
+            <button class="next-btn" style="display:inline-block; background:var(--primary-teal);" onclick="location.reload()">Watch Again</button>
+            <br>
+            <a href="index.html" class="home-btn">Back to HUB</a>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 Teacher Ivan - Media Resources
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                q: "1. According to the video, when researching a company, you should look for more than just facts. What else should you look for?",
+                options: ["The CEO's birthday", "Big successes and employee reviews", "The office cafeteria menu", "Their logo colors"],
+                ans: 1
+            },
+            {
+                q: "2. Why should you avoid ending your answer with phrases like '...and yes'?",
+                options: ["It sounds rude", "It shows you are overqualified", "It can give the impression that you lack confidence", "It makes the interview too long"],
+                ans: 2
+            },
+            {
+                q: "3. Is it recommended to memorize your answers word for word?",
+                options: ["Yes, to be perfect", "No, it won't sound natural", "Only for the first question", "Yes, interviewers love memorized speeches"],
+                ans: 1
+            },
+            {
+                q: "4. When answering 'Why do you want to work for us?', what should you avoid?",
+                options: ["Smiling", "Making empty statements without examples", "Talking about the company", "Mentioning your skills"],
+                ans: 1
+            },
+            {
+                q: "5. What is the suggested first step to handle stress/pressure?",
+                options: ["Panic and scream", "Stop and figure out priorities", "Ignore the work", "Ask for a holiday"],
+                ans: 1
+            },
+            {
+                q: "6. Which phrase is a CLICHÉ answer for 'What is your greatest weakness'?",
+                options: ["I am sometimes disorganized", "I'm a perfectionist", "I struggle with public speaking", "I need to improve my Excel skills"],
+                ans: 1
+            },
+            {
+                q: "7. When discussing your weaknesses, what is crucial to mention?",
+                options: ["That you don't have any", "That it's your boss's fault", "How you are trying to improve it", "That you act naturally"],
+                ans: 2
+            },
+            {
+                q: "8. What does the verb 'to HONE' mean? (e.g., 'hone my skills')",
+                options: ["To lose", "To improve or sharpen", "To buy", "To forget"],
+                ans: 1
+            },
+            {
+                q: "9. If you don't have a lot of experience, what should you try to 'sell'?",
+                options: ["Your car", "Your personality and willingness to learn", "Your family background", "Your hobbies"],
+                ans: 1
+            },
+            {
+                q: "10. The video suggests using the 'STAR' method implicitly. What is vital to include in every answer?",
+                options: ["Specific examples", "Jokes", "Loud voice", "Complaints"],
+                ans: 0
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let answered = false;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            quizData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `question-block ${index === 0 ? 'active' : ''}`;
+                div.id = `qBlock-${index}`;
+                
+                let buttonsHTML = '';
+                item.options.forEach((opt, i) => {
+                    buttonsHTML += `<button class="option-btn" onclick="checkAnswer(this, ${index}, ${i})">${opt}</button>`;
+                });
+
+                div.innerHTML = `
+                    <div class="q-text">${item.q}</div>
+                    <div class="options-grid">${buttonsHTML}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkAnswer(btn, qIndex, optIndex) {
+            if (answered) return; // Evitar doble click
+            answered = true;
+
+            const correctIndex = quizData[qIndex].ans;
+            const allBtns = document.getElementById(`qBlock-${qIndex}`).querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+
+            if (optIndex === correctIndex) {
+                btn.classList.add('correct');
+                feedback.innerText = "Correct! Well done.";
+                feedback.style.color = "#10b981";
+                score++;
+                document.getElementById('currentScore').innerText = score;
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correctIndex].classList.add('correct'); // Mostrar la correcta
+                feedback.innerText = "Oops! That's not right.";
+                feedback.style.color = "#ef4444";
+            }
+
+            document.getElementById('btnNext').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            document.getElementById(`qBlock-${currentQ}`).classList.remove('active');
+            document.getElementById('btnNext').style.display = 'none';
+            document.getElementById('feedback').innerText = "";
+            answered = false;
+            
+            currentQ++;
+
+            if (currentQ < quizData.length) {
+                document.getElementById(`qBlock-${currentQ}`).classList.add('active');
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('finalScoreDisplay').innerText = percentage + "%";
+            
+            const msg = document.getElementById('finalMessage');
+            if(percentage >= 80) msg.innerText = "Excellent! You are ready for your interview.";
+            else if(percentage >= 50) msg.innerText = "Good job, but you might want to watch the video again.";
+            else msg.innerText = "Keep practicing! Review the vocabulary and try again.";
+        }
+
+        // Iniciar
+        initQuiz();
+
+    </script>
+</body>
+</html>
