@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE INTERVIEW | Career Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de colores Teacher Ivan HUB */
+            --primary-teal: #5dcbc3;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --text-light: #ffffff;
+            --bg-light: #f9f9f9;
+            --card-bg: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* --- HEADER STYLE (Estilo Laundry Service) --- */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+        
+        header p {
+            color: #777;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        /* --- STUDENT GRID --- */
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .student-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+        }
+
+        /* Línea de color superior */
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--primary-teal); /* Default, se sobreescribe con JS */
+        }
+
+        .student-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .student-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .student-goal {
+            color: #666;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .goal-icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* --- DETAIL VIEW --- */
+        #detail-view {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border-radius: 50px; /* Pill shape */
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-back {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid #eee;
+        }
+        
+        .btn-back:hover { background: #eee; }
+
+        .btn-toggle {
+            background: var(--accent-coral);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 154, 139, 0.4);
+        }
+        
+        .btn-toggle:hover { background-color: #ff7e6b; transform: translateY(-2px); }
+
+        /* --- EMAIL CLIENT SIMULATION (Light Theme) --- */
+        .email-client-window {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #eee;
+        }
+
+        .email-top-bar {
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .sender-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-right: 20px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .email-meta h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+        .email-meta p {
+            margin: 2px 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .email-content {
+            background: white;
+            padding: 40px;
+            color: #444;
+        }
+
+        .email-body p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .email-signature {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.95rem;
+            color: #666;
+        }
+        
+        .company-logo-img {
+            max-width: 150px;
+            margin-bottom: 20px;
+            display: block;
+            padding: 10px 15px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .email-footer-disclaimer {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        /* --- STUDENT PREP GUIDE (Light Theme) --- */
+        .prep-guide-container {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        
+        .guide-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .guide-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+        
+        .prep-section {
+            margin-bottom: 35px;
+        }
+        
+        .prep-section h3 {
+            color: var(--primary-teal);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        
+        .checklist-item {
+            background: #f4fdfc; /* Light teal tint */
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            border: 1px solid #e0f2f1;
+        }
+        
+        .check-box {
+            min-width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-teal);
+            margin-right: 15px;
+            border-radius: 6px;
+            background: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-menu">
+        <header>
+            <h1>THE INTERVIEW</h1>
+            <p>Career Simulation Exercises by Teacher Ivan</p>
+        </header>
+
+        <div class="student-grid" id="grid-container">
+            </div>
+    </div>
+
+    <div class="container" id="detail-view">
+        <div class="nav-bar">
+            <button class="btn-back" onclick="showMenu()">← Back to Roster</button>
+            <button class="btn-toggle" id="toggleBtn" onclick="toggleViewMode()">Open Candidate Prep Zone</button>
+        </div>
+
+        <div class="email-client-window" id="email-view">
+            <div class="email-top-bar">
+                <div class="sender-avatar" id="email-avatar">MI</div>
+                <div class="email-meta">
+                    <h2 id="email-subject">Subject Line Placeholder</h2>
+                    <p><strong>From:</strong> <span id="email-from">recruiter@company.com</span></p>
+                    <p><strong>To:</strong> <span id="email-to">candidate@email.com</span></p>
+                    <p><strong>Date:</strong> October 24th, 2026, 09:42 AM PST</p>
+                </div>
+            </div>
+            <div class="email-content">
+                <div class="email-body" id="email-body-content">
+                    </div>
+            </div>
+        </div>
+
+        <div class="prep-guide-container" id="prep-view">
+            <div class="guide-header">
+                 <h2>Candidate Prep Zone: <span id="prep-role">Role Name</span></h2>
+                 <p style="color:#666">Use this briefing checklist to prepare before facing Teacher Ivan.</p>
+            </div>
+
+            <div class="prep-section">
+                <h3>Phase 1: The "Deep Dive" Research Checklist</h3>
+                <p style="color:#888; font-size: 0.9rem;">Don't just know what they do. Know <em>how</em> they do it.</p>
+                <div id="research-checklist">
+                    </div>
+            </div>
+
+            <div class="prep-section">
+                <h3>Phase 2: Tactical Interview Prep</h3>
+                <div class="checklist-item">
+                    <div class="check-box"></div>
+                    <div><strong>The "Tell Me About Yourself" Strategy:</strong> Don't give your life story. Connect your current studies and passions directly to why this specific company is your goal. Keep it under 2 minutes.</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="check-box"></div>
+                    <div><strong>Your Unique Value:</strong> Why should they pick you over other candidates? (Hint: Re-read the email. What specific skills did they mention they liked about you?)</div>
+                </div>
+            </div>
+
+            <div class="prep-section">
+                <h3>Phase 3: Questions YOU Should Ask Them</h3>
+                <p style="color:#888; font-size: 0.9rem;">Never say "I have no questions." It shows lack of interest.</p>
+                <div class="checklist-item">
+                    <div class="check-box"></div>
+                    <div>"What does success look like in the first 3 months of this role?"</div>
+                </div>
+                 <div class="checklist-item">
+                    <div class="check-box"></div>
+                    <div>"Can you tell me about the team dynamic I would be joining?"</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- BASE DE DATOS DE PERFILES ---
+        const students = [
+            // --- ESTUDIANTES EXISTENTES (SIN CAMBIOS) ---
+            {
+                id: 1,
+                name: "Santiago Gonzales",
+                goal: "Electronic Engineering",
+                icon: "⚡",
+                companyName: "MIT School of Engineering",
+                avatarText: "MIT",
+                accent: "#A31F34", // MIT Red
+                from: "admissions.engineering@mit.edu",
+                subject: "Interview Invitation: Early Identification Initiative - Class of 2030",
+                body: `
+                    <div class="company-logo-img" style="color: #A31F34; border: 2px solid #A31F34;">MIT ENGINEERING</div>
+                    <p>Dear Mr. Gonzales,</p>
+                    <p>The admissions committee at the <strong>Massachusetts Institute of Technology (MIT)</strong> has reviewed your preliminary academic portfolio with great interest. Your recent work regarding integrated circuit design shows a level of technical curiosity we actively seek.</p>
+                    <p>We would like to invite you to a formal interview as part of our "Early Identification Initiative" for promising young engineers. We want to gauge not just your technical knowledge, but your problem-solving methodology when faced with failure.</p>
+                    <p>Please prepare to discuss the most complex system you have attempted to build.</p>
+                    <div class="email-signature">
+                        Regards,<br><br>
+                        <strong>Dr. Sanjay Sarma</strong><br>
+                        Dean of Engineering Admissions<br>
+                        Massachusetts Institute of Technology<br>
+                        77 Massachusetts Ave, Cambridge, MA
+                    </div>
+                    <div class="email-footer-disclaimer">
+                        CONFIDENTIALITY NOTICE: The contents of this email message and any attachments are intended solely for the addressee(s).
+                    </div>
+                `,
+                researchTips: [
+                    "Research MIT's motto 'Mens et Manus' (Mind and Hand). How does your work reflect this?",
+                    "Look up one recent breakthrough from MIT's Media Lab related to electronics.",
+                    "Be ready to explain Ohm's Law in simple terms to a non-engineer."
+                ]
+            },
+            {
+                id: 2,
+                name: "Matias Romero",
+                goal: "Professional Swimmer",
+                icon: "🏊",
+                companyName: "World Aquatics Elite Center",
+                avatarText: "WA",
+                accent: "#008AD8", // Water blue
+                from: "talent.scout@worldaquatics.org",
+                subject: "Official Scout Invitation: High-Performance Development Squad Selection",
+                body: `
+                    <div class="company-logo-img" style="color: #008AD8; border: 2px solid #008AD8;">WORLD AQUATICS</div>
+                    <p>Dear Matias,</p>
+                    <p><strong>World Aquatics</strong> (formerly FINA) tracking data has highlighted your recent split times in the 200m freestyle at regional events. Your performance metrics indicate significant potential for elite-level competition.</p>
+                    <p>We are extending an invitation for a personal interview and physiological assessment at our High-Performance Centre. We need to assess your mental resilience and dedication to the rigorous lifestyle required of a professional athlete.</p>
+                    <p>This is the first step towards potential selection for the National Youth Squad.</p>
+                    <div class="email-signature">
+                        Sincerely,<br><br>
+                        <strong>Ian Thorpe</strong><br>
+                        Head of Talent Development<br>
+                        World Aquatics Elite Centre - Gold Coast
+                    </div>
+                    <div class="email-footer-disclaimer">
+                        This message is intended for the named recipient only. World Aquatics is the sole governing body for all aquatic sports worldwide.
+                    </div>
+                `,
+                researchTips: [
+                    "Who are the current world record holders in your best style?",
+                    "Understand the difference between short-course (25m) and long-course (50m) strategy.",
+                    "Prepare an answer for: 'What do you sacrifice to train at this level?'"
+                ]
+            },
+            {
+                id: 3,
+                name: "Cristopher Ramos",
+                goal: "Mechatronics Robotics",
+                icon: "🤖",
+                companyName: "Boston Dynamics",
+                avatarText: "BD",
+                accent: "#F2C94C", // Yellow/Gold
+                from: "careers@bostondynamics.com",
+                subject: "Candidate Next Steps: Junior Robotics Internship (Atlas Team)",
+                body: `
+                    <div class="company-logo-img" style="color: #F2C94C; border: 2px solid #F2C94C;">BOSTON DYNAMICS</div>
+                    <p>Hi Cristopher,</p>
+                    <p>Thank you for your interest in <strong>Boston Dynamics</strong>. Our engineering team was impressed by your project portfolio emphasizing the intersection of mechanical systems and smart sensors.</p>
+                    <p>We would like to move forward with an interview focused on our Atlas humanoid robot program. We are looking for interns who understand that dynamic mobility requires elegant mechanical design driven by robust code.</p>
+                    <p>Be prepared for technical questions regarding actuators and sensor integration.</p>
+                    <div class="email-signature">
+                        Best,<br><br>
+                        <strong>Marc Raibert</strong><br>
+                        Founder & Chairman<br>
+                        Boston Dynamics HQ, Waltham MA
+                    </div>
+                     <div class="email-footer-disclaimer">
+                        © 2025 Boston Dynamics. All rights reserved. An Hyundai Motor Group Company.
+                    </div>
+                `,
+                researchTips: [
+                    "Watch recent videos of the 'Atlas' and 'Spot' robots. What can they do now that they couldn't last year?",
+                    "Define what 'Mechatronics' means to you in one sentence.",
+                    "Think about a time your code worked but the mechanics failed (or vice-versa)."
+                ]
+            },
+            {
+                id: 4,
+                name: "Diana Enriquez",
+                goal: "Biologist",
+                icon: "🧬",
+                companyName: "The Royal Society",
+                avatarText: "RS",
+                accent: "#27AE60", // Green
+                from: "research.grants@royalsociety.org",
+                subject: "Interview Summons: Post-Graduate Field Research Assistant (Amazon Basin)",
+                body: `
+                     <div class="company-logo-img" style="color: #27AE60; border: 2px solid #27AE60;">THE ROYAL SOCIETY</div>
+                    <p>Dear Ms. Enriquez,</p>
+                    <p>Your application for the Field Research Assistant position has been reviewed by the biological sciences council at <strong>The Royal Society</strong>. Your academic focus on biodiversity aligns perfectly with our upcoming expedition.</p>
+                    <p>We require an interview to discuss your methodology regarding data collection in remote environments. We are looking for scientists who maintain rigorous standards even under difficult field conditions.</p>
+                    <div class="email-signature">
+                        Respectfully,<br><br>
+                        <strong>Dame Jane Goodall, DBE</strong><br>
+                        Lead Scientist & UN Messenger of Peace<br>
+                        The Royal Society of London
+                    </div>
+                    <div class="email-footer-disclaimer">
+                        The Royal Society is a Fellowship of many of the world's most eminent scientists and is the oldest scientific academy in continuous existence.
+                    </div>
+                `,
+                researchTips: [
+                    "What is the specific mission of The Royal Society?",
+                    "Brush up on essential field equipment: quadrants, transects, and sampling protocols.",
+                    "Be ready to discuss the ethics of biological conservation in 2025."
+                ]
+            },
+            {
+                id: 5,
+                name: "Leonardo Barron",
+                goal: "Paleontologist",
+                icon: "🦖",
+                companyName: "American Museum of Natural History",
+                avatarText: "AMNH",
+                accent: "#D35400", // Earthy orange
+                from: "paleo.department@amnh.org",
+                subject: "Application Update: Junior Field Associate - Gobi Desert Expedition",
+                body: `
+                    <div class="company-logo-img" style="color: #D35400; border: 2px solid #D35400;">AMNH NEW YORK</div>
+                    <p>Dear Leonardo,</p>
+                    <p>The Division of Paleontology at the <strong>American Museum of Natural History (AMNH)</strong> in New York is currently staffing our upcoming Cretaceous period expedition.</p>
+                    <p>Given your demonstrated knowledge of geological eras and fossilization processes, we would like to interview you for a Junior Field Associate position. We need individuals with the patience for excavation and the knowledge to identify potential finds in situ.</p>
+                    <div class="email-signature">
+                        Best regards,<br><br>
+                        <strong>Dr. Mark Norell</strong><br>
+                        Curator Emeritus, Division of Paleontology<br>
+                        American Museum of Natural History, NYC
+                    </div>
+                `,
+                researchTips: [
+                    "Familiarize yourself with the most famous discoveries made by the AMNH in the Gobi Desert in the 1920s.",
+                    "Be able to explain the difference between archaeology (humans) and paleontology (fossils).",
+                    "What tool is most important to a paleontologist and why?"
+                ]
+            },
+            {
+                id: 6,
+                name: "Geiser Balderrama",
+                goal: "Chef",
+                icon: "👨‍🍳",
+                companyName: "The Ritz-Carlton Culinary Academy",
+                avatarText: "RC",
+                accent: "#C0392B", // Deep red
+                from: "chef.recruitment@ritzcarlton.com",
+                subject: "Stage Opportunity: The Culinary Excellence Program - Paris & Tokyo",
+                body: `
+                    <div class="company-logo-img" style="color: #C0392B; border: 2px solid #C0392B; font-family: serif;">The Ritz-Carlton</div>
+                    <p>Bonjour Geiser,</p>
+                    <p>At <strong>The Ritz-Carlton</strong>, we believe culinary arts are the highest form of service. We have received excellent references regarding your palate and creativity in the kitchen.</p>
+                    <p>We invite you to a rigorous interview process for our prestigious culinary 'stage' (apprenticeship) program. Be prepared to defend your philosophy on ingredients and handle pressure scenarios.</p>
+                    <p>We seek perfection, not just competence.</p>
+                    <div class="email-signature">
+                        Cordially,<br><br>
+                        <strong>Chef Thomas Keller</strong><br>
+                        Global Culinary Director<br>
+                        The Ritz-Carlton Hotel Company, L.L.C.
+                    </div>
+                `,
+                researchTips: [
+                    "Understand the 'Brigade de Cuisine' system. Where would you start?",
+                    "What are the 5 mother sauces of French cuisine?",
+                    "Research The Ritz-Carlton's 'Gold Standards' of service."
+                ]
+            },
+            {
+                id: 7,
+                name: "Tatiana Thompson",
+                goal: "Veterinarian",
+                icon: "🐾",
+                companyName: "Cornell College of Veterinary Medicine",
+                avatarText: "COR",
+                accent: "#8E44AD", // Purple
+                from: "vet.admissions@cornell.edu",
+                subject: "Interview Request: Pre-Veterinary Summer Intensive Program",
+                body: `
+                    <div class="company-logo-img" style="color: #8E44AD; border: 2px solid #8E44AD;">CORNELL VET MEDICINE</div>
+                    <p>Dear Tatiana,</p>
+                    <p>The admissions board at <strong>Cornell University College of Veterinary Medicine</strong> is looking for highly motivated students for our clinical rotation intensive.</p>
+                    <p>We understand your ultimate goal is animal medicine. We would like to schedule an interview to evaluate your aptitude for both the scientific rigour and emotional fortitude required for this profession. Compassion is essential, but so is clinical detachment when necessary.</p>
+                    <div class="email-signature">
+                        Sincerely,<br><br>
+                        <strong>Dr. Lorin Warnick</strong><br>
+                        Dean of Veterinary Medicine<br>
+                        Cornell University, Ithaca NY
+                    </div>
+                `,
+                researchTips: [
+                    "Why Cornell? (It's often ranked #1 for Vet Med). Know this.",
+                    "Be ready to discuss a current issue in animal welfare (e.g., antibiotics in livestock).",
+                    "How do you handle the emotional toll of seeing sick animals?"
+                ]
+            },
+            {
+                id: 8,
+                name: "Pilar Caba",
+                goal: "Medical Research Internship (USA)",
+                icon: "🩺",
+                companyName: "Johns Hopkins School of Medicine",
+                avatarText: "JHU",
+                accent: "#002D72", // Hopkins Blue
+                from: "internships.med@hopkins.edu",
+                subject: "Fellowship Offer: International Clinical Research Program - Summer 2026",
+                body: `
+                     <div class="company-logo-img" style="color: #002D72; border: 2px solid #002D72;">JOHNS HOPKINS MEDICINE</div>
+                    <p>Dear Dr. Caba,</p>
+                    <p>The Office of International Education at <strong>Johns Hopkins University School of Medicine</strong> in Baltimore has identified your profile as a top candidate for our Summer Clinical Research Fellowship.</p>
+                    <p>We are looking for global medical talent to join our Oncology research unit. We would like to interview you to discuss your research interests and your ability to adapt to the rigorous standards of the US healthcare system.</p>
+                    <p>Expect questions regarding medical ethics and your long-term specialization goals.</p>
+                    <div class="email-signature">
+                        Sincerely,<br><br>
+                        <strong>Dr. Paul B. Rothman</strong><br>
+                        Dean of the Medical Faculty<br>
+                        Johns Hopkins Medicine, Baltimore, MD
+                    </div>
+                     <div class="email-footer-disclaimer">
+                        CONFIDENTIAL: Protected Health Information (PHI) may be contained in this message.
+                    </div>
+                `,
+                researchTips: [
+                    "Why Johns Hopkins? (It is the birthplace of modern American medicine).",
+                    "Be ready to answer: 'Why do you want to research in the USA instead of Europe?'",
+                    "Look up 'HIPAA' basics (patient privacy in the US) to impress the interviewer."
+                ]
+            },
+            {
+                id: 9,
+                name: "Daniel Carballo",
+                goal: "Aeronautical Engineer",
+                icon: "🚀",
+                companyName: "NASA Jet Propulsion Laboratory (JPL)",
+                avatarText: "NASA",
+                accent: "#0B3D91", // NASA Blue
+                from: "careers@jpl.nasa.gov",
+                subject: "Candidate Interview: Mars Sample Return Mission - Propulsion Team",
+                body: `
+                     <div class="company-logo-img" style="color: #0B3D91; border: 2px solid #0B3D91;">NASA JPL</div>
+                    <p>Dear Engineer Carballo,</p>
+                    <p>At <strong>NASA JPL</strong>, our mission is to dare mighty things. We have identified your technical profile as a potential fit for the propulsion subsystem team working on the upcoming Mars Sample Return mission.</p>
+                    <p>We invite you to a technical and behavioral interview at our Pasadena campus. Please be prepared to whiteboard complex aerodynamic problems and discuss orbital mechanics.</p>
+                    <div class="email-signature">
+                        Ad Astra,<br><br>
+                        <strong>Laurie Leshin</strong><br>
+                        Director<br>
+                        Jet Propulsion Laboratory (JPL) / Caltech
+                    </div>
+                     <div class="email-footer-disclaimer">
+                        NASA - National Aeronautics and Space Administration.
+                    </div>
+                `,
+                researchTips: [
+                    "Knowing the basics of the Mars Sample Return mission is mandatory.",
+                    "Be able to explain Bernoulli's principle or basic rocket thrust equations simply.",
+                    "NASA values teamwork intensely. Have examples of working in a team ready."
+                ]
+            },
+            
+            // --- NUEVOS ESTUDIANTES AGREGADOS ---
+            {
+                id: 10,
+                name: "Aaron Andrade",
+                goal: "Computer Science Engineer",
+                icon: "💻",
+                companyName: "Google",
+                avatarText: "GO",
+                accent: "#4285F4", // Google Blue
+                from: "tech.recruiting@google.com",
+                subject: "Technical Interview Invitation: Software Engineering Internship - Mountain View",
+                body: `
+                     <div class="company-logo-img" style="color: #4285F4; border: 2px solid #4285F4;">Google</div>
+                    <p>Hi Aaron,</p>
+                    <p>Our engineering team at <strong>Google</strong> was impressed by your GitHub portfolio and your problem-solving approach. We are looking for engineers who are not just great coders, but also great thinkers.</p>
+                    <p>We would like to invite you to a technical interview focused on Algorithms and Data Structures. Be prepared to explain your thought process out loud as you solve problems.</p>
+                    <p>We value 'Googleyness'—the ability to work well in ambiguous situations.</p>
+                    <div class="email-signature">
+                        Cheers,<br><br>
+                        <strong>Sundar Pichai</strong><br>
+                        CEO<br>
+                        Google HQ, Mountain View, CA
+                    </div>
+                `,
+                researchTips: [
+                    "Brush up on Big O notation and sorting algorithms.",
+                    "What is 'Googleyness'? Look it up.",
+                    "Be ready to code on a whiteboard (or shared doc) without an IDE."
+                ]
+            },
+            {
+                id: 11,
+                name: "Gisele Serrudo",
+                goal: "Business Administration",
+                icon: "📊",
+                companyName: "McKinsey & Company",
+                avatarText: "McK",
+                accent: "#051C2C", // McKinsey Blue/Black
+                from: "recruiting.latam@mckinsey.com",
+                subject: "First Round Interview: Business Analyst Associate - Strategy Division",
+                body: `
+                     <div class="company-logo-img" style="color: #051C2C; border: 2px solid #051C2C;">McKinsey & Company</div>
+                    <p>Dear Ms. Serrudo,</p>
+                    <p>Your academic record in Business Administration suggests you possess the analytical rigor we value at <strong>McKinsey & Company</strong>. We help the world's leading organizations solve their toughest problems.</p>
+                    <p>We invite you to a Case Study interview. You will be presented with a real-world business problem and asked to structure a solution. We are testing your logic, not just your knowledge.</p>
+                    <p>Prepare to use the MECE (Mutually Exclusive, Collectively Exhaustive) principle.</p>
+                    <div class="email-signature">
+                        Best regards,<br><br>
+                        <strong>Global Recruiting Team</strong><br>
+                        McKinsey & Company
+                    </div>
+                `,
+                researchTips: [
+                    "Practice 'Case Interview' frameworks. This is standard for top consulting firms.",
+                    "What is the MECE principle? You must know this.",
+                    "Be ready to do mental math quickly and accurately."
+                ]
+            },
+            {
+                id: 12,
+                name: "Estefany Arancibia",
+                goal: "Fashion Designer",
+                icon: "👗",
+                companyName: "Chanel",
+                avatarText: "CH",
+                accent: "#111111", // Chanel Black
+                from: "maison.careers@chanel.com",
+                subject: "Interview Request: Junior Design Internship - Haute Couture Atelier",
+                body: `
+                     <div class="company-logo-img" style="color: #000; border: 2px solid #000; font-family: serif;">CHANEL</div>
+                    <p>Bonjour Estefany,</p>
+                    <p>The Creative Director at <strong>CHANEL</strong> has reviewed your design portfolio. Your understanding of silhouette and textile manipulation shows great promise.</p>
+                    <p>We invite you to our Paris atelier for an interview. We are looking for a Junior Design Intern who respects the heritage of Gabrielle Chanel while looking towards the future of fashion.</p>
+                    <p>Please bring your sketchbook and be prepared to discuss your creative process from concept to garment.</p>
+                    <div class="email-signature">
+                        Cordialement,<br><br>
+                        <strong>Virginie Viard</strong><br>
+                        Artistic Director<br>
+                        31 Rue Cambon, Paris
+                    </div>
+                `,
+                researchTips: [
+                    "Know the history of Coco Chanel and the brand's iconic codes (tweeds, pearls, camellias).",
+                    "Be ready to explain your specific design aesthetic.",
+                    "Who are your fashion influences and why?"
+                ]
+            }
+        ];
+
+        // --- LOGICA JAVASCRIPT ---
+
+        const mainMenu = document.getElementById('main-menu');
+        const detailView = document.getElementById('detail-view');
+        const gridContainer = document.getElementById('grid-container');
+        const emailView = document.getElementById('email-view');
+        const prepView = document.getElementById('prep-view');
+        const toggleBtn = document.getElementById('toggleBtn');
+        
+        // 1. Generar la cuadrícula de estudiantes
+        students.forEach(student => {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            // Borde superior de color
+            card.style.setProperty('--primary-teal', student.accent);
+            
+            // Usamos un pequeño hack para pasar el color al pseudo-elemento si fuera necesario, 
+            // pero en este nuevo CSS usamos una variable inline o js directo.
+            // La forma más limpia en este diseño es pintar el borde superior directamente con JS
+            // o usar la variable CSS local.
+            
+            card.innerHTML = `
+                <style>.student-card:nth-child(${student.id})::before { background: ${student.accent} !important; }</style>
+                <span class="student-name">${student.name}</span>
+                <div class="student-goal">
+                    <span class="goal-icon">${student.icon}</span>
+                    <span>${student.goal}</span>
+                </div>
+            `;
+            // Aplicar color al borde via JS directo para evitar conflictos de CSS
+            setTimeout(() => {
+                card.querySelector('.student-name').style.color = "#2d2d2d"; 
+            }, 0);
+            
+            card.onclick = () => loadStudentProfile(student);
+            gridContainer.appendChild(card);
+        });
+
+        // 2. Cargar el perfil del estudiante seleccionado
+        function loadStudentProfile(student) {
+            // -- Llenar el Email --
+            const avatar = document.getElementById('email-avatar');
+            avatar.innerText = student.avatarText;
+            avatar.style.background = student.accent;
+            
+            document.getElementById('email-subject').innerText = student.subject;
+            document.getElementById('email-from').innerText = student.from;
+            
+            // Crear un email ficticio para el estudiante
+            const names = student.name.split(' ');
+            const studentEmail = names[0].toLowerCase() + "." + names[1].toLowerCase() + "@email.com";
+            
+            document.getElementById('email-to').innerText = studentEmail;
+            document.getElementById('email-body-content').innerHTML = student.body;
+
+            // -- Llenar la Guía de Preparación --
+            const roleTitle = document.getElementById('prep-role');
+            roleTitle.innerText = student.goal;
+            roleTitle.style.color = student.accent; // Personalizar color del título
+
+            const checklistContainer = document.getElementById('research-checklist');
+            checklistContainer.innerHTML = ''; // Limpiar anterior
+            
+            student.researchTips.forEach(tip => {
+               const item = document.createElement('div');
+               item.className = 'checklist-item';
+               item.innerHTML = `
+                <div class="check-box" style="border-color: ${student.accent}"></div>
+                <div>${tip}</div>
+               `;
+               checklistContainer.appendChild(item);
+            });
+
+            // -- Mostrar la vista de detalle --
+            mainMenu.style.display = 'none';
+            detailView.style.display = 'block';
+            
+            // Resetear a la vista del email por defecto
+            emailView.style.display = 'block';
+            prepView.style.display = 'none';
+            toggleBtn.innerText = "Open Candidate Prep Zone";
+            toggleBtn.style.background = 'var(--accent-coral)';
+        }
+
+        // 3. Volver al menú principal
+        function showMenu() {
+            detailView.style.display = 'none';
+            mainMenu.style.display = 'block';
+        }
+
+        // 4. Alternar entre Email y Guía de Preparación
+        function toggleViewMode() {
+            if (emailView.style.display !== 'none') {
+                // Cambiar a Prep Zone
+                emailView.style.display = 'none';
+                prepView.style.display = 'block';
+                toggleBtn.innerText = "Back to Interview Email";
+                toggleBtn.style.background = '#777'; // Botón neutro para volver
+            } else {
+                // Cambiar a Email
+                emailView.style.display = 'block';
+                prepView.style.display = 'none';
+                toggleBtn.innerText = "Open Candidate Prep Zone";
+                toggleBtn.style.background = 'var(--accent-coral)'; // Botón vibrante para ir a la guía
+            }
+        }
+    </script>
+</body>
+</html>
