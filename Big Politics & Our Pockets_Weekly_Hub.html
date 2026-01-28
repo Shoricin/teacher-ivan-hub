@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Politics & Economy Hub | Teacher Ivan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --accent-coral: #ff9a8b;
+            --bg-light: #f9f9f9;
+            --text-dark: #2d2d2d;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0; padding: 0; color: var(--text-dark);
+        }
+
+        /* HEADER */
+        header { background: white; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.5rem; margin: 0; color: var(--text-dark); line-height: 1.1; }
+        .subtitle { color: #777; margin-top: 1rem; font-size: 1.1rem; }
+
+        /* FILTER BAR */
+        .filter-section {
+            background-color: var(--primary-teal); padding: 1.5rem 1rem; text-align: center; color: white;
+            box-shadow: 0 4px 15px rgba(93, 203, 195, 0.3);
+        }
+        .current-date-display { font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; }
+
+        /* GRID */
+        .content-wrapper { padding: 3rem 2rem; display: flex; justify-content: center; }
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; width: 100%;
+        }
+
+        /* CARDS */
+        .card {
+            background: white; border-radius: 20px; padding: 2rem;
+            box-shadow: var(--card-shadow); position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: all 0.3s; border: none; min-height: 320px;
+        }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; }
+        .card-wed::before { background: var(--primary-teal); }
+        .card-thu::before { background: #f59e0b; }
+        .card-fri::before { background: var(--accent-coral); }
+
+        .card.locked { opacity: 0.6; filter: grayscale(90%); pointer-events: none; }
+        .card.locked::after { content: '🔒 DESBLOQUEA EN LA FECHA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: #333; width: 100%; text-align: center; background: rgba(255,255,255,0.8); padding: 10px; }
+        
+        .card.done { background: #f0fff4; }
+        .card.done::after { content: '✅ COMPLETADO'; position: absolute; top: 20px; right: 20px; font-weight: bold; color: green; font-size: 0.8rem; }
+
+        .card-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+        .card h3 { margin: 10px 0; font-size: 1.3rem; }
+        .card p { color: #666; font-size: 0.9rem; line-height: 1.6; }
+        
+        .btn-action {
+            display: inline-block; text-align: center; background: var(--primary-teal); color: white;
+            padding: 12px 24px; border-radius: 50px; font-weight: 600; cursor: pointer;
+            border: none; align-self: flex-start; transition: 0.2s; text-decoration: none;
+        }
+        .btn-action:hover { transform: scale(1.05); background: #4db7af; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+        .modal-content { 
+            background-color: white; margin: 2% auto; padding: 40px; border-radius: 20px; width: 90%; max-width: 800px; 
+            max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* ESTILOS DE CONTENIDO EDUCATIVO */
+        .edu-section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .edu-title { font-weight: bold; color: var(--primary-teal); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 10px; }
+        .edu-text { font-size: 0.95rem; line-height: 1.7; color: #444; }
+        .vocab-box { background: #fffbe6; padding: 15px; border-radius: 10px; border-left: 4px solid #f59e0b; margin: 15px 0; font-size: 0.9rem; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        textarea { width: 100%; height: 120px; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-family: inherit; margin-bottom: 20px; box-sizing: border-box; resize: vertical; }
+
+        /* REPORT SECTION */
+        #reportSection { display: none; margin-bottom: 50px; }
+        .report-box { background: white; padding: 40px; border-radius: 20px; box-shadow: var(--card-shadow); max-width: 800px; margin: 0 auto; }
+        .btn-pdf { background: var(--accent-coral); }
+
+        footer { background: var(--accent-coral); color: white; padding: 2rem; text-align: center; margin-top: auto; font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Big Politics & Our Pockets</h1>
+    <p class="subtitle">Semana de Análisis: Cómo la geopolítica mundial afecta tu economía personal.</p>
+</header>
+
+<div class="filter-section">
+    <div class="current-date-display" id="dateDisplay">CARGANDO FECHA...</div>
+</div>
+
+<div class="content-wrapper">
+    <div class="grid-container">
+        
+        <div id="cardWed" class="card card-wed locked">
+            <div>
+                <span class="card-tag">MIÉRCOLES: SUPPLY CHAINS</span>
+                <h3>The Inflation Connection</h3>
+                <p><strong>Reading Comprehension:</strong> Analiza cómo los conflictos en el Mar Rojo y las tarifas comerciales aumentan el precio de tu café y tecnología.</p>
+            </div>
+            <button class="btn-action" onclick="openTask('wed')">Abrir Lectura</button>
+        </div>
+
+        <div id="cardThu" class="card card-thu locked">
+            <div>
+                <span class="card-tag">JUEVES: GLOBAL RISKS</span>
+                <h3>Davos 2026 Analysis</h3>
+                <p><strong>Video Analysis:</strong> Reporte del Foro Económico Mundial. ¿Cuáles son los riesgos geopolíticos para este año?</p>
+            </div>
+            <button class="btn-action" onclick="openTask('thu')">Abrir Video</button>
+        </div>
+
+        <div id="cardFri" class="card card-fri locked">
+            <div>
+                <span class="card-tag">VIERNES: CURRENCY WARS</span>
+                <h3>The Safe-Haven Effect</h3>
+                <p><strong>Case Study:</strong> ¿Por qué sube el dólar cuando hay guerra? Entiende el impacto en las importaciones locales.</p>
+            </div>
+            <button class="btn-action" onclick="openTask('fri')">Abrir Caso</button>
+        </div>
+    </div>
+</div>
+
+<div id="reportSection" class="content-wrapper" style="padding-top:0;">
+    <div class="report-box">
+        <h2 style="text-align: center; color: var(--text-dark);">✅ Misión Semanal Completada</h2>
+        <p style="text-align: center; color: #666;">Has finalizado los 3 módulos. Genera tu reporte PDF para el profesor.</p>
+        
+        <div style="margin: 25px 0;">
+            <label style="font-weight: bold; display: block; margin-bottom: 8px;">Nombre del Estudiante:</label>
+            <input type="text" id="studentName" placeholder="Escribe tu nombre completo..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box;">
+        </div>
+
+        <div id="printableArea" style="border: 1px dashed #ccc; padding: 25px; background: #fafafa; border-radius: 12px;">
+            <div style="margin-bottom: 15px;"><strong>Wed (Reading):</strong> <br><span id="wedResult" style="color:#555;">...</span></div>
+            <div style="margin-bottom: 15px;"><strong>Thu (Video):</strong> <br><span id="thuResult" style="color:#555;">...</span></div>
+            <div style="margin-bottom: 0;"><strong>Fri (Case Study):</strong> <br><span id="friResult" style="color:#555;">...</span></div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn-action btn-pdf" onclick="generatePDF()">📄 Descargar Reporte PDF</button>
+        </div>
+    </div>
+</div>
+
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle" style="color: var(--primary-teal); margin-top:0;">Tarea</h2>
+        
+        <div id="modalResources"></div>
+
+        <div class="edu-section" style="border-top: 2px solid #eee; padding-top: 20px;">
+            <div class="edu-title">📝 TU ASIGNACIÓN</div>
+            <p id="modalInstruction" style="font-size: 0.95rem;"></p>
+            <textarea id="taskInput" placeholder="Escribe tu análisis aquí (mínimo 50 palabras)..."></textarea>
+        </div>
+        
+        <div style="text-align: right;">
+            <button class="btn-action" onclick="saveTask()">Guardar Tarea</button>
+            <button class="btn-action" onclick="closeModal()" style="background:#eee; color: #555; margin-left: 10px;">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Teacher Ivan Economics & Politics Hub</p>
+</footer>
+
+<script>
+    // --- SIMULACIÓN DE FECHA ---
+    // 3=Miércoles, 4=Jueves, 5=Viernes, 6=Sábado.
+    const SIMULATED_DAY = new Date().getDay(); 
+    // const SIMULATED_DAY = 5; // <-- DESCOMENTAR PARA PROBAR COMO SI FUERA VIERNES
+
+    const dateDisplay = document.getElementById('dateDisplay');
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateDisplay.innerText = new Date().toLocaleDateString('es-ES', options).toUpperCase();
+
+    // Estado de tareas
+    let taskStatus = { wed: false, thu: false, fri: false };
+    let taskData = { wed: "", thu: "", fri: "" };
+    let currentTaskDay = "";
+
+    // --- SISTEMA DE BLOQUEO ---
+    function checkLocks() {
+        const dayMap = { 'wed': 3, 'thu': 4, 'fri': 5 };
+        
+        Object.keys(dayMap).forEach(key => {
+            const card = document.getElementById(`card${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            // Lógica: Si el día actual es >= al día de la tarea (o es sábado=6/domingo=0), se desbloquea.
+            if ((SIMULATED_DAY >= dayMap[key] && SIMULATED_DAY !== 0) || SIMULATED_DAY === 6 || SIMULATED_DAY === 0) {
+                card.classList.remove('locked');
+            } else {
+                card.classList.add('locked');
+            }
+        });
+
+        if (taskStatus.wed && taskStatus.thu && taskStatus.fri) {
+            document.getElementById('reportSection').style.display = 'block';
+            setTimeout(() => document.getElementById('reportSection').scrollIntoView({behavior: "smooth"}), 500);
+        }
+    }
+
+    // --- CONTENIDO EDUCATIVO DETALLADO ---
+    function openTask(day) {
+        currentTaskDay = day;
+        const modal = document.getElementById('taskModal');
+        const title = document.getElementById('modalTitle');
+        const resources = document.getElementById('modalResources');
+        const instruction = document.getElementById('modalInstruction');
+        const input = document.getElementById('taskInput');
+
+        input.value = taskData[day] || ""; 
+        modal.style.display = 'block';
+
+        if (day === 'wed') {
+            title.innerText = "Wednesday: The Supply Chain Chaos";
+            resources.innerHTML = `
+                <div class="edu-section">
+                    <div class="edu-title">🔎 CONTEXTO</div>
+                    <p class="edu-text">
+                        Cuando hay tensión geopolítica (guerras o bloqueos) en rutas clave como el Canal de Suez o el Mar Rojo, los barcos deben tomar rutas más largas. Esto aumenta el costo del combustible y los seguros. ¿El resultado? <strong>"Imported Inflation"</strong>. El precio de productos cotidianos (café, ropa, electrónicos) sube aunque se produzcan lejos del conflicto.
+                    </p>
+                </div>
+                <div class="edu-section">
+                    <div class="edu-title">📚 RECURSO DE LECTURA</div>
+                    <p class="edu-text">Lee este resumen ejecutivo del Economics Observatory:</p>
+                    <div style="background:#f4f4f4; padding:15px; border-radius:8px; font-style:italic;">
+                        "Geopolitical risk leads to higher inflation through supply chain bottlenecks. When trade routes are disrupted, the cost of shipping a container can triple in weeks. This cost is passed to the consumer. Additionally, uncertainty reduces business investment, slowing down the economy while prices remain high (Stagflation)."
+                    </div>
+                    <div class="vocab-box">
+                        <strong>Vocabulary:</strong><br>
+                        • <em>Bottleneck:</em> Cuello de botella (atasco).<br>
+                        • <em>Freight Cost:</em> Costo de flete/transporte.<br>
+                        • <em>Stagflation:</em> Estancamiento económico + Inflación alta.
+                    </div>
+                </div>
+            `;
+            instruction.innerText = "Explica en tus propias palabras: ¿Cómo un conflicto político en el medio oriente puede hacer que tu teléfono o tu ropa cuesten más caros en tu país? Usa los términos 'Freight Cost' y 'Bottleneck'.";
+        } 
+        else if (day === 'thu') {
+            title.innerText = "Thursday: Geopolitics 2026";
+            resources.innerHTML = `
+                <div class="edu-section">
+                    <div class="edu-title">🎬 VIDEO ANALYSIS</div>
+                    <p class="edu-text">Mira este análisis del Foro Económico Mundial (WEF) sobre los riesgos actuales. Presta atención a la mención de "Fragmentation".</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/gzJyuPlYhK0" title="WEF Geopolitics" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="vocab-box">
+                    <strong>Key Concepts:</strong><br>
+                    • <em>Fragmentation:</em> El mundo dividiéndose en bloques comerciales separados.<br>
+                    • <em>Protectionism:</em> Gobiernos poniendo impuestos a productos extranjeros.
+                </div>
+            `;
+            instruction.innerText = "Según el video: ¿Cuál es el mayor riesgo económico de la 'Fragmentación' global? ¿Crees que el proteccionismo ayuda o daña a tu economía local?";
+        }
+        else if (day === 'fri') {
+            title.innerText = "Friday: The Safe-Haven Effect";
+            resources.innerHTML = `
+                <div class="edu-section">
+                    <div class="edu-title">📉 CASE STUDY: CURRENCY WARS</div>
+                    <p class="edu-text">
+                        En tiempos de miedo (guerra o pandemia), los grandes inversores venden monedas riesgosas (como el Peso o el Real) y compran Dólares Americanos (USD) o Francos Suizos. Esto se llama <strong>"Flight to Safety"</strong> (Vuelo a la seguridad).
+                    </p>
+                    <p class="edu-text">
+                        <strong>El problema:</strong> Cuando tu moneda local pierde valor frente al dólar, todo lo que tu país importa (gasolina, medicinas, tecnología) se vuelve automáticamente más caro. La política mundial te empobrece sin que salgas de casa.
+                    </p>
+                </div>
+                <div class="vocab-box">
+                    <strong>Vocabulary:</strong><br>
+                    • <em>Safe-Haven Currency:</em> Moneda refugio (USD, CHF).<br>
+                    • <em>Purchasing Power:</em> Poder adquisitivo.
+                </div>
+            `;
+            instruction.innerText = "Imagina que eres un asesor financiero. Tu cliente pregunta: '¿Por qué subió el dólar si la economía de mi país va bien?'. Escribe una explicación usando el concepto de 'Safe-Haven Effect' y 'Global Uncertainty'.";
+        }
+    }
+
+    function saveTask() {
+        const input = document.getElementById('taskInput').value;
+        if (input.split(" ").length < 10) { alert("Respuesta muy corta. Por favor elabora más."); return; }
+        
+        taskData[currentTaskDay] = input;
+        
+        // Actualizar visualmente el reporte (vista previa)
+        const resultSpan = document.getElementById(`${currentTaskDay}Result`);
+        if(resultSpan) resultSpan.innerText = input;
+
+        markDone(currentTaskDay);
+        closeModal();
+    }
+
+    function markDone(day) {
+        taskStatus[day] = true;
+        document.getElementById(`card${day.charAt(0).toUpperCase() + day.slice(1)}`).classList.add('done');
+        checkLocks();
+    }
+
+    function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
+
+    // --- PDF GENERATOR ---
+    function generatePDF() {
+        const name = document.getElementById('studentName').value;
+        if (!name) { alert("Escribe tu nombre."); return; }
+
+        const element = document.createElement('div');
+        element.innerHTML = `
+            <div style="padding: 30px; font-family: sans-serif; color: #333;">
+                <div style="border-bottom: 3px solid #5dcbc3; padding-bottom: 10px; margin-bottom: 20px;">
+                    <h1 style="color:#2d2d2d; margin:0;">Weekly Ethics Report</h1>
+                    <p style="margin:5px 0; color:#777;">Topic: Big Politics & Our Pockets</p>
+                </div>
+                
+                <p><strong>Estudiante:</strong> ${name}</p>
+                <p><strong>Fecha de Entrega:</strong> ${new Date().toLocaleDateString()}</p>
+                <br>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="background:#f0f8ff; padding:8px; border-left:4px solid #5dcbc3;">📅 Miércoles: Inflation & Supply Chains</h3>
+                    <p style="font-size:0.9rem; margin-bottom:5px;"><i>Task: Explain Freight Cost & Bottlenecks impact.</i></p>
+                    <div style="border:1px solid #ddd; padding:15px; background:#fff; border-radius:5px;">${taskData.wed}</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 style="background:#fffbe6; padding:8px; border-left:4px solid #f59e0b;">📅 Jueves: Geopolitics Video Analysis</h3>
+                    <p style="font-size:0.9rem; margin-bottom:5px;"><i>Task: Analysis of WEF Risks & Fragmentation.</i></p>
+                    <div style="border:1px solid #ddd; padding:15px; background:#fff; border-radius:5px;">${taskData.thu}</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 style="background:#fff0f3; padding:8px; border-left:4px solid #ff9a8b;">📅 Viernes: Safe-Haven Effect Case</h3>
+                    <p style="font-size:0.9rem; margin-bottom:5px;"><i>Task: Explanation of Dollar surge & Local purchasing power.</i></p>
+                    <div style="border:1px solid #ddd; padding:15px; background:#fff; border-radius:5px;">${taskData.fri}</div>
+                </div>
+
+                <div style="margin-top: 40px; text-align: center; font-size: 0.8rem; color: #999;">
+                    Verified by Teacher Ivan Hub System • 2026
+                </div>
+            </div>
+        `;
+
+        html2pdf().set({
+            margin: 0.5,
+            filename: `Politics_Report_${name.replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        }).from(element).save();
+    }
+
+    checkLocks();
+
+</script>
+
+</body>
+</html>

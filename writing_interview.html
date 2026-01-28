@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Writing Task - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --teal: #5dcbc3;
+            --teal-dark: #3dbdb5;
+            --coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --sidebar-width: 350px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Evita scroll en el body, usamos scroll interno */
+        }
+
+        /* --- SIDEBAR: VOCABULARY GUIDE --- */
+        aside {
+            width: var(--sidebar-width);
+            background-color: var(--white);
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        .vocab-header {
+            background-color: var(--teal);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .vocab-header h2 { margin: 0; font-size: 1.2rem; }
+        .vocab-header p { margin: 5px 0 0; opacity: 0.9; font-size: 0.85rem; }
+
+        .vocab-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .vocab-card {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-left: 4px solid var(--coral);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        .vocab-card:hover { transform: translateX(5px); border-color: var(--teal); }
+
+        .term { font-weight: 700; color: var(--teal-dark); font-size: 1.1rem; display: flex; justify-content: space-between; }
+        .translation { font-size: 0.85rem; color: #888; font-style: italic; }
+        .definition { margin: 8px 0; font-size: 0.9rem; line-height: 1.4; }
+        .example { background: #fff0ec; padding: 8px; border-radius: 6px; font-size: 0.85rem; color: #555; }
+        .example strong { color: var(--coral); }
+
+        /* --- MAIN CONTENT: WRITING TASK --- */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .task-header {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            text-align: center;
+        }
+        .task-header h1 { color: var(--text-dark); margin-bottom: 10px; }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto 100px; /* Espacio para el botón flotante */
+        }
+
+        .question-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+        }
+
+        .q-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        .tip-text { font-size: 0.85rem; color: #888; margin-bottom: 10px; display: block; }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        textarea:focus { outline: none; border-color: var(--teal); background: #f0fdfc; }
+
+        /* --- ACTION BAR --- */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: var(--sidebar-width); /* Respeta el sidebar */
+            background: white;
+            padding: 15px 40px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn-generate {
+            background-color: var(--teal);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-generate:hover { background-color: var(--teal-dark); transform: translateY(-2px); }
+
+        .student-name-input {
+            padding: 10px 15px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            width: 250px;
+            outline: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            aside { width: 100%; height: 300px; }
+            .action-bar { left: 0; position: relative; flex-direction: column; gap: 15px; }
+            main { padding: 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="vocab-header">
+            <h2> Vocabulary Helper</h2>
+            <p>Use these words in your answers!</p>
+        </div>
+        <div class="vocab-list">
+            
+            <div class="vocab-card">
+                <div class="term">Reliable <span class="translation">Confiable</span></div>
+                <div class="definition">Someone you can trust to work well.</div>
+                <div class="example">"I am a <strong>reliable</strong> person, I never miss a deadline."</div>
+            </div>
+
+            <div class="vocab-card">
+                <div class="term">Background <span class="translation">Experiencia/Fondo</span></div>
+                <div class="definition">Your past experience and education.</div>
+                <div class="example">"I have a strong <strong>background</strong> in customer service."</div>
+            </div>
+
+            <div class="vocab-card">
+                <div class="term">Eager to learn <span class="translation">Deseoso de aprender</span></div>
+                <div class="definition">Very enthusiastic about learning new things.</div>
+                <div class="example">"I am <strong>eager to learn</strong> new software tools."</div>
+            </div>
+
+            <div class="vocab-card">
+                <div class="term">Hone my skills <span class="translation">Perfeccionar habilidades</span></div>
+                <div class="definition">To sharpen or improve a specific skill.</div>
+                <div class="example">"I want to <strong>hone my skills</strong> in graphic design."</div>
+            </div>
+
+            <div class="vocab-card">
+                <div class="term">Weakness <span class="translation">Debilidad</span></div>
+                <div class="definition">An area where you need improvement.</div>
+                <div class="example">"My <strong>weakness</strong> is public speaking, but I am practicing."</div>
+            </div>
+
+            <div class="vocab-card">
+                <div class="term">Long-term goal <span class="translation">Meta a largo plazo</span></div>
+                <div class="definition">Something you want to achieve in the future.</div>
+                <div class="example">"My <strong>long-term goal</strong> is to manage a team."</div>
+            </div>
+
+        </div>
+    </aside>
+
+    <main>
+        <div class="task-header">
+            <h1>Interview Preparation Task</h1>
+            <p>Answer the following questions using your own words. Try to incorporate the vocabulary from the left.</p>
+        </div>
+
+        <div class="form-container">
+
+            <div class="question-box">
+                <label class="q-label">1. Tell me about yourself.</label>
+                <span class="tip-text">Tip: Talk about your current role, background, and one key achievement. Don't tell your life story.</span>
+                <textarea id="q1" placeholder="Start with: 'I am a teacher with 5 years of experience...'"></textarea>
+            </div>
+
+            <div class="question-box">
+                <label class="q-label">2. What are your greatest strengths?</label>
+                <span class="tip-text">Tip: Choose 2 or 3 skills relevant to the job. Use words like 'Reliable' or 'Organized'.</span>
+                <textarea id="q2" placeholder="Example: 'My greatest strength is my ability to...'"></textarea>
+            </div>
+
+            <div class="question-box">
+                <label class="q-label">3. What is your greatest weakness?</label>
+                <span class="tip-text">Tip: Be honest but mention how you are fixing it. (Don't say 'I work too hard').</span>
+                <textarea id="q3" placeholder="Example: 'Sometimes I struggle with..., however I am working on it by...'"></textarea>
+            </div>
+
+            <div class="question-box">
+                <label class="q-label">4. Why do you want to work here?</label>
+                <span class="tip-text">Tip: Mention something specific about the company you like.</span>
+                <textarea id="q4" placeholder="I admire this company because..."></textarea>
+            </div>
+
+            <div class="question-box">
+                <label class="q-label">5. Where do you see yourself in 5 years?</label>
+                <span class="tip-text">Tip: Connect your goals with the company's growth. Use 'Hone my skills'.</span>
+                <textarea id="q5" placeholder="In 5 years, I hope to be..."></textarea>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="action-bar">
+        <input type="text" id="studentName" class="student-name-input" placeholder="Enter your full name...">
+        <button class="btn-generate" onclick="generatePDF()">
+            <span class="material-icons-round">print</span>
+            Generate Study Guide PDF
+        </button>
+    </div>
+
+    <script>
+        function generatePDF() {
+            const name = document.getElementById('studentName').value;
+            if(!name) { alert("Please enter your name first!"); return; }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // --- HEADER ---
+            doc.setFillColor(93, 203, 195); // Teal
+            doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text("Interview Preparation Guide", 105, 15, null, null, "center");
+            doc.setFontSize(10);
+            doc.text(`Student: ${name} | Teacher Ivan Resources`, 105, 25, null, null, "center");
+
+            let y = 45;
+            const questions = [
+                "1. Tell me about yourself.",
+                "2. What are your greatest strengths?",
+                "3. What is your greatest weakness?",
+                "4. Why do you want to work here?",
+                "5. Where do you see yourself in 5 years?"
+            ];
+
+            // --- STUDENT ANSWERS SECTION ---
+            doc.setTextColor(45, 45, 45); // Dark Grey
+            
+            questions.forEach((q, index) => {
+                const answer = document.getElementById(`q${index+1}`).value;
+                
+                // Check page break
+                if (y > 270) { doc.addPage(); y = 20; }
+
+                // Question Title
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.setTextColor(255, 107, 107); // Coral for Questions
+                doc.text(q, 20, y);
+                y += 7;
+
+                // Answer Content
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+
+                if(answer.trim() === "") {
+                    doc.setTextColor(150);
+                    doc.text("(No answer provided)", 20, y);
+                    y += 15;
+                } else {
+                    const splitText = doc.splitTextToSize(answer, 170); // Wrap text
+                    doc.text(splitText, 20, y);
+                    y += (splitText.length * 6) + 10;
+                }
+            });
+
+            // --- VOCABULARY SECTION (Bonus Guide) ---
+            if (y > 200) { doc.addPage(); y = 20; }
+            else { y += 10; doc.setDrawColor(200); doc.line(20, y, 190, y); y += 15; }
+
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(93, 203, 195); // Teal
+            doc.setFontSize(14);
+            doc.text("Study Vocabulary Review", 20, y);
+            y += 10;
+
+            const vocab = [
+                {t: "Reliable", m: "Confiable - Trustworthy"},
+                {t: "Background", m: "Experiencia - Past experience"},
+                {t: "Eager to learn", m: "Deseoso de aprender - Enthusiastic"},
+                {t: "Hone skills", m: "Perfeccionar - To sharpen/improve"},
+                {t: "Weakness", m: "Debilidad - Area to improve"}
+            ];
+
+            doc.setFontSize(10);
+            doc.setTextColor(50);
+            
+            vocab.forEach(v => {
+                doc.setFont("helvetica", "bold");
+                doc.text(`• ${v.t}:`, 20, y);
+                doc.setFont("helvetica", "normal");
+                doc.text(v.m, 50, y);
+                y += 6;
+            });
+
+            doc.save(`Interview_Guide_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>
