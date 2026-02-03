@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation Lab | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+        }
+
+        h1 { margin: 0; color: var(--text-dark); font-size: 2.2rem; }
+        .subtitle { color: #888; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #aaa;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-teal);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        .content-area {
+            max-width: 1000px;
+            margin: 0 auto 50px;
+            width: 90%;
+        }
+
+        .section-view { display: none; animation: fadeIn 0.4s ease; }
+        .section-view.active { display: block; }
+
+        /* CARDS FOR SOUNDS */
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .sound-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 5px solid var(--primary-teal);
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .sound-card:hover { transform: translateY(-5px); }
+
+        .pair-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .word-btn {
+            background: #f0fdfc;
+            border: 2px solid var(--primary-teal);
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            transition: 0.1s;
+            min-width: 90px;
+        }
+        .word-btn:active { background: var(--primary-teal); color: white; transform: scale(0.95); }
+
+        .icon-vs { color: #ccc; font-style: italic; font-size: 0.9rem; }
+
+        /* TONGUE TWISTERS */
+        .twister-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+             gap: 20px;
+        }
+
+        .twister-card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .level-badge {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--accent-coral); color: white;
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+        }
+
+        .twister-text { font-size: 1.2rem; font-weight: 600; color: #444; line-height: 1.5; margin: 30px 0 20px; }
+
+        .controls { display: flex; gap: 10px; margin-top: auto; }
+        .play-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-slow { background: #e0f2f1; color: var(--primary-dark); }
+        .btn-fast { background: var(--primary-teal); color: white; }
+        .play-btn:hover { opacity: 0.9; }
+
+        /* SHADOWING AREA */
+        .shadow-box {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%; height: 150px; padding: 20px;
+            border: 2px solid #eee; border-radius: 15px;
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem;
+            resize: none; box-sizing: border-box; margin-bottom: 20px;
+        }
+        textarea:focus { outline: none; border-color: var(--primary-teal); }
+
+        .action-btn {
+            background: var(--text-dark); color: white;
+            padding: 15px 40px; border-radius: 50px;
+            border: none; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .action-btn:hover { background: black; transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Pronunciation Lab</h1>
+        <div class="subtitle">Listen, Repeat, and Perfect your English Accent</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('sounds')">Tricky Sounds</button>
+        <button class="tab-btn" onclick="switchTab('twisters')">Tongue Twisters</button>
+        <button class="tab-btn" onclick="switchTab('shadowing')">Text Shadowing</button>
+    </div>
+
+    <div class="content-area">
+
+        <div id="sounds" class="section-view active">
+            <div style="text-align:center; margin-bottom:30px; color:#666;">
+                <p>Click the words to hear the difference. Pay attention to the vowel length and consonant vibration!</p>
+            </div>
+
+            <div class="sound-grid">
+                <div class="sound-card">
+                    <h3>Short 'I' vs Long 'EE'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Ship')">Ship</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Sheep')">Sheep</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Bit')">Bit</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Beat')">Beat</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'TH' vs 'T' / 'D'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Three')">Three</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Tree')">Tree</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('They')">They</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Day')">Day</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'V' vs 'B'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Very')">Very</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Berry')">Berry</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Vote')">Vote</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Boat')">Boat</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'S' vs 'SH'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Sea')">Sea</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('She')">She</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Sock')">Sock</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Shock')">Shock</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'CH' vs 'SH'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Chair')">Chair</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Share')">Share</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Chip')">Chip</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Ship')">Ship</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'Y' vs 'J'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Yellow')">Yellow</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Jello')">Jello</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Year')">Year</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Jeer')">Jeer</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>'A' vs 'U'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Cat')">Cat</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Cut')">Cut</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Hat')">Hat</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Hut')">Hut</button>
+                    </div>
+                </div>
+
+                <div class="sound-card">
+                    <h3>Long 'U' vs Short 'U'</h3>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Pool')">Pool</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Pull')">Pull</button>
+                    </div>
+                    <div class="pair-container">
+                        <button class="word-btn" onclick="speak('Fool')">Fool</button>
+                        <span class="icon-vs">vs</span>
+                        <button class="word-btn" onclick="speak('Full')">Full</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="twisters" class="section-view">
+            
+            <div class="twister-grid">
+                
+                <div class="twister-card">
+                    <div class="level-badge">Level 1: The 'S' Sound</div>
+                    <div class="twister-text">"She sells seashells by the seashore."</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('She sells seashells by the seashore', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('She sells seashells by the seashore', 1.1)">🐇 Normal</button>
+                    </div>
+                </div>
+
+                <div class="twister-card">
+                    <div class="level-badge">Level 1: Ice Cream</div>
+                    <div class="twister-text">"I scream, you scream, we all scream for ice cream."</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('I scream, you scream, we all scream for ice cream', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('I scream, you scream, we all scream for ice cream', 1.1)">🐇 Normal</button>
+                    </div>
+                </div>
+
+                <div class="twister-card">
+                    <div class="level-badge" style="background:#f59e0b;">Level 2: The 'P' Popper</div>
+                    <div class="twister-text">"Peter Piper picked a peck of pickled peppers."</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('Peter Piper picked a peck of pickled peppers', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('Peter Piper picked a peck of pickled peppers', 1.1)">🐇 Normal</button>
+                    </div>
+                </div>
+
+                <div class="twister-card">
+                    <div class="level-badge" style="background:#f59e0b;">Level 2: Fuzzy Bear</div>
+                    <div class="twister-text">"Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair. Fuzzy Wuzzy wasn't fuzzy, was he?"</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair. Fuzzy Wuzzy wasn\'t fuzzy, was he?', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair. Fuzzy Wuzzy wasn\'t fuzzy, was he?', 1.1)">🐇 Normal</button>
+                    </div>
+                </div>
+
+                <div class="twister-card">
+                    <div class="level-badge" style="background:#ef4444;">Level 3: Expert Mode</div>
+                    <div class="twister-text">"How much wood would a woodchuck chuck if a woodchuck could chuck wood?"</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('How much wood would a woodchuck chuck if a woodchuck could chuck wood?', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('How much wood would a woodchuck chuck if a woodchuck could chuck wood?', 1.2)">🐇 Fast!</button>
+                    </div>
+                </div>
+
+                <div class="twister-card">
+                    <div class="level-badge" style="background:#ef4444;">Level 3: Butter Battle</div>
+                    <div class="twister-text">"Betty Botter bought some butter but she said the butter's bitter."</div>
+                    <div class="controls">
+                        <button class="play-btn btn-slow" onclick="speak('Betty Botter bought some butter but she said the butter\'s bitter.', 0.7)">🐢 Slow</button>
+                        <button class="play-btn btn-fast" onclick="speak('Betty Botter bought some butter but she said the butter\'s bitter.', 1.1)">🐇 Fast!</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="shadowing" class="section-view">
+            <div class="shadow-box">
+                <h2 style="margin-top:0;">Text-to-Speech Shadowing</h2>
+                <p style="color:#666; margin-bottom:20px;">Type or paste any text here. Listen to the AI, then pause and repeat (Shadow) exactly what you heard.</p>
+                
+                <textarea id="customText" placeholder="Example: Hello! My name is Ivan and I am practicing my English accent today."></textarea>
+                
+                <div style="display:flex; justify-content:center; gap:10px;">
+                    <button class="action-btn" onclick="speakCustom()">
+                        <span class="material-icons-round">volume_up</span> Listen
+                    </button>
+                    <button class="action-btn" style="background:#ddd; color:#333;" onclick="stopSpeak()">
+                        <span class="material-icons-round">stop</span> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB LOGIC ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            // Highlight button
+            const btns = document.querySelectorAll('.tab-btn');
+            if(tabId === 'sounds') btns[0].classList.add('active');
+            if(tabId === 'twisters') btns[1].classList.add('active');
+            if(tabId === 'shadowing') btns[2].classList.add('active');
+        }
+
+        // --- SPEECH LOGIC (Web Speech API) ---
+        const synth = window.speechSynthesis;
+        let voices = [];
+
+        function loadVoices() {
+            voices = synth.getVoices();
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function speak(text, rate = 1) {
+            if (synth.speaking) {
+                synth.cancel(); // Stop current if clicking fast
+            }
+
+            const utterThis = new SpeechSynthesisUtterance(text);
+            
+            // Try to find a good English voice
+            const englishVoice = voices.find(voice => voice.lang === 'en-US' || voice.lang === 'en-GB');
+            if (englishVoice) {
+                utterThis.voice = englishVoice;
+            }
+
+            utterThis.rate = rate;
+            utterThis.pitch = 1;
+            synth.speak(utterThis);
+        }
+
+        function speakCustom() {
+            const text = document.getElementById('customText').value;
+            if(text.trim() === "") return alert("Please type something first!");
+            speak(text, 0.9); // Slightly slower for shadowing
+        }
+
+        function stopSpeak() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+        }
+
+        // Init
+        loadVoices();
+
+    </script>
+
+</body>
+</html>
