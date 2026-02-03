@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Workshop: All Tenses | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 6px solid var(--primary-teal);
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; color: var(--text-dark); }
+        .subtitle { color: #777; margin-top: 10px; font-weight: 300; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* CONTENT GRID */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 40px;
+        }
+
+        /* EXERCISE CARD */
+        .exercise-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 1fr 300px; /* Split: Content | Vocab */
+        }
+
+        .ex-content { padding: 30px; }
+        .ex-vocab { 
+            background: #f0fdfc; 
+            padding: 30px; 
+            border-left: 1px solid #e0f2f1;
+            display: flex; flex-direction: column;
+        }
+
+        /* CARD HEADER */
+        .step-tag {
+            background: var(--primary-teal);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .step-tag.past { background: #5d9bcb; }
+        .step-tag.present { background: var(--primary-teal); }
+        .step-tag.future { background: var(--accent-coral); }
+
+        h2 { margin: 0 0 10px 0; font-size: 1.5rem; }
+        .instruction { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; }
+
+        /* TEXT AREA */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: 0.3s;
+            background: #fafafa;
+        }
+        textarea:focus { outline: none; border-color: var(--primary-teal); background: white; }
+
+        /* VOCAB STYLES */
+        .vocab-title { font-weight: 700; color: #006064; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .vocab-list { list-style: none; padding: 0; margin: 0; }
+        .vocab-item { 
+            margin-bottom: 10px; font-size: 0.9rem; color: #444; 
+            background: white; padding: 8px 12px; border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+        .vocab-item strong { color: var(--primary-dark); }
+        .vocab-tip { font-size: 0.8rem; color: #888; font-style: italic; margin-top: auto; }
+
+        /* FOOTER ACTIONS */
+        .action-area {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
+
+        .student-input {
+            padding: 12px 20px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            width: 300px;
+            margin-right: 15px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn-save {
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-save:hover { background: #000; transform: translateY(-2px); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .exercise-card { grid-template-columns: 1fr; }
+            .ex-vocab { border-left: none; border-top: 1px solid #e0f2f1; }
+            .student-input { width: 100%; margin-bottom: 15px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mastering English Tenses</h1>
+        <p class="subtitle">A creative writing workshop. Complete the 3 exercises below to practice Past, Present, and Future tenses in context.</p>
+    </header>
+
+    <div class="container">
+
+        <div class="exercise-card">
+            <div class="ex-content">
+                <span class="step-tag past">Exercise 1: Narrative Past</span>
+                <h2>The Unexpected Journey</h2>
+                <div class="instruction">
+                    <strong>Task:</strong> Write a short story (50-80 words) about a trip that went wrong but ended well.<br>
+                    <strong>Grammar Focus:</strong> Use <em>Past Simple</em> for main events, <em>Past Continuous</em> for background actions, and <em>Past Perfect</em> for things that happened before the trip started.
+                </div>
+                <textarea id="textPast" placeholder="Start typing: 'Last summer, I decided to go to...'"></textarea>
+            </div>
+            <div class="ex-vocab">
+                <div class="vocab-title"><span class="material-icons-round">book</span> Power Vocab</div>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><strong>Suddenly</strong> (De repente)</li>
+                    <li class="vocab-item"><strong>While</strong> (Mientras)</li>
+                    <li class="vocab-item"><strong>Had realized</strong> (Se había dado cuenta)</li>
+                    <li class="vocab-item"><strong>Fortunately</strong> (Afortunadamente)</li>
+                    <li class="vocab-item"><strong>Booked</strong> (Reservó)</li>
+                </ul>
+                <div class="vocab-tip">Tip: "I <b>was sleeping</b> when the phone <b>rang</b>."</div>
+            </div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-content">
+                <span class="step-tag present">Exercise 2: Present & Habits</span>
+                <h2>My Life vs. My Project</h2>
+                <div class="instruction">
+                    <strong>Task:</strong> Describe your general daily routine versus a specific temporary project you are working on <u>these days</u>.<br>
+                    <strong>Grammar Focus:</strong> Use <em>Present Simple</em> for habits and facts, and <em>Present Continuous</em> for temporary actions happening now/currently.
+                </div>
+                <textarea id="textPresent" placeholder="Start typing: 'Normally, I wake up at 7 AM, but these days I am working on...'"></textarea>
+            </div>
+            <div class="ex-vocab">
+                <div class="vocab-title"><span class="material-icons-round">bolt</span> Power Vocab</div>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><strong>Usually</strong> (Usualmente)</li>
+                    <li class="vocab-item"><strong>Currently</strong> (Actualmente)</li>
+                    <li class="vocab-item"><strong>Nowadays</strong> (Hoy en día)</li>
+                    <li class="vocab-item"><strong>Developing</strong> (Desarrollando)</li>
+                    <li class="vocab-item"><strong>Consists of</strong> (Consiste en)</li>
+                </ul>
+                <div class="vocab-tip">Tip: "I <b>live</b> in Spain, but I <b>am staying</b> in a hotel."</div>
+            </div>
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-content">
+                <span class="step-tag future">Exercise 3: Future Vision</span>
+                <h2>The 10-Year Outlook</h2>
+                <div class="instruction">
+                    <strong>Task:</strong> Predict your life in 2036. What will you be doing? What will you have achieved by then?<br>
+                    <strong>Grammar Focus:</strong> Use <em>Will/Going to</em> for plans, and <em>Future Perfect</em> (will have done) for completed achievements.
+                </div>
+                <textarea id="textFuture" placeholder="Start typing: 'By 2036, I will have graduated and I will be living in...'"></textarea>
+            </div>
+            <div class="ex-vocab">
+                <div class="vocab-title"><span class="material-icons-round">rocket_launch</span> Power Vocab</div>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><strong>Accomplish</strong> (Lograr)</li>
+                    <li class="vocab-item"><strong>By the time</strong> (Para cuando...)</li>
+                    <li class="vocab-item"><strong>Hope to</strong> (Espero)</li>
+                    <li class="vocab-item"><strong>Career path</strong> (Trayectoria)</li>
+                    <li class="vocab-item"><strong>Will have finished</strong> (Habré terminado)</li>
+                </ul>
+                <div class="vocab-tip">Tip: "By next year, I <b>will have saved</b> enough money."</div>
+            </div>
+        </div>
+
+        <div class="action-area">
+            <h3>Finished? Save your work!</h3>
+            <p style="margin-bottom:20px; color:#666;">Enter your name to generate the official report for Teacher Ivan.</p>
+            
+            <input type="text" id="studentName" class="student-input" placeholder="Your Full Name...">
+            <button class="btn-save" onclick="generateReport()">
+                <span class="material-icons-round" style="vertical-align:middle; margin-right:5px;">save_alt</span>
+                Save & Download Report
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function generateReport() {
+            const name = document.getElementById('studentName').value;
+            const tPast = document.getElementById('textPast').value;
+            const tPresent = document.getElementById('textPresent').value;
+            const tFuture = document.getElementById('textFuture').value;
+
+            if(!name || !tPast || !tPresent || !tFuture) {
+                alert("Please fill in all exercises and your name.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header Style
+            doc.setFillColor(93, 203, 195); // Teal
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(20);
+            doc.text("Writing Workshop Report", 105, 20, null, null, "center");
+            doc.setFontSize(12);
+            doc.text(`Student: ${name} | Teacher Ivan HUB`, 105, 30, null, null, "center");
+
+            let y = 60;
+
+            // SECTION 1
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("1. Narrative Past (Story)", 20, y);
+            y += 8;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            const splitPast = doc.splitTextToSize(tPast, 170);
+            doc.text(splitPast, 20, y);
+            y += (splitPast.length * 6) + 15;
+
+            // SECTION 2
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("2. Present Habits vs. Projects", 20, y);
+            y += 8;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            const splitPresent = doc.splitTextToSize(tPresent, 170);
+            doc.text(splitPresent, 20, y);
+            y += (splitPresent.length * 6) + 15;
+
+            // Check Page Break
+            if(y > 220) { doc.addPage(); y = 20; }
+
+            // SECTION 3
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("3. Future Vision (2036)", 20, y);
+            y += 8;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            const splitFuture = doc.splitTextToSize(tFuture, 170);
+            doc.text(splitFuture, 20, y);
+            
+            // Footer Info
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text("Instructions for Student: Please email this PDF to your teacher.", 105, 280, null, null, "center");
+
+            doc.save(`Writing_Report_${name.replace(/\s/g, '_')}.pdf`);
+        }
+    </script>
+
+</body>
+</html>
