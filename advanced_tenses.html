@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Tenses Master Class | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --text-light: #666;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --sidebar-w: 280px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        aside {
+            width: var(--sidebar-w);
+            background: var(--white);
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            padding: 30px;
+            background: var(--primary-teal);
+            color: white;
+        }
+        .brand h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+        .brand span { font-size: 0.8rem; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-light);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover { background: #f0fdfc; color: var(--primary-teal); }
+        .nav-item.active { 
+            background: #f0fdfc; 
+            color: var(--primary-dark); 
+            border-left-color: var(--primary-teal); 
+            font-weight: 700;
+        }
+
+        /* MAIN CONTENT AREA */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .content-section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        .content-section.active { display: block; }
+
+        /* HEADERS */
+        .section-header { margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .topic-label { 
+            background: var(--accent-coral); color: white; 
+            padding: 5px 12px; border-radius: 50px; 
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        }
+        h2 { font-size: 2.2rem; margin: 10px 0; color: var(--text-dark); }
+        .definition { font-size: 1.1rem; color: var(--text-light); line-height: 1.6; }
+
+        /* FORMULA BOX */
+        .formula-box {
+            background: var(--white);
+            border: 2px dashed var(--primary-teal);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        .formula-box span { color: var(--accent-coral); margin: 0 5px; }
+
+        /* TIMELINE VISUALIZATION */
+        .timeline-box {
+            position: relative;
+            height: 100px;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .line { width: 100%; height: 4px; background: #ddd; position: absolute; }
+        
+        .point {
+            width: 16px; height: 16px; border-radius: 50%; background: #999;
+            position: absolute; z-index: 2;
+        }
+        .point::after { 
+            content: attr(data-label); position: absolute; top: 25px; left: 50%; 
+            transform: translateX(-50%); font-size: 0.8rem; color: #777; white-space: nowrap;
+        }
+
+        .zone {
+            height: 10px; background: var(--primary-teal); opacity: 0.5;
+            position: absolute; border-radius: 10px; z-index: 1;
+        }
+        .zone::before {
+            content: attr(data-action); position: absolute; top: -30px; left: 50%;
+            transform: translateX(-50%); font-weight: bold; color: var(--primary-dark); font-size: 0.9rem;
+        }
+
+        /* EXAMPLES GRID */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .example-card {
+            background: white; padding: 20px; border-radius: 12px;
+            box-shadow: var(--shadow); border-left: 4px solid #ddd;
+        }
+        .example-card.aff { border-left-color: #27ae60; }
+        .example-card.neg { border-left-color: var(--accent-coral); }
+        .example-card.int { border-left-color: #f39c12; }
+        
+        .ex-type { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #999; margin-bottom: 5px; display: block; }
+        .ex-text { font-size: 1rem; font-weight: 500; }
+
+        /* QUIZ STYLES */
+        .quiz-container {
+            background: white; padding: 40px; border-radius: 20px; box-shadow: var(--shadow);
+            max-width: 700px; margin: 0 auto; text-align: center;
+        }
+        .question-text { font-size: 1.3rem; margin-bottom: 30px; font-weight: 600; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn {
+            padding: 15px; background: #f4f4f4; border: 2px solid transparent;
+            border-radius: 10px; font-family: inherit; font-size: 1rem; cursor: pointer;
+            transition: 0.2s;
+        }
+        .opt-btn:hover { background: white; border-color: var(--primary-teal); }
+        .opt-btn.correct { background: #d1fae5; border-color: #27ae60; color: #0f5132; }
+        .opt-btn.wrong { background: #fee2e2; border-color: #c0392b; color: #842029; }
+
+        .start-btn {
+            background: var(--primary-teal); color: white; padding: 15px 40px;
+            border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(93, 203, 195, 0.4); transition: 0.3s;
+        }
+        .start-btn:hover { transform: translateY(-3px); background: var(--primary-dark); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            aside { width: 100%; height: auto; }
+            .nav-menu { display: flex; overflow-x: auto; padding: 10px; }
+            .nav-item { padding: 10px 15px; white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; }
+            .nav-item.active { border-bottom-color: var(--primary-teal); background: transparent; }
+            main { padding: 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="brand">
+            <h1>Teacher Ivan</h1>
+            <span>Advanced Grammar</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" onclick="showSection('pres-perf-cont', this)">
+                <span class="material-icons-round">update</span> Pres. Perf. Continuous
+            </li>
+            <li class="nav-item" onclick="showSection('past-perf', this)">
+                <span class="material-icons-round">history</span> Past Perfect
+            </li>
+            <li class="nav-item" onclick="showSection('past-perf-cont', this)">
+                <span class="material-icons-round">history_toggle_off</span> Past Perf. Continuous
+            </li>
+            <li class="nav-item" onclick="showSection('future-perf', this)">
+                <span class="material-icons-round">event_available</span> Future Perfect
+            </li>
+            <li class="nav-item" onclick="showSection('future-perf-cont', this)">
+                <span class="material-icons-round">av_timer</span> Future Perf. Cont.
+            </li>
+            <li class="nav-item" onclick="showSection('modals', this)">
+                <span class="material-icons-round">psychology</span> Modals + Perfect
+            </li>
+            <li class="nav-item" onclick="showSection('quiz', this)" style="margin-top:20px; color:var(--accent-coral);">
+                <span class="material-icons-round">quiz</span> Final Quiz
+            </li>
+        </ul>
+    </aside>
+
+    <main>
+
+        <div id="pres-perf-cont" class="content-section active">
+            <div class="section-header">
+                <span class="topic-label">Duration & Recency</span>
+                <h2>Present Perfect Continuous</h2>
+                <p class="definition">We use this tense to emphasize the <b>duration</b> of an action that started in the past and continues up to the present, or has just finished with visible results.</p>
+            </div>
+
+            <div class="formula-box">
+                Have/Has <span>+</span> Been <span>+</span> Verb-ing
+            </div>
+
+            <div class="timeline-box">
+                <div class="line"></div>
+                <div class="point" style="left: 20%;" data-label="Past Start"></div>
+                <div class="point" style="left: 80%; background:var(--text-dark);" data-label="NOW"></div>
+                <div class="zone" style="left: 20%; width: 60%;" data-action="Action happening..."></div>
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card aff">
+                    <span class="ex-type">Affirmative</span>
+                    <div class="ex-text">"I <b>have been waiting</b> here for two hours."</div>
+                </div>
+                <div class="example-card neg">
+                    <span class="ex-type">Negative</span>
+                    <div class="ex-text">"She <b>hasn't been sleeping</b> well lately."</div>
+                </div>
+                <div class="example-card int">
+                    <span class="ex-type">Question</span>
+                    <div class="ex-text">"<b>Have</b> you <b>been working</b> out? You look fit."</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="past-perf" class="content-section">
+            <div class="section-header">
+                <span class="topic-label">The Past of the Past</span>
+                <h2>Past Perfect</h2>
+                <p class="definition">This tense is used to make it clear that one action happened <b>before</b> another action in the past.</p>
+            </div>
+
+            <div class="formula-box">
+                Had <span>+</span> Past Participle
+            </div>
+
+            <div class="timeline-box">
+                <div class="line"></div>
+                <div class="point" style="left: 30%; background:var(--primary-dark);" data-label="Action 1 (Had done)"></div>
+                <div class="point" style="left: 60%;" data-label="Action 2 (Simple Past)"></div>
+                <div class="point" style="left: 90%; background:var(--text-dark);" data-label="NOW"></div>
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card aff">
+                    <span class="ex-type">Affirmative</span>
+                    <div class="ex-text">"When we arrived, the train <b>had</b> already <b>left</b>."</div>
+                </div>
+                <div class="example-card neg">
+                    <span class="ex-type">Negative</span>
+                    <div class="ex-text">"He <b>hadn't studied</b>, so he failed the test."</div>
+                </div>
+                <div class="example-card int">
+                    <span class="ex-type">Question</span>
+                    <div class="ex-text">"<b>Had</b> you <b>seen</b> that movie before?"</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="past-perf-cont" class="content-section">
+            <div class="section-header">
+                <span class="topic-label">Duration in the Past</span>
+                <h2>Past Perfect Continuous</h2>
+                <p class="definition">Use this to show that an action started in the past and continued up until another time in the past. It emphasizes the duration.</p>
+            </div>
+
+            <div class="formula-box">
+                Had <span>+</span> Been <span>+</span> Verb-ing
+            </div>
+
+            <div class="timeline-box">
+                <div class="line"></div>
+                <div class="point" style="left: 20%;" data-label="Start"></div>
+                <div class="zone" style="left: 20%; width: 40%;" data-action="Working..."></div>
+                <div class="point" style="left: 60%; background:var(--accent-coral);" data-label="Stop (Past)"></div>
+                <div class="point" style="left: 90%; background:var(--text-dark);" data-label="NOW"></div>
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card aff">
+                    <span class="ex-type">Affirmative</span>
+                    <div class="ex-text">"I <b>had been working</b> for 3 hours when the power went out."</div>
+                </div>
+                <div class="example-card neg">
+                    <span class="ex-type">Negative</span>
+                    <div class="ex-text">"They <b>hadn't been waiting</b> long when the bus arrived."</div>
+                </div>
+                <div class="example-card int">
+                    <span class="ex-type">Question</span>
+                    <div class="ex-text">"How long <b>had</b> you <b>been driving</b> before you stopped?"</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="future-perf" class="content-section">
+            <div class="section-header">
+                <span class="topic-label">Completed in Future</span>
+                <h2>Future Perfect</h2>
+                <p class="definition">We use this to say that an action will be <b>finished</b> by a certain time in the future.</p>
+            </div>
+
+            <div class="formula-box">
+                Will have <span>+</span> Past Participle
+            </div>
+
+            <div class="timeline-box">
+                <div class="line"></div>
+                <div class="point" style="left: 10%; background:var(--text-dark);" data-label="NOW"></div>
+                <div class="zone" style="left: 30%; width: 20%; background:#ccc;" data-action="Action"></div>
+                <div class="point" style="left: 70%; background:var(--primary-dark);" data-label="Deadline (By 2030)"></div>
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card aff">
+                    <span class="ex-type">Affirmative</span>
+                    <div class="ex-text">"By next year, I <b>will have finished</b> my degree."</div>
+                </div>
+                <div class="example-card neg">
+                    <span class="ex-type">Negative</span>
+                    <div class="ex-text">"We <b>won't have arrived</b> by 8 PM."</div>
+                </div>
+                <div class="example-card int">
+                    <span class="ex-type">Question</span>
+                    <div class="ex-text">"<b>Will</b> you <b>have cleaned</b> your room by the time I return?"</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="future-perf-cont" class="content-section">
+            <div class="section-header">
+                <span class="topic-label">Duration until Future</span>
+                <h2>Future Perfect Continuous</h2>
+                <p class="definition">This tense emphasizes how long an action will have been happening at a specific point in the future.</p>
+            </div>
+
+            <div class="formula-box">
+                Will have <span>+</span> Been <span>+</span> Verb-ing
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card aff">
+                    <span class="ex-type">Affirmative</span>
+                    <div class="ex-text">"By 2026, I <b>will have been teaching</b> English for 10 years."</div>
+                </div>
+                <div class="example-card neg">
+                    <span class="ex-type">Negative</span>
+                    <div class="ex-text">"She <b>won't have been living</b> there for long."</div>
+                </div>
+                <div class="example-card int">
+                    <span class="ex-type">Question</span>
+                    <div class="ex-text">"How long <b>will</b> you <b>have been studying</b> by graduation?"</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modals" class="content-section">
+            <div class="section-header">
+                <span class="topic-label">Past Deduction & Regret</span>
+                <h2>Modals + Perfect Infinitive</h2>
+                <p class="definition">We use modals (Must, Could, Should, Might) + Have + Past Participle to speculate about the past or express regrets.</p>
+            </div>
+
+            <div class="examples-grid" style="grid-template-columns: 1fr;">
+                <div class="example-card" style="border-left-color: var(--primary-dark);">
+                    <span class="ex-type">MUST HAVE (90% Certainty)</span>
+                    <div class="ex-text">"The grass is wet. It <b>must have rained</b> last night." <br> <small><i>(Logical deduction: I am almost sure.)</i></small></div>
+                </div>
+                <div class="example-card" style="border-left-color: var(--accent-coral);">
+                    <span class="ex-type">SHOULD HAVE (Regret/Criticism)</span>
+                    <div class="ex-text">"I <b>should have studied</b> more for the exam." <br> <small><i>(I didn't study, and now I regret it.)</i></small></div>
+                </div>
+                <div class="example-card" style="border-left-color: #f39c12;">
+                    <span class="ex-type">COULD / MIGHT HAVE (Possibility)</span>
+                    <div class="ex-text">"Where is Tom? He <b>might have missed</b> the bus." <br> <small><i>(It's possible, but I don't know.)</i></small></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz" class="content-section">
+            <div class="quiz-container" id="quizStart">
+                <h2>Time Travel Quiz ⏳</h2>
+                <p style="color:#666; margin-bottom:30px;">12 Questions covering all advanced tenses. Are you ready?</p>
+                <button class="start-btn" onclick="startQuiz()">Start Challenge</button>
+            </div>
+
+            <div class="quiz-container" id="quizGame" style="display:none;">
+                <div style="margin-bottom:10px; color:#aaa; font-size:0.9rem;">Question <span id="qCount">1</span> / 12</div>
+                <div class="question-text" id="qText">Loading...</div>
+                <div class="options-grid" id="optGrid"></div>
+            </div>
+
+            <div class="quiz-container" id="quizResult" style="display:none;">
+                <h2>Assessment Complete!</h2>
+                <div style="font-size:3rem; font-weight:700; color:var(--primary-teal); margin:20px 0;" id="finalScore">0%</div>
+                <p id="finalMsg">Good job!</p>
+                <button class="start-btn" onclick="location.reload()">Review & Try Again</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function showSection(id, element) {
+            // Remove active classes
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            // Activate selected
+            document.getElementById(id).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- QUIZ DATA ---
+        const questions = [
+            { q: "By next year, we _______ in this house for 20 years.", options: ["will have lived", "will have been living", "have lived"], ans: 1 }, // Future Perf Cont
+            { q: "The streets are wet. It _______ rained last night.", options: ["must have", "should have", "would have"], ans: 0 }, // Modal
+            { q: "She was tired because she _______ working all day.", options: ["has been", "had been", "was"], ans: 1 }, // Past Perf Cont
+            { q: "I _______ the report by 5 PM tomorrow.", options: ["will finish", "will have finished", "have finished"], ans: 1 }, // Future Perf
+            { q: "When I arrived at the cinema, the movie _______ already started.", options: ["has", "had", "was"], ans: 1 }, // Past Perf
+            { q: "I failed the test. I _______ studied more.", options: ["must have", "should have", "could have"], ans: 1 }, // Modal Regret
+            { q: "Look at the puddles! It _______ raining.", options: ["has been", "had been", "is being"], ans: 0 }, // Pres Perf Cont
+            { q: "They _______ married for 50 years by 2030.", options: ["will have been", "are going to be", "will be"], ans: 0 }, // Future Perf
+            { q: "He said he _______ seen that movie before.", options: ["has", "had", "was"], ans: 1 }, // Past Perf
+            { q: "Sorry I'm messy, I _______ the garage.", options: ["have cleaned", "have been cleaning", "had cleaned"], ans: 1 }, // Pres Perf Cont
+            { q: "Where is my wallet? I _______ dropped it in the car.", options: ["should have", "might have", "ought to have"], ans: 1 }, // Modal Possibility
+            { q: "By the time the police arrived, the thief _______ escaped.", options: ["had", "has", "was"], ans: 0 } // Past Perf
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('quizStart').style.display = 'none';
+            document.getElementById('quizGame').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('qCount').innerText = currentQ + 1;
+            document.getElementById('qText').innerText = q.q;
+            
+            const grid = document.getElementById('optGrid');
+            grid.innerHTML = "";
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, index);
+                grid.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, index) {
+            const btns = document.querySelectorAll('.opt-btn');
+            btns.forEach(b => b.disabled = true); // Disable all
+
+            if(index === questions[currentQ].ans) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+                btns[questions[currentQ].ans].classList.add('correct'); // Show correct
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                if(currentQ < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        function showResult() {
+            document.getElementById('quizGame').style.display = 'none';
+            document.getElementById('quizResult').style.display = 'block';
+            
+            const pct = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').innerText = pct + "%";
+            
+            let msg = "Keep practicing!";
+            if(pct > 80) msg = "Excellent Grammar Mastery!";
+            else if(pct > 60) msg = "Good job, but review the timelines.";
+            
+            document.getElementById('finalMsg').innerText = msg;
+        }
+
+    </script>
+</body>
+</html>
