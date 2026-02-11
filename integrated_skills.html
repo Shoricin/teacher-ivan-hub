@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Skills Lab | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #999; font-weight: 600; }
+        h1 { margin: 0; color: var(--text-dark); font-size: 2rem; }
+        .subtitle { color: #888; margin-top: 5px; font-weight: 300; }
+
+        /* LEVEL TABS */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+
+        .level-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            background: #e0e0e0;
+            color: #777;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .level-btn:hover { transform: translateY(-3px); }
+        
+        .level-btn.active {
+            background: var(--primary-teal);
+            color: white;
+            border-color: var(--primary-teal);
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4);
+        }
+
+        /* CONTENT AREA */
+        .container {
+            max-width: 900px;
+            margin: 0 auto 50px;
+            width: 90%;
+            flex: 1;
+        }
+
+        .level-content { display: none; animation: fadeIn 0.5s ease; }
+        .level-content.active { display: block; }
+
+        /* SKILL BLOCKS */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card-box {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .label {
+            position: absolute; top: -12px; left: 20px;
+            background: var(--text-dark); color: white;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+        }
+        .label.read { background: var(--primary-teal); }
+        .label.list { background: var(--accent-coral); }
+        .label.write { background: #f59e0b; }
+
+        /* READING STYLES PER LEVEL */
+        .reading-text { font-family: 'Georgia', serif; line-height: 1.6; color: #444; margin-top: 10px; }
+        
+        /* A1 Postcard Style */
+        .postcard { background: #fffbe6; padding: 15px; border: 1px dashed #ccc; font-family: 'Comic Sans MS', cursive; }
+        /* A2 Email Style */
+        .email-ui { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .email-head { background: #eee; padding: 10px; font-size: 0.8rem; border-bottom: 1px solid #ddd; }
+        .email-body { padding: 15px; font-size: 0.95rem; }
+
+        /* AUDIO PLAYER SIMULATION */
+        .audio-player {
+            display: flex; align-items: center; gap: 15px;
+            background: #f4f4f4; padding: 15px; border-radius: 12px; margin-top: 10px;
+        }
+        .play-icon {
+            width: 40px; height: 40px; background: var(--accent-coral); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .play-icon:hover { transform: scale(1.1); }
+        .audio-wave { height: 4px; flex: 1; background: #ddd; border-radius: 4px; position: relative; }
+        .audio-wave::after { content:''; position:absolute; left:0; top:0; height:100%; width:30%; background: var(--accent-coral); border-radius: 4px; }
+
+        /* WRITING AREA */
+        .writing-area {
+            grid-column: 1 / -1; /* Full width */
+        }
+        
+        textarea {
+            width: 100%; height: 150px; padding: 20px;
+            border: 2px solid #eee; border-radius: 15px;
+            font-family: 'Poppins', sans-serif; font-size: 1rem;
+            resize: vertical; box-sizing: border-box; margin-top: 15px;
+            background: #fafafa; transition: 0.3s;
+        }
+        textarea:focus { outline: none; border-color: var(--primary-teal); background: white; }
+
+        /* FOOTER ACTIONS */
+        .action-bar {
+            text-align: center; margin-top: 40px; padding: 30px;
+            background: white; border-radius: var(--radius); box-shadow: var(--shadow);
+        }
+        
+        .save-btn {
+            background: var(--text-dark); color: white;
+            padding: 15px 40px; border-radius: 50px; border: none;
+            font-size: 1rem; font-weight: bold; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .save-btn:hover { background: black; transform: translateY(-3px); }
+
+        @media (max-width: 768px) {
+            .skill-grid { grid-template-columns: 1fr; }
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← HUB</a>
+        <h1>Integrated Skills Lab</h1>
+        <div class="subtitle">Reading, Listening & Writing • Multi-Level Practice</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="level-btn active" onclick="openLevel('A1')">A1</button>
+        <button class="level-btn" onclick="openLevel('A2')">A2</button>
+        <button class="level-btn" onclick="openLevel('B1')">B1</button>
+        <button class="level-btn" onclick="openLevel('B2')">B2</button>
+        <button class="level-btn" onclick="openLevel('C1')">C1</button>
+    </div>
+
+    <div class="container">
+
+        <div id="A1" class="level-content active">
+            <h2 style="color:var(--primary-teal); border-bottom:2px solid #eee; padding-bottom:10px;">A1: A Postcard from London</h2>
+            <div class="skill-grid">
+                <div class="card-box">
+                    <span class="label read">Reading</span>
+                    <div class="reading-text postcard">
+                        <p>Hi Mom!</p>
+                        <p>I am in London now. It is cold but beautiful. I see the Big Ben and red buses. I eat fish and chips today. I am very happy.</p>
+                        <p>Love,<br>Ivan</p>
+                    </div>
+                </div>
+                <div class="card-box">
+                    <span class="label list">Listening</span>
+                    <p>Listen to the audio message from Ivan.</p>
+                    <div class="audio-player">
+                        <div class="play-icon" onclick="speak('Hi! I am at the hotel. My room is big. See you soon!', 0.8)">
+                            <span class="material-icons-round">play_arrow</span>
+                        </div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+                <div class="card-box writing-area">
+                    <span class="label write">Writing Task</span>
+                    <p><strong>Task:</strong> Write a short reply (20-30 words). Say where you are and how you feel.</p>
+                    <textarea id="textA1" placeholder="Hi Ivan! I am in..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="A2" class="level-content">
+            <h2 style="color:var(--primary-teal); border-bottom:2px solid #eee; padding-bottom:10px;">A2: Planning a Weekend Trip</h2>
+            <div class="skill-grid">
+                <div class="card-box">
+                    <span class="label read">Reading</span>
+                    <div class="reading-text email-ui">
+                        <div class="email-head">From: Travel Agency | Subject: Your Booking</div>
+                        <div class="email-body">
+                            Dear customer, your trip to Paris is confirmed. The train leaves at 9:00 AM on Saturday. Please arrive 30 minutes early. Your hotel is near the Eiffel Tower.
+                        </div>
+                    </div>
+                </div>
+                <div class="card-box">
+                    <span class="label list">Listening</span>
+                    <p>Listen to your friend calling about the trip.</p>
+                    <div class="audio-player">
+                        <div class="play-icon" onclick="speak('Hey! I am so excited about Paris. I want to visit the Louvre Museum. Can we go there on Sunday morning?', 0.9)">
+                            <span class="material-icons-round">play_arrow</span>
+                        </div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+                <div class="card-box writing-area">
+                    <span class="label write">Writing Task</span>
+                    <p><strong>Task:</strong> Reply to your friend. Agree to visit the museum and suggest one place to eat.</p>
+                    <textarea id="textA2" placeholder="Hi! That sounds great. We can go to..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="B1" class="level-content">
+            <h2 style="color:var(--primary-teal); border-bottom:2px solid #eee; padding-bottom:10px;">B1: Travel Blog Review</h2>
+            <div class="skill-grid">
+                <div class="card-box">
+                    <span class="label read">Reading</span>
+                    <div class="reading-text">
+                        <h3>Review: The Blue Lagoon</h3>
+                        <p>I visited the Blue Lagoon last summer. While the water was incredibly warm and relaxing, the place was too crowded. I waited in line for 45 minutes just to enter. I recommend going very early in the morning to avoid the tourists.</p>
+                    </div>
+                </div>
+                <div class="card-box">
+                    <span class="label list">Listening</span>
+                    <p>Listen to a comment from another traveler.</p>
+                    <div class="audio-player">
+                        <div class="play-icon" onclick="speak('I totally agree with you. It used to be a hidden gem, but now it is just a tourist trap. I prefer the local pools in the city center.', 1)">
+                            <span class="material-icons-round">play_arrow</span>
+                        </div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+                <div class="card-box writing-area">
+                    <span class="label write">Writing Task</span>
+                    <p><strong>Task:</strong> Write a comment on the blog (50-80 words). Have you ever visited a crowded place? Did you like it?</p>
+                    <textarea id="textB1" placeholder="I think that..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="B2" class="level-content">
+            <h2 style="color:var(--primary-teal); border-bottom:2px solid #eee; padding-bottom:10px;">B2: Sustainable Tourism</h2>
+            <div class="skill-grid">
+                <div class="card-box">
+                    <span class="label read">Reading</span>
+                    <div class="reading-text" style="font-size:0.9rem; text-align:justify;">
+                        <strong>Article: The Impact of Footprints.</strong><br>
+                        Mass tourism provides economic benefits but poses significant environmental threats. Fragile ecosystems, such as coral reefs and alpine trails, are deteriorating due to excessive foot traffic. "Eco-tourism" has emerged as a solution, aiming to educate travelers and provide funds for ecological conservation, yet critics argue it is often just a marketing gimmick.
+                    </div>
+                </div>
+                <div class="card-box">
+                    <span class="label list">Listening</span>
+                    <p>Listen to an interview snippet with an environmentalist.</p>
+                    <div class="audio-player">
+                        <div class="play-icon" onclick="speak('The problem isn\'t travel itself, but how we travel. If we prioritize local businesses and minimize plastic usage, our impact changes dramatically. We need conscious travelers, not just consumers.', 1)">
+                            <span class="material-icons-round">play_arrow</span>
+                        </div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+                <div class="card-box writing-area">
+                    <span class="label write">Writing Task</span>
+                    <p><strong>Task:</strong> Write a short opinion piece (80-100 words). Do you believe Eco-Tourism is effective or just marketing? Why?</p>
+                    <textarea id="textB2" placeholder="In my opinion, sustainable tourism is..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="C1" class="level-content">
+            <h2 style="color:var(--primary-teal); border-bottom:2px solid #eee; padding-bottom:10px;">C1: Cultural Assimilation</h2>
+            <div class="skill-grid">
+                <div class="card-box">
+                    <span class="label read">Reading</span>
+                    <div class="reading-text" style="font-size:0.9rem; text-align:justify;">
+                        <strong>Abstract: The Expat Dilemma.</strong><br>
+                        Globalization has facilitated the movement of labor across borders, yet the psychological toll of cultural assimilation remains under-discussed. The phenomenon of 'culture shock' is not merely a transient phase but a profound restructuring of identity. Expatriates often find themselves in a liminal space, neither fully belonging to their host culture nor retaining the unaltered essence of their origin.
+                    </div>
+                </div>
+                <div class="card-box">
+                    <span class="label list">Listening</span>
+                    <p>Listen to a lecture fragment on Sociology.</p>
+                    <div class="audio-player">
+                        <div class="play-icon" onclick="speak('Indeed, this liminality can be a source of great creativity. However, without a robust support network, it often leads to alienation. Successful integration requires a mutual adaptation from both the individual and the host society.', 1.1)">
+                            <span class="material-icons-round">play_arrow</span>
+                        </div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+                <div class="card-box writing-area">
+                    <span class="label write">Writing Task</span>
+                    <p><strong>Task:</strong> Write a synthesis (100+ words). Discuss the challenges of living abroad mentioned in the text and audio. Add your perspective.</p>
+                    <textarea id="textC1" placeholder="Living abroad presents a unique set of psychological challenges..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <h3>Completion</h3>
+            <p style="color:#666; margin-bottom:20px;">Enter your name to compile all your writing tasks into a PDF report.</p>
+            <input type="text" id="studentName" placeholder="Your Name" style="padding:10px 20px; border-radius:50px; border:1px solid #ccc; width:250px; outline:none;">
+            <button class="save-btn" onclick="generateReport()">
+                <span class="material-icons-round">download</span> Save & Download
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB LOGIC ---
+        function openLevel(levelName) {
+            // Hide all content
+            const contents = document.getElementsByClassName("level-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            // Deactivate all buttons
+            const btns = document.getElementsByClassName("level-btn");
+            for (let i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+                if (btns[i].innerText === levelName) {
+                    btns[i].classList.add("active");
+                }
+            }
+            // Show selected
+            document.getElementById(levelName).classList.add("active");
+        }
+
+        // --- AUDIO LOGIC (TTS) ---
+        function speak(text, rate) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Try to find English voice
+            const voices = window.speechSynthesis.getVoices();
+            const enVoice = voices.find(v => v.lang.includes('en'));
+            if(enVoice) utterance.voice = enVoice;
+
+            utterance.rate = rate; // Adjust speed based on level
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- PDF GENERATION ---
+        function generateReport() {
+            const name = document.getElementById('studentName').value;
+            if(!name) return alert("Please enter your name.");
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFillColor(93, 203, 195);
+            doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.text("Integrated Skills Report", 105, 15, null, null, "center");
+            doc.setFontSize(12);
+            doc.text(`Student: ${name}`, 105, 25, null, null, "center");
+
+            let y = 45;
+            const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
+
+            doc.setTextColor(0, 0, 0);
+
+            levels.forEach(lvl => {
+                const text = document.getElementById(`text${lvl}`).value;
+                if(text.trim() !== "") {
+                    // Check page break
+                    if(y > 250) { doc.addPage(); y = 20; }
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(14);
+                    doc.setTextColor(93, 203, 195);
+                    doc.text(`Level ${lvl} Writing Task:`, 20, y);
+                    y += 10;
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(11);
+                    doc.setTextColor(50, 50, 50);
+                    
+                    const splitText = doc.splitTextToSize(text, 170);
+                    doc.text(splitText, 20, y);
+                    y += (splitText.length * 6) + 15;
+                }
+            });
+
+            if (y === 45) {
+                doc.text("No answers submitted.", 20, y);
+            }
+
+            doc.save(`Skills_Report_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>
