@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Listening Tower | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            z-index: 100;
+        }
+
+        .back-link { text-decoration: none; color: #999; font-weight: 600; font-size: 0.9rem; }
+        .game-title { font-size: 1.5rem; margin: 0; font-weight: 700; color: var(--text-dark); }
+        
+        .lives-container {
+            display: flex;
+            gap: 5px;
+            font-size: 1.5rem;
+        }
+        .heart { color: var(--accent-coral); transition: 0.3s; }
+        .heart.lost { color: #ddd; transform: scale(0.8); }
+
+        /* MAIN LAYOUT */
+        .game-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* LEFT: THE TOWER (Visual Progression) */
+        .tower-panel {
+            width: 250px;
+            background: #eef2f3;
+            border-right: 2px solid #ddd;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse; /* Bottom to top */
+            padding: 20px;
+            position: relative;
+        }
+
+        .floor {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #aaa;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .floor.active {
+            border-color: var(--primary-teal);
+            color: var(--primary-dark);
+            background: #f0fdfc;
+            box-shadow: 0 4px 10px rgba(93, 203, 195, 0.2);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .floor.completed {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .avatar {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            display: none;
+        }
+        .floor.active .avatar { display: block; animation: bounce 1s infinite; }
+
+        /* RIGHT: GAME AREA */
+        .play-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23cccccc" opacity="0.2"/></svg>');
+        }
+
+        /* AUDIO BUTTON */
+        .audio-btn-large {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: white;
+            border: 6px solid var(--primary-teal);
+            color: var(--primary-teal);
+            font-size: 3.5rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(93, 203, 195, 0.3);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .audio-btn-large:hover { transform: scale(1.1); background: #f0fdfc; }
+        .audio-btn-large:active { transform: scale(0.95); }
+        .audio-btn-large.playing { border-color: var(--accent-coral); color: var(--accent-coral); animation: pulse 1s infinite; }
+
+        /* OPTIONS */
+        .options-grid {
+            display: grid;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .option-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #555;
+            transition: 0.2s;
+            text-align: left;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+        .option-card:hover { border-color: var(--primary-teal); transform: translateX(5px); }
+        .option-card.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-card.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-card {
+            background: white; padding: 40px; border-radius: 20px;
+            text-align: center; max-width: 500px; width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-icon { font-size: 4rem; display: block; margin-bottom: 20px; }
+        .btn-primary {
+            background: var(--primary-teal); color: white; padding: 15px 40px;
+            border-radius: 50px; border: none; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .btn-danger { background: var(--accent-coral); margin-top: 10px; }
+        .btn-danger:hover { background: #e05656; }
+
+        /* BADGE CANVAS (Hidden initially) */
+        #badgeCanvas { display: none; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border-radius: 50%; }
+
+        @media (max-width: 768px) {
+            .game-layout { flex-direction: column-reverse; }
+            .tower-panel { width: 100%; height: 150px; flex-direction: row; overflow-x: auto; overflow-y: hidden; border-right: none; border-top: 2px solid #ddd; }
+            .floor { min-width: 100px; margin-right: 10px; margin-bottom: 0; display: flex; align-items: center; justify-content: center; }
+        }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(-60%); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(255, 107, 107, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← HUB</a>
+        <h2 class="game-title">The Listening Tower</h2>
+        <div class="lives-container" id="livesDisplay">
+            <span class="material-icons-round heart">favorite</span>
+            <span class="material-icons-round heart">favorite</span>
+            <span class="material-icons-round heart">favorite</span>
+        </div>
+    </header>
+
+    <div class="game-layout">
+        <div class="tower-panel" id="towerContainer"></div>
+        <div class="play-area">
+            <div id="gameUI">
+                <button class="audio-btn-large" id="mainAudioBtn" onclick="playCurrentAudio()">
+                    <span class="material-icons-round">volume_up</span>
+                </button>
+                <p style="text-align:center; color:#999; margin-bottom:30px;">Tap to listen. Choose the exact phrase.</p>
+                <div class="options-grid" id="optionsBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="startModal">
+        <div class="modal-card">
+            <span class="modal-icon">🏰</span>
+            <h1>The Challenge</h1>
+            <p>Can you climb the <strong>20 Floors</strong>?</p>
+            <div style="font-size:0.9rem; color:#666; background:#f4f4f4; padding:15px; border-radius:10px; text-align:left; margin: 20px 0;">
+                <strong>⚠️ Hardcore Rules:</strong><br>
+                1. You have 3 Lives ❤️.<br>
+                2. If you lose all lives, you fall to <strong>Level 1</strong>.<br>
+                3. Speed increases every 5 levels.
+            </div>
+            <button class="btn-primary" onclick="initGame()">Start Climbing</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="failModal" style="display:none;">
+        <div class="modal-card">
+            <span class="modal-icon">💀</span>
+            <h2>Game Over!</h2>
+            <p>You fell from the tower.</p>
+            <p style="color:var(--accent-coral); font-weight:bold;">All progress lost. Try again?</p>
+            <button class="btn-primary btn-danger" onclick="restartGame()">Restart from Level 1</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="winModal" style="display:none;">
+        <div class="modal-card">
+            <canvas id="badgeCanvas" width="300" height="300"></canvas>
+            <h2>Legendary!</h2>
+            <p>You have conquered the tower.</p>
+            <button class="btn-primary" onclick="downloadBadge()">Download Badge 🏅</button>
+            <br>
+            <a href="index.html" style="color:#999; text-decoration:none; display:block; margin-top:20px;">Back to HUB</a>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE ---
+        const questionPool = {
+            tier1: [ 
+                { t: "The cat is on the mat.", d: ["The cat is on the map.", "The bat is on the hat."] },
+                { t: "I like red apples.", d: ["I like green apples.", "I like red snappers."] },
+                { t: "She opens the door.", d: ["She opens the floor.", "She hopes for more."] },
+                { t: "My pen is blue.", d: ["My pan is blue.", "My pen is new."] },
+                { t: "They play soccer.", d: ["They play locker.", "They say soccer."] },
+                { t: "Where is the bus?", d: ["Where is the boss?", "Here is the bus."] },
+                { t: "It is a sunny day.", d: ["It is a funny day.", "It is a sunny bay."] },
+                { t: "I need some water.", d: ["I need some waiter.", "I need warm water."] }
+            ],
+            tier2: [ 
+                { t: "He arrived late due to traffic.", d: ["He arrived late due to tragic.", "He arrived late due to graphic."] },
+                { t: "I would like a coffee without sugar.", d: ["I would like a coffee with sugar.", "I would like a toffee without sugar."] },
+                { t: "The train leaves at five.", d: ["The rain leaves at five.", "The train lives at five."] },
+                { t: "She sells seashells by the sea.", d: ["She sees shells by the sea.", "She sells sea cells by the sea."] },
+                { t: "We are going to the cinema.", d: ["We are going to the sinner.", "We are boring at the cinema."] },
+                { t: "Please turn off the lights.", d: ["Please turn off the rights.", "Please turn on the lights."] },
+                { t: "This is the best pizza ever.", d: ["This is the best piece ever.", "This is the best pizza never."] }
+            ],
+            tier3: [ 
+                { t: "It's a blessing in disguise.", d: ["It's a lesson in disguise.", "It's a blessing in the skies."] },
+                { t: "He kicked the bucket yesterday.", d: ["He kicked the bracket yesterday.", "He picked the bucket yesterday."] },
+                { t: "You are barking up the wrong tree.", d: ["You are parking up the wrong tree.", "You are barking up the long tree."] },
+                { t: "Sustainability is crucial for us.", d: ["Sustainability is brutal for us.", "Suitability is crucial for us."] },
+                { t: "I should have studied more.", d: ["I should of studied more.", "I showed have studied more."] },
+                { t: "The entrepreneur launched a startup.", d: ["The entrepreneur lunched a startup.", "The entrepreneur launched a star up."] },
+                { t: "Don't bite off more than you can chew.", d: ["Don't bite off more than you can shoe.", "Don't buy off more than you can chew."] }
+            ],
+            tier4: [ 
+                { t: "The pronunciation of 'colonel' is tricky.", d: ["The pronunciation of 'kernel' is tricky.", "The pronunciation of 'colonial' is tricky."] },
+                { t: "Thorough thought is essential here.", d: ["Tough thought is essential here.", "Through thought is essential here."] },
+                { t: "He was acquitted due to lack of evidence.", d: ["He was a quitted due to lack of evidence.", "He was acquitted due to luck of evidence."] },
+                { t: "Whom should I say is calling?", d: ["Who should I say is calling?", "Whom should I say his calling?"] },
+                { t: "Peter Piper picked a peck of pickled peppers.", d: ["Peter Piper picked a pack of pickled peppers.", "Peter Piper picked a peck of pickled papers."] },
+                { t: "Ironically, the fire station burned down.", d: ["Ironically, the fire station turned down.", "Ironically, the fire station burned clown."] },
+                { t: "The phenomenon occurred unexpectedly.", d: ["The phenomenon occurred unrespectfully.", "The phenomenon occurred expectedly."] }
+            ]
+        };
+
+        // --- STATE ---
+        const TOTAL_LEVELS = 20;
+        let currentLevel = 1;
+        let lives = 3;
+        let currentQuestion = null;
+        let isSpeaking = false;
+        let usedPhrases = []; 
+
+        // --- INITIALIZATION ---
+        function initGame() {
+            document.getElementById('startModal').style.display = 'none';
+            usedPhrases = []; 
+            buildTower();
+            startLevel();
+        }
+
+        function buildTower() {
+            const container = document.getElementById('towerContainer');
+            container.innerHTML = "";
+            for (let i = 1; i <= TOTAL_LEVELS; i++) {
+                const floor = document.createElement('div');
+                floor.className = 'floor';
+                floor.id = `floor-${i}`;
+                floor.innerHTML = `Level ${i} <span class="avatar">🧗</span>`;
+                container.appendChild(floor); 
+            }
+        }
+
+        // --- GAMEPLAY ---
+        function startLevel() {
+            // Visual Update
+            document.querySelectorAll('.floor').forEach(f => f.classList.remove('active'));
+            const currentFloor = document.getElementById(`floor-${currentLevel}`);
+            currentFloor.classList.add('active');
+            currentFloor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Logic: Pick question
+            let pool, speed;
+            if (currentLevel <= 5) { pool = questionPool.tier1; speed = 0.8; }
+            else if (currentLevel <= 10) { pool = questionPool.tier2; speed = 1.0; }
+            else if (currentLevel <= 15) { pool = questionPool.tier3; speed = 1.1; }
+            else { pool = questionPool.tier4; speed = 1.4; }
+
+            // Filter used
+            let available = pool.filter(q => !usedPhrases.includes(q.t));
+            if (available.length === 0) available = pool; // Reset if exhausted
+
+            // Random Pick
+            const rawData = available[Math.floor(Math.random() * available.length)];
+            usedPhrases.push(rawData.t);
+
+            currentQuestion = {
+                text: rawData.t,
+                speed: speed,
+                options: [...rawData.d, rawData.t].sort(() => Math.random() - 0.5)
+            };
+
+            // Render Options
+            const box = document.getElementById('optionsBox');
+            box.innerHTML = "";
+            currentQuestion.options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-card';
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(btn, opt);
+                box.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(btn, text) {
+            document.querySelectorAll('.option-card').forEach(o => o.onclick = null);
+
+            if (text === currentQuestion.text) {
+                btn.classList.add('correct');
+                document.getElementById(`floor-${currentLevel}`).classList.add('completed');
+                
+                setTimeout(() => {
+                    if (currentLevel === TOTAL_LEVELS) {
+                        winGame();
+                    } else {
+                        currentLevel++;
+                        startLevel();
+                    }
+                }, 1000);
+            } else {
+                btn.classList.add('wrong');
+                lives--;
+                updateLivesUI();
+                
+                if (lives === 0) {
+                    setTimeout(() => document.getElementById('failModal').style.display = 'flex', 800);
+                } else {
+                    // Just shake and let them try again (re-enable buttons? No, standard logic usually resets level content)
+                    // Let's reload level to give a NEW question to prevent brute forcing
+                    setTimeout(() => {
+                        document.querySelector('.play-area').style.animation = "shake 0.5s";
+                        setTimeout(() => {
+                            document.querySelector('.play-area').style.animation = "";
+                            startLevel(); // Load NEW question on same level
+                        }, 500);
+                    }, 800);
+                }
+            }
+        }
+
+        function restartGame() {
+            lives = 3;
+            currentLevel = 1;
+            usedPhrases = [];
+            updateLivesUI();
+            buildTower(); // Reset visual classes
+            document.getElementById('failModal').style.display = 'none';
+            startLevel();
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('livesDisplay');
+            container.innerHTML = "";
+            for(let i=0; i<3; i++) {
+                const heart = document.createElement('span');
+                heart.className = "material-icons-round heart";
+                heart.innerText = "favorite";
+                if (i >= lives) heart.classList.add("lost");
+                container.appendChild(heart);
+            }
+        }
+
+        // --- BADGE SYSTEM ---
+        function winGame() {
+            const modal = document.getElementById('winModal');
+            const canvas = document.getElementById('badgeCanvas');
+            modal.style.display = 'flex';
+            canvas.style.display = 'block';
+            drawBadge(canvas);
+        }
+
+        function drawBadge(canvas) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Background
+            ctx.fillStyle = "#5dcbc3"; // Teal
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, w/2 - 10, 0, 2*Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "#ff9a8b"; // Coral
+            ctx.stroke();
+
+            // Text
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("LISTENING", w/2, 80);
+            
+            ctx.font = "bold 32px Arial";
+            ctx.fillText("MASTER", w/2, 120);
+
+            ctx.font = "16px Arial";
+            ctx.fillText("Teacher Ivan Hub", w/2, 220);
+            
+            // Star
+            ctx.font = "60px Arial";
+            ctx.fillText("⭐", w/2, 180);
+        }
+
+        function downloadBadge() {
+            const canvas = document.getElementById('badgeCanvas');
+            const link = document.createElement('a');
+            link.download = 'Listening_Master_Badge.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // --- AUDIO ---
+        function playCurrentAudio() {
+            if (isSpeaking) { window.speechSynthesis.cancel(); isSpeaking = false; return; }
+            
+            const u = new SpeechSynthesisUtterance(currentQuestion.text);
+            const v = window.speechSynthesis.getVoices().find(v => v.lang.includes('en'));
+            if(v) u.voice = v;
+            u.rate = currentQuestion.speed;
+            
+            u.onstart = () => { isSpeaking = true; audioBtn.classList.add('playing'); };
+            u.onend = () => { isSpeaking = false; audioBtn.classList.remove('playing'); };
+            window.speechSynthesis.speak(u);
+        }
+
+        window.speechSynthesis.getVoices();
+
+    </script>
+</body>
+</html>
