@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Club | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #999; font-weight: 600; }
+        h1 { margin: 0; color: var(--text-dark); font-size: 2rem; }
+        .subtitle { color: #888; margin-top: 5px; font-weight: 300; }
+
+        /* MODES NAVIGATION */
+        .modes-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .mode-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #777;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .mode-btn:hover { transform: translateY(-3px); }
+        
+        .mode-btn.active {
+            background: var(--primary-teal);
+            color: white;
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.3);
+        }
+
+        /* CARD DISPLAY AREA */
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px 40px;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            min-height: 300px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+            border-top: 10px solid var(--accent-coral);
+        }
+
+        .card-icon { font-size: 4rem; margin-bottom: 20px; }
+        .card-category { 
+            text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; 
+            font-weight: 700; color: #999; margin-bottom: 10px; 
+        }
+        .card-text { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); line-height: 1.4; }
+        
+        /* Role Play Specific Styles */
+        .role-box {
+            margin-top: 20px;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            border-left: 4px solid var(--primary-dark);
+        }
+        .role-label { font-weight: bold; color: var(--primary-dark); }
+
+        /* CONTROLS */
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .action-btn {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-next { background: var(--text-dark); }
+        .btn-next:hover { background: black; transform: scale(1.1); }
+        
+        .btn-timer { background: var(--accent-coral); font-size: 1.5rem; width: 60px; height: 60px; }
+        .btn-timer:hover { background: #ff7b7b; }
+
+        /* TIMER DISPLAY */
+        .timer-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-teal);
+            margin-top: 20px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .timer-display.active { opacity: 1; }
+
+        /* ANIMATION CLASSES */
+        .shake { animation: shake 0.5s; }
+        .fade-in { animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← HUB</a>
+        <h1>Talk Time!</h1>
+        <div class="subtitle">Interactive Conversation Generator</div>
+    </header>
+
+    <div class="modes-container">
+        <button class="mode-btn active" onclick="setMode('icebreaker')">🧊 Ice Breakers</button>
+        <button class="mode-btn" onclick="setMode('debate')">🔥 Debate Arena</button>
+        <button class="mode-btn" onclick="setMode('roleplay')">🎭 Role Play</button>
+        <button class="mode-btn" onclick="setMode('deep')">🤔 Deep Talk</button>
+    </div>
+
+    <div class="game-area">
+        
+        <div class="card" id="cardDisplay">
+            <div class="card-category" id="catLabel">Welcome</div>
+            <div class="card-icon" id="iconLabel">👋</div>
+            <div class="card-text" id="textLabel">Select a mode and press Next to start talking!</div>
+            <div id="roleArea" style="display:none;"></div>
+        </div>
+
+        <div class="timer-display" id="timerLabel">02:00</div>
+
+        <div class="controls">
+            <button class="action-btn btn-timer" onclick="toggleTimer()" title="Start/Stop Timer">
+                <span class="material-icons-round">timer</span>
+            </button>
+            <button class="action-btn btn-next" onclick="nextCard()" title="New Topic">
+                <span class="material-icons-round">arrow_forward</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATABASE ---
+        const content = {
+            icebreaker: [
+                { t: "If you could have any superpower, what would it be?", i: "🦸‍♂️" },
+                { t: "What is the strangest food you have ever eaten?", i: "🍕" },
+                { t: "Would you rather travel to the past or the future?", i: "⏳" },
+                { t: "If you won the lottery today, what is the first thing you would buy?", i: "💰" },
+                { t: "Do you prefer cats or dogs? Why?", i: "🐱/🐶" },
+                { t: "What is your favorite movie of all time?", i: "🎬" },
+                { t: "Describe your perfect weekend.", i: "🏖️" },
+                { t: "What is one skill you wish you could master instantly?", i: "🤹" }
+            ],
+            debate: [
+                { t: "Social media does more harm than good.", i: "📱" },
+                { t: "Money can buy happiness.", i: "💵" },
+                { t: "Artificial Intelligence will replace teachers.", i: "🤖" },
+                { t: "A university degree is necessary for success.", i: "🎓" },
+                { t: "Video games make people violent.", i: "🎮" },
+                { t: "Living in the city is better than the countryside.", i: "🏙️" },
+                { t: "Uniforms should be mandatory in all schools.", i: "👔" },
+                { t: "Space exploration is a waste of money.", i: "🚀" }
+            ],
+            roleplay: [
+                { t: "At a Restaurant", i: "🍽️", rA: "Customer: You found a hair in your soup. Complain politely.", rB: "Waiter: Apologize and offer a solution." },
+                { t: "Job Interview", i: "💼", rA: "Interviewer: Ask about strengths and weaknesses.", rB: "Candidate: Try to get the job." },
+                { t: "The Late Student", i: "⏰", rA: "Teacher: Ask why the student is late again.", rB: "Student: Give a crazy (but creative) excuse." },
+                { t: "Airport Check-in", i: "✈️", rA: "Passenger: Your luggage is overweight. Try to avoid paying.", rB: "Agent: Follow the rules strictly." },
+                { t: "Tech Support", i: "💻", rA: "Grandparent: You deleted the internet.", rB: "Tech Support: Try to explain how to fix it simply." }
+            ],
+            deep: [
+                { t: "What is the meaning of success for you?", i: "🌟" },
+                { t: "Do you think people can truly change?", i: "🐛" },
+                { t: "What is your biggest fear?", i: "😨" },
+                { t: "If you could change one thing about the world, what would it be?", i: "🌍" },
+                { t: "Is it better to be loved or respected?", i: "❤️" },
+                { t: "What advice would you give to your younger self?", i: "👶" }
+            ]
+        };
+
+        // --- STATE ---
+        let currentMode = 'icebreaker';
+        let history = { icebreaker: [], debate: [], roleplay: [], deep: [] };
+        let timerInterval = null;
+        let timeLeft = 120; // 2 minutes default
+
+        // --- FUNCTIONS ---
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update UI Buttons
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            // Find the button clicked (simple matching)
+            const buttons = document.querySelectorAll('.mode-btn');
+            if(mode === 'icebreaker') buttons[0].classList.add('active');
+            if(mode === 'debate') buttons[1].classList.add('active');
+            if(mode === 'roleplay') buttons[2].classList.add('active');
+            if(mode === 'deep') buttons[3].classList.add('active');
+
+            // Reset Card Style
+            const card = document.getElementById('cardDisplay');
+            card.style.borderTopColor = getModeColor(mode);
+            
+            nextCard(); // Auto load first card
+        }
+
+        function getModeColor(mode) {
+            if(mode === 'icebreaker') return '#5dcbc3'; // Teal
+            if(mode === 'debate') return '#ff9a8b'; // Coral
+            if(mode === 'roleplay') return '#f59e0b'; // Orange
+            if(mode === 'deep') return '#5f27cd'; // Purple
+            return '#ccc';
+        }
+
+        function nextCard() {
+            // Animation reset
+            const card = document.getElementById('cardDisplay');
+            card.classList.remove('fade-in');
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('fade-in');
+
+            // Logic: No Repetition
+            const pool = content[currentMode];
+            let available = pool.filter(item => !history[currentMode].includes(item.t));
+            
+            if(available.length === 0) {
+                history[currentMode] = []; // Reset history
+                available = pool;
+            }
+
+            const randomItem = available[Math.floor(Math.random() * available.length)];
+            history[currentMode].push(randomItem.t);
+
+            // Render
+            document.getElementById('catLabel').innerText = currentMode.toUpperCase();
+            document.getElementById('iconLabel').innerText = randomItem.i;
+            document.getElementById('textLabel').innerText = randomItem.t;
+
+            const roleArea = document.getElementById('roleArea');
+            if(currentMode === 'roleplay') {
+                roleArea.style.display = 'block';
+                roleArea.innerHTML = `
+                    <div class="role-box"><span class="role-label">Student A:</span> ${randomItem.rA}</div>
+                    <div class="role-box"><span class="role-label">Student B:</span> ${randomItem.rB}</div>
+                `;
+            } else {
+                roleArea.style.display = 'none';
+            }
+
+            // Reset Timer automatically on new card? Optional. Let's stop it.
+            stopTimer();
+        }
+
+        // --- TIMER LOGIC ---
+        function toggleTimer() {
+            const display = document.getElementById('timerLabel');
+            
+            if(timerInterval) {
+                stopTimer();
+            } else {
+                timeLeft = 120; // Reset to 2 mins
+                display.classList.add('active');
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if(timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        playSound(); // Optional beep
+                        alert("Time's Up!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById('timerLabel').classList.remove('active');
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            document.getElementById('timerLabel').innerText = 
+                `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function playSound() {
+            // Simple beep context if needed, or visual alert
+        }
+
+    </script>
+</body>
+</html>
