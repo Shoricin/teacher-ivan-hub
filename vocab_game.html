@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vocabulary Tower | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            height: 100vh; overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background: white; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 4px solid var(--primary-teal);
+            box-shadow: var(--shadow); z-index: 100;
+        }
+
+        .back-link { text-decoration: none; color: #999; font-weight: 600; font-size: 0.9rem; }
+        .game-title { font-size: 1.5rem; margin: 0; font-weight: 700; color: var(--text-dark); }
+        
+        .lives-container { display: flex; gap: 5px; font-size: 1.5rem; }
+        .heart { color: var(--accent-coral); transition: 0.3s; }
+        .heart.lost { color: #ddd; transform: scale(0.8); }
+
+        /* MAIN LAYOUT */
+        .game-layout { display: flex; flex: 1; overflow: hidden; }
+
+        /* LEFT: THE TOWER (50 FLOORS) */
+        .tower-panel {
+            width: 250px; background: #eef2f3; border-right: 2px solid #ddd;
+            overflow-y: auto; display: flex; flex-direction: column-reverse; /* Bottom to top */
+            padding: 20px; position: relative; scroll-behavior: smooth;
+        }
+
+        /* Make floors thinner to fit 50 nicely */
+        .floor {
+            background: white; border: 2px solid #ddd; border-radius: 6px;
+            padding: 8px 15px; margin-bottom: 5px; text-align: center;
+            font-weight: bold; color: #aaa; position: relative; transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .floor.active {
+            border-color: var(--primary-teal); color: var(--primary-dark);
+            background: #f0fdfc; box-shadow: 0 4px 10px rgba(93, 203, 195, 0.2);
+            transform: scale(1.05); z-index: 2; font-size: 1rem; padding: 12px 15px;
+        }
+
+        .floor.completed { background: #d1fae5; border-color: #10b981; color: #065f46; }
+
+        /* Dynamic Tier Colors for the tower */
+        .tier-1 { border-left: 5px solid #aed6f1; } /* A1 */
+        .tier-2 { border-left: 5px solid #5dade2; } /* A2 */
+        .tier-3 { border-left: 5px solid #2874a6; } /* B1 */
+        .tier-4 { border-left: 5px solid #f5b041; } /* B2 */
+        .tier-5 { border-left: 5px solid #e74c3c; } /* C1/IELTS */
+
+        .avatar {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 1.2rem; display: none;
+        }
+        .floor.active .avatar { display: block; animation: bounce 1s infinite; }
+
+        /* RIGHT: GAME AREA */
+        .play-area {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; background: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23cccccc" opacity="0.2"/></svg>');
+            overflow-y: auto;
+        }
+
+        .question-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); max-width: 700px; width: 100%;
+            text-align: center; border-top: 8px solid var(--primary-teal);
+            margin-bottom: 20px; transition: 0.3s;
+        }
+
+        .tier-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
+            margin-bottom: 20px; color: white;
+        }
+
+        .sentence { font-size: 1.6rem; font-weight: 600; color: var(--text-dark); line-height: 1.5; margin-bottom: 30px; }
+        .blank { border-bottom: 3px solid var(--accent-coral); color: var(--accent-coral); padding: 0 10px; display: inline-block; min-width: 80px; }
+
+        /* OPTIONS */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        
+        .option-card {
+            background: #f9f9f9; padding: 20px; border-radius: 12px; border: 2px solid #eee;
+            cursor: pointer; font-size: 1.2rem; font-weight: 600; color: #444;
+            transition: 0.2s; text-align: center; font-family: 'Poppins', sans-serif;
+        }
+        .option-card:hover { border-color: var(--primary-teal); background: #f0fdfc; transform: translateY(-3px); }
+        .option-card.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-card.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(5px);
+        }
+        .modal-card {
+            background: white; padding: 40px; border-radius: 20px; text-align: center;
+            max-width: 500px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-icon { font-size: 4rem; display: block; margin-bottom: 20px; }
+        .btn-primary {
+            background: var(--primary-teal); color: white; padding: 15px 40px;
+            border-radius: 50px; border: none; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .btn-danger { background: var(--accent-coral); margin-top: 10px; }
+        .btn-danger:hover { background: #e05656; }
+
+        #badgeCanvas { display: none; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border-radius: 50%; }
+
+        @media (max-width: 768px) {
+            .game-layout { flex-direction: column-reverse; }
+            .tower-panel { width: 100%; height: 120px; flex-direction: row; overflow-x: auto; overflow-y: hidden; border-right: none; border-top: 2px solid #ddd; align-items: center;}
+            .floor { min-width: 80px; margin-right: 5px; margin-bottom: 0; font-size: 0.8rem; padding: 5px; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(-60%); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← HUB</a>
+        <h2 class="game-title">The Vocab Tower</h2>
+        <div class="lives-container" id="livesDisplay">
+            <span class="material-icons-round heart">favorite</span>
+            <span class="material-icons-round heart">favorite</span>
+            <span class="material-icons-round heart">favorite</span>
+        </div>
+    </header>
+
+    <div class="game-layout">
+        <div class="tower-panel" id="towerContainer"></div>
+        
+        <div class="play-area">
+            <div class="question-box" id="qBox">
+                <div class="tier-badge" id="tierBadge">Level 1 - A1</div>
+                <div class="sentence" id="sentenceText">Loading...</div>
+                <div class="options-grid" id="optionsBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="startModal">
+        <div class="modal-card">
+            <span class="modal-icon">📚</span>
+            <h1>The 50-Floor Challenge</h1>
+            <p>From <strong>A1</strong> (Beginner) to <strong>IELTS</strong> (Advanced).</p>
+            <div style="font-size:0.9rem; color:#666; background:#f4f4f4; padding:15px; border-radius:10px; text-align:left; margin: 20px 0;">
+                <strong>⚠️ Hardcore Rules:</strong><br>
+                1. You have exactly 3 Lives ❤️.<br>
+                2. If you lose all 3, you fall back to <strong>Floor 1</strong>.<br>
+                3. The vocabulary gets harder every 10 floors.
+            </div>
+            <button class="btn-primary" onclick="initGame()">Enter the Tower</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="failModal" style="display:none;">
+        <div class="modal-card">
+            <span class="modal-icon">💀</span>
+            <h2>You Fell!</h2>
+            <p>Your vocabulary wasn't strong enough this time.</p>
+            <p style="color:var(--accent-coral); font-weight:bold;">All progress has been lost.</p>
+            <button class="btn-primary btn-danger" onclick="restartGame()">Restart from Floor 1</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="winModal" style="display:none;">
+        <div class="modal-card">
+            <canvas id="badgeCanvas" width="300" height="300"></canvas>
+            <h2>Vocabulary God!</h2>
+            <p>You have conquered the 50 floors of the tower.</p>
+            <button class="btn-primary" onclick="downloadBadge()">Download Badge 🏅</button>
+            <br>
+            <a href="index.html" style="color:#999; text-decoration:none; display:block; margin-top:20px;">Back to HUB</a>
+        </div>
+    </div>
+
+    <script>
+        // --- VOCABULARY DATABASE ---
+        // S = Sentence (use ____ for blank), A = Correct Answer, D = Distractors (Array of 3)
+        const vocabPool = {
+            tier1: [ // A1: Floors 1-10
+                { s: "I want to drink some ____.", a: "water", d: ["bread", "book", "table"] },
+                { s: "My mother's sister is my ____.", a: "aunt", d: ["uncle", "brother", "cousin"] },
+                { s: "I sleep in my ____.", a: "bedroom", d: ["kitchen", "bathroom", "garden"] },
+                { s: "He is running very ____.", a: "fast", d: ["slow", "sad", "happy"] },
+                { s: "The sky is blue and ____.", a: "sunny", d: ["rain", "snow", "night"] },
+                { s: "I wear ____ on my feet.", a: "shoes", d: ["hats", "shirts", "gloves"] },
+                { s: "She is reading a good ____.", a: "book", d: ["apple", "chair", "pen"] },
+                { s: "A dog is a very popular ____.", a: "pet", d: ["car", "plant", "food"] },
+                { s: "We eat breakfast in the ____.", a: "morning", d: ["evening", "night", "tomorrow"] },
+                { s: "I go to school to ____.", a: "learn", d: ["eat", "sleep", "fly"] },
+                { s: "The elephant is a very ____ animal.", a: "big", d: ["small", "tiny", "short"] },
+                { s: "Please close the ____.", a: "door", d: ["floor", "sun", "water"] },
+                { s: "I have a red ____.", a: "car", d: ["cat", "sad", "tall"] },
+                { s: "She is my best ____.", a: "friend", d: ["enemy", "teacher", "table"] },
+                { s: "I use a pen to ____.", a: "write", d: ["read", "run", "jump"] }
+            ],
+            tier2: [ // A2: Floors 11-20
+                { s: "You must be ____ when crossing the street.", a: "careful", d: ["careless", "boring", "empty"] },
+                { s: "He wants to ____ his English speaking skills.", a: "improve", d: ["destroy", "forget", "guess"] },
+                { s: "It is very ____ to say 'please' and 'thank you'.", a: "polite", d: ["rude", "dangerous", "loud"] },
+                { s: "I need to ____ what to eat for dinner.", a: "decide", d: ["arrive", "invite", "build"] },
+                { s: "My daily ____ includes going to the gym.", a: "routine", d: ["surprise", "accident", "dream"] },
+                { s: "The glass has no water. It is ____.", a: "empty", d: ["full", "heavy", "cheap"] },
+                { s: "Playing with fire is very ____.", a: "dangerous", d: ["safe", "healthy", "modern"] },
+                { s: "This sofa is very soft and ____.", a: "comfortable", d: ["hard", "terrible", "traditional"] },
+                { s: "Did you ____ an invitation to the party?", a: "receive", d: ["lose", "break", "hide"] },
+                { s: "I don't know the answer, let me ____.", a: "guess", d: ["know", "shout", "fly"] },
+                { s: "We are going to ____ the new museum tomorrow.", a: "visit", d: ["cook", "paint", "sleep"] },
+                { s: "This jacket is very ____. It cost $500.", a: "expensive", d: ["cheap", "ugly", "old"] },
+                { s: "Can you ____ me your pen?", a: "lend", d: ["borrow", "steal", "eat"] },
+                { s: "I was ____ to see her at the mall.", a: "surprised", d: ["bored", "angry", "asleep"] },
+                { s: "Let's ____ the game together.", a: "join", d: ["leave", "break", "cry"] }
+            ],
+            tier3: [ // B1: Floors 21-30
+                { s: "Water is ____ for human survival.", a: "essential", d: ["optional", "useless", "terrible"] },
+                { s: "He is a very ____ worker; he never misses a deadline.", a: "reliable", d: ["lazy", "careless", "anxious"] },
+                { s: "We need to protect the ____ from pollution.", a: "environment", d: ["government", "building", "entertainment"] },
+                { s: "Living near the train station is very ____.", a: "convenient", d: ["annoying", "distant", "complicated"] },
+                { s: "I was highly ____ by the movie's terrible ending.", a: "disappointed", d: ["excited", "encouraged", "satisfied"] },
+                { s: "The hotel will ____ breakfast for all guests.", a: "provide", d: ["steal", "destroy", "avoid"] },
+                { s: "This is a great ____ to learn a new language.", a: "opportunity", d: ["disaster", "mistake", "punishment"] },
+                { s: "I highly ____ this restaurant to anyone.", a: "recommend", d: ["criticize", "avoid", "ignore"] },
+                { s: "She was feeling very ____ before her big presentation.", a: "anxious", d: ["calm", "confident", "bored"] },
+                { s: "We must ____ a meeting for next Monday.", a: "arrange", d: ["cancel", "destroy", "forget"] },
+                { s: "Can you ____ what will happen next year?", a: "predict", d: ["remember", "forget", "maintain"] },
+                { s: "Try to ____ eating too much sugar.", a: "avoid", d: ["enjoy", "encourage", "continue"] },
+                { s: "The actor will ____ on stage tonight.", a: "perform", d: ["hide", "sleep", "complain"] },
+                { s: "I didn't ____ how late it was.", a: "realize", d: ["forget", "ignore", "pretend"] },
+                { s: "Regular exercise helps ____ good health.", a: "maintain", d: ["destroy", "avoid", "prevent"] }
+            ],
+            tier4: [ // B2: Floors 31-40
+                { s: "Wearing a seatbelt is ____ by law.", a: "mandatory", d: ["optional", "suggested", "irrelevant"] },
+                { s: "There has been a ____ increase in sales this quarter.", a: "significant", d: ["minor", "invisible", "obsolete"] },
+                { s: "She managed to ____ her fear of public speaking.", a: "overcome", d: ["exaggerate", "implement", "ignore"] },
+                { s: "The new policy is highly ____; many people hate it.", a: "controversial", d: ["popular", "acceptable", "sustainable"] },
+                { s: "We need a ____ energy source like solar power.", a: "sustainable", d: ["temporary", "destructive", "fragile"] },
+                { s: "Don't ____ the problem; it's not that bad.", a: "exaggerate", d: ["solve", "underestimate", "justify"] },
+                { s: "Communication is ____ to the success of this project.", a: "crucial", d: ["unimportant", "optional", "trivial"] },
+                { s: "The manager plans to ____ new safety rules.", a: "implement", d: ["cancel", "forget", "obstruct"] },
+                { s: "Typewriters are mostly ____ in the digital age.", a: "obsolete", d: ["modern", "essential", "lucrative"] },
+                { s: "Prices tend to ____ depending on the season.", a: "fluctuate", d: ["stabilize", "disappear", "remain"] },
+                { s: "Every action has a logical ____.", a: "consequence", d: ["beginning", "priority", "strategy"] },
+                { s: "We must ____ the risks before proceeding.", a: "evaluate", d: ["ignore", "create", "exaggerate"] },
+                { s: "He tried to ____ his bad behavior with weak excuses.", a: "justify", d: ["admit", "confess", "implement"] },
+                { s: "Developing a good marketing ____ is vital.", a: "strategy", d: ["mistake", "obstacle", "consequence"] },
+                { s: "Safety must always be our top ____.", a: "priority", d: ["option", "complaint", "burden"] }
+            ],
+            tier5: [ // C1/IELTS: Floors 41-50
+                { s: "Smartphones have become ____ in modern society.", a: "ubiquitous", d: ["obsolete", "ephemeral", "scarce"] },
+                { s: "The government must take steps to ____ the impact of the crisis.", a: "mitigate", d: ["exacerbate", "instigate", "provoke"] },
+                { s: "His reckless comments only served to ____ the tense situation.", a: "exacerbate", d: ["alleviate", "mitigate", "pacify"] },
+                { s: "We need a ____ approach, not just theoretical ideas.", a: "pragmatic", d: ["utopian", "ambiguous", "dogmatic"] },
+                { s: "She planned the event with ____ attention to detail.", a: "meticulous", d: ["careless", "haphazard", "superficial"] },
+                { s: "His excuse for being late sounded highly ____.", a: "plausible", d: ["impossible", "ludicrous", "absurd"] },
+                { s: "This ethical ____ has puzzled philosophers for centuries.", a: "conundrum", d: ["solution", "epiphany", "resolution"] },
+                { s: "Fame on the internet is often ____, lasting only a few days.", a: "ephemeral", d: ["eternal", "perpetual", "ubiquitous"] },
+                { s: "The discovery of DNA shifted the entire scientific ____.", a: "paradigm", d: ["stagnation", "triviality", "anecdote"] },
+                { s: "The most ____ point of his speech was about the economy.", a: "salient", d: ["obscure", "hidden", "redundant"] },
+                { s: "Repeating the same information made his essay ____.", a: "redundant", d: ["concise", "eloquent", "profound"] },
+                { s: "The instructions were so ____ that nobody knew what to do.", a: "ambiguous", d: ["lucid", "explicit", "meticulous"] },
+                { s: "We base our conclusions on ____ evidence, not guesses.", a: "empirical", d: ["conjectural", "hypothetical", "ambiguous"] },
+                { s: "Building a bridge across the ocean is not financially ____.", a: "feasible", d: ["impossible", "ludicrous", "ephemeral"] },
+                { s: "Real estate investment can be a highly ____ business.", a: "lucrative", d: ["bankrupt", "unprofitable", "obsolete"] }
+            ]
+        };
+
+        // --- GAME STATE ---
+        const TOTAL_FLOORS = 50;
+        let currentFloor = 1;
+        let lives = 3;
+        let currentQuestion = null;
+        let usedQuestions = [];
+
+        // --- UI ELEMENTS ---
+        const towerContainer = document.getElementById('towerContainer');
+        const qBox = document.getElementById('qBox');
+        const tierBadge = document.getElementById('tierBadge');
+        const sentenceText = document.getElementById('sentenceText');
+        const optionsBox = document.getElementById('optionsBox');
+        const livesDisplay = document.getElementById('livesDisplay');
+
+        // --- INITIALIZATION ---
+        function initGame() {
+            document.getElementById('startModal').style.display = 'none';
+            usedQuestions = [];
+            buildTower();
+            startFloor();
+        }
+
+        function buildTower() {
+            towerContainer.innerHTML = "";
+            for (let i = 1; i <= TOTAL_FLOORS; i++) {
+                const floor = document.createElement('div');
+                floor.className = 'floor';
+                floor.id = `floor-${i}`;
+                
+                // Add color class based on tier
+                if (i <= 10) floor.classList.add('tier-1');
+                else if (i <= 20) floor.classList.add('tier-2');
+                else if (i <= 30) floor.classList.add('tier-3');
+                else if (i <= 40) floor.classList.add('tier-4');
+                else floor.classList.add('tier-5');
+
+                floor.innerHTML = `${i} <span class="avatar">🧗</span>`;
+                towerContainer.appendChild(floor); 
+            }
+        }
+
+        // --- GAMEPLAY LOGIC ---
+        function startFloor() {
+            // Visual Tower Update
+            document.querySelectorAll('.floor').forEach(f => f.classList.remove('active'));
+            const floorEl = document.getElementById(`floor-${currentFloor}`);
+            floorEl.classList.add('active');
+            
+            // Scroll logic (smooth to center)
+            floorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Determine Tier
+            let pool, badgeText, badgeColor;
+            if (currentFloor <= 10) { pool = vocabPool.tier1; badgeText = "Level 1: A1 (Beginner)"; badgeColor = "#aed6f1"; }
+            else if (currentFloor <= 20) { pool = vocabPool.tier2; badgeText = "Level 2: A2 (Pre-Int)"; badgeColor = "#5dade2"; }
+            else if (currentFloor <= 30) { pool = vocabPool.tier3; badgeText = "Level 3: B1 (Intermediate)"; badgeColor = "#2874a6"; }
+            else if (currentFloor <= 40) { pool = vocabPool.tier4; badgeText = "Level 4: B2 (Advanced)"; badgeColor = "#f5b041"; }
+            else { pool = vocabPool.tier5; badgeText = "Level 5: C1/IELTS (Expert)"; badgeColor = "#e74c3c"; }
+
+            // UI Badge
+            tierBadge.innerText = badgeText;
+            tierBadge.style.backgroundColor = badgeColor;
+            qBox.style.borderTopColor = badgeColor;
+
+            // Pick Question (No Repetition)
+            let available = pool.filter(q => !usedQuestions.includes(q.s));
+            if (available.length === 0) available = pool; // Fallback reset
+
+            const rawData = available[Math.floor(Math.random() * available.length)];
+            usedQuestions.push(rawData.s);
+
+            // Format Question
+            currentQuestion = {
+                text: rawData.s.replace('____', '<span class="blank">____</span>'),
+                ans: rawData.a,
+                options: [...rawData.d, rawData.a].sort(() => Math.random() - 0.5)
+            };
+
+            // Render
+            sentenceText.innerHTML = currentQuestion.text;
+            optionsBox.innerHTML = "";
+            
+            currentQuestion.options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-card';
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(btn, opt);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(btn, text) {
+            // Lock clicks
+            document.querySelectorAll('.option-card').forEach(o => o.onclick = null);
+
+            if (text === currentQuestion.ans) {
+                // CORRECT
+                btn.classList.add('correct');
+                // Fill the blank visually
+                sentenceText.innerHTML = sentenceText.innerHTML.replace('<span class="blank">____</span>', `<span class="blank" style="color:#10b981; border-color:#10b981;">${text}</span>`);
+                
+                document.getElementById(`floor-${currentFloor}`).classList.add('completed');
+                
+                setTimeout(() => {
+                    if (currentFloor === TOTAL_FLOORS) {
+                        winGame();
+                    } else {
+                        currentFloor++;
+                        startFloor();
+                    }
+                }, 1000);
+
+            } else {
+                // WRONG
+                btn.classList.add('wrong');
+                lives--;
+                updateLivesUI();
+                
+                // Show correct answer
+                document.querySelectorAll('.option-card').forEach(o => {
+                    if(o.innerText === currentQuestion.ans) o.classList.add('correct');
+                });
+                
+                if (lives === 0) {
+                    setTimeout(() => document.getElementById('failModal').style.display = 'flex', 1200);
+                } else {
+                    // Shake and retry same floor
+                    setTimeout(() => {
+                        document.querySelector('.play-area').style.animation = "shake 0.5s";
+                        setTimeout(() => {
+                            document.querySelector('.play-area').style.animation = "";
+                            startFloor(); // New question, same floor
+                        }, 500);
+                    }, 1500);
+                }
+            }
+        }
+
+        function restartGame() {
+            lives = 3;
+            currentFloor = 1;
+            usedQuestions = [];
+            updateLivesUI();
+            buildTower(); 
+            document.getElementById('failModal').style.display = 'none';
+            startFloor();
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('livesDisplay');
+            container.innerHTML = "";
+            for(let i=0; i<3; i++) {
+                const heart = document.createElement('span');
+                heart.className = "material-icons-round heart";
+                heart.innerText = "favorite";
+                if (i >= lives) heart.classList.add("lost");
+                container.appendChild(heart);
+            }
+        }
+
+        // --- BADGE SYSTEM ---
+        function winGame() {
+            const modal = document.getElementById('winModal');
+            const canvas = document.getElementById('badgeCanvas');
+            modal.style.display = 'flex';
+            canvas.style.display = 'block';
+            drawBadge(canvas);
+        }
+
+        function drawBadge(canvas) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Background
+            ctx.fillStyle = "#e74c3c"; // IELTS Red / Expert color
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, w/2 - 10, 0, 2*Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = "#f1c40f"; // Gold
+            ctx.stroke();
+
+            // Text
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            
+            ctx.font = "bold 26px Arial";
+            ctx.fillText("VOCABULARY", w/2, 80);
+            
+            ctx.font = "bold 36px Arial";
+            ctx.fillStyle = "#f1c40f";
+            ctx.fillText("MASTER", w/2, 125);
+
+            ctx.fillStyle = "white";
+            ctx.font = "italic 16px Arial";
+            ctx.fillText("Teacher Ivan Hub", w/2, 230);
+            
+            // Icon
+            ctx.font = "60px Arial";
+            ctx.fillText("🎓", w/2, 190);
+        }
+
+        function downloadBadge() {
+            const canvas = document.getElementById('badgeCanvas');
+            const link = document.createElement('a');
+            link.download = 'Vocab_Master_Badge.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+    </script>
+</body>
+</html>
