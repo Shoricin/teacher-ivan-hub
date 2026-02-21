@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Vocab Tower | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --ielts-red: #d32f2f;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            height: 100vh; overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background: white; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 4px solid var(--ielts-red);
+            box-shadow: var(--shadow); z-index: 100;
+        }
+
+        .back-link { text-decoration: none; color: #999; font-weight: 600; font-size: 0.9rem; }
+        .game-title { font-size: 1.5rem; margin: 0; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 10px;}
+        .ielts-badge { background: var(--ielts-red); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; }
+        
+        .lifeline-container { display: flex; gap: 20px; align-items: center; }
+        .lives { display: flex; gap: 5px; font-size: 1.5rem; color: var(--ielts-red); }
+        .heart { transition: 0.3s; }
+        .heart.lost { color: #ddd; transform: scale(0.8); }
+
+        .hints { 
+            display: flex; align-items: center; gap: 5px; font-size: 1.2rem; 
+            font-weight: bold; color: #f39c12; background: #fff8e1; 
+            padding: 5px 15px; border-radius: 50px; border: 1px solid #ffe082;
+        }
+
+        /* MAIN LAYOUT */
+        .game-layout { display: flex; flex: 1; overflow: hidden; }
+
+        /* LEFT: THE TOWER (50 FLOORS) */
+        .tower-panel {
+            width: 250px; background: #eef2f3; border-right: 2px solid #ddd;
+            overflow-y: auto; display: flex; flex-direction: column-reverse; 
+            padding: 20px; position: relative; scroll-behavior: smooth;
+        }
+
+        .floor {
+            background: white; border: 2px solid #ddd; border-radius: 6px;
+            padding: 8px 15px; margin-bottom: 5px; text-align: center;
+            font-weight: bold; color: #aaa; position: relative; transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .floor.active {
+            border-color: var(--ielts-red); color: var(--ielts-red);
+            background: #ffebee; box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2);
+            transform: scale(1.05); z-index: 2; font-size: 1rem; padding: 12px 15px;
+        }
+
+        .floor.completed { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+
+        .tier-1 { border-left: 5px solid #aed6f1; } /* IELTS 1 */
+        .tier-2 { border-left: 5px solid #5dade2; } /* IELTS 2 */
+        .tier-3 { border-left: 5px solid #2874a6; } /* IELTS 3 */
+        .tier-4 { border-left: 5px solid #f5b041; } /* IELTS 4 */
+        .tier-5 { border-left: 5px solid #212121; } /* IELTS 5 */
+
+        .avatar {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 1.2rem; display: none;
+        }
+        .floor.active .avatar { display: block; animation: bounce 1s infinite; }
+
+        /* RIGHT: GAME AREA */
+        .play-area {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; background: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23cccccc" opacity="0.2"/></svg>');
+            overflow-y: auto;
+        }
+
+        .question-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); max-width: 800px; width: 100%;
+            text-align: center; border-top: 8px solid var(--ielts-red);
+            margin-bottom: 20px; transition: 0.3s; position: relative;
+        }
+
+        .tier-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
+            margin-bottom: 20px; color: white;
+        }
+
+        .sentence { font-size: 1.5rem; font-weight: 600; color: var(--text-dark); line-height: 1.6; margin-bottom: 30px; font-family: 'Merriweather', serif; }
+        .blank { border-bottom: 3px solid var(--accent-coral); color: var(--accent-coral); padding: 0 10px; display: inline-block; min-width: 100px; }
+
+        /* OPTIONS */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        
+        .option-card {
+            background: #f9f9f9; padding: 20px; border-radius: 12px; border: 2px solid #eee;
+            cursor: pointer; font-size: 1.2rem; font-weight: 600; color: #444;
+            transition: 0.2s; text-align: center; font-family: 'Poppins', sans-serif;
+        }
+        .option-card:hover { border-color: var(--ielts-red); background: #fff0f3; transform: translateY(-3px); }
+        .option-card.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-card.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s; }
+
+        /* HINT SYSTEM */
+        .btn-hint {
+            position: absolute; top: 20px; right: 20px;
+            background: #f39c12; color: white; border: none;
+            padding: 8px 15px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center; gap: 5px;
+            transition: 0.2s; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+        }
+        .btn-hint:hover { background: #e67e22; transform: scale(1.05); }
+        .btn-hint:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .hint-display {
+            display: none; background: #fffbe6; border-left: 4px solid #f39c12;
+            padding: 15px; margin-top: 20px; text-align: left; border-radius: 8px;
+            font-size: 0.95rem; color: #555; animation: fadeIn 0.4s;
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(5px);
+        }
+        .modal-card {
+            background: white; padding: 40px; border-radius: 20px; text-align: center;
+            max-width: 500px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-icon { font-size: 4rem; display: block; margin-bottom: 20px; }
+        .btn-primary {
+            background: var(--ielts-red); color: white; padding: 15px 40px;
+            border-radius: 50px; border: none; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-primary:hover { background: #b71c1c; transform: scale(1.05); }
+
+        #badgeCanvas { display: none; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border-radius: 50%; }
+
+        @media (max-width: 768px) {
+            .game-layout { flex-direction: column-reverse; }
+            .tower-panel { width: 100%; height: 120px; flex-direction: row; overflow-x: auto; overflow-y: hidden; border-right: none; border-top: 2px solid #ddd; align-items: center;}
+            .floor { min-width: 80px; margin-right: 5px; margin-bottom: 0; font-size: 0.8rem; padding: 5px; }
+            .options-grid { grid-template-columns: 1fr; }
+            .btn-hint { position: relative; top: 0; right: 0; margin: 0 auto 20px; width: fit-content; }
+        }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(-60%); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← HUB</a>
+        <h2 class="game-title"><span class="ielts-badge">IELTS</span> Vocab Tower</h2>
+        <div class="lifeline-container">
+            <div class="hints" title="Hints Remaining">
+                <span class="material-icons-round">lightbulb</span> <span id="hintCountUI">5</span>
+            </div>
+            <div class="lives" id="livesDisplay">
+                <span class="material-icons-round heart">favorite</span>
+                <span class="material-icons-round heart">favorite</span>
+                <span class="material-icons-round heart">favorite</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-layout">
+        <div class="tower-panel" id="towerContainer"></div>
+        
+        <div class="play-area">
+            <div class="question-box" id="qBox">
+                <button class="btn-hint" id="hintBtn" onclick="useHint()">
+                    <span class="material-icons-round">help_outline</span> Use Hint
+                </button>
+                <div class="tier-badge" id="tierBadge">IELTS 1 (Band 6.5)</div>
+                <div class="sentence" id="sentenceText">Loading...</div>
+                <div class="options-grid" id="optionsBox"></div>
+                
+                <div class="hint-display" id="hintBox">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="startModal">
+        <div class="modal-card">
+            <span class="modal-icon">🏛️</span>
+            <h1>Academic Challenge</h1>
+            <p>Climb <strong>50 Floors</strong> of Advanced IELTS Vocabulary.</p>
+            <div style="font-size:0.9rem; color:#666; background:#f4f4f4; padding:15px; border-radius:10px; text-align:left; margin: 20px 0;">
+                <strong>⚠️ Hardcore Rules:</strong><br>
+                1. <strong>3 Lives:</strong> If you lose them, you fall to Floor 1.<br>
+                2. <strong>5 Hints:</strong> Use them wisely across the entire 50 floors. A hint reveals the definition.<br>
+                3. Difficulty increases every 10 floors.
+            </div>
+            <button class="btn-primary" onclick="initGame()">Enter the Tower</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="failModal" style="display:none;">
+        <div class="modal-card">
+            <span class="modal-icon">📚</span>
+            <h2>Tower Collapsed!</h2>
+            <p>The academic vocabulary was too heavy this time.</p>
+            <p style="color:var(--ielts-red); font-weight:bold;">Progress and Hints have been reset.</p>
+            <button class="btn-primary" onclick="restartGame()">Restart from Floor 1</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="winModal" style="display:none;">
+        <div class="modal-card">
+            <canvas id="badgeCanvas" width="300" height="300"></canvas>
+            <h2>Vocabulary Grandmaster!</h2>
+            <p>You have conquered the pinnacle of English academia.</p>
+            <button class="btn-primary" onclick="downloadBadge()">Download Badge 🏅</button>
+            <br>
+            <a href="index.html" style="color:#999; text-decoration:none; display:block; margin-top:20px;">Back to HUB</a>
+        </div>
+    </div>
+
+    <script>
+        // --- ACADEMIC VOCABULARY DATABASE (IELTS Tiers) ---
+        const vocabPool = {
+            tier1: [ // IELTS 1 (Band 6.5)
+                { s: "The new tax laws will ____ local businesses from expanding.", a: "hinder", d: ["commence", "retain", "allocate"], h: "To delay or prevent the progress of something (Obstaculizar/Dificultar)." },
+                { s: "The project will ____ next Monday after the final review.", a: "commence", d: ["terminate", "hinder", "fluctuate"], h: "A formal word for 'begin' or 'start' (Comenzar)." },
+                { s: "We must ____ a large portion of the budget to marketing.", a: "allocate", d: ["extract", "retain", "offset"], h: "To distribute resources for a specific purpose (Asignar/Distribuir)." },
+                { s: "The board reached a ____ after three hours of debate.", a: "consensus", d: ["margin", "commodity", "hierarchy"], h: "A general agreement among a group of people (Consenso)." },
+                { s: "It is important to ____ the original features of the historic building.", a: "retain", d: ["trigger", "exploit", "offset"], h: "To keep or continue to have something (Retener/Conservar)." },
+                { s: "The complaints were mostly about ____ issues, nothing serious.", a: "trivial", d: ["ample", "implicit", "profound"], h: "Of little value or importance (Trivial/Insignificante)." },
+                { s: "There is ____ evidence to support the scientist's theory.", a: "ample", d: ["trivial", "scarce", "rigid"], h: "More than enough; abundant (Amplio/Suficiente)." },
+                { s: "The company tried to ____ the environmental damage by planting trees.", a: "offset", d: ["trigger", "exploit", "commence"], h: "To balance or compensate for something (Compensar)." },
+                { s: "Coffee is a highly traded ____ in the global market.", a: "commodity", d: ["hierarchy", "consensus", "margin"], h: "A raw material or primary agricultural product that can be bought and sold (Materia prima/Producto)." },
+                { s: "The sudden drop in temperature could ____ an avalanche.", a: "trigger", d: ["retain", "allocate", "hinder"], h: "To cause an event or situation to happen (Desencadenar)." },
+                { s: "They tend to ____ their workers by paying them very low wages.", a: "exploit", d: ["retain", "offset", "commence"], h: "To use someone unfairly for your own advantage (Explotar)." },
+                { s: "There was an ____ threat in his tone, even though he smiled.", a: "implicit", d: ["ample", "trivial", "explicit"], h: "Suggested but not directly expressed (Implícito)." },
+                { s: "We won the election by a very narrow ____.", a: "margin", d: ["consensus", "hierarchy", "commodity"], h: "The amount by which one thing differs from another, often small (Margen)." },
+                { s: "The military has a very strict ____ of command.", a: "hierarchy", d: ["consensus", "margin", "commodity"], h: "A system in which members are ranked according to status or authority (Jerarquía)." },
+                { s: "Our schedules ____, so we can work on the project together.", a: "overlap", d: ["trigger", "offset", "hinder"], h: "To cover part of the same area of interest or time (Superponerse/Coincidir)." }
+            ],
+            tier2: [ // IELTS 2 (Band 7.0 - 7.5)
+                { s: "Smoking is highly ____ to your respiratory health.", a: "detrimental", d: ["intrinsic", "feasible", "coherent"], h: "Tending to cause harm (Perjudicial)." },
+                { s: "Motivation is an ____ part of learning a new language.", a: "intrinsic", d: ["arbitrary", "detrimental", "predominant"], h: "Belonging naturally; essential (Intrínseco/Esencial)." },
+                { s: "Building a colony on Mars is not currently ____.", a: "feasible", d: ["arbitrary", "coherent", "detrimental"], h: "Possible to do easily or conveniently (Factible/Viable)." },
+                { s: "English is the ____ language used in international business.", a: "predominant", d: ["intrinsic", "arbitrary", "subtle"], h: "Present as the strongest or main element (Predominante)." },
+                { s: "The contract was full of ____, confusing both parties.", a: "ambiguity", d: ["analogy", "sequence", "consensus"], h: "The quality of being open to more than one interpretation (Ambigüedad)." },
+                { s: "Do not ____ from the main topic during your presentation.", a: "deviate", d: ["converge", "manipulate", "induce"], h: "To depart from an established course or plan (Desviarse)." },
+                { s: "The two rivers ____ at the center of the city.", a: "converge", d: ["deviate", "confine", "persist"], h: "To come together from different directions (Converger)." },
+                { s: "The teacher's decision to punish the whole class felt ____.", a: "arbitrary", d: ["feasible", "coherent", "intrinsic"], h: "Based on random choice or personal whim, rather than reason (Arbitrario)." },
+                { s: "You must follow the steps in the exact ____.", a: "sequence", d: ["analogy", "ambiguity", "hierarchy"], h: "A particular order in which related events follow each other (Secuencia)." },
+                { s: "He drew an ____ between the brain and a computer.", a: "analogy", d: ["ambiguity", "sequence", "margin"], h: "A comparison between two things (Analogía)." },
+                { s: "The media can easily ____ public opinion during elections.", a: "manipulate", d: ["deviate", "confine", "converge"], h: "To control or influence cleverly or unfairly (Manipular)." },
+                { s: "Please ____ your comments to the topic of the meeting.", a: "confine", d: ["induce", "manipulate", "deviate"], h: "To keep or restrict someone or something within certain limits (Confinar/Limitar)." },
+                { s: "The medication may ____ extreme drowsiness.", a: "induce", d: ["confine", "converge", "persist"], h: "To succeed in persuading or leading someone to do something; to cause (Inducir/Provocar)." },
+                { s: "If the symptoms ____, you should see a doctor immediately.", a: "persist", d: ["deviate", "converge", "induce"], h: "To continue firmly or obstinately (Persistir)." },
+                { s: "His argument was not ____, making it hard to understand.", a: "coherent", d: ["arbitrary", "feasible", "detrimental"], h: "Logical and consistent (Coherente)." }
+            ],
+            tier3: [ // IELTS 3 (Band 7.5 - 8.0)
+                { s: "Smartphones are now ____ in modern urban life.", a: "ubiquitous", d: ["empirical", "rigid", "reluctant"], h: "Present, appearing, or found everywhere (Ubicuo/Omnipresente)." },
+                { s: "We need ____ evidence, not just theories, to prove this.", a: "empirical", d: ["ubiquitous", "innate", "pragmatic"], h: "Based on observation or experience rather than theory (Empírico)." },
+                { s: "The medicine helped to ____ the patient's pain.", a: "alleviate", d: ["distort", "maintain", "hinder"], h: "To make suffering or a problem less severe (Aliviar)." },
+                { s: "The discovery of DNA created a new ____ in biology.", a: "paradigm", d: ["norm", "analogy", "ambiguity"], h: "A typical example or pattern of something; a model (Paradigma)." },
+                { s: "Birds have an ____ ability to build complex nests.", a: "innate", d: ["ubiquitous", "pragmatic", "empirical"], h: "Inborn; natural (Innato)." },
+                { s: "We must take a ____ approach to solve the financial crisis.", a: "pragmatic", d: ["innate", "rigid", "ubiquitous"], h: "Dealing with things sensibly and realistically (Pragmático/Práctico)." },
+                { s: "As populations grow, traffic congestion becomes ____.", a: "inevitable", d: ["subtle", "reluctant", "valid"], h: "Certain to happen; unavoidable (Inevitable)." },
+                { s: "She was ____ to accept the job offer because of the low salary.", a: "reluctant", d: ["inevitable", "rigid", "pragmatic"], h: "Unwilling and hesitant (Reacio)." },
+                { s: "There is a ____ difference between the two twin brothers.", a: "subtle", d: ["rigid", "ubiquitous", "empirical"], h: "So delicate or precise as to be difficult to analyze or describe (Sutil)." },
+                { s: "The school rules are too ____ and don't allow for creativity.", a: "rigid", d: ["subtle", "valid", "pragmatic"], h: "Unable to bend or be forced out of shape; not adaptable (Rígido)." },
+                { s: "Your passport is no longer ____; it expired yesterday.", a: "valid", d: ["rigid", "inevitable", "reluctant"], h: "Legally or officially acceptable (Válido)." },
+                { s: "The new software is ____ with older operating systems.", a: "compatible", d: ["ubiquitous", "valid", "subtle"], h: "Able to exist or occur together without conflict (Compatible)." },
+                { s: "The journalist tried to ____ the facts to create a scandal.", a: "distort", d: ["alleviate", "maintain", "converge"], h: "To give a misleading or false account or impression of (Distorsionar)." },
+                { s: "Working from home has become the new ____ for many companies.", a: "norm", d: ["paradigm", "margin", "consensus"], h: "Something that is usual, typical, or standard (Norma)." },
+                { s: "His arguments were based on a highly ____ interpretation of the law.", a: "ambiguous", d: ["empirical", "innate", "ubiquitous"], h: "Open to more than one interpretation (Ambiguo)." }
+            ],
+            tier4: [ // IELTS 4 (Band 8.0 - 8.5)
+                { s: "Fame on the internet is often ____, lasting only a few days.", a: "ephemeral", d: ["profound", "volatile", "comprehensive"], h: "Lasting for a very short time (Efímero)." },
+                { s: "There is a false ____ between science and religion.", a: "dichotomy", d: ["methodology", "scrutiny", "anomaly"], h: "A division or contrast between two things that are represented as being opposed (Dicotomía)." },
+                { s: "The government took steps to ____ the impact of the disaster.", a: "mitigate", d: ["verify", "distort", "alleviate"], h: "Make less severe, serious, or painful (Mitigar)." },
+                { s: "The galaxy contains a ____ of stars and planets.", a: "myriad", d: ["dichotomy", "anomaly", "scrutiny"], h: "A countless or extremely great number (Miríada/Infinidad)." },
+                { s: "Auditors found a massive ____ in the financial reports.", a: "discrepancy", d: ["methodology", "myriad", "dichotomy"], h: "A lack of compatibility or similarity between two or more facts (Discrepancia)." },
+                { s: "Genetic ____ can sometimes lead to evolutionary advantages.", a: "anomalies", d: ["scrutinies", "myriads", "methodologies"], h: "Something that deviates from what is standard, normal, or expected (Anomalías)." },
+                { s: "The researcher's ____ was flawed, leading to incorrect results.", a: "methodology", d: ["discrepancy", "dichotomy", "anomaly"], h: "A system of methods used in a particular area of study or activity (Metodología)." },
+                { s: "His alibi sounded highly ____, so the police let him go.", a: "plausible", d: ["ephemeral", "volatile", "inherent"], h: "Seeming reasonable or probable (Plausible/Creíble)." },
+                { s: "The new laws will be subject to intense public ____.", a: "scrutiny", d: ["myriad", "discrepancy", "anomaly"], h: "Critical observation or examination (Escrutinio/Examen minucioso)." },
+                { s: "Elderly people are highly ____ to the flu virus.", a: "susceptible", d: ["plausible", "ephemeral", "comprehensive"], h: "Likely or liable to be influenced or harmed by a particular thing (Susceptible)." },
+                { s: "The stock market has been highly ____ this week.", a: "volatile", d: ["profound", "inherent", "comprehensive"], h: "Liable to change rapidly and unpredictably, especially for the worse (Volátil)." },
+                { s: "The university offers a ____ program in international relations.", a: "comprehensive", d: ["ephemeral", "volatile", "susceptible"], h: "Complete; including all or nearly all elements or aspects of something (Exhaustivo/Integral)." },
+                { s: "Risk is an ____ part of starting a new business.", a: "inherent", d: ["plausible", "ephemeral", "volatile"], h: "Existing in something as a permanent, essential, or characteristic attribute (Inherente)." },
+                { s: "The invention of the internet had a ____ impact on society.", a: "profound", d: ["volatile", "susceptible", "ephemeral"], h: "Very great or intense; showing great knowledge or insight (Profundo)." },
+                { s: "We need to ____ the data before publishing the report.", a: "verify", d: ["mitigate", "distort", "alleviate"], h: "Make sure or demonstrate that something is true, accurate, or justified (Verificar)." }
+            ],
+            tier5: [ // IELTS 5 (Band 8.5 - 9.0)
+                { s: "The politician tried to ____ the truth with complicated rhetoric.", a: "obfuscate", d: ["vindicate", "juxtapose", "elucidate"], h: "To make something unclear, unintelligible, or confusing (Ofuscar/Confundir)." },
+                { s: "He has a highly ____ writing style that is difficult to copy.", a: "idiosyncratic", d: ["superfluous", "cognizant", "pernicious"], h: "Peculiar or individual; a distinctive characteristic (Idiosincrásico/Peculiar)." },
+                { s: "The ____ child refused to follow the teacher's instructions.", a: "recalcitrant", d: ["sporadic", "meticulous", "anomalous"], h: "Having an obstinately uncooperative attitude towards authority or discipline (Recalcitrante/Rebelde)." },
+                { s: "Fake news has a ____ effect on democratic societies.", a: "pernicious", d: ["superfluous", "cognizant", "idiosyncratic"], h: "Having a harmful effect, especially in a gradual or subtle way (Pernicioso/Nocivo)." },
+                { s: "The rapid ____ of nuclear weapons is a global threat.", a: "proliferation", d: ["assertion", "anomaly", "dichotomy"], h: "Rapid increase in numbers (Proliferación)." },
+                { s: "Gunfire was heard in ____ bursts throughout the night.", a: "sporadic", d: ["meticulous", "recalcitrant", "pernicious"], h: "Occurring at irregular intervals or only in a few places; scattered (Esporádico)." },
+                { s: "Deleting the ____ paragraphs made the essay much stronger.", a: "superfluous", d: ["idiosyncratic", "cognizant", "anomalous"], h: "Unnecessary, especially through being more than enough (Superfluo/Innecesario)." },
+                { s: "The DNA evidence will finally ____ the wrongly accused man.", a: "vindicate", d: ["obfuscate", "juxtapose", "elucidate"], h: "Clear someone of blame or suspicion (Vindicar/Absolver)." },
+                { s: "He made a bold ____ that AI would soon control the world.", a: "assertion", d: ["proliferation", "scrutiny", "myriad"], h: "A confident and forceful statement of fact or belief (Afirmación/Aseveración)." },
+                { s: "It was an ____ situation that no one had ever witnessed before.", a: "anomalous", d: ["sporadic", "recalcitrant", "meticulous"], h: "Deviating from what is standard, normal, or expected (Anómalo)." },
+                { s: "A good leader must be ____ of the needs of their team.", a: "cognizant", d: ["superfluous", "pernicious", "idiosyncratic"], h: "Having knowledge or being aware of (Consciente/Conocedor)." },
+                { s: "Please ____ the reasons for your decision so we can understand.", a: "elucidate", d: ["obfuscate", "vindicate", "juxtapose"], h: "Make something clear; explain (Elucidar/Aclarar)." },
+                { s: "The argument was completely ____ and easily disproven.", a: "fallacious", d: ["anomalous", "meticulous", "sporadic"], h: "Based on a mistaken belief (Falaz/Engañoso)." },
+                { s: "The artist decided to ____ modern elements with classical architecture.", a: "juxtapose", d: ["obfuscate", "vindicate", "elucidate"], h: "Place or deal with close together for contrasting effect (Yuxtaponer)." },
+                { s: "She planned the royal wedding with ____ attention to detail.", a: "meticulous", d: ["sporadic", "recalcitrant", "fallacious"], h: "Showing great attention to detail; very careful and precise (Meticuloso)." }
+            ]
+        };
+
+        // --- GAME STATE ---
+        const TOTAL_FLOORS = 50;
+        let currentFloor = 1;
+        let lives = 3;
+        let hintsLeft = 5;
+        let currentQuestion = null;
+        let usedQuestions = [];
+
+        // --- UI ELEMENTS ---
+        const towerContainer = document.getElementById('towerContainer');
+        const qBox = document.getElementById('qBox');
+        const tierBadge = document.getElementById('tierBadge');
+        const sentenceText = document.getElementById('sentenceText');
+        const optionsBox = document.getElementById('optionsBox');
+        const livesDisplay = document.getElementById('livesDisplay');
+        const hintBtn = document.getElementById('hintBtn');
+        const hintBox = document.getElementById('hintBox');
+        const hintCountUI = document.getElementById('hintCountUI');
+
+        // --- INITIALIZATION ---
+        function initGame() {
+            document.getElementById('startModal').style.display = 'none';
+            usedQuestions = [];
+            hintsLeft = 5;
+            updateHintUI();
+            buildTower();
+            startFloor();
+        }
+
+        function buildTower() {
+            towerContainer.innerHTML = "";
+            for (let i = 1; i <= TOTAL_FLOORS; i++) {
+                const floor = document.createElement('div');
+                floor.className = 'floor';
+                floor.id = `floor-${i}`;
+                
+                // Tier coloring
+                if (i <= 10) floor.classList.add('tier-1');
+                else if (i <= 20) floor.classList.add('tier-2');
+                else if (i <= 30) floor.classList.add('tier-3');
+                else if (i <= 40) floor.classList.add('tier-4');
+                else floor.classList.add('tier-5');
+
+                floor.innerHTML = `${i} <span class="avatar">🧗</span>`;
+                towerContainer.appendChild(floor); 
+            }
+        }
+
+        // --- GAMEPLAY LOGIC ---
+        function startFloor() {
+            // Visual Update
+            document.querySelectorAll('.floor').forEach(f => f.classList.remove('active'));
+            const floorEl = document.getElementById(`floor-${currentFloor}`);
+            floorEl.classList.add('active');
+            floorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Reset Hint UI
+            hintBox.style.display = 'none';
+            hintBtn.disabled = (hintsLeft <= 0);
+
+            // Determine Tier
+            let pool, badgeText, badgeColor;
+            if (currentFloor <= 10) { pool = vocabPool.tier1; badgeText = "Tier 1: IELTS 6.5"; badgeColor = "#aed6f1"; }
+            else if (currentFloor <= 20) { pool = vocabPool.tier2; badgeText = "Tier 2: IELTS 7.0"; badgeColor = "#5dade2"; }
+            else if (currentFloor <= 30) { pool = vocabPool.tier3; badgeText = "Tier 3: IELTS 7.5"; badgeColor = "#2874a6"; }
+            else if (currentFloor <= 40) { pool = vocabPool.tier4; badgeText = "Tier 4: IELTS 8.0"; badgeColor = "#f5b041"; }
+            else { pool = vocabPool.tier5; badgeText = "Tier 5: IELTS 9.0"; badgeColor = "#212121"; }
+
+            tierBadge.innerText = badgeText;
+            tierBadge.style.backgroundColor = badgeColor;
+            qBox.style.borderTopColor = badgeColor;
+
+            // Pick Question (No Repetition)
+            let available = pool.filter(q => !usedQuestions.includes(q.s));
+            if (available.length === 0) available = pool;
+
+            const rawData = available[Math.floor(Math.random() * available.length)];
+            usedQuestions.push(rawData.s);
+
+            currentQuestion = {
+                text: rawData.s.replace('____', '<span class="blank">____</span>'),
+                ans: rawData.a,
+                hint: rawData.h,
+                options: [...rawData.d, rawData.a].sort(() => Math.random() - 0.5)
+            };
+
+            // Render
+            sentenceText.innerHTML = currentQuestion.text;
+            optionsBox.innerHTML = "";
+            
+            currentQuestion.options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-card';
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(btn, opt);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        // --- HINT SYSTEM ---
+        function useHint() {
+            if (hintsLeft > 0) {
+                hintsLeft--;
+                updateHintUI();
+                hintBox.innerHTML = `<strong>💡 Definition:</strong> ${currentQuestion.hint}`;
+                hintBox.style.display = 'block';
+                hintBtn.disabled = true; // Disable for this question
+            }
+        }
+
+        function updateHintUI() {
+            hintCountUI.innerText = hintsLeft;
+        }
+
+        // --- ANSWER LOGIC ---
+        function handleAnswer(btn, text) {
+            document.querySelectorAll('.option-card').forEach(o => o.onclick = null);
+            hintBtn.disabled = true; // Prevent using hint after answering
+
+            if (text === currentQuestion.ans) {
+                // CORRECT
+                btn.classList.add('correct');
+                sentenceText.innerHTML = sentenceText.innerHTML.replace('<span class="blank">____</span>', `<span class="blank" style="color:#10b981; border-color:#10b981;">${text}</span>`);
+                document.getElementById(`floor-${currentFloor}`).classList.add('completed');
+                
+                setTimeout(() => {
+                    if (currentFloor === TOTAL_FLOORS) winGame();
+                    else { currentFloor++; startFloor(); }
+                }, 1200);
+
+            } else {
+                // WRONG
+                btn.classList.add('wrong');
+                lives--;
+                updateLivesUI();
+                
+                document.querySelectorAll('.option-card').forEach(o => {
+                    if(o.innerText === currentQuestion.ans) o.classList.add('correct');
+                });
+                
+                if (lives === 0) {
+                    setTimeout(() => document.getElementById('failModal').style.display = 'flex', 1500);
+                } else {
+                    setTimeout(() => {
+                        document.querySelector('.play-area').style.animation = "shake 0.5s";
+                        setTimeout(() => {
+                            document.querySelector('.play-area').style.animation = "";
+                            startFloor(); 
+                        }, 500);
+                    }, 2000);
+                }
+            }
+        }
+
+        function restartGame() {
+            lives = 3;
+            currentFloor = 1;
+            usedQuestions = [];
+            hintsLeft = 5; // Reset hints on total failure
+            updateLivesUI();
+            updateHintUI();
+            buildTower(); 
+            document.getElementById('failModal').style.display = 'none';
+            startFloor();
+        }
+
+        function updateLivesUI() {
+            livesDisplay.innerHTML = "";
+            for(let i=0; i<3; i++) {
+                const heart = document.createElement('span');
+                heart.className = "material-icons-round heart";
+                heart.innerText = "favorite";
+                if (i >= lives) heart.classList.add("lost");
+                livesDisplay.appendChild(heart);
+            }
+        }
+
+        // --- BADGE SYSTEM ---
+        function winGame() {
+            const modal = document.getElementById('winModal');
+            const canvas = document.getElementById('badgeCanvas');
+            modal.style.display = 'flex';
+            canvas.style.display = 'block';
+            drawBadge(canvas);
+        }
+
+        function drawBadge(canvas) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Background
+            ctx.fillStyle = "#212121"; // Black for IELTS 5
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, w/2 - 10, 0, 2*Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = "#d32f2f"; // IELTS Red
+            ctx.stroke();
+
+            // Text
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("IELTS VOCAB", w/2, 80);
+            
+            ctx.font = "bold 34px Arial";
+            ctx.fillStyle = "#f1c40f";
+            ctx.fillText("GRANDMASTER", w/2, 125);
+
+            ctx.fillStyle = "white";
+            ctx.font = "italic 16px Arial";
+            ctx.fillText("Teacher Ivan Hub", w/2, 230);
+            
+            // Icon
+            ctx.font = "60px Arial";
+            ctx.fillText("🎓", w/2, 190);
+        }
+
+        function downloadBadge() {
+            const canvas = document.getElementById('badgeCanvas');
+            const link = document.createElement('a');
+            link.download = 'IELTS_Vocab_Grandmaster.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+    </script>
+</body>
+</html>

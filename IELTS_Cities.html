@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Mock Test: Future Cities | Teacher Ivan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            padding-bottom: 60px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 4px solid var(--primary-teal);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .back-link { text-decoration: none; color: #999; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+        .back-link:hover { color: var(--primary-teal); }
+        
+        h1 { margin: 0; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .ielts-badge { background: var(--accent-coral); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; letter-spacing: 1px; }
+
+        .timer-badge {
+            background: #f0fdfc; color: var(--primary-dark); padding: 8px 20px; border-radius: 50px;
+            font-weight: 700; font-size: 1.2rem; border: 2px solid var(--primary-teal);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* --- TABS --- */
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; cursor: pointer;
+            font-weight: 600; color: #aaa; border-radius: 50px; transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-family: 'Poppins', sans-serif;
+        }
+        .tab-btn.active { background: var(--primary-teal); color: white; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(93, 203, 195, 0.3); }
+        .tab-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #eee; box-shadow: none; }
+
+        /* --- SECTIONS --- */
+        .section-card {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); display: none; border-top: 8px solid var(--primary-teal);
+        }
+        .section-card.active { display: block; animation: fadeIn 0.5s ease; }
+
+        h2 { color: var(--text-dark); font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; }
+        
+        .instruction-box { 
+            background: #f0fdfc; padding: 20px; border-radius: 12px; margin-bottom: 30px; 
+            border-left: 5px solid var(--primary-teal); font-size: 0.95rem; color: #444;
+        }
+
+        /* --- CONTENT STYLES --- */
+        .academic-text {
+            font-family: 'Merriweather', serif; line-height: 1.9; color: #333;
+            background: #fafafa; padding: 30px; border: 1px solid #eee; margin-bottom: 30px;
+            max-height: 450px; overflow-y: auto; border-radius: 12px; font-size: 1.05rem;
+        }
+        .academic-text h3 { font-family: 'Poppins', sans-serif; color: var(--text-dark); margin-top: 0; }
+
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 30px;
+            border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* --- QUESTIONS & FORMS --- */
+        .question-block { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #eee; }
+        .q-label { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.1rem; color: var(--text-dark); }
+        
+        input[type="text"] {
+            width: 100%; max-width: 300px; padding: 12px 20px; border: 2px solid #ddd; 
+            border-radius: 50px; font-family: 'Poppins', sans-serif; font-size: 1rem;
+            outline: none; transition: 0.3s;
+        }
+        input[type="text"]:focus { border-color: var(--primary-teal); background: #f0fdfc; }
+        
+        .radio-group label { 
+            display: block; margin: 10px 0; cursor: pointer; background: #f9f9f9; 
+            padding: 12px 20px; border-radius: 10px; border: 1px solid #eee; transition: 0.2s;
+        }
+        .radio-group label:hover { background: #f0fdfc; border-color: var(--primary-teal); }
+        .radio-group input[type="radio"] { margin-right: 10px; accent-color: var(--primary-teal); transform: scale(1.2); }
+
+        textarea { 
+            width: 100%; height: 250px; padding: 20px; border: 2px solid #ddd; 
+            border-radius: 15px; font-family: 'Poppins', sans-serif; font-size: 1rem; 
+            resize: vertical; outline: none; transition: 0.3s; box-sizing: border-box; background: #fafafa;
+        }
+        textarea:focus { border-color: var(--primary-teal); background: white; }
+
+        /* --- BUTTONS --- */
+        .btn-main {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; float: right; margin-top: 20px;
+            font-family: 'Poppins', sans-serif; font-size: 1rem; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-main:hover { background: black; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-coral { background: var(--accent-coral); }
+        .btn-coral:hover { background: #ff7e6b; }
+
+        /* --- SMART ANALYSIS UI --- */
+        .score-dashboard {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; margin-bottom: 40px;
+        }
+        .score-card { background: #f0fdfc; padding: 30px 20px; border-radius: 15px; border: 1px solid #e0f2f1; }
+        .score-num { font-size: 3rem; font-weight: 700; color: var(--primary-teal); display: block; line-height: 1; margin-bottom: 10px; }
+        .score-label { font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
+
+        .smart-analysis-box {
+            background: #fff; border: 2px dashed var(--accent-coral); padding: 25px;
+            border-radius: 15px; margin-bottom: 30px;
+        }
+        .smart-title { color: var(--accent-coral); font-size: 1.2rem; display: flex; align-items: center; gap: 8px; margin-top: 0; }
+        .feedback-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        .feedback-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .clearfix::after { content: ""; clear: both; display: table; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="index.html" class="back-link">← HUB</a>
+        <h1><span class="ielts-badge">IELTS</span> Cities & Environment</h1>
+    </div>
+    <div class="timer-badge" id="timer">
+        <span class="material-icons-round">timer</span> 45:00
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tabListening">1. Listening</button>
+        <button class="tab-btn" id="tabReading" onclick="switchTab('reading')" disabled>2. Reading</button>
+        <button class="tab-btn" id="tabWriting" onclick="switchTab('writing')" disabled>3. Writing</button>
+        <button class="tab-btn" id="tabResults" disabled>4. Smart Analysis</button>
+    </div>
+
+    <div id="sectionListening" class="section-card active clearfix">
+        <h2>Listening Comprehension</h2>
+        <div class="instruction-box">
+            <span class="material-icons-round" style="vertical-align: middle; margin-right: 5px;">info</span>
+            <strong>Instructions:</strong> Watch Peter Calthorpe's TED Talk about "7 principles for building better cities". Answer questions 1-4. (Play it only once!)
+        </div>
+
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/IFjD3NMv6Kw" allowfullscreen></iframe>
+        </div>
+
+        <form id="listeningForm">
+            <div class="question-block">
+                <span class="q-label">1. According to the speaker, the main villain in the story of modern city planning is called __________.</span>
+                <input type="text" id="l_q1" placeholder="Type ONE word...">
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">2. The speaker argues that this 'villain' can happen anywhere, and its key attribute is that it __________ people.</span>
+                <input type="text" id="l_q2" placeholder="Type ONE word...">
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">3. In the new high-density "super blocks" in China, how many residential units can be found in a single block?</span>
+                <input type="text" id="l_q3" placeholder="Type a number...">
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">4. What is the speaker's main concern regarding Autonomous Vehicles (self-driving cars)?</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="l_q4" value="A"> A) They will be too expensive for the middle class.</label>
+                    <label><input type="radio" name="l_q4" value="B"> B) They will generate much more traffic and encourage people to live further away.</label>
+                    <label><input type="radio" name="l_q4" value="C"> C) They will eliminate the need for bicycles and walking completely.</label>
+                </div>
+            </div>
+        </form>
+
+        <button class="btn-main" onclick="nextSection('reading')">Continue to Reading ➜</button>
+    </div>
+
+    <div id="sectionReading" class="section-card clearfix">
+        <h2>Academic Reading</h2>
+        <div class="instruction-box">
+            <span class="material-icons-round" style="vertical-align: middle; margin-right: 5px;">menu_book</span>
+            <strong>Instructions:</strong> Read "The Rise of Vertical Forests" and answer questions 5-8. Select True, False, or Not Given.
+        </div>
+
+        <div class="academic-text">
+            <h3>The Rise of Vertical Forests</h3>
+            <p><strong>Paragraph A</strong><br>
+            The concept of the 'Vertical Forest' (or Bosco Verticale) has emerged as a groundbreaking architectural response to the environmental challenges of rapid urbanization. By integrating hundreds of trees and thousands of shrubs into the facades of high-rise residential towers, architects aim to mitigate the 'Urban Heat Island' effect. This phenomenon, where city centers experience significantly higher temperatures than surrounding rural areas, is primarily driven by the abundance of concrete and asphalt, which absorb and retain solar heat.</p>
+            
+            <p><strong>Paragraph B</strong><br>
+            Beyond temperature regulation, these living buildings serve as vertical ecosystems. The dense vegetation acts as a natural air filter, absorbing carbon dioxide and particulate matter while simultaneously releasing oxygen. Studies indicate that a pair of well-designed vertical forest towers can provide the ecological equivalent of a several-hectare flat forest. However, the structural engineering required to support the massive weight of mature trees, soil, and complex irrigation systems makes these buildings notoriously expensive to construct and maintain.</p>
+            
+            <p><strong>Paragraph C</strong><br>
+            While vertical forests are often celebrated as the ultimate solution to urban pollution, some critics argue they are largely symbolic. Skeptics point out that the immense carbon footprint generated during the construction of these reinforced concrete behemoths may take decades to offset through the trees' natural carbon sequestration. Nevertheless, as a visual manifesto for green urbanism, they have undeniably inspired a new generation of city planners.</p>
+        </div>
+
+        <form id="readingForm">
+            <div class="question-block">
+                <span class="q-label">5. The 'Urban Heat Island' effect is mainly caused by the lack of trees in rural areas.</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="r_q5" value="TRUE"> True</label>
+                    <label><input type="radio" name="r_q5" value="FALSE"> False</label>
+                    <label><input type="radio" name="r_q5" value="NOT GIVEN"> Not Given</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">6. A single vertical forest tower provides the exact same ecological benefits as a ten-hectare flat forest.</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="r_q6" value="TRUE"> True</label>
+                    <label><input type="radio" name="r_q6" value="FALSE"> False</label>
+                    <label><input type="radio" name="r_q6" value="NOT GIVEN"> Not Given</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">7. Vertical forests are relatively inexpensive to build and maintain compared to traditional skyscrapers.</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="r_q7" value="TRUE"> True</label>
+                    <label><input type="radio" name="r_q7" value="FALSE"> False</label>
+                    <label><input type="radio" name="r_q7" value="NOT GIVEN"> Not Given</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">8. Critics believe that building these towers produces a significant amount of carbon emissions.</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="r_q8" value="TRUE"> True</label>
+                    <label><input type="radio" name="r_q8" value="FALSE"> False</label>
+                    <label><input type="radio" name="r_q8" value="NOT GIVEN"> Not Given</label>
+                </div>
+            </div>
+        </form>
+
+        <button class="btn-main" onclick="nextSection('writing')">Continue to Writing ➜</button>
+    </div>
+
+    <div id="sectionWriting" class="section-card clearfix">
+        <h2>Writing Task 2 (Essay)</h2>
+        <div class="instruction-box">
+            <span class="material-icons-round" style="vertical-align: middle; margin-right: 5px;">edit_document</span>
+            <strong>Task:</strong> Write about the following topic. Minimum 250 words. The system will analyze your essay automatically.
+        </div>
+
+        <div style="background:var(--bg-light); border:2px dashed #ccc; padding:25px; border-radius: 12px; margin-bottom:25px;">
+            <p style="font-size: 1.1rem; margin-top:0;"><strong>As cities become more crowded, some people believe that governments should ban private cars from city centers to reduce pollution and traffic. Others argue that this would restrict personal freedom and harm local businesses.</strong></p>
+            <p style="color:#666; margin-bottom:0;"><em>Discuss both these views and give your own opinion.</em></p>
+        </div>
+
+        <textarea id="essayInput" placeholder="Start typing your essay here..."></textarea>
+        <div style="text-align:right; font-size:0.9rem; color:#888; margin-top:10px; font-weight:600;">Word Count: <span id="wordCount" style="color:var(--primary-teal);">0</span></div>
+
+        <button class="btn-main btn-coral" onclick="finishExam()">Finish & Analyze Essay <span class="material-icons-round">psychology</span></button>
+    </div>
+
+    <div id="sectionResults" class="section-card clearfix">
+        <h2 style="border:none; text-align:center;">Exam Completed 🎉</h2>
+
+        <div class="score-dashboard">
+            <div class="score-card">
+                <span class="score-num" id="scoreListening">-</span>
+                <span class="score-label">Listening</span>
+            </div>
+            <div class="score-card">
+                <span class="score-num" id="scoreReading">-</span>
+                <span class="score-label">Reading</span>
+            </div>
+            <div class="score-card" style="background:#fff0f3; border-color:#ffebee;">
+                <span class="score-num" style="color:var(--accent-coral);" id="scoreWritingEst">-</span>
+                <span class="score-label">Writing Est. Band</span>
+            </div>
+        </div>
+
+        <div class="smart-analysis-box" id="pdfAnalysisArea">
+            <h3 class="smart-title"><span class="material-icons-round">memory</span> AI Smart Analysis (Writing Task 2)</h3>
+            <div id="feedbackContainer">
+                </div>
+        </div>
+
+        <div style="text-align:center; background:#f4f7f6; padding:30px; border-radius:15px; margin-top: 30px;">
+            <h3 style="margin-top:0;">Download Official Report</h3>
+            <p style="font-size:0.9rem; color:#666;">The PDF will include your scores and the Smart Analysis feedback.</p>
+            <input type="text" id="studentName" placeholder="Enter Full Name..." style="margin-bottom:15px; text-align:center; padding:10px; border-radius:50px; border:1px solid #ccc; width:250px; outline:none;">
+            <br>
+            <button class="btn-main" style="float:none; margin:0;" onclick="generatePDF()"><span class="material-icons-round">download</span> Save PDF Report</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- TIMER LOGIC ---
+    let timeLeft = 45 * 60; // 45 minutes
+    const timerEl = document.getElementById('timer');
+    
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        timerEl.innerHTML = `<span class="material-icons-round">timer</span> ${m}:${s < 10 ? '0'+s : s}`;
+        
+        if(timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Time is up! Submitting exam...");
+            finishExam();
+        }
+    }, 1000);
+
+    // --- NAVIGATION ---
+    function nextSection(nextId) {
+        document.getElementById('tab' + nextId.charAt(0).toUpperCase() + nextId.slice(1)).disabled = false;
+        switchTab(nextId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchTab(sectionId) {
+        document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById('section' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1)).classList.add('active');
+        document.getElementById('tab' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1)).classList.add('active');
+    }
+
+    // --- WORD COUNT ---
+    document.getElementById('essayInput').addEventListener('input', function() {
+        const words = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+        document.getElementById('wordCount').innerText = words;
+    });
+
+    // --- SMART ANALYZER ALGORITHM ---
+    function analyzeEssay(text) {
+        let feedback = [];
+        let estScore = 8.5; // Starting max estimated score
+        
+        // 1. Task Response (Word Count)
+        let words = text.trim().split(/\s+/).filter(w => w.length > 0);
+        let count = words.length;
+        if(count === 0) {
+            return { score: 0, html: "<div class='feedback-item'>❌ No essay written.</div>" };
+        } else if (count < 250) {
+            feedback.push(`<div class='feedback-item'>⚠️ <b>Task Response:</b> You wrote <b>${count} words</b>. You must write at least 250 words in Task 2. You will be heavily penalized in the real exam.</div>`);
+            estScore -= 1.5;
+        } else {
+            feedback.push(`<div class='feedback-item'>✅ <b>Task Response:</b> Great! You wrote <b>${count} words</b>, meeting the 250-word minimum requirement.</div>`);
+        }
+
+        // 2. Cohesion & Coherence (Linking Words)
+        const linkers = ["furthermore", "moreover", "however", "therefore", "consequently", "in addition", "on the other hand", "for instance", "to conclude", "nevertheless", "whereas"];
+        let foundLinkers = linkers.filter(l => text.toLowerCase().includes(l));
+        if (foundLinkers.length < 3) {
+            feedback.push(`<div class='feedback-item'>⚠️ <b>Cohesion:</b> You lack academic transition words. Try to use words like <i>'Furthermore', 'However', 'Therefore'</i> to connect your paragraphs smoothly.</div>`);
+            estScore -= 1.0;
+        } else {
+            feedback.push(`<div class='feedback-item'>✅ <b>Cohesion:</b> Good use of academic linking words (${foundLinkers.join(", ")}). This makes your essay flow logically.</div>`);
+        }
+
+        // 3. Lexical Resource (Basic Vocab Check)
+        const basicWords = [" good ", " bad ", " big ", " small ", " very ", " a lot "];
+        let foundBasic = basicWords.filter(w => text.toLowerCase().includes(w));
+        if (foundBasic.length >= 2) {
+            feedback.push(`<div class='feedback-item'>💡 <b>Vocabulary Improvement:</b> You used basic words like <b>${foundBasic.join(",").trim()}</b>. To get a Band 7+, upgrade them to: <i>beneficial, detrimental, substantial, significantly, a great deal of</i>.</div>`);
+            estScore -= 0.5;
+        } else {
+            feedback.push(`<div class='feedback-item'>✅ <b>Vocabulary:</b> You avoided relying heavily on simple/repetitive vocabulary. Excellent.</div>`);
+        }
+
+        // 4. Grammatical Range (Sentence Complexity)
+        let sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        let avgLength = count / (sentences.length || 1);
+        if (avgLength < 12) {
+            feedback.push(`<div class='feedback-item'>⚠️ <b>Grammar:</b> Your sentences are quite short (average ${Math.round(avgLength)} words). Combine ideas using relative clauses (which, who) or conditionals (If...) to show complex grammar.</div>`);
+            estScore -= 0.5;
+        } else {
+            feedback.push(`<div class='feedback-item'>✅ <b>Grammar:</b> Good sentence variety. Your average sentence length is ${Math.round(avgLength)} words, indicating a mix of simple and complex structures.</div>`);
+        }
+
+        return { score: Math.max(1, estScore).toFixed(1), html: feedback.join("") };
+    }
+
+    // --- SCORING ENGINE ---
+    function finishExam() {
+        clearInterval(timerInterval);
+        
+        // 1. Calculate Listening
+        let l_score = 0;
+        if(document.getElementById('l_q1').value.toLowerCase().trim() === "sprawl") l_score++;
+        if(document.getElementById('l_q2').value.toLowerCase().trim() === "isolates" || document.getElementById('l_q2').value.toLowerCase().trim() === "segregates") l_score++;
+        if(document.getElementById('l_q3').value.trim() === "5000" || document.getElementById('l_q3').value.trim() === "5,000") l_score++;
+        if(document.querySelector('input[name="l_q4"]:checked')?.value === "B") l_score++;
+
+        let l_band = (l_score / 4) * 9;
+        if(l_band === 0) l_band = 1;
+        
+        // 2. Calculate Reading
+        let r_score = 0;
+        if(document.querySelector('input[name="r_q5"]:checked')?.value === "FALSE") r_score++;
+        if(document.querySelector('input[name="r_q6"]:checked')?.value === "NOT GIVEN") r_score++;
+        if(document.querySelector('input[name="r_q7"]:checked')?.value === "FALSE") r_score++;
+        if(document.querySelector('input[name="r_q8"]:checked')?.value === "TRUE") r_score++;
+
+        let r_band = (r_score / 4) * 9;
+        if(r_band === 0) r_band = 1;
+
+        // 3. Analyze Writing
+        const essayText = document.getElementById('essayInput').value;
+        const writingAnalysis = analyzeEssay(essayText);
+
+        // 4. Display Results
+        document.getElementById('scoreListening').innerText = l_band.toFixed(1);
+        document.getElementById('scoreReading').innerText = r_band.toFixed(1);
+        document.getElementById('scoreWritingEst').innerText = writingAnalysis.score;
+        
+        document.getElementById('feedbackContainer').innerHTML = writingAnalysis.html;
+
+        // Unlock Results Tab
+        const resTab = document.getElementById('tabResults');
+        resTab.disabled = false;
+        switchTab('results');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- PDF GENERATOR ---
+    function generatePDF() {
+        const name = document.getElementById('studentName').value.trim();
+        if(!name) { alert("Please enter your name before downloading."); return; }
+
+        const l_score = document.getElementById('scoreListening').innerText;
+        const r_score = document.getElementById('scoreReading').innerText;
+        const w_score = document.getElementById('scoreWritingEst').innerText;
+        const feedbackHTML = document.getElementById('feedbackContainer').innerHTML;
+
+        const element = document.createElement('div');
+        element.innerHTML = `
+            <div style="font-family: 'Helvetica', sans-serif; padding: 40px; color: #2d2d2d;">
+                <h1 style="color:#5dcbc3; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top:0;">IELTS Mock Exam: Future Cities</h1>
+                <p><strong>Student:</strong> ${name}</p>
+                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                <br>
+                <h3 style="color:#2d2d2d; margin-bottom:10px;">Objective Scores</h3>
+                <table style="width:100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ddd; background:#f9f9f9; width:33%;"><strong>Listening:</strong> ${l_score} / 9.0</td>
+                        <td style="padding:10px; border:1px solid #ddd; background:#f9f9f9; width:33%;"><strong>Reading:</strong> ${r_score} / 9.0</td>
+                        <td style="padding:10px; border:1px solid #ddd; background:#fff0f3; width:33%;"><strong>Writing (Est):</strong> ${w_score} / 9.0</td>
+                    </tr>
+                </table>
+                
+                <h3 style="color:#ff9a8b; margin-bottom:10px;">AI Smart Analysis (Writing)</h3>
+                <div style="background:#fff; border:2px dashed #ff9a8b; padding:20px; border-radius:10px; margin-bottom: 30px; font-size: 0.95rem; line-height: 1.6;">
+                    ${feedbackHTML}
+                </div>
+
+                <h3 style="color:#2d2d2d; margin-bottom:10px;">Original Essay Submission</h3>
+                <div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; white-space: pre-wrap; font-size: 0.9rem; line-height: 1.6; color:#555;">
+                    ${document.getElementById('essayInput').value || "No essay submitted."}
+                </div>
+                
+                <p style="font-size:0.8em; color:#999; text-align: center; margin-top: 50px;">Generated by Teacher Ivan's IELTS Hub • 2026</p>
+            </div>
+        `;
+
+        html2pdf().set({
+            margin: 0.5,
+            filename: `IELTS_Cities_Report_${name.replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        }).from(element).save();
+    }
+</script>
+
+</body>
+</html>
