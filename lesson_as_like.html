@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>As vs. Like | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #999; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; color: var(--text-dark); font-size: 2.2rem; }
+        .subtitle { color: #888; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #aaa;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-teal);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.3);
+        }
+
+        /* CONTENT AREA */
+        .container {
+            max-width: 900px;
+            margin: 0 auto 50px;
+            width: 90%;
+        }
+
+        .section-view { display: none; animation: fadeIn 0.4s ease; }
+        .section-view.active { display: block; }
+
+        /* THEORY CARDS */
+        .grid-theory {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .rule-card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-top: 6px solid #ccc;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .rule-card:hover { transform: translateY(-5px); }
+
+        .c-like { border-top-color: var(--primary-teal); }
+        .c-as { border-top-color: var(--accent-coral); }
+
+        .rule-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: var(--text-dark); }
+        .rule-translation { color: #888; font-style: italic; margin-bottom: 15px; font-size: 0.95rem; }
+        
+        .formula-box {
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .c-like .formula-box { background: #f0fdfc; border: 1px dashed var(--primary-teal); color: var(--primary-dark); }
+        .c-as .formula-box { background: #fff0f3; border: 1px dashed var(--accent-coral); color: #d32f2f; }
+
+        .example-list { list-style: none; padding: 0; margin: 0; }
+        .example-list li { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.5; }
+        .ex-eng { font-weight: 600; color: #333; display: block; }
+        .ex-spa { color: #666; font-size: 0.85rem; }
+        
+        .highlight-like { color: var(--primary-dark); font-weight: bold; }
+        .highlight-as { color: #d32f2f; font-weight: bold; }
+
+        /* QUICK TIP */
+        .quick-tip {
+            background: #fffbe6;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* QUIZ STYLES */
+        .quiz-box {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .q-progress { color: #aaa; font-weight: 600; margin-bottom: 10px; font-size: 0.9rem; }
+        .q-text { font-size: 1.4rem; font-weight: 600; color: var(--text-dark); margin-bottom: 30px; line-height: 1.5; }
+        .q-blank { border-bottom: 3px solid var(--accent-coral); color: var(--accent-coral); padding: 0 10px; min-width: 60px; display: inline-block; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .opt-btn {
+            padding: 15px;
+            border: 2px solid #eee;
+            background: #f9f9f9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            color: #555;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .opt-btn:hover { border-color: var(--primary-teal); background: #f0fdfc; }
+        .opt-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .opt-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s; }
+
+        /* SCORE AREA */
+        #scoreArea { display: none; text-align: center; }
+        .score-circle {
+            width: 150px; height: 150px;
+            border-radius: 50%; border: 8px solid var(--primary-teal);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; font-weight: 700; color: var(--primary-teal);
+            margin: 0 auto 20px;
+        }
+        .btn-restart {
+            background: var(--text-dark); color: white; padding: 12px 30px;
+            border-radius: 50px; border: none; font-weight: bold; cursor: pointer;
+            margin-top: 20px; transition: 0.3s;
+        }
+        .btn-restart:hover { background: black; transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Volver al HUB</a>
+        <h1>As vs. Like</h1>
+        <div class="subtitle">The Ultimate Guide to Comparisons and Roles</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('theory')">📚 Theory Lab</button>
+        <button class="tab-btn" onclick="switchTab('practice')">📝 Practice Quiz</button>
+    </div>
+
+    <div class="container">
+
+        <div id="theory" class="section-view active">
+            <div class="grid-theory">
+                
+                <div class="rule-card c-like">
+                    <div class="rule-title">1. LIKE (Similitud)</div>
+                    <div class="rule-translation">Significado: "Similar a" / "Igual que"</div>
+                    <div class="formula-box">LIKE + Noun / Pronoun</div>
+                    <p style="font-size:0.9rem; color:#666;">Se usa para decir que dos cosas son <strong>similares visualmente o en su forma de actuar</strong>, pero NO son lo mismo.</p>
+                    <ul class="example-list">
+                        <li>
+                            <span class="ex-eng">"He runs <span class="highlight-like">like</span> the wind."</span>
+                            <span class="ex-spa">Corre como el viento. (Es rápido, pero no es el viento).</span>
+                        </li>
+                        <li>
+                            <span class="ex-eng">"She looks exactly <span class="highlight-like">like</span> her mother."</span>
+                            <span class="ex-spa">Se ve exactamente como su madre. (Físicamente similares).</span>
+                        </li>
+                        <li>
+                            <span class="ex-eng">"I sleep <span class="highlight-like">like</span> a baby."</span>
+                            <span class="ex-spa">Duermo como un bebé.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rule-card c-as">
+                    <div class="rule-title">2. AS (Rol / Profesión)</div>
+                    <div class="rule-translation">Significado: "En calidad de" / "Trabaja de"</div>
+                    <div class="formula-box">AS + Profession / Function</div>
+                    <p style="font-size:0.9rem; color:#666;">Se usa para hablar del <strong>trabajo real</strong> de alguien, o de la <strong>función real</strong> de un objeto.</p>
+                    <ul class="example-list">
+                        <li>
+                            <span class="ex-eng">"He works <span class="highlight-as">as</span> a manager."</span>
+                            <span class="ex-spa">Trabaja como gerente. (Es su profesión real).</span>
+                        </li>
+                        <li>
+                            <span class="ex-eng">"I am using this box <span class="highlight-as">as</span> a table."</span>
+                            <span class="ex-spa">Estoy usando esta caja como mesa. (Esa es su función ahora).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rule-card c-as">
+                    <div class="rule-title">3. AS (Conjunción)</div>
+                    <div class="rule-translation">Significado: "De la manera que"</div>
+                    <div class="formula-box">AS + Subject + Verb</div>
+                    <p style="font-size:0.9rem; color:#666;">A diferencia de 'Like', 'As' suele ir seguido de una cláusula completa (una persona haciendo una acción).</p>
+                    <ul class="example-list">
+                        <li>
+                            <span class="ex-eng">"Please do exactly <span class="highlight-as">as</span> I say."</span>
+                            <span class="ex-spa">Por favor, haz exactamente como digo.</span>
+                        </li>
+                        <li>
+                            <span class="ex-eng">"<span class="highlight-as">As</span> you know, the meeting is cancelled."</span>
+                            <span class="ex-spa">Como ya sabes, la reunión está cancelada.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="rule-card c-like">
+                    <div class="rule-title">4. SUCH AS (Ejemplos)</div>
+                    <div class="rule-translation">Significado: "Como por ejemplo"</div>
+                    <div class="formula-box">Category + SUCH AS + Examples</div>
+                    <p style="font-size:0.9rem; color:#666;">En inglés formal, para dar ejemplos usamos <strong>"Such as"</strong> en lugar de "Like".</p>
+                    <ul class="example-list">
+                        <li>
+                            <span class="ex-eng">"I love citrus fruits, <span class="highlight-like">such as</span> oranges and lemons."</span>
+                            <span class="ex-spa">Me encantan las frutas cítricas, como las naranjas y limones.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div class="quick-tip">
+                <strong>💡 Quick Tip (La regla de oro):</strong><br>
+                Si dices: "As your boss, I tell you to study." -> Significa que <strong>soy</strong> tu jefe.<br>
+                Si dices: "Like your boss, I tell you to study." -> Significa que actúo de forma similar a tu jefe, pero <strong>no soy</strong> tu jefe.
+            </div>
+        </div>
+
+        <div id="practice" class="section-view">
+            <div class="quiz-box" id="quizArea">
+                <div class="q-progress">Question <span id="qCount">1</span> / 10</div>
+                <div class="q-text" id="qText">Loading...</div>
+                <div class="options-grid" id="optContainer">
+                    </div>
+            </div>
+
+            <div class="quiz-box" id="scoreArea">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle" id="finalScore">0</div>
+                <p id="scoreMessage" style="color:#666; font-size:1.1rem;"></p>
+                <button class="btn-restart" onclick="startQuiz()">Try Again</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB LOGIC ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            const btns = document.querySelectorAll('.tab-btn');
+            if(tabId === 'theory') btns[0].classList.add('active');
+            if(tabId === 'practice') btns[1].classList.add('active');
+        }
+
+        // --- QUIZ DATA ---
+        const questions = [
+            { q: "He works ________ a software engineer at Google.", options: ["like", "as", "such as"], ans: 1 },
+            { q: "She sings beautifully, just ________ an angel.", options: ["as", "such as", "like"], ans: 2 },
+            { q: "________ I told you yesterday, the project is delayed.", options: ["As", "Like", "Such as"], ans: 0 },
+            { q: "I enjoy reading classic novels, ________ 'Pride and Prejudice'.", options: ["like", "such as", "as"], ans: 1 },
+            { q: "Nobody understands me ________ you do.", options: ["like", "as", "such as"], ans: 1 }, // Technically "as" is grammatically correct before Subject+Verb, though colloquially "like" is used. For IELTS/Academic, "As" is correct.
+            { q: "I am using this old shirt ________ a cleaning cloth.", options: ["as", "like", "such as"], ans: 0 },
+            { q: "He looks exactly ________ his grandfather.", options: ["as", "like", "such as"], ans: 1 },
+            { q: "________ your teacher, I expect you to do your homework.", options: ["Like", "Such as", "As"], ans: 2 },
+            { q: "It feels ________ it's going to snow tonight.", options: ["like", "as", "such as"], ans: 0 },
+            { q: "Please leave the documents exactly ________ they are.", options: ["like", "as", "such as"], ans: 1 }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        // --- QUIZ LOGIC ---
+        function startQuiz() {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('quizArea').style.display = 'block';
+            document.getElementById('scoreArea').style.display = 'none';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const data = questions[currentQ];
+            document.getElementById('qCount').innerText = currentQ + 1;
+            
+            // Format sentence with visual blank
+            const formattedText = data.q.replace('________', '<span class="q-blank">________</span>');
+            document.getElementById('qText').innerHTML = formattedText;
+
+            const optBox = document.getElementById('optContainer');
+            optBox.innerHTML = "";
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, index, data.ans, opt);
+                optBox.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, selectedIndex, correctIndex, text) {
+            // Lock buttons
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(b => b.onclick = null);
+
+            const qTextEl = document.getElementById('qText');
+
+            if (selectedIndex === correctIndex) {
+                btn.classList.add('correct');
+                score++;
+                // Fill the blank correctly
+                qTextEl.innerHTML = qTextEl.innerHTML.replace('<span class="q-blank">________</span>', `<span class="q-blank" style="color:#10b981; border-color:#10b981;">${text}</span>`);
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correctIndex].classList.add('correct'); // Highlight correct
+                // Fill blank with correct answer
+                const correctText = questions[currentQ].options[correctIndex];
+                qTextEl.innerHTML = qTextEl.innerHTML.replace('<span class="q-blank">________</span>', `<span class="q-blank" style="color:#ef4444; border-color:#ef4444;">${correctText}</span>`);
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < questions.length) {
+                    loadQuestion();
+                } else {
+                    showScore();
+                }
+            }, 1800);
+        }
+
+        function showScore() {
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('scoreArea').style.display = 'block';
+            
+            document.getElementById('finalScore').innerText = `${score}/10`;
+            
+            const msgEl = document.getElementById('scoreMessage');
+            if (score === 10) {
+                msgEl.innerText = "¡Perfección! Tienes muy clara la diferencia. 👑";
+            } else if (score >= 7) {
+                msgEl.innerText = "¡Buen trabajo! Estás muy cerca de dominarlo. 👍";
+            } else {
+                msgEl.innerText = "Recuerda: 'Like' para similitud, 'As' para rol/profesión. ¡Inténtalo de nuevo! 💪";
+            }
+        }
+
+        // Init
+        startQuiz();
+
+    </script>
+</body>
+</html>
