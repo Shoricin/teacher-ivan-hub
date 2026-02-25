@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyday English with TV Series | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+            color: white;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: white; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #d1d8e0; margin-top: 5px; font-weight: 300; }
+
+        /* TABS (Scenes) */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0; padding: 0 20px; flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px;
+        }
+
+        .tab-btn:hover { border-color: var(--primary-teal); }
+
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4);
+        }
+
+        /* MAIN CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 90%; }
+        
+        .scene-view { display: none; animation: fadeIn 0.5s ease; }
+        .scene-view.active { display: block; }
+
+        /* VIDEO WRAPPER */
+        .video-box {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-top: 5px solid var(--primary-teal);
+        }
+
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden;
+            background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .scene-context {
+            margin-top: 20px; padding: 15px; background: #fff0f3; border-left: 4px solid var(--accent-coral);
+            border-radius: 8px; font-size: 0.95rem; color: #444; line-height: 1.6;
+        }
+
+        /* VOCABULARY SECTION */
+        h2 { color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+        
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .vocab-card {
+            background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent-yellow); transition: 0.2s;
+        }
+        .vocab-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .v-word { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
+        .v-def { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+        .v-spa { font-size: 0.85rem; font-weight: bold; color: var(--primary-dark); text-transform: uppercase; }
+
+        /* QUIZ SECTION */
+        .quiz-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--text-dark);
+        }
+
+        .question { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #eee; }
+        .question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .q-text { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn {
+            padding: 12px 20px; border: 1px solid #ddd; background: #fafafa; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif; font-size: 0.95rem; text-align: left;
+        }
+        .opt-btn:hover { border-color: var(--primary-teal); background: white; }
+        .opt-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; font-weight: bold; }
+        .opt-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>🍿 Everyday English</h1>
+        <div class="subtitle">Aprende inglés con tus series favoritas</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchScene('scene1')">☕ Friends</button>
+        <button class="tab-btn" onclick="switchScene('scene2')">🏢 The Office</button>
+        <button class="tab-btn" onclick="switchScene('scene3')">🚔 B99</button>
+        <button class="tab-btn" onclick="switchScene('scene4')">🚲 Stranger Things</button>
+        <button class="tab-btn" onclick="switchScene('scene5')">👨‍👩‍👦 Modern Family</button>
+    </div>
+
+    <div class="container">
+
+        <div id="scene1" class="scene-view active">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/dGLObch14e4" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Joey is on a romantic date. Everything is going well until his date does the one thing Joey hates the most: taking food from his plate.
+                </div>
+            </div>
+
+            <h2><span class="material-icons-round">spellcheck</span> Everyday Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">To share</div>
+                    <div class="v-def">To give a portion of something to others.</div>
+                    <div class="v-spa">Compartir</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Date</div>
+                    <div class="v-def">A romantic meeting between two people.</div>
+                    <div class="v-spa">Cita romántica</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Plate</div>
+                    <div class="v-def">A flat dish used for eating food.</div>
+                    <div class="v-spa">Plato</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2><span class="material-icons-round">quiz</span> Quick Quiz</h2>
+                <div class="question" id="q1_1">
+                    <div class="q-text">1. Why is Joey angry during his date?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', false)">Because she didn't talk to him.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', true)">Because she took some fries from his plate.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', false)">Because she arrived late.</button>
+                    </div>
+                </div>
+                <div class="question" id="q1_2">
+                    <div class="q-text">2. What is Joey's golden rule?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', true)">"Joey doesn't share food!"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', false)">"Joey never pays for dinner!"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', false)">"Joey only eats pizza!"</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene2" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/gO8N3L_aERg" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Dwight decides to test his coworkers' safety knowledge by starting a fake fire in the office. Complete chaos and panic follow.
+                </div>
+            </div>
+
+            <h2><span class="material-icons-round">spellcheck</span> Everyday Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Fire drill</div>
+                    <div class="v-def">A practice of the emergency procedures to be used in case of a fire.</div>
+                    <div class="v-spa">Simulacro de incendio</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">To panic</div>
+                    <div class="v-def">To feel sudden and uncontrollable fear.</div>
+                    <div class="v-spa">Entrar en pánico</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Calm down</div>
+                    <div class="v-def">To become less excited, angry, or upset.</div>
+                    <div class="v-spa">Calmarse / Tranquilizarse</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2><span class="material-icons-round">quiz</span> Quick Quiz</h2>
+                <div class="question" id="q2_1">
+                    <div class="q-text">1. Who intentionally starts the fire in the office?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', false)">Michael.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', true)">Dwight.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', false)">Jim.</button>
+                    </div>
+                </div>
+                <div class="question" id="q2_2">
+                    <div class="q-text">2. How do the employees react to the fire?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', false)">They follow the instructions calmly.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', true)">They panic and destroy the office trying to escape.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', false)">They ignore it and keep working.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene3" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/HlBYdiXdUa8" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Detective Jake Peralta asks a group of suspects to sing a famous Backstreet Boys song so the witness can identify the killer's voice.
+                </div>
+            </div>
+
+            <h2><span class="material-icons-round">spellcheck</span> Everyday Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Suspect</div>
+                    <div class="v-def">A person thought to be guilty of a crime.</div>
+                    <div class="v-spa">Sospechoso</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Line-up</div>
+                    <div class="v-def">A group of people assembled for a witness to identify a suspect.</div>
+                    <div class="v-spa">Rueda de reconocimiento</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Catchy</div>
+                    <div class="v-def">Instantly appealing and memorable (usually a song).</div>
+                    <div class="v-spa">Pegadizo (canción)</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2><span class="material-icons-round">quiz</span> Quick Quiz</h2>
+                <div class="question" id="q3_1">
+                    <div class="q-text">1. What does Jake make the suspects do?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', false)">Read a scary book.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', true)">Sing "I Want It That Way".</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', false)">Dance together.</button>
+                    </div>
+                </div>
+                <div class="question" id="q3_2">
+                    <div class="q-text">2. What funny thing happens at the end of the scene?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', true)">Jake completely forgets they are investigating a murder because he enjoyed the song.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', false)">The witness starts dancing.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', false)">The suspects run away.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene4" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/4kL4IxCaN0s" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Eleven doesn't know many words in English. Chief Hopper (and Mike) try to explain to her what a "promise" means and the most important rule of friendship.
+                </div>
+            </div>
+
+            <h2><span class="material-icons-round">spellcheck</span> Everyday Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Promise</div>
+                    <div class="v-def">A declaration that you will definitely do something.</div>
+                    <div class="v-spa">Promesa / Prometer</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Secret</div>
+                    <div class="v-def">Something that is kept hidden from others.</div>
+                    <div class="v-spa">Secreto</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">To trust</div>
+                    <div class="v-def">To believe that someone is reliable and honest.</div>
+                    <div class="v-spa">Confiar</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2><span class="material-icons-round">quiz</span> Quick Quiz</h2>
+                <div class="question" id="q4_1">
+                    <div class="q-text">1. How do they explain a "promise"?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', true)">It's something that you can never break.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', false)">It's a game you play.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', false)">It means you have to give someone money.</button>
+                    </div>
+                </div>
+                <div class="question" id="q4_2">
+                    <div class="q-text">2. What is the most famous quote from this scene?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', false)">"Friends are forever."</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', true)">"Friends don't lie."</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', false)">"Never trust adults."</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene5" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/3GACORMzdZk" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Gloria gets very frustrated because her family constantly misunderstands her due to her strong Colombian accent and mixed-up vocabulary.
+                </div>
+            </div>
+
+            <h2><span class="material-icons-round">spellcheck</span> Everyday Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Accent</div>
+                    <div class="v-def">A distinctive way of pronouncing a language.</div>
+                    <div class="v-spa">Acento</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">To misunderstand</div>
+                    <div class="v-def">To fail to understand someone or something correctly.</div>
+                    <div class="v-spa">Malinterpretar</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Frustrated</div>
+                    <div class="v-def">Feeling annoyed or less confident because you cannot achieve what you want.</div>
+                    <div class="v-spa">Frustrado/a</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2><span class="material-icons-round">quiz</span> Quick Quiz</h2>
+                <div class="question" id="q5_1">
+                    <div class="q-text">1. Why does Gloria get frustrated in this scene?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', false)">Because her family doesn't want to travel to Colombia.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', true)">Because her family constantly misunderstands her English.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', false)">Because Jay bought the wrong groceries.</button>
+                    </div>
+                </div>
+                <div class="question" id="q5_2">
+                    <div class="q-text">2. What famous defense does Gloria use about her intelligence?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', true)">"Do you know how smart I am in Spanish?"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', false)">"I am the smartest person in this house!"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', false)">"I have a university degree!"</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to switch between scenes
+        function switchScene(sceneId) {
+            // Hide all scenes
+            const scenes = document.querySelectorAll('.scene-view');
+            scenes.forEach(scene => scene.classList.remove('active'));
+
+            // Show the target scene
+            document.getElementById(sceneId).classList.add('active');
+
+            // Update active state on tab buttons
+            if (window.event && window.event.currentTarget) {
+                const tabs = document.querySelectorAll('.tab-btn');
+                tabs.forEach(tab => tab.classList.remove('active'));
+                window.event.currentTarget.classList.add('active');
+            }
+        }
+
+        // Function to check quiz answers
+        function checkAns(button, questionId, isCorrect) {
+            // Find all buttons in this specific question
+            const questionDiv = document.getElementById(questionId);
+            const allButtons = questionDiv.querySelectorAll('.opt-btn');
+
+            // Disable all buttons so the user can only guess once
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                
+                // Highlight the correct answer automatically
+                if (btn.getAttribute('onclick').includes('true')) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            // If the user clicked the wrong answer, highlight it in red
+            if (!isCorrect) {
+                button.classList.add('wrong');
+            }
+        }
+    </script>
+</body>
+</html>

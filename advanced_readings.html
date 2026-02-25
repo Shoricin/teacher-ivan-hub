@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Reading Mastery | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); }
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0; padding: 0 20px; flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn:hover { border-color: var(--primary-teal); }
+
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4);
+        }
+
+        /* MAIN CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 90%; }
+        
+        .reading-view { display: none; animation: fadeIn 0.5s ease; }
+        .reading-view.active { display: block; }
+
+        /* READING TEXT */
+        .reading-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-top: 6px solid var(--accent-coral);
+        }
+
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .reading-text h2 { font-family: 'Poppins', sans-serif; color: var(--text-dark); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+
+        /* VOCABULARY TOOLTIP */
+        .vocab-word {
+            background-color: rgba(93, 203, 195, 0.2);
+            border-bottom: 2px dashed var(--primary-teal);
+            cursor: help;
+            position: relative;
+            font-weight: bold;
+            color: var(--primary-dark);
+            transition: 0.2s;
+        }
+        
+        .vocab-word:hover { background-color: rgba(93, 203, 195, 0.4); }
+        
+        .vocab-word::after {
+            content: attr(data-def);
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--text-dark); color: white; padding: 8px 12px; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: normal;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s;
+            pointer-events: none; z-index: 10;
+        }
+        .vocab-word:hover::after { opacity: 1; visibility: visible; bottom: 120%; }
+
+        /* QUIZ SECTION */
+        .quiz-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+        }
+
+        .question { margin-bottom: 25px; }
+        .q-text { font-size: 1.05rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            padding: 12px 20px; border: 1px solid #ddd; background: #fafafa; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); }
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); }
+
+        .submit-btn {
+            background: var(--accent-coral); color: white; border: none; padding: 12px 25px;
+            border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; width: 100%; margin-top: 20px; font-family: 'Poppins', sans-serif;
+        }
+        .submit-btn:hover { background: #ff7e6b; transform: translateY(-2px); }
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: 600; text-align: center; display: none;
+        }
+        .feedback-box.success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .feedback-box.warning { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .feedback-box.danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; font-weight: bold; }
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>📚 Advanced Reading Mastery</h1>
+        <div class="subtitle">B2-C1 Level Reading Comprehension & Analysis</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('read1')">1. The AI Paradox</button>
+        <button class="tab-btn" onclick="switchTab('read2')">2. De-extinction</button>
+        <button class="tab-btn" onclick="switchTab('read3')">3. Choice Paralysis</button>
+        <button class="tab-btn" onclick="switchTab('read4')">4. Linguistic Relativity</button>
+        <button class="tab-btn" onclick="switchTab('read5')">5. Circular Economy</button>
+    </div>
+
+    <div class="container">
+
+        <div id="read1" class="reading-view active">
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h2>The Artificial Introspection</h2>
+                    <p>As artificial intelligence continues to encroach upon domains traditionally considered the exclusive purview of human creativity, society faces a profound existential <span class="vocab-word" data-def="A difficult or confusing situation or problem.">quandary</span>. The algorithms generating art, literature, and even music are not merely mimicking human behavior; they are synthesizing vast datasets to produce outputs that often <span class="vocab-word" data-def="To cause someone to feel confused or unable to understand something.">baffle</span> experts.</p>
+                    <p>However, the assertion that these machines possess true creativity is highly <span class="vocab-word" data-def="Open to debate or argument.">contentious</span>. Critics argue that AI lacks the lived experience and emotional depth necessary to infuse art with genuine meaning. The output, they claim, is a sophisticated pastiche—a statistical probability rather than a stroke of genius. Yet, as the lines blur, we are forced to redefine the very parameters of what constitutes art and intelligence.</p>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <div class="q-text">Comprehension Check</div>
+                <form id="quiz1" onsubmit="gradeQuiz(event, 'quiz1', ['q1_c', 'q2_b', 'q3_a'])">
+                    <div class="question">
+                        <p>1. What is the main purpose of the passage?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_a"> A) To prove that AI is more creative than humans.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_b"> B) To explain the technical process of algorithms.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_c"> C) To discuss the philosophical implications of AI in creative fields.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>2. In the context of the second paragraph, what does the author imply by the phrase "sophisticated pastiche"?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_a"> A) A masterpiece that surpasses human ability.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_b"> B) An imitation composed of existing elements rather than original thought.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_c"> C) A purely mathematical formula with no aesthetic value.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>3. According to the text, why do critics reject the idea that AI possesses true creativity?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_a"> A) Because algorithms lack human consciousness and emotional experience.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_b"> B) Because the algorithms are not fast enough to process large datasets.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_c"> C) Because AI outputs are often confusing to experts.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                    <div id="quiz1-feedback" class="feedback-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="read2" class="reading-view">
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h2>Bringing Back the Dead: De-extinction</h2>
+                    <p>The concept of de-extinction, once relegated to the realm of science fiction, is rapidly approaching scientific <span class="vocab-word" data-def="The point at which a plan or project is realized.">fruition</span>. Utilizing advanced genetic engineering tools like CRISPR, scientists are attempting to resurrect species such as the woolly mammoth and the passenger pigeon. The appeal is undeniably romantic: righting historical ecological wrongs and restoring lost biodiversity.</p>
+                    <p>Nevertheless, ecologists voice profound skepticism regarding the <span class="vocab-word" data-def="The practicality or possibility of something.">viability</span> of integrating these resurrected species into modern ecosystems. Habitats have irrevocably altered since these animals vanished. Introducing a 'proxy' species could inadvertently trigger catastrophic disruptions, outcompeting native fauna or introducing novel pathogens. The ethical dilemma remains: just because we have the technology to bring them back, does it mean we should?</p>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <div class="q-text">Comprehension Check</div>
+                <form id="quiz2" onsubmit="gradeQuiz(event, 'quiz2', ['q1_b', 'q2_c', 'q3_a'])">
+                    <div class="question">
+                        <p>1. How does the author characterize the motivation behind de-extinction?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_a"> A) Solely driven by economic profit.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_b"> B) Driven by a romantic desire to fix past environmental mistakes.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_c"> C) Mandated by international ecological laws.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>2. Which of the following is NOT mentioned as a potential risk of de-extinction?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_a"> A) The spread of new diseases.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_b"> B) Disruption of current food chains.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_c"> C) The high financial cost of genetic research.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>3. What can be inferred about the current ecosystems compared to the past?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_a"> A) They have changed so much that extinct animals might not survive in them.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_b"> B) They are healthier now than when the mammoth existed.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_c"> C) They have remained mostly identical over thousands of years.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                    <div id="quiz2-feedback" class="feedback-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="read3" class="reading-view">
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h2>The Choice Paralysis</h2>
+                    <p>Modern consumerism dictates that more options lead to greater satisfaction. However, psychological studies reveal the opposite: an <span class="vocab-word" data-def="A very large quantity of something.">abundance</span> of choice often leads to decision fatigue and anxiety. When confronted with fifty types of jam, shoppers frequently leave the store empty-handed, overwhelmed by the fear of making a <span class="vocab-word" data-def="Of less than the highest standard or quality.">suboptimal</span> decision.</p>
+                    <p>This phenomenon, coined the "paradox of choice," suggests that beyond a certain threshold, options cease to liberate us and instead paralyze us. Consequently, forward-thinking brands are increasingly curating their offerings, simplifying the consumer journey to <span class="vocab-word" data-def="Make less severe, serious, or painful.">mitigate</span> cognitive overload. Sometimes, less truly is more.</p>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <div class="q-text">Comprehension Check</div>
+                <form id="quiz3" onsubmit="gradeQuiz(event, 'quiz3', ['q1_a', 'q2_b', 'q3_c'])">
+                    <div class="question">
+                        <p>1. What is the "paradox of choice" as described in the text?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_a"> A) Having too many options makes decision-making harder, not easier.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_b"> B) Shoppers prefer buying jam over other types of products.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_c"> C) Brands deliberately offer too few choices to increase prices.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>2. Why do shoppers often leave the store empty-handed when faced with many options?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_a"> A) Because they lack the financial means to purchase premium goods.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_b"> B) Because they fear making a less-than-perfect decision.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_c"> C) Because the stores frequently run out of their favorite stock.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>3. How are brands responding to this psychological phenomenon?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_a"> A) By offering fifty new types of products.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_b"> B) By intentionally increasing the cognitive overload of consumers.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_c"> C) By curating and simplifying their product offerings.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                    <div id="quiz3-feedback" class="feedback-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="read4" class="reading-view">
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h2>Linguistic Relativity</h2>
+                    <p>Does the language we speak shape the way we think? The Sapir-Whorf hypothesis <span class="vocab-word" data-def="Assumes as a fact; puts forward as a basis of argument.">posits</span> that linguistic structures inherently constrain cognitive paradigms. While strict linguistic <span class="vocab-word" data-def="The doctrine that all events are determined by external causes.">determinism</span> is widely rejected today, researchers acknowledge that language heavily influences memory, spatial orientation, and even color perception.</p>
+                    <p>For instance, languages that assign distinct terms to varying shades of blue enable their speakers to distinguish those <span class="vocab-word" data-def="Colors or shades.">hues</span> more rapidly than speakers of languages that lump them together under a single word. Thus, learning a new language is not merely acquiring a new vocabulary; it is adopting a novel framework for interpreting reality.</p>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <div class="q-text">Comprehension Check</div>
+                <form id="quiz4" onsubmit="gradeQuiz(event, 'quiz4', ['q1_b', 'q2_a', 'q3_c'])">
+                    <div class="question">
+                        <p>1. What is the current scientific consensus on strict linguistic determinism?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_a"> A) It is universally accepted as an absolute truth.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_b"> B) It is widely rejected, though language is still seen as influential.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_c"> C) It only applies strictly to how humans perceive colors.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>2. How does language affect color perception according to the text?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_a"> A) Having specific words for shades helps speakers identify them faster.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_b"> B) People who speak different languages see entirely different wavelengths of light.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_c"> C) Language has no measurable effect on visual perception.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>3. What does the author conclude about the process of learning a new language?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_a"> A) It is a mechanical process of memorizing grammar rules.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_b"> B) It is unnecessarily complicated by the Sapir-Whorf hypothesis.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_c"> C) It provides the learner with a new framework to interpret reality.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                    <div id="quiz4-feedback" class="feedback-box"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="read5" class="reading-view">
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h2>The Circular Economy</h2>
+                    <p>For over a century, global industries have operated on a linear "take-make-dispose" model. As natural resources become increasingly <span class="vocab-word" data-def="Having limits or bounds.">finite</span>, the economic paradigm is shifting towards a circular economy—a systemic approach designed to eliminate waste and continually regenerate natural systems.</p>
+                    <p>Rather than discarding products at the end of their lifecycle, a circular economy emphasizes designing for durability, reuse, remanufacturing, and recycling. Transitioning to this model requires a monumental <span class="vocab-word" data-def="A thorough examination of a system, with major changes made.">overhaul</span> of global supply chains and consumer habits, but advocates argue it is the only viable pathway to <span class="vocab-word" data-def="Separate, disengage, or dissociate something from something else.">decouple</span> economic growth from environmental degradation.</p>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <div class="q-text">Comprehension Check</div>
+                <form id="quiz5" onsubmit="gradeQuiz(event, 'quiz5', ['q1_b', 'q2_a', 'q3_b'])">
+                    <div class="question">
+                        <p>1. What characterizes the traditional industrial model mentioned in the text?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_a"> A) It focuses entirely on recycling and sustainability.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_b"> B) It operates on a linear system of taking, making, and disposing.</label>
+                            <label class="opt-label"><input type="radio" name="q1" value="q1_c"> C) It constantly regenerates natural resources to prevent waste.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>2. Which of the following is a key focus of the circular economy?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_a"> A) Designing products for durability, reuse, and remanufacturing.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_b"> B) Extracting more fossil fuels to power new technologies.</label>
+                            <label class="opt-label"><input type="radio" name="q2" value="q2_c"> C) Discarding products safely in eco-friendly landfills.</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <p>3. What does the word 'decouple' imply in the final sentence?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_a"> A) To closely link economic growth to more industrial pollution.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_b"> B) To separate economic success from environmental damage.</label>
+                            <label class="opt-label"><input type="radio" name="q3" value="q3_c"> C) To stop all economic growth entirely in order to save the planet.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Answers</button>
+                    <div id="quiz5-feedback" class="feedback-box"></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.reading-view').forEach(view => view.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            if (event && event.currentTarget) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        // Lógica de Calificación
+        function gradeQuiz(e, formId, correctAnswers) {
+            e.preventDefault();
+            const form = document.getElementById(formId);
+            const feedback = document.getElementById(formId + '-feedback');
+            let score = 0;
+            let total = correctAnswers.length;
+
+            // Resetear estilos anteriores
+            form.querySelectorAll('.opt-label').forEach(label => {
+                label.classList.remove('correct-ans', 'wrong-ans');
+            });
+
+            correctAnswers.forEach((correctVal, index) => {
+                const groupName = `q${index + 1}`;
+                const selected = form.querySelector(`input[name="${groupName}"]:checked`);
+                
+                // Buscar el label correcto para pintarlo de verde
+                const correctLabel = form.querySelector(`input[value="${correctVal}"]`).parentElement;
+                correctLabel.classList.add('correct-ans');
+
+                if (selected) {
+                    if (selected.value === correctVal) {
+                        score++;
+                    } else {
+                        // Pintar la respuesta incorrecta del usuario de rojo
+                        selected.parentElement.classList.add('wrong-ans');
+                    }
+                }
+            });
+
+            // Mostrar Feedback
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; // Reset classes
+            
+            const percentage = (score / total) * 100;
+            if (percentage === 100) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Excellent! You scored ${score}/${total} (C1 Level Mastery).`;
+            } else if (percentage > 50) {
+                feedback.classList.add('warning');
+                feedback.innerHTML = `👍 Good job! You scored ${score}/${total} (B2 Level). Review the highlighted answers.`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `📚 Keep practicing! You scored ${score}/${total}. Carefully read the text again to understand the correct answers.`;
+            }
+
+            // Deshabilitar el botón de submit y los radios
+            const btn = form.querySelector('.submit-btn');
+            btn.disabled = true;
+            btn.innerText = 'Quiz Completed';
+            btn.style.opacity = '0.6';
+            btn.style.cursor = 'not-allowed';
+            
+            form.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+        }
+    </script>
+</body>
+</html>
