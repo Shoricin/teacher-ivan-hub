@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final Speech Builder | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary-teal: #5dcbc3;
@@ -183,24 +184,28 @@
             <h2>Structure Your Speech</h2>
             <form onsubmit="generatePDF(event)">
                 <div class="input-group">
+                    <label>Student Full Name</label>
+                    <input type="text" name="studentName" required style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1rem; box-sizing: border-box;" placeholder="e.g., Geiser Perez">
+                </div>
+                <div class="input-group">
                     <label>1. The Hook & Introduction</label>
                     <p class="instruction">Start with a strong statement, a question, or a fact to grab the audience's attention. Introduce your main topic.</p>
-                    <textarea placeholder="Good morning everyone. Have you ever wondered..."></textarea>
+                    <textarea name="hook" required placeholder="Good morning everyone. Have you ever wondered..."></textarea>
                 </div>
                 <div class="input-group">
                     <label>2. Your Main Argument (Stance)</label>
                     <p class="instruction">What is your opinion based on the reading? State your position clearly.</p>
-                    <textarea placeholder="Based on the text, I strongly believe that..."></textarea>
+                    <textarea name="argument" required placeholder="Based on the text, I strongly believe that..."></textarea>
                 </div>
                 <div class="input-group">
                     <label>3. Supporting Evidence & Examples</label>
                     <p class="instruction">Provide at least two examples or facts from the reading to support your opinion.</p>
-                    <textarea placeholder="For instance, the reading mentions that... Furthermore..."></textarea>
+                    <textarea name="evidence" required placeholder="For instance, the reading mentions that... Furthermore..."></textarea>
                 </div>
                 <div class="input-group">
                     <label>4. Conclusion & Call to Action</label>
                     <p class="instruction">Summarize your main point and tell the audience what they should think or do about it.</p>
-                    <textarea placeholder="In conclusion, we must realize that... Thank you."></textarea>
+                    <textarea name="conclusion" required placeholder="In conclusion, we must realize that... Thank you."></textarea>
                 </div>
                 <button type="submit" class="btn-primary">Generate Final Speech PDF</button>
             </form>
@@ -262,8 +267,86 @@
 
         function generatePDF(e) {
             e.preventDefault();
-            // Aquí integrarías la lógica de jsPDF que usas en el HUB
-            alert("¡Excelente trabajo! La función para generar el PDF de tu Speech se conectará en el siguiente paso. Asegúrate de revisar tu gramática.");
+            
+            // Capturar los datos del formulario
+            const form = e.target;
+            const studentName = form.querySelector('[name="studentName"]').value;
+            const hook = form.querySelector('[name="hook"]').value;
+            const argument = form.querySelector('[name="argument"]').value;
+            const evidence = form.querySelector('[name="evidence"]').value;
+            const conclusion = form.querySelector('[name="conclusion"]').value;
+
+            // Determinar el nivel y tema seleccionado
+            let topic = "Intermediate Level: General Topic";
+            const isAdvanced = document.getElementById('advanced-section').classList.contains('active');
+            if(isAdvanced) {
+                const selectElement = document.getElementById('student-select');
+                const selectedOption = selectElement.options[selectElement.selectedIndex].text;
+                topic = "Advanced Level: " + selectedOption;
+            }
+
+            // Inicializar jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Estilos de Título Principal
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(45, 45, 45);
+            doc.text("Final Speech Draft", 105, 20, null, null, "center");
+
+            // Información del Estudiante
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Student: ${studentName}`, 20, 35);
+            doc.text(`Topic: ${topic}`, 20, 42);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 49);
+
+            // Línea separadora
+            doc.setDrawColor(93, 203, 195); // Turquesa
+            doc.setLineWidth(1);
+            doc.line(20, 53, 190, 53); 
+
+            let yPos = 65;
+            const maxWidth = 170; // Ancho máximo del texto antes de hacer salto de línea
+
+            // Función auxiliar para imprimir secciones
+            const addSection = (title, content) => {
+                // Comprobar si hay espacio en la página, si no, crear nueva
+                if (yPos > 260) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                // Título de sección
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(93, 203, 195); // Turquesa
+                doc.setFontSize(14);
+                doc.text(title, 20, yPos);
+                yPos += 8;
+
+                // Contenido de sección
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(60, 60, 60);
+                doc.setFontSize(11);
+                
+                // Dividir el texto para que no se salga del margen
+                const lines = doc.splitTextToSize(content, maxWidth);
+                doc.text(lines, 20, yPos);
+                
+                // Actualizar la posición Y para la siguiente sección
+                yPos += (lines.length * 6) + 12;
+            };
+
+            // Imprimir las 4 partes del discurso
+            addSection("1. The Hook & Introduction", hook);
+            addSection("2. Main Argument (Stance)", argument);
+            addSection("3. Supporting Evidence & Examples", evidence);
+            addSection("4. Conclusion & Call to Action", conclusion);
+
+            // Generar y descargar el PDF
+            const fileName = `${studentName.replace(/\s+/g, '_')}_Final_Speech.pdf`;
+            doc.save(fileName);
         }
     </script>
 </body>
