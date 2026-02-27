@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Speech Builder | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); }
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 1000px; margin: 40px auto; width: 90%; }
+
+        /* LEVEL SELECTION */
+        .level-selection {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+        }
+
+        .level-card {
+            background: white; padding: 40px 30px; border-radius: var(--radius);
+            box-shadow: var(--shadow); text-align: center; cursor: pointer;
+            transition: all 0.3s ease; flex: 1; min-width: 280px; max-width: 400px;
+            border-top: 6px solid var(--primary-teal);
+        }
+
+        .level-card.advanced { border-top-color: var(--accent-coral); }
+        
+        .level-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .level-card h2 { margin-top: 0; font-size: 1.8rem; }
+        .level-card p { color: #666; font-size: 0.95rem; }
+
+        /* CONTENT SECTIONS (Hidden by default) */
+        .content-section { display: none; animation: fadeIn 0.5s ease; }
+        .content-section.active { display: block; }
+
+        /* STUDENT SELECTOR (Advanced) */
+        .student-selector {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; text-align: center;
+        }
+        select {
+            padding: 12px 20px; font-size: 1rem; font-family: 'Poppins', sans-serif;
+            border: 2px solid var(--primary-teal); border-radius: 10px; outline: none;
+            width: 100%; max-width: 300px; cursor: pointer;
+        }
+
+        /* READING BOX */
+        .reading-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-left: 6px solid var(--primary-teal);
+        }
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 1.8; color: #333; }
+        .reading-text h3 { font-family: 'Poppins', sans-serif; color: var(--text-dark); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+
+        /* SPEECH BUILDER FORM */
+        .speech-builder {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark);
+        }
+
+        .speech-builder h2 { margin-top: 0; margin-bottom: 20px; text-align: center; }
+
+        .input-group { margin-bottom: 25px; }
+        .input-group label {
+            display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-dark);
+        }
+        .input-group p.instruction {
+            font-size: 0.85rem; color: #666; margin-top: 0; margin-bottom: 10px; font-style: italic;
+        }
+        textarea {
+            width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px;
+            font-family: 'Poppins', sans-serif; font-size: 1rem; resize: vertical;
+            min-height: 120px; box-sizing: border-box; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        .btn-primary {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 10px;
+        }
+        .btn-primary:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,154,139,0.4); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>🎙️ The Final Speech Builder</h1>
+        <div class="subtitle">Read, Analyze, and Structure your Argument</div>
+    </header>
+
+    <div class="container">
+        
+        <div id="selection-screen" class="level-selection">
+            <div class="level-card" onclick="loadLevel('intermediate')">
+                <h2>B1 Intermediate Level</h2>
+                <p>Read a general topic article and structure your opinion speech. Perfect for standard practice.</p>
+            </div>
+            <div class="level-card advanced" onclick="loadLevel('advanced')">
+                <h2>B2/C1 Advanced Level</h2>
+                <p>Personalized paths for Geiser, Diana, Tatiana, and Santiago. Career-focused readings.</p>
+            </div>
+        </div>
+
+        <div id="intermediate-section" class="content-section">
+            <button onclick="resetSelection()" style="margin-bottom: 20px; background: none; border: none; color: var(--primary-teal); cursor: pointer; font-weight: bold;">← Change Level</button>
+            
+            <div class="reading-box">
+                <div class="reading-text">
+                    <h3>The Digital Dilemma: Connected or Isolated?</h3>
+                    <p>In the 21st century, technology has revolutionized how we communicate. With smartphones and social media, we can connect with anyone around the globe in seconds. However, psychologists are raising concerns about the quality of these connections. Studies suggest that while our online networks expand, our real-world relationships may be suffering. The "always-on" culture can lead to screen addiction, reducing face-to-face interactions that are vital for developing empathy and deep emotional bonds.</p>
+                    <p>Are social media platforms enriching our social lives, or are they creating a society of isolated individuals staring at screens? As we navigate this digital era, finding a balance between virtual connectivity and physical presence has never been more critical.</p>
+                </div>
+            </div>
+            
+            <div id="intermediate-builder"></div>
+        </div>
+
+        <div id="advanced-section" class="content-section">
+            <button onclick="resetSelection()" style="margin-bottom: 20px; background: none; border: none; color: var(--accent-coral); cursor: pointer; font-weight: bold;">← Change Level</button>
+            
+            <div class="student-selector">
+                <label for="student-select" style="font-weight: bold; margin-right: 10px;">Select your profile:</label>
+                <select id="student-select" onchange="loadStudentReading()">
+                    <option value="" disabled selected>-- Choose your name --</option>
+                    <option value="geiser">Geiser (Gastronomy / Chef)</option>
+                    <option value="diana">Diana (Biology / Conservation)</option>
+                    <option value="tatiana">Tatiana (Veterinary Medicine)</option>
+                    <option value="santiago">Santiago (Electrical Engineering)</option>
+                </select>
+            </div>
+
+            <div id="advanced-reading-container" style="display: none;">
+                <div class="reading-box">
+                    <div class="reading-text" id="dynamic-reading">
+                        </div>
+                </div>
+                <div id="advanced-builder"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <template id="speech-form-template">
+        <div class="speech-builder">
+            <h2>Structure Your Speech</h2>
+            <form onsubmit="generatePDF(event)">
+                <div class="input-group">
+                    <label>1. The Hook & Introduction</label>
+                    <p class="instruction">Start with a strong statement, a question, or a fact to grab the audience's attention. Introduce your main topic.</p>
+                    <textarea placeholder="Good morning everyone. Have you ever wondered..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>2. Your Main Argument (Stance)</label>
+                    <p class="instruction">What is your opinion based on the reading? State your position clearly.</p>
+                    <textarea placeholder="Based on the text, I strongly believe that..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>3. Supporting Evidence & Examples</label>
+                    <p class="instruction">Provide at least two examples or facts from the reading to support your opinion.</p>
+                    <textarea placeholder="For instance, the reading mentions that... Furthermore..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>4. Conclusion & Call to Action</label>
+                    <p class="instruction">Summarize your main point and tell the audience what they should think or do about it.</p>
+                    <textarea placeholder="In conclusion, we must realize that... Thank you."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Generate Final Speech PDF</button>
+            </form>
+        </div>
+    </template>
+
+    <script>
+        // Data for Advanced Students
+        const studentData = {
+            geiser: `
+                <h3>The Heat of the Kitchen: The Reality of Professional Gastronomy</h3>
+                <p>Behind the beautifully plated dishes served in high-end restaurants lies a high-pressure environment that demands extreme discipline. Professional kitchens operate on a strict hierarchy known as the "Brigade System." A chef's life is characterized by long hours, physical exhaustion, and the relentless pursuit of perfection. However, culinary arts are also a profound form of cultural expression and innovation. The debate remains: does the intense, often grueling culture of professional kitchens stifle creativity, or is it the necessary forge that creates culinary masterpieces?</p>
+            `,
+            diana: `
+                <h3>Saving the Giant of the Lake: The Titicaca Water Frog</h3>
+                <p>The Titicaca water frog (*Telmatobius culeus*) is a critically endangered amphibian found exclusively in the Andean Lake Titicaca basin. Known for its excessive, folded skin which helps it absorb oxygen underwater, this unique species faces severe threats from habitat pollution, invasive trout, and illegal poaching. Conservation biologists are fighting a complex battle to save it. The preservation of this species is not just about saving a single frog; it is about maintaining the ecological balance of an entire high-altitude ecosystem. Should local economic development take precedence over strict environmental protections?</p>
+            `,
+            tatiana: `
+                <h3>Beyond the Clinic: The Modern Role of Veterinary Medicine</h3>
+                <p>Veterinary medicine has evolved far beyond simply treating household pets. Today, veterinarians are at the forefront of global public health, dealing with zoonotic diseases (illnesses that can spread between animals and humans), wildlife conservation, and ensuring food safety. As medical treatments for animals become as advanced as those for humans, ethical dilemmas arise. How far should we go to prolong an animal's life? Modern veterinarians must balance scientific capability with deep ethical responsibilities towards animal welfare.</p>
+            `,
+            santiago: `
+                <h3>Powering the Future: Innovations in Electrical Engineering</h3>
+                <p>The transition from fossil fuels to renewable energy sources is the greatest engineering challenge of our time. Electrical engineers are currently redesigning global power grids to handle decentralized energy sources like solar and wind power. Innovations in battery storage technology and smart grid AI are crucial to ensuring a stable energy supply. However, implementing these massive infrastructural changes is expensive and politically complex. The question is: is the electrical engineering sector moving fast enough to prevent irreversible climate change, or are we constrained by outdated technologies?</p>
+            `
+        };
+
+        function loadLevel(level) {
+            document.getElementById('selection-screen').style.display = 'none';
+            const template = document.getElementById('speech-form-template').innerHTML;
+
+            if (level === 'intermediate') {
+                document.getElementById('intermediate-section').classList.add('active');
+                document.getElementById('intermediate-builder').innerHTML = template;
+            } else if (level === 'advanced') {
+                document.getElementById('advanced-section').classList.add('active');
+            }
+        }
+
+        function resetSelection() {
+            document.getElementById('intermediate-section').classList.remove('active');
+            document.getElementById('advanced-section').classList.remove('active');
+            document.getElementById('selection-screen').style.display = 'flex';
+            document.getElementById('advanced-reading-container').style.display = 'none';
+            document.getElementById('student-select').value = "";
+        }
+
+        function loadStudentReading() {
+            const student = document.getElementById('student-select').value;
+            const container = document.getElementById('advanced-reading-container');
+            const readingText = document.getElementById('dynamic-reading');
+            const builderSpace = document.getElementById('advanced-builder');
+            const template = document.getElementById('speech-form-template').innerHTML;
+
+            readingText.innerHTML = studentData[student];
+            builderSpace.innerHTML = template;
+            container.style.display = 'block';
+        }
+
+        function generatePDF(e) {
+            e.preventDefault();
+            // Aquí integrarías la lógica de jsPDF que usas en el HUB
+            alert("¡Excelente trabajo! La función para generar el PDF de tu Speech se conectará en el siguiente paso. Asegúrate de revisar tu gramática.");
+        }
+    </script>
+</body>
+</html>
