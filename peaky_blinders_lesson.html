@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peaky Blinders | English Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            /* Peaky Blinders Color Palette */
+            --primary-red: #8a0303;      /* Blood red */
+            --dark-charcoal: #1a1a1a;    /* Very dark grey/black */
+            --brass-gold: #c5a059;       /* Vintage brass/gold */
+            --text-dark: #2d2d2d;
+            --bg-light: #f0f0f0;         /* Slightly darker light grey for industrial feel */
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--dark-charcoal);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-red);
+            box-shadow: var(--shadow);
+            position: relative;
+            color: white;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #111 100%);
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--brass-gold); }
+        h1 { margin: 0; font-family: 'Merriweather', serif; font-size: 2.5rem; color: var(--white); letter-spacing: 2px; text-transform: uppercase;}
+        .subtitle { color: var(--brass-gold); margin-top: 5px; font-weight: 400; font-size: 1.1rem; }
+
+        /* TABS (Scenes) */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0; padding: 0 20px; flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: var(--dark-charcoal); color: var(--brass-gold); transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(26, 26, 26, 0.4); border-color: var(--brass-gold);
+        }
+
+        /* MAIN CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 90%; }
+        
+        .scene-view { display: none; animation: fadeIn 0.5s ease; }
+        .scene-view.active { display: block; }
+
+        /* VIDEO WRAPPER */
+        .video-box {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-top: 5px solid var(--dark-charcoal);
+        }
+
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden;
+            background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .scene-context {
+            margin-top: 20px; padding: 15px; background: #e8e8e8; border-left: 4px solid var(--primary-red);
+            border-radius: 8px; font-size: 0.95rem; color: #333; line-height: 1.6;
+        }
+
+        /* VOCABULARY SECTION */
+        h2 { font-family: 'Merriweather', serif; color: var(--dark-charcoal); border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .vocab-card {
+            background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--brass-gold); transition: 0.2s;
+        }
+        .vocab-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .v-word { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
+        .v-def { font-size: 0.9rem; color: #666; font-style: italic; margin-bottom: 10px; }
+        .v-spa { font-size: 0.85rem; font-weight: bold; color: var(--primary-red); text-transform: uppercase; }
+
+        /* QUIZ SECTION */
+        .quiz-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--brass-gold);
+        }
+
+        .question { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
+        .question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .q-text { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn {
+            padding: 12px 20px; border: 1px solid #ddd; background: #fafafa; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif; font-size: 0.95rem; text-align: left;
+        }
+        .opt-btn:hover { border-color: var(--dark-charcoal); background: white; }
+        .opt-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; font-weight: bold; }
+        .opt-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>Peaky Blinders</h1>
+        <div class="subtitle">By Order of the Peaky Blinders: Slang & Accents</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchScene('scene1')"><span class="material-icons-round">movie</span> 1. No Fighting</button>
+        <button class="tab-btn" onclick="switchScene('scene2')"><span class="material-icons-round">movie</span> 2. Arthur</button>
+        <button class="tab-btn" onclick="switchScene('scene3')"><span class="material-icons-round">movie</span> 3. Alfie Solomons</button>
+        <button class="tab-btn" onclick="switchScene('scene4')"><span class="material-icons-round">movie</span> 4. Aunt Polly</button>
+        <button class="tab-btn" onclick="switchScene('scene5')"><span class="material-icons-round">movie</span> 5. Grace</button>
+    </div>
+
+    <div class="container">
+
+        <div id="scene1" class="scene-view active">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/5U_wD7FwL64" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> It's Tommy Shelby's wedding day. He gathers his brothers and the gang in the kitchen to give them strict, intense instructions on how to behave around his new wife's respectable family.
+                </div>
+            </div>
+
+            <h2>Street Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">To forbid</div>
+                    <div class="v-def">To order someone not to do something.</div>
+                    <div class="v-spa">Prohibir</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Outburst</div>
+                    <div class="v-def">A sudden release of strong emotion, usually anger.</div>
+                    <div class="v-spa">Arrebato / Estallido</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Cocaine</div>
+                    <div class="v-def">An addictive drug commonly used by the gang (historically referenced in the show). Note how Tommy pronounces it as "Snow".</div>
+                    <div class="v-spa">Nieve (Jerga)</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2>Scene Quiz</h2>
+                <div class="question" id="q1_1">
+                    <div class="q-text">1. What is the main rule Tommy enforces on his wedding day?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', false)">Everyone must wear a specific suit.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', true)">Absolutely no fighting or starting trouble.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_1', false)">Nobody is allowed to drink alcohol.</button>
+                    </div>
+                </div>
+                <div class="question" id="q1_2">
+                    <div class="q-text">2. Why does a waiter bump into Tommy at the end of the scene?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', true)">To show the irony; Tommy immediately loses his temper and breaks his own rule.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', false)">Because it was an assassination attempt.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q1_2', false)">Because Arthur pushed the waiter.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene2" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/H01XmYyK1Hw" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Arthur Shelby violently asserts his family's authority in a local pub, establishing dominance over the territory with his famous catchphrase.
+                </div>
+            </div>
+
+            <h2>Street Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Notorious</div>
+                    <div class="v-def">Famous or well known, typically for some bad quality or deed.</div>
+                    <div class="v-spa">Tristemente célebre / Famoso por algo malo</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Authority</div>
+                    <div class="v-def">The power or right to give orders, make decisions, and enforce obedience.</div>
+                    <div class="v-spa">Autoridad</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Blinder</div>
+                    <div class="v-def">Slang for the peaked caps the gang wears, which allegedly had razor blades sewn into them.</div>
+                    <div class="v-spa">Visera (Gorra del clan)</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2>Scene Quiz</h2>
+                <div class="question" id="q2_1">
+                    <div class="q-text">1. What is the iconic phrase Arthur yells to assert dominance?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', false)">"We are the Shelby brothers!"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', true)">"By order of the Peaky Blinders!"</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_1', false)">"Get out of my pub!"</button>
+                    </div>
+                </div>
+                <div class="question" id="q2_2">
+                    <div class="q-text">2. How would you describe Arthur's behavior in this scene?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', false)">Calm and diplomatic.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', true)">Aggressive, theatrical, and intimidating.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q2_2', false)">Nervous and hesitant.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene3" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/8XsgB_y8m10" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Tommy Shelby negotiates with Alfie Solomons, a powerful and eccentric Jewish gang leader from London. Alfie's speaking style is fast, intimidating, and full of heavy slang.
+                </div>
+            </div>
+
+            <h2>Street Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Negotiation</div>
+                    <div class="v-def">Discussion aimed at reaching an agreement.</div>
+                    <div class="v-spa">Negociación</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Leverage</div>
+                    <div class="v-def">Power or ability to act or to influence people, events, or decisions.</div>
+                    <div class="v-spa">Ventaja / Poder de influencia</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Truce</div>
+                    <div class="v-def">An agreement between enemies or opponents to stop fighting or arguing for a certain time.</div>
+                    <div class="v-spa">Tregua</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2>Scene Quiz</h2>
+                <div class="question" id="q3_1">
+                    <div class="q-text">1. How does Alfie Solomons typically speak?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', false)">Very slowly and politely.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', true)">Fast, erratic, and using intimidation tactics.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_1', false)">He barely speaks; he uses silence.</button>
+                    </div>
+                </div>
+                <div class="question" id="q3_2">
+                    <div class="q-text">2. What is the ultimate goal of Tommy's visit?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', true)">To form a business alliance despite the risks.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', false)">To surrender to Alfie's gang.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q3_2', false)">To buy Alfie's bakery.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene4" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/3R-A3qUUXmQ" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> Aunt Polly proves she is the true matriarch of the family. While the men use violence, Polly uses her sharp mind, intuition, and threats to protect the Shelby family business.
+                </div>
+            </div>
+
+            <h2>Street Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Matriarch</div>
+                    <div class="v-def">A woman who is the head of a family or tribe.</div>
+                    <div class="v-spa">Matriarca</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Ruthless</div>
+                    <div class="v-def">Having or showing no pity or compassion for others.</div>
+                    <div class="v-spa">Despiadado / Implacable</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Intuition</div>
+                    <div class="v-def">The ability to understand something immediately, without the need for conscious reasoning.</div>
+                    <div class="v-spa">Intuición</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2>Scene Quiz</h2>
+                <div class="question" id="q4_1">
+                    <div class="q-text">1. What role does Aunt Polly play in the Shelby family?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', true)">She is the brains, the treasurer, and the matriarch.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', false)">She is just a bartender at the Garrison.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_1', false)">She is an undercover police officer.</button>
+                    </div>
+                </div>
+                <div class="question" id="q4_2">
+                    <div class="q-text">2. How does Polly usually defeat her enemies?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', false)">By challenging them to a physical fight.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', true)">By using psychological manipulation, secrets, and sharp threats.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q4_2', false)">By paying them large amounts of money to leave.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scene5" class="scene-view">
+            <div class="video-box">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/s3y_J7G1Z8I" allowfullscreen></iframe>
+                </div>
+                <div class="scene-context">
+                    <strong>🎬 Context:</strong> A quiet but tense moment in the empty Garrison pub. Tommy asks Grace, the new barmaid, to sing a song for him. He asks for something sad to match his broken spirit.
+                </div>
+            </div>
+
+            <h2>Street Vocabulary</h2>
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="v-word">Undercover</div>
+                    <div class="v-def">Involving secret work within a community or organization, especially for the purpose of police investigation.</div>
+                    <div class="v-spa">Encubierto</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Heartbroken</div>
+                    <div class="v-def">Suffering from overwhelming distress; very sad.</div>
+                    <div class="v-spa">Con el corazón roto</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="v-word">Barmaid</div>
+                    <div class="v-def">A woman who serves drinks in a bar.</div>
+                    <div class="v-spa">Camarera de bar</div>
+                </div>
+            </div>
+
+            <div class="quiz-box">
+                <h2>Scene Quiz</h2>
+                <div class="question" id="q5_1">
+                    <div class="q-text">1. What kind of song does Tommy ask Grace to sing?</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', false)">A happy, Irish dancing song.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', true)">A sad song to break his heart.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_1', false)">A romantic love song.</button>
+                    </div>
+                </div>
+                <div class="question" id="q5_2">
+                    <div class="q-text">2. What is the dramatic irony of this scene? (What do we know that Tommy doesn't?)</div>
+                    <div class="options">
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', true)">Grace is actually an undercover spy working for the police.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', false)">Grace is Tommy's long-lost sister.</button>
+                        <button class="opt-btn" onclick="checkAns(this, 'q5_2', false)">The pub is on fire.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function switchScene(sceneId) {
+            document.querySelectorAll('.scene-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(sceneId).classList.add('active');
+            
+            // Stop videos from playing in background when switching tabs
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; // Reloads iframe to stop playback
+            });
+            
+            // Highlight Button
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAns(btn, questionId, isCorrect) {
+            // Find all buttons in this specific question
+            const container = document.getElementById(questionId);
+            const allBtns = container.querySelectorAll('.opt-btn');
+            
+            // Disable clicks
+            allBtns.forEach(b => b.onclick = null);
+
+            if(isCorrect) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+                // Show the correct one
+                allBtns.forEach(b => {
+                    // We check the onclick attribute string to find the 'true' one
+                    if(b.getAttribute('onclick') && b.getAttribute('onclick').includes('true')) {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
