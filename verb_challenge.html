@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Matrix Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0; padding: 0 20px; flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1rem;
+        }
+
+        .tab-btn:hover { border-color: var(--primary-teal); }
+
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4);
+        }
+
+        /* MAIN CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 90%; }
+        
+        .level-view { display: none; animation: fadeIn 0.5s ease; }
+        .level-view.active { display: block; }
+
+        /* MATRIX TABLE */
+        .matrix-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral); overflow-x: auto;
+        }
+
+        .matrix-desc {
+            text-align: center; margin-bottom: 20px; color: #555; font-size: 0.95rem;
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { 
+            background: var(--bg-light); padding: 15px; font-weight: 700; color: var(--text-dark);
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; border-bottom: 2px solid #eee;
+        }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+        
+        .static-verb { font-weight: bold; font-size: 1.1rem; color: var(--primary-dark); text-transform: capitalize; }
+        
+        .verb-input {
+            width: 80%; padding: 10px 15px; border: 2px solid #ddd; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 1rem; text-align: center;
+            transition: 0.3s; outline: none; background: #fafafa;
+        }
+        .verb-input:focus { border-color: var(--primary-teal); background: white; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        /* Validation Colors */
+        .verb-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; font-weight: bold; }
+        .verb-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+        .correction-text { font-size: 0.8rem; color: #ef4444; font-weight: bold; display: block; margin-top: 5px; }
+
+        /* BUTTON & FEEDBACK */
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; display: block; margin: 30px auto 0; font-family: 'Poppins', sans-serif;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-submit:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: 600; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .feedback-box.success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .feedback-box.warning { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .feedback-box.danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">spellcheck</span> The Verb Matrix</h1>
+        <div class="subtitle">Complete the missing Past and Past Participle forms.</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchLevel('level1')">Level 1 (A2)</button>
+        <button class="tab-btn" onclick="switchLevel('level2')">Level 2 (B1)</button>
+        <button class="tab-btn" onclick="switchLevel('level3')">Level 3 (B2+)</button>
+    </div>
+
+    <div class="container">
+
+        <div id="level1" class="level-view active">
+            <div class="matrix-box">
+                <div class="matrix-desc"><strong>Essential Mix.</strong> 30 verbos regulares e irregulares básicos. Escribe las formas faltantes cuidadosamente.</div>
+                <table>
+                    <thead>
+                        <tr><th>Base Form (V1)</th><th>Past Simple (V2)</th><th>Past Participle (V3)</th></tr>
+                    </thead>
+                    <tbody id="tbody-level1">
+                        </tbody>
+                </table>
+                <button class="btn-submit" onclick="gradeMatrix('level1')">Submit Answers</button>
+                <div class="feedback-box"></div>
+            </div>
+        </div>
+
+        <div id="level2" class="level-view">
+            <div class="matrix-box">
+                <div class="matrix-desc"><strong>Intermediate Mix.</strong> 30 verbos regulares e irregulares con pronunciaciones y reglas de escritura engañosas.</div>
+                <table>
+                    <thead>
+                        <tr><th>Base Form (V1)</th><th>Past Simple (V2)</th><th>Past Participle (V3)</th></tr>
+                    </thead>
+                    <tbody id="tbody-level2">
+                        </tbody>
+                </table>
+                <button class="btn-submit" onclick="gradeMatrix('level2')">Submit Answers</button>
+                <div class="feedback-box"></div>
+            </div>
+        </div>
+
+        <div id="level3" class="level-view">
+            <div class="matrix-box">
+                <div class="matrix-desc"><strong>Advanced Challenge.</strong> 30 verbos de nivel superior. Muchos confunden estas formas.</div>
+                <table>
+                    <thead>
+                        <tr><th>Base Form (V1)</th><th>Past Simple (V2)</th><th>Past Participle (V3)</th></tr>
+                    </thead>
+                    <tbody id="tbody-level3">
+                        </tbody>
+                </table>
+                <button class="btn-submit" onclick="gradeMatrix('level3')">Submit Answers</button>
+                <div class="feedback-box"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // BASE DE DATOS DE VERBOS (30 por nivel)
+        // formato: [v1, v2, v3, columna_mostrada(1,2,3)]
+        // ==========================================
+
+        const verbsLevel1 = [
+            ["go", "went", "gone", 1], ["play", "played", "played", 2], ["see", "saw", "seen", 3],
+            ["work", "worked", "worked", 1], ["eat", "ate", "eaten", 2], ["want", "wanted", "wanted", 3],
+            ["make", "made", "made", 1], ["look", "looked", "looked", 2], ["take", "took", "taken", 3],
+            ["use", "used", "used", 1], ["do", "did", "done", 2], ["help", "helped", "helped", 3],
+            ["have", "had", "had", 1], ["ask", "asked", "asked", 2], ["know", "knew", "known", 3],
+            ["call", "called", "called", 1], ["think", "thought", "thought", 2], ["try", "tried", "tried", 3],
+            ["come", "came", "come", 1], ["need", "needed", "needed", 2], ["give", "gave", "given", 3],
+            ["live", "lived", "lived", 1], ["find", "found", "found", 2], ["love", "loved", "loved", 3],
+            ["tell", "told", "told", 1], ["walk", "walked", "walked", 2], ["speak", "spoke", "spoken", 3],
+            ["stop", "stopped", "stopped", 1], ["read", "read", "read", 2], ["start", "started", "started", 3]
+        ];
+
+        const verbsLevel2 = [
+            ["buy", "bought", "bought", 1], ["travel", "travelled|traveled", "travelled|traveled", 2], ["teach", "taught", "taught", 3],
+            ["study", "studied", "studied", 1], ["fly", "flew", "flown", 2], ["plan", "planned", "planned", 3],
+            ["forget", "forgot", "forgotten", 1], ["happen", "happened", "happened", 2], ["choose", "chose", "chosen", 3],
+            ["decide", "decided", "decided", 1], ["learn", "learnt|learned", "learnt|learned", 2], ["believe", "believed", "believed", 3],
+            ["bring", "brought", "brought", 1], ["continue", "continued", "continued", 2], ["catch", "caught", "caught", 3],
+            ["enjoy", "enjoyed", "enjoyed", 1], ["throw", "threw", "thrown", 2], ["wait", "waited", "waited", 3],
+            ["understand", "understood", "understood", 1], ["visit", "visited", "visited", 2], ["drive", "drove", "driven", 3],
+            ["listen", "listened", "listened", 1], ["steal", "stole", "stolen", 2], ["explain", "explained", "explained", 3],
+            ["wake", "woke", "woken", 1], ["promise", "promised", "promised", 2], ["wear", "wore", "worn", 3],
+            ["prefer", "preferred", "preferred", 1], ["lose", "lost", "lost", 2], ["remember", "remembered", "remembered", 3]
+        ];
+
+        const verbsLevel3 = [
+            ["forbid", "forbade|forbad", "forbidden", 1], ["achieve", "achieved", "achieved", 2], ["broadcast", "broadcast|broadcasted", "broadcast|broadcasted", 3],
+            ["acknowledge", "acknowledged", "acknowledged", 1], ["shrink", "shrank", "shrunk", 2], ["guarantee", "guaranteed", "guaranteed", 3],
+            ["flee", "fled", "fled", 1], ["struggle", "struggled", "struggled", 2], ["strike", "struck", "struck", 3],
+            ["threaten", "threatened", "threatened", 1], ["overcome", "overcame", "overcome", 2], ["wander", "wandered", "wandered", 3],
+            ["weave", "wove", "woven", 1], ["whisper", "whispered", "whispered", 2], ["swear", "swore", "sworn", 3],
+            ["acquire", "acquired", "acquired", 1], ["cling", "clung", "clung", 2], ["complain", "complained", "complained", 3],
+            ["seek", "sought", "sought", 1], ["emphasize", "emphasized", "emphasized", 2], ["shed", "shed", "shed", 3],
+            ["hesitate", "hesitated", "hesitated", 1], ["spill", "spilt|spilled", "spilt|spilled", 2], ["justify", "justified", "justified", 3],
+            ["split", "split", "split", 1], ["persuade", "persuaded", "persuaded", 2], ["sting", "stung", "stung", 3],
+            ["recognize", "recognized", "recognized", 1], ["sweep", "swept", "swept", 2], ["survive", "survived", "survived", 3]
+        ];
+
+        // ==========================================
+        // GENERADOR DE TABLAS HTML
+        // ==========================================
+        function renderTable(dataArray, tbodyId) {
+            const tbody = document.getElementById(tbodyId);
+            let htmlContent = "";
+
+            dataArray.forEach(verbObj => {
+                const v1 = verbObj[0];
+                const v2 = verbObj[1];
+                const v3 = verbObj[2];
+                const showCol = verbObj[3]; // 1, 2, o 3 indica cuál columna tiene el texto estático
+
+                let col1 = showCol === 1 ? `<td class="static-verb">${v1}</td>` : `<td><input type="text" class="verb-input" data-correct="${v1}" placeholder="Type V1..."></td>`;
+                let col2 = showCol === 2 ? `<td class="static-verb">${v2.split('|')[0]}</td>` : `<td><input type="text" class="verb-input" data-correct="${v2}" placeholder="Type V2..."></td>`;
+                let col3 = showCol === 3 ? `<td class="static-verb">${v3.split('|')[0]}</td>` : `<td><input type="text" class="verb-input" data-correct="${v3}" placeholder="Type V3..."></td>`;
+
+                htmlContent += `<tr>${col1}${col2}${col3}</tr>`;
+            });
+
+            tbody.innerHTML = htmlContent;
+        }
+
+        // Renderizar las 3 tablas al cargar la página
+        window.onload = function() {
+            renderTable(verbsLevel1, 'tbody-level1');
+            renderTable(verbsLevel2, 'tbody-level2');
+            renderTable(verbsLevel3, 'tbody-level3');
+        };
+
+        // ==========================================
+        // LÓGICA DE INTERFAZ Y CALIFICACIÓN
+        // ==========================================
+        function switchLevel(levelId) {
+            document.querySelectorAll('.level-view').forEach(view => view.classList.remove('active'));
+            document.getElementById(levelId).classList.add('active');
+            
+            if (event && event.currentTarget) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function gradeMatrix(levelId) {
+            const container = document.getElementById(levelId);
+            const inputs = container.querySelectorAll('.verb-input');
+            const feedback = container.querySelector('.feedback-box');
+            
+            let score = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                input.classList.remove('correct', 'wrong');
+                input.disabled = true; // Bloquea el input
+                
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswers = input.getAttribute('data-correct').split('|');
+                
+                if (correctAnswers.includes(userAnswer) && userAnswer !== "") {
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.add('wrong');
+                    const correctText = correctAnswers[0]; 
+                    const span = document.createElement('span');
+                    span.className = 'correction-text';
+                    span.innerText = `Correct: ${correctText}`;
+                    input.parentNode.appendChild(span);
+                }
+            });
+
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; 
+            
+            const percentage = (score / total) * 100;
+            if (percentage === 100) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 ¡Perfecto! Dominas esta matriz al 100% (${score}/${total}).`;
+            } else if (percentage >= 60) {
+                feedback.classList.add('warning');
+                feedback.innerHTML = `👍 Buen intento. Obtuviste ${score}/${total}. Revisa los verbos en rojo.`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `📚 Necesitas estudiar más estos verbos. Obtuviste ${score}/${total}.`;
+            }
+
+            const btn = container.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerText = 'Evaluation Completed';
+            btn.style.opacity = '0.6';
+            btn.style.cursor = 'not-allowed';
+        }
+    </script>
+</body>
+</html>
