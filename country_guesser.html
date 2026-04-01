@@ -6,6 +6,9 @@
     <title>Country & Nationality Guesser | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <style>
         :root {
             --primary-teal: #5dcbc3;
@@ -42,39 +45,81 @@
         h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
         .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
 
-        /* MAIN CONTAINER */
-        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+        /* CONTAINERS */
+        .container { max-width: 1000px; margin: 40px auto; width: 90%; }
         
-        /* SCORE BOARD */
-        .score-board {
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--primary-teal); color: white; padding: 15px 30px;
-            border-radius: var(--radius); margin-bottom: 30px; font-weight: bold; font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(93, 203, 195, 0.3);
+        /* --- SETUP SCREEN --- */
+        #setup-screen {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-top: 6px solid var(--accent-coral);
+            text-align: center; max-width: 600px; margin: 0 auto;
         }
+
+        .player-input-group {
+            display: flex; gap: 10px; justify-content: center; margin-top: 20px; margin-bottom: 20px;
+        }
+
+        .player-input-group input {
+            padding: 12px 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif;
+            font-size: 1rem; width: 60%; outline: none; transition: 0.3s;
+        }
+        .player-input-group input:focus { border-color: var(--primary-teal); }
+
+        .btn-add {
+            background: var(--primary-teal); color: white; border: none; padding: 12px 20px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-add:hover { background: var(--primary-dark); }
+
+        .player-list {
+            list-style: none; padding: 0; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+        .player-chip {
+            background: #f0f8f8; color: var(--primary-dark); padding: 8px 15px; border-radius: 50px;
+            font-weight: 600; font-size: 0.95rem; border: 1px solid var(--primary-teal);
+        }
+
+        /* --- GAME SCREEN --- */
+        #game-screen { display: none; }
+
+        /* SCORE BOARD CONTROLS */
+        .scoreboard-container {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px;
+        }
+        
+        .player-card {
+            background: white; border: 2px solid var(--primary-teal); border-radius: 12px;
+            padding: 15px; min-width: 150px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .p-name { font-weight: bold; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 5px; }
+        .p-score { font-size: 1.5rem; font-weight: 700; color: var(--accent-coral); margin-bottom: 10px; }
+        .p-controls { display: flex; justify-content: space-between; gap: 5px; }
+        .btn-score {
+            flex: 1; border: none; padding: 5px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .btn-plus { background: #d1fae5; color: #065f46; }
+        .btn-plus:hover { background: #10b981; color: white; }
+        .btn-minus { background: #fee2e2; color: #991b1b; }
+        .btn-minus:hover { background: #ef4444; color: white; }
+
+        .round-info { text-align: center; font-size: 1.2rem; font-weight: bold; color: #555; margin-bottom: 20px; }
 
         /* GAME CARD */
         .game-card {
             background: white; padding: 40px; border-radius: var(--radius);
-            box-shadow: var(--shadow); border-top: 6px solid var(--accent-coral);
-            text-align: center;
+            box-shadow: var(--shadow); border-top: 6px solid var(--accent-coral); text-align: center;
         }
 
         /* MEDIA GRID (Map + Flag) */
-        .media-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .media-grid { grid-template-columns: 1fr; }
-        }
+        .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        @media (max-width: 768px) { .media-grid { grid-template-columns: 1fr; } }
 
         .map-box, .flag-box {
             background: var(--bg-light); border-radius: 15px; overflow: hidden;
-            border: 2px solid #eee; height: 250px; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #eee; height: 300px; display: flex; align-items: center; justify-content: center; position: relative;
         }
         
-        .map-box iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
+        #map-container { width: 100%; height: 100%; z-index: 1; }
         .flag-box img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         /* INPUTS & HINTS */
@@ -99,23 +144,16 @@
         
         .btn-main {
             background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
-            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s; font-family: 'Poppins', sans-serif;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;
             box-shadow: 0 5px 15px rgba(255,154,139,0.3);
         }
         .btn-main:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
-        .btn-main:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-secondary {
             background: var(--primary-teal); color: white; border: none; padding: 15px 40px;
-            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s; font-family: 'Poppins', sans-serif; display: none;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; display: none;
         }
         .btn-secondary:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        .feedback-msg { font-size: 1.2rem; font-weight: bold; margin-top: 20px; min-height: 30px; }
-        .text-success { color: #10b981; }
-        .text-danger { color: #ef4444; }
 
     </style>
 </head>
@@ -124,108 +162,171 @@
     <header>
         <a href="index.html" class="back-link">← Return to HUB</a>
         <h1><span class="material-icons-round">public</span> World Explorer Guesser</h1>
-        <div class="subtitle">Look at the map and flag, check the hints, and guess!</div>
+        <div class="subtitle">No labels. Just geography, flags, and hints!</div>
     </header>
 
     <div class="container">
         
-        <div class="score-board">
-            <div>Country: <span id="current-round">1</span>/50</div>
-            <div>Score: <span id="score-display">0</span> pts</div>
+        <div id="setup-screen">
+            <h2>Add Contestants / Teams</h2>
+            <p>Escribe el nombre de los participantes o equipos para llevar el control de los puntos.</p>
+            
+            <div class="player-input-group">
+                <input type="text" id="new-player-name" placeholder="Name or Team (e.g., Team A)" onkeypress="if(event.key==='Enter') addPlayer()">
+                <button class="btn-add" onclick="addPlayer()">Add</button>
+            </div>
+
+            <ul class="player-list" id="player-list">
+                </ul>
+
+            <button class="btn-main" onclick="startGame()">Start Game!</button>
         </div>
 
-        <div class="game-card">
+        <div id="game-screen">
             
-            <div class="media-grid">
-                <div class="map-box" id="map-container">
-                    </div>
-                <div class="flag-box">
-                    <img id="flag-img" src="" alt="Country Flag">
+            <div class="scoreboard-container" id="scoreboard">
                 </div>
+
+            <div class="round-info">Country: <span id="current-round">1</span>/50</div>
+
+            <div class="game-card">
+                
+                <div class="media-grid">
+                    <div class="map-box">
+                        <div id="map-container"></div>
+                    </div>
+                    <div class="flag-box">
+                        <img id="flag-img" src="" alt="Country Flag">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>1. Name the Country</label>
+                    <div class="hint-text" id="country-hint">_ _ _ _ _</div>
+                    <input type="text" id="input-country" class="custom-input" placeholder="Type the country name..." autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label>2. Name the Nationality</label>
+                    <div class="hint-text" id="nationality-hint">_ _ _ _ _ _ _</div>
+                    <input type="text" id="input-nationality" class="custom-input" placeholder="Type the nationality..." autocomplete="off">
+                </div>
+
+                <div class="btn-container">
+                    <button class="btn-main" id="btn-check" onclick="revealAnswer()">Reveal / Check Answer</button>
+                    <button class="btn-secondary" id="btn-next" onclick="nextCountry()">Next Country ➔</button>
+                </div>
+
             </div>
-
-            <div class="input-group">
-                <label>1. Name the Country</label>
-                <div class="hint-text" id="country-hint">_ _ _ _ _</div>
-                <input type="text" id="input-country" class="custom-input" placeholder="Type the country name..." autocomplete="off">
-            </div>
-
-            <div class="input-group">
-                <label>2. Name the Nationality</label>
-                <div class="hint-text" id="nationality-hint">_ _ _ _ _ _ _</div>
-                <input type="text" id="input-nationality" class="custom-input" placeholder="Type the nationality..." autocomplete="off">
-            </div>
-
-            <div class="feedback-msg" id="feedback-message"></div>
-
-            <div class="btn-container">
-                <button class="btn-main" id="btn-check" onclick="checkAnswer()">Check Answer</button>
-                <button class="btn-secondary" id="btn-next" onclick="nextCountry()">Next Country ➔</button>
-            </div>
-
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
-        // Database of 50 Countries (Code for Flag API, Country, Nationality)
+        // Data with Lat/Lng coordinates to place the marker on the blank map
         const countriesData = [
-            { code: "bo", country: "Bolivia", nat: "Bolivian" },
-            { code: "ar", country: "Argentina", nat: "Argentinian" },
-            { code: "br", country: "Brazil", nat: "Brazilian" },
-            { code: "co", country: "Colombia", nat: "Colombian" },
-            { code: "cl", country: "Chile", nat: "Chilean" },
-            { code: "pe", country: "Peru", nat: "Peruvian" },
-            { code: "mx", country: "Mexico", nat: "Mexican" },
-            { code: "us", country: "United States", nat: "American" },
-            { code: "ca", country: "Canada", nat: "Canadian" },
-            { code: "gb", country: "United Kingdom", nat: "British" },
-            { code: "ie", country: "Ireland", nat: "Irish" },
-            { code: "au", country: "Australia", nat: "Australian" },
-            { code: "nz", country: "New Zealand", nat: "New Zealander" },
-            { code: "fr", country: "France", nat: "French" },
-            { code: "de", country: "Germany", nat: "German" },
-            { code: "it", country: "Italy", nat: "Italian" },
-            { code: "es", country: "Spain", nat: "Spanish" },
-            { code: "pt", country: "Portugal", nat: "Portuguese" },
-            { code: "gr", country: "Greece", nat: "Greek" },
-            { code: "ru", country: "Russia", nat: "Russian" },
-            { code: "cn", country: "China", nat: "Chinese" },
-            { code: "jp", country: "Japan", nat: "Japanese" },
-            { code: "kr", country: "South Korea", nat: "South Korean" },
-            { code: "in", country: "India", nat: "Indian" },
-            { code: "eg", country: "Egypt", nat: "Egyptian" },
-            { code: "za", country: "South Africa", nat: "South African" },
-            { code: "ng", country: "Nigeria", nat: "Nigerian" },
-            { code: "ke", country: "Kenya", nat: "Kenyan" },
-            { code: "ma", country: "Morocco", nat: "Moroccan" },
-            { code: "tr", country: "Turkey", nat: "Turkish" },
-            { code: "sa", country: "Saudi Arabia", nat: "Saudi Arabian" },
-            { code: "th", country: "Thailand", nat: "Thai" },
-            { code: "vn", country: "Vietnam", nat: "Vietnamese" },
-            { code: "ph", country: "Philippines", nat: "Filipino" },
-            { code: "se", country: "Sweden", nat: "Swedish" },
-            { code: "no", country: "Norway", nat: "Norwegian" },
-            { code: "dk", country: "Denmark", nat: "Danish" },
-            { code: "fi", country: "Finland", nat: "Finnish" },
-            { code: "ch", country: "Switzerland", nat: "Swiss" },
-            { code: "at", country: "Austria", nat: "Austrian" },
-            { code: "be", country: "Belgium", nat: "Belgian" },
-            { code: "nl", country: "Netherlands", nat: "Dutch" },
-            { code: "pl", country: "Poland", nat: "Polish" },
-            { code: "ua", country: "Ukraine", nat: "Ukrainian" },
-            { code: "cu", country: "Cuba", nat: "Cuban" },
-            { code: "jm", country: "Jamaica", nat: "Jamaican" },
-            { code: "ve", country: "Venezuela", nat: "Venezuelan" },
-            { code: "ec", country: "Ecuador", nat: "Ecuadorian" },
-            { code: "uy", country: "Uruguay", nat: "Uruguayan" },
-            { code: "mg", country: "Madagascar", nat: "Malagasy" }
+            { code: "bo", country: "Bolivia", nat: "Bolivian", lat: -16.29, lng: -63.58, z: 5 },
+            { code: "ar", country: "Argentina", nat: "Argentinian", lat: -38.41, lng: -63.61, z: 4 },
+            { code: "br", country: "Brazil", nat: "Brazilian", lat: -14.23, lng: -51.92, z: 4 },
+            { code: "co", country: "Colombia", nat: "Colombian", lat: 4.57, lng: -74.29, z: 5 },
+            { code: "cl", country: "Chile", nat: "Chilean", lat: -35.67, lng: -71.54, z: 4 },
+            { code: "pe", country: "Peru", nat: "Peruvian", lat: -9.18, lng: -75.01, z: 5 },
+            { code: "mx", country: "Mexico", nat: "Mexican", lat: 23.63, lng: -102.55, z: 4 },
+            { code: "us", country: "United States", nat: "American", lat: 37.09, lng: -95.71, z: 3 },
+            { code: "ca", country: "Canada", nat: "Canadian", lat: 56.13, lng: -106.34, z: 3 },
+            { code: "gb", country: "United Kingdom", nat: "British", lat: 55.37, lng: -3.43, z: 5 },
+            { code: "ie", country: "Ireland", nat: "Irish", lat: 53.14, lng: -7.69, z: 6 },
+            { code: "au", country: "Australia", nat: "Australian", lat: -25.27, lng: 133.77, z: 4 },
+            { code: "nz", country: "New Zealand", nat: "New Zealander", lat: -40.90, lng: 174.88, z: 5 },
+            { code: "fr", country: "France", nat: "French", lat: 46.22, lng: 2.21, z: 5 },
+            { code: "de", country: "Germany", nat: "German", lat: 51.16, lng: 10.45, z: 5 },
+            { code: "it", country: "Italy", nat: "Italian", lat: 41.87, lng: 12.56, z: 5 },
+            { code: "es", country: "Spain", nat: "Spanish", lat: 40.46, lng: -3.74, z: 5 },
+            { code: "pt", country: "Portugal", nat: "Portuguese", lat: 39.39, lng: -8.22, z: 6 },
+            { code: "gr", country: "Greece", nat: "Greek", lat: 39.07, lng: 21.82, z: 6 },
+            { code: "ru", country: "Russia", nat: "Russian", lat: 61.52, lng: 105.31, z: 2 },
+            { code: "cn", country: "China", nat: "Chinese", lat: 35.86, lng: 104.19, z: 3 },
+            { code: "jp", country: "Japan", nat: "Japanese", lat: 36.20, lng: 138.25, z: 5 },
+            { code: "kr", country: "South Korea", nat: "South Korean", lat: 35.90, lng: 127.76, z: 6 },
+            { code: "in", country: "India", nat: "Indian", lat: 20.59, lng: 78.96, z: 4 },
+            { code: "eg", country: "Egypt", nat: "Egyptian", lat: 26.82, lng: 30.80, z: 5 },
+            { code: "za", country: "South Africa", nat: "South African", lat: -30.55, lng: 22.93, z: 5 },
+            { code: "ng", country: "Nigeria", nat: "Nigerian", lat: 9.08, lng: 8.67, z: 5 },
+            { code: "ke", country: "Kenya", nat: "Kenyan", lat: -0.02, lng: 37.90, z: 5 },
+            { code: "ma", country: "Morocco", nat: "Moroccan", lat: 31.79, lng: -7.09, z: 5 },
+            { code: "tr", country: "Turkey", nat: "Turkish", lat: 38.96, lng: 35.24, z: 5 },
+            { code: "sa", country: "Saudi Arabia", nat: "Saudi Arabian", lat: 23.88, lng: 45.07, z: 4 },
+            { code: "th", country: "Thailand", nat: "Thai", lat: 15.87, lng: 100.99, z: 5 },
+            { code: "vn", country: "Vietnam", nat: "Vietnamese", lat: 14.05, lng: 108.27, z: 5 },
+            { code: "ph", country: "Philippines", nat: "Filipino", lat: 12.87, lng: 121.77, z: 5 },
+            { code: "se", country: "Sweden", nat: "Swedish", lat: 60.12, lng: 18.64, z: 4 },
+            { code: "no", country: "Norway", nat: "Norwegian", lat: 60.47, lng: 8.46, z: 4 },
+            { code: "dk", country: "Denmark", nat: "Danish", lat: 56.26, lng: 9.50, z: 6 },
+            { code: "fi", country: "Finland", nat: "Finnish", lat: 61.92, lng: 25.74, z: 4 },
+            { code: "ch", country: "Switzerland", nat: "Swiss", lat: 46.81, lng: 8.22, z: 6 },
+            { code: "at", country: "Austria", nat: "Austrian", lat: 47.51, lng: 14.55, z: 6 },
+            { code: "be", country: "Belgium", nat: "Belgian", lat: 50.50, lng: 4.46, z: 6 },
+            { code: "nl", country: "Netherlands", nat: "Dutch", lat: 52.13, lng: 5.29, z: 6 },
+            { code: "pl", country: "Poland", nat: "Polish", lat: 51.91, lng: 19.14, z: 5 },
+            { code: "ua", country: "Ukraine", nat: "Ukrainian", lat: 48.37, lng: 31.16, z: 4 },
+            { code: "cu", country: "Cuba", nat: "Cuban", lat: 21.52, lng: -77.78, z: 6 },
+            { code: "jm", country: "Jamaica", nat: "Jamaican", lat: 18.10, lng: -77.29, z: 7 },
+            { code: "ve", country: "Venezuela", nat: "Venezuelan", lat: 9.18, lng: -68.46, z: 5 },
+            { code: "ec", country: "Ecuador", nat: "Ecuadorian", lat: -1.83, lng: -78.18, z: 6 },
+            { code: "uy", country: "Uruguay", nat: "Uruguayan", lat: -32.52, lng: -55.76, z: 6 },
+            { code: "mg", country: "Madagascar", nat: "Malagasy", lat: -18.76, lng: 46.86, z: 5 }
         ];
 
+        // --- PLAYER SETUP LOGIC ---
+        let players = [];
+        
+        function addPlayer() {
+            const input = document.getElementById("new-player-name");
+            const name = input.value.trim();
+            if(name) {
+                players.push({ name: name, score: 0 });
+                input.value = "";
+                renderPlayerList();
+            }
+        }
+
+        function renderPlayerList() {
+            const list = document.getElementById("player-list");
+            list.innerHTML = "";
+            players.forEach(p => {
+                list.innerHTML += `<li class="player-chip">${p.name}</li>`;
+            });
+        }
+
+        function renderScoreboard() {
+            const board = document.getElementById("scoreboard");
+            board.innerHTML = "";
+            players.forEach((p, index) => {
+                board.innerHTML += `
+                    <div class="player-card">
+                        <div class="p-name">${p.name}</div>
+                        <div class="p-score" id="score-${index}">${p.score}</div>
+                        <div class="p-controls">
+                            <button class="btn-score btn-plus" onclick="updateScore(${index}, 10)">+10</button>
+                            <button class="btn-score btn-minus" onclick="updateScore(${index}, -5)">-5</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateScore(playerIndex, points) {
+            players[playerIndex].score += points;
+            document.getElementById(`score-${playerIndex}`).innerText = players[playerIndex].score;
+        }
+
+        // --- GAME LOGIC & LEAFLET MAP ---
         let currentList = [];
         let currentIndex = 0;
-        let score = 0;
+        let map;
+        let marker;
 
-        // Shuffle the array to make it dynamic every time
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -234,15 +335,14 @@
             return array;
         }
 
-        // Generate hints by replacing characters with underscores
         function generateHint(word) {
             let result = "";
             let chars = word.split('');
             for (let i = 0; i < chars.length; i++) {
                 if (chars[i] === " ") {
-                    result += "  "; // double space for multiple words
+                    result += "  "; 
                 } else if (i === 0 || i === chars.length - 1 || Math.random() > 0.6) {
-                    result += chars[i] + " "; // Reveal first, last, and random letters
+                    result += chars[i] + " "; 
                 } else {
                     result += "_ ";
                 }
@@ -250,53 +350,76 @@
             return result.trim();
         }
 
-        function initGame() {
-            // Copy and shuffle the data (ensure Bolivia plays often if you want, but random is fun!)
+        function startGame() {
+            if (players.length === 0) {
+                alert("Por favor, añade al menos un concursante o equipo.");
+                return;
+            }
+            
+            document.getElementById("setup-screen").style.display = "none";
+            document.getElementById("game-screen").style.display = "block";
+            
+            renderScoreboard();
+            initMap();
+            
             currentList = shuffle([...countriesData]);
             currentIndex = 0;
-            score = 0;
-            document.getElementById("score-display").innerText = score;
             loadCountry();
+        }
+
+        function initMap() {
+            // Inicializar el mapa sin controles de zoom (para que sea una vista limpia)
+            map = L.map('map-container', { zoomControl: false, attributionControl: false }).setView([0,0], 2);
+            
+            // Capa de CartoDB "nolabels" (mapa en blanco sin nombres de países ni ciudades)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19
+            }).addTo(map);
+
+            // Evitar que el usuario mueva el mapa y se pierda
+            map.dragging.disable();
+            map.scrollWheelZoom.disable();
+            map.doubleClickZoom.disable();
         }
 
         function loadCountry() {
             if (currentIndex >= currentList.length) {
-                document.getElementById("feedback-message").innerHTML = `<span class="text-success">🎉 Amazing! You completed the World Explorer! Final Score: ${score}</span>`;
+                alert("¡Juego terminado! Revisen los puntajes finales.");
                 return;
             }
 
             const data = currentList[currentIndex];
-            
-            // Update UI Counters
             document.getElementById("current-round").innerText = currentIndex + 1;
 
-            // Load Map (Google Maps Embed API - dynamic search)
-            const mapHtml = `<iframe src="https://maps.google.com/maps?q=${encodeURIComponent(data.country)}&t=&z=4&ie=UTF8&iwloc=&output=embed"></iframe>`;
-            document.getElementById("map-container").innerHTML = mapHtml;
+            // Arreglo importante: Refrescar el tamaño del mapa cuando se carga dinámicamente
+            setTimeout(() => { map.invalidateSize(); }, 100);
 
-            // Load Flag (FlagCDN API)
+            // Centrar el mapa ciego y poner el marcador
+            map.setView([data.lat, data.lng], data.z);
+            if(marker) map.removeLayer(marker);
+            marker = L.marker([data.lat, data.lng]).addTo(map);
+
+            // Cargar Bandera
             document.getElementById("flag-img").src = `https://flagcdn.com/w320/${data.code}.png`;
 
-            // Load Hints
+            // Cargar Pistas
             document.getElementById("country-hint").innerText = generateHint(data.country);
             document.getElementById("nationality-hint").innerText = generateHint(data.nat);
 
-            // Reset Inputs and Buttons
+            // Resetear Inputs
             const inputC = document.getElementById("input-country");
             const inputN = document.getElementById("input-nationality");
             inputC.value = ""; inputN.value = "";
             inputC.className = "custom-input"; inputN.className = "custom-input";
             inputC.disabled = false; inputN.disabled = false;
             
-            document.getElementById("feedback-message").innerHTML = "";
             document.getElementById("btn-check").style.display = "block";
             document.getElementById("btn-next").style.display = "none";
             
-            // Focus first input
             inputC.focus();
         }
 
-        function checkAnswer() {
+        function revealAnswer() {
             const data = currentList[currentIndex];
             const inputC = document.getElementById("input-country");
             const inputN = document.getElementById("input-nationality");
@@ -306,41 +429,23 @@
             const correctC = data.country.toLowerCase();
             const correctN = data.nat.toLowerCase();
 
-            let pointsEarned = 0;
-
-            // Check Country
+            // Evaluar País
             if (ansC === correctC) {
                 inputC.classList.add("correct");
-                pointsEarned += 10;
             } else {
                 inputC.classList.add("wrong");
-                inputC.value = data.country; // Show correct answer
+                inputC.value = data.country; // Reveal correct
             }
 
-            // Check Nationality
+            // Evaluar Nacionalidad
             if (ansN === correctN) {
                 inputN.classList.add("correct");
-                pointsEarned += 10;
             } else {
                 inputN.classList.add("wrong");
-                inputN.value = data.nat; // Show correct answer
+                inputN.value = data.nat; // Reveal correct
             }
 
-            // Update Score
-            score += pointsEarned;
-            document.getElementById("score-display").innerText = score;
-
-            // Feedback
-            const feedback = document.getElementById("feedback-message");
-            if (pointsEarned === 20) {
-                feedback.innerHTML = `<span class="text-success">Perfect! +20 points</span>`;
-            } else if (pointsEarned === 10) {
-                feedback.innerHTML = `<span class="text-danger">Almost! You missed one. Correct answers revealed.</span>`;
-            } else {
-                feedback.innerHTML = `<span class="text-danger">Oops! Correct answers are shown above.</span>`;
-            }
-
-            // Swap Buttons
+            // Cambiar botones (El profe decide a quién darle puntos arriba)
             inputC.disabled = true;
             inputN.disabled = true;
             document.getElementById("btn-check").style.display = "none";
@@ -351,22 +456,6 @@
             currentIndex++;
             loadCountry();
         }
-
-        // Allow pressing "Enter" to submit
-        document.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                const btnCheck = document.getElementById("btn-check");
-                const btnNext = document.getElementById("btn-next");
-                if (btnCheck.style.display !== "none") {
-                    btnCheck.click();
-                } else if (btnNext.style.display !== "none") {
-                    btnNext.click();
-                }
-            }
-        });
-
-        // Start Game on load
-        window.onload = initGame;
     </script>
 </body>
 </html>
