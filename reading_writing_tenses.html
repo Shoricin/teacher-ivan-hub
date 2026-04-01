@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Simple vs Present Perfect | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); }
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* KEY / LEGEND BOX */
+        .legend-box {
+            display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .legend-item {
+            background: white; padding: 15px 25px; border-radius: 12px; box-shadow: var(--shadow);
+            display: flex; flex-direction: column; align-items: center; text-align: center; width: 250px;
+        }
+        .legend-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .legend-desc { font-size: 0.85rem; color: #666; }
+        
+        .hl-pp { background-color: rgba(93, 203, 195, 0.2); color: var(--primary-dark); font-weight: bold; padding: 2px 6px; border-radius: 4px; border-bottom: 2px solid var(--primary-teal);}
+        .hl-ps { background-color: rgba(255, 154, 139, 0.2); color: #d9534f; font-weight: bold; padding: 2px 6px; border-radius: 4px; border-bottom: 2px solid var(--accent-coral);}
+
+        /* READING BOX */
+        .reading-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 40px; border-left: 6px solid var(--primary-teal);
+        }
+        .reading-box h2 { margin-top: 0; font-size: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 1.9; color: #333; margin-top: 20px;}
+
+        /* WRITING BOX */
+        .writing-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .writing-box h2 { margin-top: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;}
+        
+        .instructions {
+            background: #fafafa; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 25px;
+        }
+        .instructions h3 { margin-top: 0; font-size: 1.1rem; color: var(--text-dark); }
+        .instructions ul { margin: 0; padding-left: 20px; color: #555; font-size: 0.95rem; line-height: 1.6;}
+        .instructions li { margin-bottom: 8px; }
+
+        /* FORM */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
+        
+        input[type="text"], textarea {
+            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px;
+            font-family: 'Poppins', sans-serif; font-size: 1rem; box-sizing: border-box; transition: 0.3s;
+            background: #fafafa;
+        }
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--accent-coral); outline: none; background: white;
+            box-shadow: 0 0 0 3px rgba(255,154,139,0.2);
+        }
+        textarea { resize: vertical; min-height: 200px; line-height: 1.6; }
+
+        .btn-submit {
+            background: var(--primary-teal); color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(93,203,195,0.4); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>Experiences & Memories</h1>
+        <div class="subtitle">Mastering Present Perfect vs. Past Simple</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="legend-box">
+            <div class="legend-item" style="border-top: 4px solid var(--primary-teal);">
+                <span class="legend-title hl-pp">Present Perfect</span>
+                <span class="legend-desc">Life experiences and unfinished time (e.g., in my life, recently, so far).</span>
+            </div>
+            <div class="legend-item" style="border-top: 4px solid var(--accent-coral);">
+                <span class="legend-title hl-ps">Past Simple</span>
+                <span class="legend-desc">Finished actions at a specific time in the past (e.g., yesterday, in 2019).</span>
+            </div>
+        </div>
+
+        <div class="reading-box">
+            <h2><span class="material-icons-round">menu_book</span> Reading Example</h2>
+            <div class="reading-text">
+                <p>My name is Alex, and I <span class="hl-pp">have loved</span> traveling since I was a child. Over the past ten years, I <span class="hl-pp">have visited</span> more than fifteen countries across three continents. I <span class="hl-pp">have seen</span> the beautiful Eiffel Tower in Paris, and I <span class="hl-pp">have hiked</span> through the dense jungles of Costa Rica. However, I <span class="hl-pp">have never been</span> to Asia, but I hope to go there soon.</p>
+                
+                <p>My absolute favorite adventure <span class="hl-ps">was</span> my trip to Peru. Two years ago, I <span class="hl-ps">flew</span> to Cusco with my best friend. We <span class="hl-ps">spent</span> three days adjusting to the altitude, and then we <span class="hl-ps">started</span> the Inca Trail. On the fourth day, we finally <span class="hl-ps">arrived</span> at Machu Picchu. The sun <span class="hl-ps">was</span> shining, and the view <span class="hl-ps">took</span> my breath away. It is an experience I will never forget.</p>
+            </div>
+        </div>
+
+        <div class="writing-box">
+            <h2><span class="material-icons-round">edit_note</span> Your Turn: Writing Task</h2>
+            
+            <div class="instructions">
+                <h3>📝 Instructions for your short essay:</h3>
+                <ul>
+                    <li>Write a short essay (approx. 150 - 200 words) about your own life experiences or a memorable trip.</li>
+                    <li>Use at least <strong>3 sentences in Present Perfect</strong> to describe general experiences.</li>
+                    <li>Use at least <strong>3 sentences in Past Simple</strong> to give specific details about a finished event.</li>
+                    <li>Check your spelling and grammar before generating the PDF.</li>
+                </ul>
+            </div>
+
+            <form onsubmit="generateEssayPDF(event)">
+                <div class="input-group">
+                    <label>Student Full Name</label>
+                    <input type="text" id="studentName" required placeholder="e.g., Tatiana Thompson">
+                </div>
+                <div class="input-group">
+                    <label>Essay Title</label>
+                    <input type="text" id="essayTitle" required placeholder="e.g., My Adventures in Bolivia">
+                </div>
+                <div class="input-group">
+                    <label>Essay Content</label>
+                    <textarea id="essayContent" required placeholder="Start writing your experiences here..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <span class="material-icons-round">picture_as_pdf</span> Generate Essay PDF
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        function generateEssayPDF(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const studentName = document.getElementById('studentName').value;
+            const essayTitle = document.getElementById('essayTitle').value;
+            const essayContent = document.getElementById('essayContent').value;
+
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Set Title Style
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(45, 45, 45); // Dark text
+            doc.text(essayTitle, 105, 25, null, null, "center");
+
+            // Set Student Info Style
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`By: ${studentName}`, 105, 33, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 40, null, null, "center");
+
+            // Decorative Line (Coral)
+            doc.setDrawColor(255, 154, 139); 
+            doc.setLineWidth(1.5);
+            doc.line(20, 48, 190, 48); 
+
+            // Set Content Style
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            // Split text to fit page width (margins at 20 and 190 = 170 max width)
+            const splitText = doc.splitTextToSize(essayContent, 170);
+            
+            // Print text with line spacing
+            doc.text(splitText, 20, 60, { lineHeightFactor: 1.5 });
+
+            // Generate File Name and Save
+            const fileName = `${studentName.replace(/\s+/g, '_')}_Essay.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
