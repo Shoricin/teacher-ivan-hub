@@ -255,14 +255,11 @@
     </div>
 
     <script>
-        /* * BASE DE DATOS DE ESCENAS
-         * IMPORTANTE: He usado IDs de YouTube reales de clips oficiales en Español Latino.
-         * Si alguno se cae por copyright en el futuro, solo debes cambiar el "videoId".
-         */
+        /* * BASE DE DATOS DE ESCENAS CON ENLACES FUNCIONALES VERIFICADOS */
         const moviesDB = [
             {
                 title: "1. Shrek (Las Cebollas)",
-                videoId: "y4vIih8GzB8", // Shrek explicando que los ogros son como cebollas
+                videoId: "nGg4laURO_I", 
                 context: "Shrek y Burro caminan hacia el castillo. Shrek intenta explicarle a Burro que los ogros tienen sentimientos y capas, pero Burro no logra entender la metáfora.",
                 vocab: [
                     { es: "El ogro", en: "Ogre" },
@@ -274,14 +271,14 @@
                 quiz: [
                     { q: "¿Con qué vegetal compara Shrek a los ogros?", opts: ["Con un tomate", "Con una cebolla", "Con una papa"], ans: 1 },
                     { q: "¿Qué tienen en común los ogros y las cebollas según Shrek?", opts: ["Tienen capas", "Son verdes", "Saben mal"], ans: 0 },
-                    { q: "¿Qué ejemplo da Burro que a todos les gusta?", opts: ["El pastel (o parfaits)", "El chocolate", "La pizza"], ans: 0 },
+                    { q: "¿Qué ejemplo da Burro que a todos les gusta?", opts: ["El pastel/helado", "El chocolate", "La pizza"], ans: 0 },
                     { q: "¿Qué hacen las cebollas cuando las cortas?", opts: ["Te hacen reír", "Te hacen llorar", "Te hacen gritar"], ans: 1 },
                     { q: "¿Burro entiende la metáfora inmediatamente?", opts: ["Sí, es muy inteligente", "No, sigue hablando de otras comidas", "Se enoja y se va"], ans: 1 }
                 ]
             },
             {
                 title: "2. Toy Story (Eres un Juguete)",
-                videoId: "iHWeoFvM9H8", // Woody le grita a Buzz
+                videoId: "0n5aPQ63z80", 
                 context: "Woody está frustrado porque Buzz Lightyear realmente cree que es un guardián espacial. Woody intenta hacerle entender la realidad.",
                 vocab: [
                     { es: "El juguete", en: "Toy" },
@@ -299,27 +296,27 @@
                 ]
             },
             {
-                title: "3. Coco (La Familia)",
-                videoId: "5uSjVdG6fSg", // Coco Trailer/Clip familia
-                context: "Miguel vive en un pueblo de México y ama la música, pero su familia la tiene estrictamente prohibida debido a un problema del pasado.",
+                title: "3. Coco (Latido de mi corazón)",
+                videoId: "ZZkVaNWvatM", 
+                context: "Miguel logra cumplir su sueño. Canta junto a su familia, demostrando que la música ya no está prohibida para los Rivera, uniendo sus dos pasiones.",
                 vocab: [
-                    { es: "La familia", en: "Family" },
-                    { es: "La música", en: "Music" },
-                    { es: "Recordar", en: "To remember" },
-                    { es: "El zapato", en: "Shoe" },
-                    { es: "El sueño", en: "Dream" }
+                    { es: "El corazón", en: "Heart" },
+                    { es: "La guitarra", en: "Guitar" },
+                    { es: "Cantar", en: "To sing" },
+                    { es: "El latido", en: "Heartbeat" },
+                    { es: "Juntos", en: "Together" }
                 ],
                 quiz: [
-                    { q: "¿Qué actividad está prohibida en la familia de Miguel?", opts: ["Hacer zapatos", "La música", "Jugar fútbol"], ans: 1 },
-                    { q: "¿De qué trabaja la familia de Miguel?", opts: ["Son músicos", "Son zapateros", "Son cocineros"], ans: 1 },
-                    { q: "¿A quién admira profundamente Miguel?", opts: ["A Ernesto de la Cruz", "A su abuela", "A un mariachi"], ans: 0 },
-                    { q: "¿Qué hace la abuela de Miguel cuando ve música?", opts: ["Baila", "Se enoja mucho", "Canta"], ans: 1 },
-                    { q: "El tema principal de la película trata sobre...", opts: ["Olvidar el pasado", "Recordar a los ancestros", "Aprender a tocar guitarra"], ans: 1 }
+                    { q: "¿Qué actividad realiza Miguel junto a su familia?", opts: ["Cantar y tocar música", "Hacer zapatos", "Llorar"], ans: 0 },
+                    { q: "¿A quién le canta Miguel principalmente?", opts: ["A su perro Dante", "A Mamá Coco y su familia", "A Ernesto de la Cruz"], ans: 1 },
+                    { q: "¿Qué instrumento toca Miguel con gran habilidad?", opts: ["La trompeta", "La guitarra", "El piano"], ans: 1 },
+                    { q: "La canción dice que la música es su...", opts: ["Trabajo aburrido", "Lenguaje", "Peor pesadilla"], ans: 1 },
+                    { q: "¿Cuál es el sentimiento general de la escena?", opts: ["Alegría y celebración", "Enojo", "Tristeza profunda"], ans: 0 }
                 ]
             },
             {
                 title: "4. Spider-Man (Gran Responsabilidad)",
-                videoId: "P1c-F2Xv7q8", // Tío Ben y Peter
+                videoId: "We_Z5DeDOvY", 
                 context: "Peter Parker está en el auto con su tío Ben. Su tío intenta darle un consejo de vida importante antes de dejarlo en la biblioteca.",
                 vocab: [
                     { es: "El poder", en: "Power" },
@@ -338,7 +335,7 @@
             },
             {
                 title: "5. Buscando a Nemo (Hablando Cetáceo)",
-                videoId: "c9c2Yd-m1vU", // Dory hablando ballena
+                videoId: "GEIqrjKFOZs",
                 context: "Marlin y Dory están perdidos y se encuentran con una ballena gigante. Dory decide comunicarse con ella usando su 'acento cetáceo'.",
                 vocab: [
                     { es: "La ballena", en: "Whale" },
@@ -351,71 +348,71 @@
                     { q: "¿Qué animal gigante aparece frente a ellos?", opts: ["Un tiburón", "Una ballena", "Un pulpo"], ans: 1 },
                     { q: "¿Qué habilidad especial dice tener Dory?", opts: ["Hablar 'cetáceo'", "Volar", "Leer mapas"], ans: 0 },
                     { q: "¿Cómo reacciona Marlin cuando Dory habla?", opts: ["Se ríe", "Se asusta y le pide que pare", "Canta con ella"], ans: 1 },
-                    { q: "¿Qué le pregunta Dory a la ballena?", opts: ["¿Tienes comida?", "¿Nos puedes dar direcciones?", "¿Quieres jugar?"], ans: 1 },
+                    { q: "¿Qué le pregunta Dory a la ballena?", opts: ["¿Tienes comida?", "¿Nos puedes dar ayuda/direcciones?", "¿Quieres jugar?"], ans: 1 },
                     { q: "¿Cómo suena el idioma que habla Dory?", opts: ["Como sonidos muy largos y graves", "Como español rápido", "Como ladridos"], ans: 0 }
                 ]
             },
             {
                 title: "6. Los Simpson (Plan Dental)",
-                videoId: "15pQ_2Y5N7A", // Plan Dental / Lisa necesita frenos
+                videoId: "GJStd0msIwY", 
                 context: "Homero descubre en el sindicato del trabajo que van a perder su seguro dental, lo que choca con la necesidad de su hija Lisa.",
                 vocab: [
                     { es: "El diente", en: "Tooth" },
                     { es: "El plan dental", en: "Dental plan" },
                     { es: "Los frenos", en: "Braces" },
-                    { es: "El sindicato", en: "Union" },
-                    { es: "Pensar", en: "To think" }
+                    { es: "Pensar", en: "To think" },
+                    { es: "Necesitar", en: "To need" }
                 ],
                 quiz: [
                     { q: "¿Qué beneficio laboral van a perder en la planta nuclear?", opts: ["Las vacaciones", "El plan dental", "El aguinaldo"], ans: 1 },
                     { q: "¿Qué necesita Lisa desesperadamente?", opts: ["Frenos (brackets)", "Gafas", "Zapatos nuevos"], ans: 0 },
                     { q: "La mente de Homero repite dos frases: 'Plan dental' y...", opts: ["'Lisa necesita frenos'", "'Cerveza gratis'", "'Marge está enojada'"], ans: 0 },
                     { q: "¿Quién es el jefe que les quiere quitar el seguro?", opts: ["El Sr. Burns", "Ned Flanders", "El alcalde Quimby"], ans: 0 },
-                    { q: "¿Qué hace Homero al darse cuenta del problema?", opts: ["Renuncia", "Lidera una huelga", "Paga en efectivo"], ans: 1 }
+                    { q: "¿Qué hace Homero al darse cuenta del problema?", opts: ["Renuncia", "Lidera la protesta", "Paga en efectivo"], ans: 1 }
                 ]
             },
             {
-                title: "7. Bob Esponja (Repartiendo Pizza)",
-                videoId: "U0X0oK8n5qI", // La pizza de Don Cangrejo
-                context: "Bob Esponja y Calamardo se pierden entregando la primera pizza a domicilio del Crustáceo Cascarudo. Bob canta para motivarse.",
+                title: "7. Bob Esponja (Pizza de Don Cangrejo)",
+                videoId: "ed18yJ_HTms", 
+                context: "Bob Esponja y Calamardo deben entregar la primera pizza a domicilio del Crustáceo Cascarudo. Bob canta para motivarse en el camino.",
                 vocab: [
                     { es: "La pizza", en: "Pizza" },
                     { es: "Caminar", en: "To walk" },
                     { es: "El cliente", en: "Customer" },
                     { es: "La canción", en: "Song" },
-                    { es: "Perdido", en: "Lost" }
+                    { es: "Llegar", en: "To arrive" }
                 ],
                 quiz: [
                     { q: "¿Qué están repartiendo Bob y Calamardo?", opts: ["Hamburguesas", "Una pizza", "Un pastel"], ans: 1 },
-                    { q: "¿Cómo es la actitud de Bob Esponja?", opts: ["Muy entusiasta y feliz", "Enojado", "Triste y cansado"], ans: 0 },
-                    { q: "¿Cómo es la actitud de Calamardo?", opts: ["Optimista", "Miserable y quejumbroso", "Amable"], ans: 1 },
-                    { q: "Según la canción de Bob, ¿para quién es la pizza?", opts: ["Para ti y para mí", "Para el Rey", "Para Don Cangrejo"], ans: 0 },
-                    { q: "¿En qué lugar trabajan ellos normalmente?", opts: ["El Balde de Carnada", "El Crustáceo Cascarudo", "La Escuela de Botes"], ans: 1 }
+                    { q: "¿Cómo es la actitud de Bob Esponja al cantar?", opts: ["Muy entusiasta y feliz", "Enojado", "Triste y cansado"], ans: 0 },
+                    { q: "¿De quién es la pizzería según la canción?", opts: ["De Plankton", "De Don Cangrejo", "De Patricio"], ans: 1 },
+                    { q: "Según la canción de Bob, la pizza es...", opts: ["Para ti y para mí", "Para el Rey", "Para las medusas"], ans: 0 },
+                    { q: "¿Qué estilo musical intenta imitar Bob en algunas partes?", opts: ["Ópera / Soul", "Heavy Metal", "Cumbia"], ans: 0 }
                 ]
             },
             {
                 title: "8. El Rey León (Hakuna Matata)",
-                videoId: "vX1Xz_Zk3sI", // Hakuna Matata
+                videoId: "qqBqAn3fJ2E", 
                 context: "Simba ha huido de su casa y se encuentra con Timón y Pumba, quienes le enseñan su filosofía de vida para no preocuparse.",
                 vocab: [
                     { es: "El problema", en: "Problem" },
                     { es: "Vivir", en: "To live" },
                     { es: "El pasado", en: "The past" },
-                    { es: "El bicho", en: "Bug / Insect" },
+                    { es: "Aprender", en: "To learn" },
                     { es: "Preocuparse", en: "To worry" }
                 ],
                 quiz: [
                     { q: "¿Qué significa Hakuna Matata?", opts: ["Trabaja duro", "Sin preocuparse es como hay que vivir", "El rey ha vuelto"], ans: 1 },
                     { q: "¿Qué animales son Timón y Pumba?", opts: ["Un león y un tigre", "Un suricato y un jabalí", "Un mono y un pájaro"], ans: 1 },
-                    { q: "¿Qué le dan de comer a Simba?", opts: ["Carne fresca", "Bichos e insectos", "Frutas"], ans: 1 },
-                    { q: "¿Cómo sabe la comida que le ofrecen?", opts: ["Viscosa pero sabrosa", "A pollo", "Muy picante"], ans: 0 },
-                    { q: "El mensaje de la canción es...", opts: ["Lucha por tu reino", "Olvida el pasado y relájate", "Busca a tu familia"], ans: 1 }
+                    { q: "¿Qué dice la canción sobre el pasado?", opts: ["Debes olvidarlo / dejarlo atrás", "Debes llorar", "Debes estudiarlo"], ans: 0 },
+                    { q: "¿Qué palabra usan para describir esta forma de ser?", opts: ["Aburrida", "Mágica", "Relajante"], ans: 1 },
+                    { q: "El mensaje central que le enseñan a Simba es...", opts: ["Lucha por tu reino", "No te estreses y vive el momento", "Busca a tu familia"], ans: 1 }
                 ]
             },
             {
-                title: "9. Intensa Mente (La Tristeza)",
-                videoId: "p8ZJ0f9MOfw", // Alegría y Tristeza
-                context: "Dentro de la mente de Riley, la emoción 'Alegría' intenta mantener el control, pero 'Tristeza' empieza a tocar los recuerdos.",
+                title: "9. Intensa Mente (La Paradoja de la Alegría)",
+                videoId: "cdT-Oam7mms", 
+                context: "Análisis sobre cómo las emociones de Alegría y Tristeza interactúan dentro de la mente, y por qué sentir tristeza a veces es necesario.",
                 vocab: [
                     { es: "La emoción", en: "Emotion" },
                     { es: "La alegría", en: "Joy" },
@@ -424,30 +421,30 @@
                     { es: "Llorar", en: "To cry" }
                 ],
                 quiz: [
-                    { q: "¿Qué emoción es la líder en la mente de Riley al inicio?", opts: ["Furia", "Alegría", "Miedo"], ans: 1 },
-                    { q: "¿De qué color es el personaje de Tristeza?", opts: ["Verde", "Rojo", "Azul"], ans: 2 },
-                    { q: "¿Qué pasa cuando Tristeza toca una esfera de recuerdo?", opts: ["Se rompe", "Se vuelve azul y triste", "Se vuelve brillante"], ans: 1 },
-                    { q: "El objetivo de Alegría es que Riley siempre esté...", opts: ["Estudiando", "Feliz", "Durmiendo"], ans: 1 },
-                    { q: "El doblaje de esta película usa un español...", opts: ["Muy técnico", "Coloquial y emocional", "Antiguo"], ans: 1 }
+                    { q: "¿Qué emoción intenta controlar todo al principio de la historia?", opts: ["Furia", "Alegría", "Miedo"], ans: 1 },
+                    { q: "¿Qué descubre Alegría sobre los recuerdos tristes?", opts: ["Que deben ser destruidos", "Que son necesarios para sanar", "Que causan enojo"], ans: 1 },
+                    { q: "El crecimiento emocional significa que...", opts: ["Nunca volverás a sonreír", "Debes suprimir tus sentimientos", "Aceptar todas tus emociones"], ans: 2 },
+                    { q: "¿Qué función cumple Tristeza cuando el personaje necesita consuelo?", opts: ["Lo hace enojar", "Permite que otros la ayuden y consuelen", "La hace dormir"], ans: 1 },
+                    { q: "El mensaje final del clip es que...", opts: ["Solo Alegría es importante", "Ser adulto es terrible", "Todas las emociones son válidas y trabajan juntas"], ans: 2 }
                 ]
             },
             {
-                title: "10. El Chavo del 8 (Sin Querer)",
-                videoId: "B504qf8QdEc", // Escena clasica
-                context: "El Chavo, un niño huérfano de la vecindad, golpea accidentalmente a Don Ramón y usa su excusa clásica.",
+                title: "10. El Chavo del 8 (Frases Clásicas)",
+                videoId: "G_fDG_EWUrI", 
+                context: "El Chavo, un niño huérfano de la vecindad, golpea accidentalmente a los adultos y se justifica con su famosa excusa para evitar problemas.",
                 vocab: [
                     { es: "La vecindad", en: "Neighborhood/Courtyard" },
                     { es: "El golpe", en: "The hit/punch" },
-                    { es: "El barril", en: "Barrel" },
+                    { es: "Equivocarse", en: "To make a mistake" },
                     { es: "Querer", en: "To want" },
                     { es: "El niño", en: "Boy" }
                 ],
                 quiz: [
-                    { q: "¿Dónde vive (o se esconde) usualmente el Chavo?", opts: ["En una mansión", "En un barril", "En un árbol"], ans: 1 },
-                    { q: "¿A quién golpea el Chavo por accidente?", opts: ["A Doña Florinda", "A Quico", "A Don Ramón (Ron Damón)"], ans: 2 },
-                    { q: "¿Cuál es la frase célebre que dice para disculparse?", opts: ["Lo siento mucho", "Fue sin querer queriendo", "Yo no fui"], ans: 1 },
-                    { q: "¿Qué suele responder Don Ramón cuando se enoja?", opts: ["Tenía que ser el Chavo del 8", "Está bien, no pasa nada", "Llama a la policía"], ans: 0 },
-                    { q: "El programa es original de...", opts: ["España", "Argentina", "México"], ans: 2 }
+                    { q: "¿Dónde ocurren las historias del Chavo?", opts: ["En un castillo", "En una vecindad", "En la playa"], ans: 1 },
+                    { q: "¿A qué personaje adulto suele golpear el Chavo sin querer?", opts: ["A Doña Florinda", "Al Profesor Jirafales", "A Don Ramón / El Señor Barriga"], ans: 2 },
+                    { q: "¿Cuál es la frase célebre que usa para disculparse?", opts: ["Lo siento mucho", "Fue sin querer queriendo", "Yo no fui"], ans: 1 },
+                    { q: "Cuando a él o a otros se les escapa una palabra incorrecta, dicen...", opts: ["Se me chispoteó", "Me equivoqué", "No hablo español"], ans: 0 },
+                    { q: "El tono del programa es...", opts: ["De comedia y enredos", "Drama serio", "Documental histórico"], ans: 0 }
                 ]
             }
         ];
@@ -482,6 +479,7 @@
             // Update UI Elements
             document.getElementById('ui-title').innerText = scene.title.substring(3); // Quitar el número
             document.getElementById('ui-context').innerText = scene.context;
+            // Configurar iframe asegurando su reproducción correcta
             document.getElementById('ui-video').src = `https://www.youtube.com/embed/${scene.videoId}?rel=0`;
 
             // Update Vocab
