@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numbers & Age Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 800px; margin: 40px auto; width: 90%; }
+        
+        /* SCREENS */
+        .screen { display: none; animation: fadeIn 0.4s ease; }
+        .screen.active { display: block; }
+
+        /* RULE BOX */
+        .rule-box {
+            background: white; padding: 30px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-left: 6px solid var(--accent-coral);
+            margin-bottom: 30px; text-align: center;
+        }
+        .rule-box h2 { color: var(--primary-dark); margin-top: 0; }
+        .grammar-compare { display: flex; justify-content: space-around; margin-top: 20px; font-size: 1.2rem; font-weight: bold;}
+        .wrong-way { color: #ef4444; text-decoration: line-through; }
+        .right-way { color: #10b981; }
+
+        /* QUIZ CARD */
+        .quiz-card {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-top: 6px solid var(--primary-teal);
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%; background: #eee; height: 10px; border-radius: 10px; margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: var(--primary-teal); width: 0%; transition: width 0.3s;
+        }
+
+        .question-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; color: var(--text-dark); }
+        
+        .options-grid { display: flex; flex-direction: column; gap: 15px; }
+        
+        .option-btn {
+            background: #fafafa; border: 2px solid #ddd; padding: 15px 20px; border-radius: 12px;
+            font-size: 1.1rem; font-family: 'Poppins', sans-serif; font-weight: 600; color: #555;
+            cursor: pointer; transition: 0.2s; text-align: left; display: flex; align-items: center; gap: 15px;
+        }
+        .option-btn:hover { border-color: var(--primary-teal); background: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(93,203,195,0.15); }
+        
+        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        .feedback-text {
+            font-size: 1.1rem; font-weight: bold; margin-top: 20px; min-height: 25px;
+        }
+
+        /* BUTTONS */
+        .btn-main {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3); display: inline-block;
+        }
+        .btn-main:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+
+        #next-btn { display: none; margin: 25px auto 0; background: var(--primary-teal); }
+        #next-btn:hover { background: var(--primary-dark); }
+
+        /* RESULTS SCREEN */
+        .results-box { text-align: center; padding: 40px; background: white; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-coral);}
+        .score-display { font-size: 4rem; font-weight: bold; color: var(--primary-teal); margin: 20px 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">cake</span> Numbers & Age</h1>
+        <div class="subtitle">Mastering the verb 'To Be' for ages</div>
+    </header>
+
+    <div class="container">
+        
+        <div id="start-screen" class="screen active">
+            <div class="rule-box">
+                <h2>⚠️ Golden Rule / Regla de Oro</h2>
+                <p>En inglés, <strong>NO TENEMOS</strong> nuestra edad. Nosotros <strong>SOMOS</strong> nuestra edad. Siempre usamos el verbo <strong>To Be</strong> (am, is, are) en lugar de "have".</p>
+                <div class="grammar-compare">
+                    <div class="wrong-way">❌ I have 15 years.</div>
+                    <div class="right-way">✅ I am 15 years old.</div>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn-main" onclick="startGame()">Start Challenge <span class="material-icons-round">play_arrow</span></button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-card">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                
+                <div class="question-text" id="question-text">Question goes here...</div>
+                
+                <div class="options-grid" id="options-container">
+                    </div>
+
+                <div class="feedback-text" id="feedback"></div>
+                <button class="btn-main" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-box">
+                <h2>Challenge Completed!</h2>
+                <div class="score-display" id="final-score">0/10</div>
+                <p id="result-message" style="font-size: 1.2rem; color: #666; margin-bottom: 30px;"></p>
+                <button class="btn-main" onclick="location.reload()">Play Again <span class="material-icons-round">refresh</span></button>
+                <a href="index.html" style="display: block; margin-top: 20px; color: var(--primary-teal); font-weight: bold; text-decoration: none;">Return to HUB</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                q: "1. Translate: 'Yo tengo 14 años.'",
+                options: ["I have 14 years.", "I am 14 years old.", "I has 14 years old."],
+                correct: 1
+            },
+            {
+                q: "2. How do you write the number 47?",
+                options: ["Forty-seven", "Fourty-seven", "Four seven"],
+                correct: 0
+            },
+            {
+                q: "3. Choose the correct sentence:",
+                options: ["My girlfriend has 28 years.", "My girlfriend is 28 years old.", "My girlfriend are 28 years old."],
+                correct: 1
+            },
+            {
+                q: "4. The students at Colegio Fielding ___ ready to learn numbers.",
+                options: ["have", "is", "are"],
+                correct: 2
+            },
+            {
+                q: "5. What number is 'Eighty-two'?",
+                options: ["82", "28", "802"],
+                correct: 0
+            },
+            {
+                q: "6. How do you ask someone for their age?",
+                options: ["How many years do you have?", "How old are you?", "What is your age?"],
+                correct: 1
+            },
+            {
+                q: "7. I go to CrossFit ___ days a week. (5)",
+                options: ["five", "fiv", "fif"],
+                correct: 0
+            },
+            {
+                q: "8. Which option is grammatically CORRECT?",
+                options: ["Teacher Ivan has 30 years old.", "He is 30 years old.", "Teacher Ivan have 30 years."],
+                correct: 1
+            },
+            {
+                q: "9. How do you write the number 13?",
+                options: ["Thirty", "Thirteen", "Tirten"],
+                correct: 1
+            },
+            {
+                q: "10. How do you say 100?",
+                options: ["One hundred", "A hundred", "Both are correct"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startGame() {
+            document.getElementById('start-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const qData = quizData[currentQuestion];
+            document.getElementById('question-text').innerText = qData.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = "";
+            
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span style="background: var(--bg-light); border: 2px solid #ccc; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">${['A','B','C'][index]}</span> ${opt}`;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Update Progress Bar
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+
+            // Reset UI
+            document.getElementById('feedback').innerText = "";
+            document.getElementById('next-btn').style.display = "none";
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const correctIndex = quizData[currentQuestion].correct;
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            allBtns.forEach(b => b.style.pointerEvents = "none");
+
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                document.getElementById('feedback').innerHTML = `<span style="color: #10b981;">Correct! Well done.</span>`;
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[correctIndex].classList.add('correct');
+                document.getElementById('feedback').innerHTML = `<span style="color: #ef4444;">Oops! Remember the rule.</span>`;
+            }
+
+            document.getElementById('next-btn').style.display = "block";
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.add('active');
+            
+            document.getElementById('final-score').innerText = `${score}/${quizData.length}`;
+            
+            const msgElement = document.getElementById('result-message');
+            if (score === quizData.length) {
+                msgElement.innerText = "🌟 Perfect score! You are a master of Numbers and Age.";
+            } else if (score >= 7) {
+                msgElement.innerText = "👍 Great job! You have a solid understanding.";
+            } else {
+                msgElement.innerText = "📚 Keep practicing! Remember we ARE our age in English.";
+            }
+        }
+    </script>
+</body>
+</html>
