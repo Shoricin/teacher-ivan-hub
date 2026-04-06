@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For vs Since Mastery | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* RULE CARDS */
+        .rules-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;
+        }
+        @media (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+
+        .rule-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            text-align: center; border-top: 6px solid;
+        }
+        .rule-for { border-color: var(--primary-teal); }
+        .rule-since { border-color: var(--accent-coral); }
+        
+        .rule-card h2 { margin-top: 0; font-size: 2rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .rule-for h2 { color: var(--primary-dark); }
+        .rule-since h2 { color: #d9534f; }
+        
+        .rule-desc { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #555;}
+        .rule-examples { text-align: left; background: #fafafa; padding: 15px; border-radius: 10px; font-size: 0.95rem; line-height: 1.8;}
+        .highlight-for { background: rgba(93, 203, 195, 0.2); font-weight: bold; padding: 2px 5px; border-radius: 4px; color: var(--primary-dark);}
+        .highlight-since { background: rgba(255, 154, 139, 0.2); font-weight: bold; padding: 2px 5px; border-radius: 4px; color: #d9534f;}
+
+        /* READING ASSESSMENT */
+        .assessment-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark);
+        }
+        .assessment-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        .assessment-instructions { color: #666; font-style: italic; margin-bottom: 25px; }
+
+        .reading-text {
+            font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333;
+        }
+
+        .gap-select {
+            appearance: none; -webkit-appearance: none;
+            background-color: #f0f8f8; border: 2px solid #ddd; padding: 5px 15px 5px 10px;
+            border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: bold;
+            color: var(--primary-dark); cursor: pointer; outline: none; transition: 0.3s;
+            text-align: center; margin: 0 5px;
+        }
+        .gap-select:hover, .gap-select:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        
+        /* Validation Classes */
+        .gap-select.correct { border-color: #10b981; background-color: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-select.wrong { border-color: #ef4444; background-color: #fee2e2; color: #991b1b; }
+
+        /* BUTTON & FEEDBACK */
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 40px auto 0;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-submit:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+
+        .feedback-box {
+            margin-top: 25px; padding: 20px; border-radius: 12px; font-weight: 600; text-align: center; display: none; font-size: 1.2rem;
+        }
+        .feedback-box.success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .feedback-box.warning { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .feedback-box.danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">hourglass_bottom</span> Time Markers</h1>
+        <div class="subtitle">Mastering the difference between FOR and SINCE</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-grid">
+            <div class="rule-card rule-for">
+                <h2>FOR <span class="material-icons-round" style="font-size: 2rem;">linear_scale</span></h2>
+                <div class="rule-desc">A Period of Time (Duration)</div>
+                <div class="rule-examples">
+                    Use <strong>FOR</strong> to talk about an amount of time (how long something lasts). It can be used in different tenses.<br><br>
+                    • <span class="highlight-for">for 10 minutes</span><br>
+                    • <span class="highlight-for">for three weeks</span><br>
+                    • <span class="highlight-for">for a long time</span><br><br>
+                    <em>Example:</em> "I have lived in Sucre <span class="highlight-for">for 5 years</span>."
+                </div>
+            </div>
+            
+            <div class="rule-card rule-since">
+                <h2>SINCE <span class="material-icons-round" style="font-size: 2rem;">place</span></h2>
+                <div class="rule-desc">A Point in Time (Starting Point)</div>
+                <div class="rule-examples">
+                    Use <strong>SINCE</strong> to talk about a specific point in the past when an action started. It is mostly used with Perfect tenses.<br><br>
+                    • <span class="highlight-since">since 8:00 AM</span><br>
+                    • <span class="highlight-since">since Monday</span><br>
+                    • <span class="highlight-since">since I was a child</span><br><br>
+                    <em>Example:</em> "I have lived in Sucre <span class="highlight-since">since 2019</span>."
+                </div>
+            </div>
+        </div>
+
+        <div class="assessment-box">
+            <h2><span class="material-icons-round">menu_book</span> Reading Comprehension Test</h2>
+            <div class="assessment-instructions">Read Elena's story carefully. Click on the blank spaces and choose either "for" or "since" to complete the sentences correctly.</div>
+
+            <div class="reading-text" id="reading-container">
+                Hello! My name is Elena and I have lived in London 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                five years. I moved here in 2021, and I have worked at the same marketing agency 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                then. It has been a wonderful experience, although the weather has been quite rainy 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                the last few weeks!
+                <br><br>
+                I have studied English 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                I was in high school, but my fluency has improved significantly 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                I arrived in the UK. I haven't seen my family 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                last Christmas, which makes me a bit sad. However, my parents are coming to visit me next month. They have planned this trip 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                a long time!
+                <br><br>
+                My roommate, Sarah, is also an international student. We have been best friends 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                over three years now. She has played the piano 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                she was six years old, and she practices every single evening 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                exactly two hours. Her music is beautiful. We haven't had a proper holiday 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                2022, so we are planning to travel to Italy soon. I have dreamed of visiting Rome 
+                <select class="gap-select" data-answer="since"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                I first saw it in a movie, and I have saved money 
+                <select class="gap-select" data-answer="for"><option value="">---</option><option value="for">for</option><option value="since">since</option></select> 
+                six months to make it happen. It's going to be amazing!
+            </div>
+
+            <button class="btn-submit" id="submit-btn" onclick="evaluateReading()">Check Answers <span class="material-icons-round">done_all</span></button>
+            <div id="feedback" class="feedback-box"></div>
+        </div>
+
+    </div>
+
+    <script>
+        function evaluateReading() {
+            const selects = document.querySelectorAll('.gap-select');
+            let score = 0;
+            let total = selects.length;
+            let allAnswered = true;
+
+            // Primero revisamos que no haya dejado campos vacíos
+            selects.forEach(select => {
+                if (select.value === "") {
+                    allAnswered = false;
+                }
+            });
+
+            if (!allAnswered) {
+                alert("Please fill in all the blanks before checking your answers!");
+                return;
+            }
+
+            // Evaluar respuestas
+            selects.forEach(select => {
+                const correctAnswer = select.getAttribute('data-answer');
+                const studentAnswer = select.value;
+
+                // Reiniciar clases por si el estudiante está corrigiendo
+                select.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    select.classList.add('correct');
+                    score++;
+                } else {
+                    select.classList.add('wrong');
+                }
+            });
+
+            // Mostrar Feedback
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; // Reset clases
+            
+            const percentage = (score / total) * 100;
+
+            if (percentage === 100) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 ¡Perfecto! Dominas la diferencia a la perfección. (${score}/${total})`;
+                document.getElementById('submit-btn').style.display = "none";
+            } else if (percentage >= 70) {
+                feedback.classList.add('warning');
+                feedback.innerHTML = `👍 ¡Muy bien! Tienes ${score} correctas de ${total}. Corrige las que están en rojo.`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `📚 Necesitas repasar las reglas arriba. Obtuviste ${score} de ${total}. ¡Inténtalo de nuevo!`;
+            }
+        }
+    </script>
+</body>
+</html>
