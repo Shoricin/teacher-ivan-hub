@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Objects & Pointers | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* RULE CARDS */
+        .rules-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;
+        }
+        @media (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+
+        .rule-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            text-align: center; border-top: 6px solid;
+        }
+        .rule-this { border-color: var(--primary-teal); }
+        .rule-that { border-color: var(--accent-coral); }
+        
+        .rule-card h2 { margin-top: 0; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .rule-this h2 { color: var(--primary-dark); }
+        .rule-that h2 { color: #d9534f; }
+        
+        .rule-desc { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #555;}
+        .rule-icon { font-size: 4rem; margin-bottom: 15px; }
+        .rule-this .rule-icon { color: var(--primary-teal); }
+        .rule-that .rule-icon { color: var(--accent-coral); }
+
+        .rule-examples { text-align: left; background: #fafafa; padding: 15px; border-radius: 10px; font-size: 0.95rem; line-height: 1.8;}
+        .rule-examples strong { color: var(--text-dark); }
+
+        /* VOCABULARY SECTION */
+        .vocab-section {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 40px; border-top: 6px solid var(--accent-yellow);
+        }
+        .vocab-section h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .vocab-grid {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;
+        }
+        .v-chip {
+            background: #fff9e6; border: 1px solid #f5b041; color: #b9770e; padding: 8px 15px; border-radius: 50px;
+            font-weight: bold; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;
+        }
+
+        /* READING ASSESSMENT */
+        .assessment-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark); margin-bottom: 40px;
+        }
+        .assessment-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        .assessment-instructions { color: #666; font-style: italic; margin-bottom: 25px; }
+
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
+
+        /* TOOLTIPS */
+        .vocab-word {
+            background-color: rgba(93, 203, 195, 0.2); border-bottom: 2px dashed var(--primary-teal);
+            cursor: help; position: relative; font-weight: bold; color: var(--primary-dark); transition: 0.2s;
+        }
+        .vocab-word:hover { background-color: rgba(93, 203, 195, 0.4); }
+        .vocab-word::after {
+            content: attr(data-spa); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--text-dark); color: white; padding: 6px 12px; border-radius: 6px;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: normal;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; z-index: 10;
+        }
+        .vocab-word:hover::after { opacity: 1; visibility: visible; bottom: 120%; }
+
+        /* GAP SELECTS */
+        .gap-select {
+            appearance: none; -webkit-appearance: none;
+            background-color: #f0f8f8; border: 2px solid #ddd; padding: 5px 15px 5px 10px;
+            border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: bold;
+            color: var(--primary-dark); cursor: pointer; outline: none; transition: 0.3s; text-align: center; margin: 0 5px;
+        }
+        .gap-select:hover, .gap-select:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-select.correct { border-color: #10b981; background-color: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-select.wrong { border-color: #ef4444; background-color: #fee2e2; color: #991b1b; }
+
+        /* QUIZ SECTION */
+        .quiz-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .question { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #eee; }
+        .question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .q-text { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            padding: 12px 20px; border: 1px solid #ddd; background: #fafafa; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); }
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); }
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; font-weight: bold; }
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; }
+
+        /* BUTTONS & FEEDBACK */
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 30px auto 0;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-submit:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .warning { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">touch_app</span> Classroom Pointers</h1>
+        <div class="subtitle">Mastering "This" and "That" with Classroom Objects</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-grid">
+            <div class="rule-card rule-this">
+                <h2>THIS</h2>
+                <div class="rule-icon material-icons-round">pan_tool_alt</div>
+                <div class="rule-desc">Near / Cerca (Singular)</div>
+                <div class="rule-examples">
+                    Use <strong>THIS</strong> to point at ONE object that is very close to you (you can touch it).<br><br>
+                    • <strong>This</strong> is my desk.<br>
+                    • <strong>This</strong> pencil is yellow.
+                </div>
+            </div>
+            
+            <div class="rule-card rule-that">
+                <h2>THAT</h2>
+                <div class="rule-icon material-icons-round">arrow_forward</div>
+                <div class="rule-desc">Far / Lejos (Singular)</div>
+                <div class="rule-examples">
+                    Use <strong>THAT</strong> to point at ONE object that is far from you (you have to walk to touch it).<br><br>
+                    • <strong>That</strong> is the whiteboard.<br>
+                    • <strong>That</strong> backpack over there is heavy.
+                </div>
+            </div>
+        </div>
+
+        <div class="vocab-section">
+            <h2><span class="material-icons-round">school</span> Classroom Vocabulary</h2>
+            <div class="vocab-grid">
+                <span class="v-chip">Desk (Pupitre)</span>
+                <span class="v-chip">Whiteboard (Pizarra)</span>
+                <span class="v-chip">Notebook (Cuaderno)</span>
+                <span class="v-chip">Pencil Case (Estuche/Cartuchera)</span>
+                <span class="v-chip">Backpack (Mochila)</span>
+                <span class="v-chip">Eraser (Goma de borrar)</span>
+                <span class="v-chip">Scissors (Tijeras)</span>
+                <span class="v-chip">Projector (Proyector)</span>
+            </div>
+        </div>
+
+        <div class="assessment-box">
+            <h2><span class="material-icons-round">menu_book</span> Part 1: Fill in the Blanks</h2>
+            <div class="assessment-instructions">Imagine you are sitting at your desk in Colegio Fielding. Choose "This" (near) or "That" (far) to complete the story. Hover over highlighted words for translation.</div>
+
+            <div class="reading-text" id="reading-container">
+                Welcome to our English class at Colegio Fielding! I am sitting at my <span class="vocab-word" data-spa="pupitre">desk</span> right now. 
+                <select class="gap-select" data-answer="This"><option value="">---</option><option value="This">This</option><option value="That">That</option></select> 
+                is my new <span class="vocab-word" data-spa="cuaderno">notebook</span> right in front of me, and I love it. I am holding a blue pen in my hand; 
+                <select class="gap-select" data-answer="this"><option value="">---</option><option value="this">this</option><option value="that">that</option></select> 
+                pen writes very smoothly.
+                <br><br>
+                However, I forgot my <span class="vocab-word" data-spa="goma de borrar">eraser</span>! Look over there, near the classroom door. Do you see it? 
+                <select class="gap-select" data-answer="That"><option value="">---</option><option value="This">This</option><option value="That">That</option></select> 
+                is my friend's <span class="vocab-word" data-spa="mochila">backpack</span> on the floor. I need to ask him to lend me an eraser. 
+                <br><br>
+                Look at the wall across the room; 
+                <select class="gap-select" data-answer="that"><option value="">---</option><option value="this">this</option><option value="that">that</option></select> 
+                is the new smart <span class="vocab-word" data-spa="pizarra">whiteboard</span> the school bought. It looks amazing! I really like 
+                <select class="gap-select" data-answer="this"><option value="">---</option><option value="this">this</option><option value="that">that</option></select> 
+                comfortable chair I am sitting on, but 
+                <select class="gap-select" data-answer="that"><option value="">---</option><option value="this">this</option><option value="that">that</option></select> 
+                chair next to the window looks broken. Anyway, Teacher Ivan is coming, so class is about to start!
+            </div>
+
+            <button class="btn-submit" id="btn-reading" onclick="evaluateReading()">Check Answers</button>
+            <div id="feedback-reading" class="feedback-box"></div>
+        </div>
+
+        <div class="quiz-box">
+            <h2><span class="material-icons-round">quiz</span> Part 2: Distance Check</h2>
+            <p style="color: #666; margin-bottom: 20px;">Let's verify if you understand the rules of distance.</p>
+            
+            <form id="rules-quiz" onsubmit="evaluateQuiz(event)">
+                <div class="question">
+                    <p class="q-text">1. You are holding an apple in your hand. What do you say?</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q1" value="wrong"> That is an apple.</label>
+                        <label class="opt-label"><input type="radio" name="q1" value="correct"> This is an apple.</label>
+                        <label class="opt-label"><input type="radio" name="q1" value="wrong"> These is an apple.</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="q-text">2. You are pointing at an airplane flying high in the sky. What do you say?</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q2" value="wrong"> This is an airplane.</label>
+                        <label class="opt-label"><input type="radio" name="q2" value="wrong"> It is an airplane.</label>
+                        <label class="opt-label"><input type="radio" name="q2" value="correct"> That is an airplane.</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="q-text">3. What does "This" and "That" have in common?</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q3" value="wrong"> They are both used for plural objects (many things).</label>
+                        <label class="opt-label"><input type="radio" name="q3" value="correct"> They are both used for singular objects (only one thing).</label>
+                        <label class="opt-label"><input type="radio" name="q3" value="wrong"> They are both used for objects that are far away.</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btn-quiz">Submit Quiz</button>
+                <div id="feedback-quiz" class="feedback-box"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // --- READING EVALUATION ---
+        function evaluateReading() {
+            const selects = document.querySelectorAll('.gap-select');
+            let score = 0;
+            let total = selects.length;
+            let allAnswered = true;
+
+            selects.forEach(select => {
+                if (select.value === "") allAnswered = false;
+            });
+
+            if (!allAnswered) {
+                alert("Please fill in all the blanks in the reading first!");
+                return;
+            }
+
+            selects.forEach(select => {
+                const correctAnswer = select.getAttribute('data-answer');
+                select.classList.remove('correct', 'wrong');
+
+                // Case-insensitive comparison just in case
+                if (select.value.toLowerCase() === correctAnswer.toLowerCase()) {
+                    select.classList.add('correct');
+                    score++;
+                } else {
+                    select.classList.add('wrong');
+                }
+            });
+
+            const feedback = document.getElementById('feedback-reading');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; 
+            
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Excellent! You understand distance perfectly (${score}/${total}).`;
+                document.getElementById('btn-reading').disabled = true;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `You got ${score} out of ${total}. Remember: THIS is near, THAT is far. Try again!`;
+            }
+        }
+
+        // --- QUIZ EVALUATION ---
+        function evaluateQuiz(e) {
+            e.preventDefault();
+            const form = document.getElementById('rules-quiz');
+            const feedback = document.getElementById('feedback-quiz');
+            let score = 0;
+            let total = 3;
+
+            // Reset classes
+            form.querySelectorAll('.opt-label').forEach(label => {
+                label.classList.remove('correct-ans', 'wrong-ans');
+            });
+
+            let allAnswered = true;
+            for(let i = 1; i <= total; i++) {
+                if(!form.querySelector(`input[name="q${i}"]:checked`)) {
+                    allAnswered = false;
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Please answer all questions before submitting.");
+                return;
+            }
+
+            // Evaluate
+            for(let i = 1; i <= total; i++) {
+                const selected = form.querySelector(`input[name="q${i}"]:checked`);
+                const correctOption = form.querySelector(`input[name="q${i}"][value="correct"]`);
+                
+                // Highlight the correct answer always
+                if(correctOption) correctOption.parentElement.classList.add('correct-ans');
+
+                if (selected) {
+                    if (selected.value === "correct") {
+                        score++;
+                    } else {
+                        selected.parentElement.classList.add('wrong-ans');
+                    }
+                }
+            }
+
+            // Provide Feedback
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; 
+
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Perfect score! You are a master of This and That (${score}/${total}).`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `Review your answers. You scored ${score}/${total}.`;
+            }
+
+            // Disable form
+            document.getElementById('btn-quiz').disabled = true;
+            form.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+        }
+    </script>
+</body>
+</html>
