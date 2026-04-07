@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just, Already & Yet | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* RULE CARDS */
+        .rules-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;
+        }
+
+        .rule-card {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid; display: flex; flex-direction: column;
+        }
+        .rule-just { border-color: var(--primary-teal); }
+        .rule-already { border-color: var(--accent-coral); }
+        .rule-yet { border-color: var(--accent-yellow); }
+        
+        .rule-card h2 { margin-top: 0; font-size: 1.8rem; text-align: center; margin-bottom: 10px;}
+        .rule-just h2 { color: var(--primary-dark); }
+        .rule-already h2 { color: #d9534f; }
+        .rule-yet h2 { color: #d68910; }
+        
+        .rule-desc { font-size: 1rem; font-weight: 600; margin-bottom: 10px; color: #555; text-align: center;}
+        .rule-position { background: #f0f8f8; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; text-align: center; margin-bottom: 15px;}
+        .rule-examples { font-size: 0.95rem; line-height: 1.6; color: #444;}
+        .rule-examples strong { color: var(--text-dark); }
+
+        /* READING ASSESSMENT */
+        .assessment-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark); margin-bottom: 40px;
+        }
+        .assessment-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        .assessment-instructions { color: #666; font-style: italic; margin-bottom: 25px; }
+
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
+
+        /* VOCABULARY TOOLTIP */
+        .vocab-word {
+            background-color: rgba(93, 203, 195, 0.2); border-bottom: 2px dashed var(--primary-teal);
+            cursor: help; position: relative; font-weight: bold; color: var(--primary-dark); transition: 0.2s;
+        }
+        .vocab-word:hover { background-color: rgba(93, 203, 195, 0.4); }
+        .vocab-word::after {
+            content: attr(data-spa); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--text-dark); color: white; padding: 6px 12px; border-radius: 6px;
+            font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: normal;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; z-index: 10;
+        }
+        .vocab-word:hover::after { opacity: 1; visibility: visible; bottom: 120%; }
+
+        /* GAP SELECTS */
+        .gap-select {
+            appearance: none; -webkit-appearance: none;
+            background-color: #f0f8f8; border: 2px solid #ddd; padding: 5px 15px 5px 10px;
+            border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: bold;
+            color: var(--primary-dark); cursor: pointer; outline: none; transition: 0.3s; text-align: center; margin: 0 5px;
+        }
+        .gap-select:hover, .gap-select:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-select.correct { border-color: #10b981; background-color: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-select.wrong { border-color: #ef4444; background-color: #fee2e2; color: #991b1b; }
+
+        /* QUIZ SECTION */
+        .quiz-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        
+        .question { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #eee; }
+        .question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .q-text { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            padding: 12px 20px; border: 1px solid #ddd; background: #fafafa; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); }
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); }
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; font-weight: bold; }
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; }
+
+        /* BUTTONS & FEEDBACK */
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 30px auto 0;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-submit:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .warning { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">update</span> Recent Actions</h1>
+        <div class="subtitle">Mastering Just, Already, and Yet</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-grid">
+            <div class="rule-card rule-just">
+                <h2>JUST</h2>
+                <div class="rule-desc">A very short time ago.</div>
+                <div class="rule-position">📍 Position: Between 'have/has' and the Verb (V3).</div>
+                <div class="rule-examples">
+                    • I have <strong>just</strong> finished my coffee.<br>
+                    • She has <strong>just</strong> left the building.<br>
+                    <em>(Usado principalmente en oraciones afirmativas).</em>
+                </div>
+            </div>
+            
+            <div class="rule-card rule-already">
+                <h2>ALREADY</h2>
+                <div class="rule-desc">Sooner than expected.</div>
+                <div class="rule-position">📍 Position: Between 'have/has' and the Verb (V3).</div>
+                <div class="rule-examples">
+                    • Don't wash the dishes. I have <strong>already</strong> washed them.<br>
+                    • The train has <strong>already</strong> arrived.<br>
+                    <em>(Usado en oraciones afirmativas).</em>
+                </div>
+            </div>
+
+            <div class="rule-card rule-yet">
+                <h2>YET</h2>
+                <div class="rule-desc">Until now / Expectation.</div>
+                <div class="rule-position">📍 Position: At the END of the sentence.</div>
+                <div class="rule-examples">
+                    • I haven't finished my homework <strong>yet</strong>.<br>
+                    • Have you called your mother <strong>yet</strong>?<br>
+                    <em>(Usado en oraciones Negativas e Interrogativas).</em>
+                </div>
+            </div>
+        </div>
+
+        <div class="assessment-box">
+            <h2><span class="material-icons-round">menu_book</span> Part 1: Reading & Grammar Context</h2>
+            <div class="assessment-instructions">Hover over the highlighted words for translations. Complete the gaps using Just, Already, or Yet.</div>
+
+            <div class="reading-text" id="reading-container">
+                Organizing the annual Global Tech Summit is <span class="vocab-word" data-spa="abrumador">overwhelming</span>, but we are making good progress. I have 
+                <select class="gap-select" data-answer="already"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select> 
+                secured the main conference hall, which is a huge <span class="vocab-word" data-spa="alivio">relief</span> because venues sell out fast. 
+                <br><br>
+                However, there are still major tasks to <span class="vocab-word" data-spa="lograr / cumplir">accomplish</span>. For instance, we haven't printed the official schedules 
+                <select class="gap-select" data-answer="yet"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select>. 
+                The design team sent the final draft to my email two minutes ago! I have 
+                <select class="gap-select" data-answer="just"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select> 
+                opened the file, and it looks <span class="vocab-word" data-spa="asombroso">stunning</span>. 
+                <br><br>
+                I am a bit worried about the <span class="vocab-word" data-spa="orador principal">keynote speaker</span>. She was supposed to send us her presentation yesterday, but we haven't received it 
+                <select class="gap-select" data-answer="yet"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select>. 
+                On the bright side, the catering company called me an hour ago. They have 
+                <select class="gap-select" data-answer="already"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select> 
+                prepared the vegan menu options we requested last month. 
+                <br><br>
+                Have you bought your tickets 
+                <select class="gap-select" data-answer="yet"><option value="">---</option><option value="just">just</option><option value="already">already</option><option value="yet">yet</option></select>? 
+                You should hurry up before they are completely sold out!
+            </div>
+
+            <button class="btn-submit" id="btn-reading" onclick="evaluateReading()">Check Reading</button>
+            <div id="feedback-reading" class="feedback-box"></div>
+        </div>
+
+        <div class="quiz-box">
+            <h2><span class="material-icons-round">rule</span> Part 2: Grammar Rule Check</h2>
+            <p style="color: #666; margin-bottom: 20px;">Let's verify if you understand the structural rules behind these words.</p>
+            
+            <form id="rules-quiz" onsubmit="evaluateQuiz(event)">
+                <div class="question">
+                    <p class="q-text">1. Where do we typically place the word <strong>YET</strong> in a sentence?</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q1" value="wrong"> Between the auxiliary 'have' and the past participle.</label>
+                        <label class="opt-label"><input type="radio" name="q1" value="correct"> At the very end of the sentence.</label>
+                        <label class="opt-label"><input type="radio" name="q1" value="wrong"> At the beginning of the sentence.</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="q-text">2. Which word do we use to express that an action happened <strong>sooner than expected</strong>?</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q2" value="wrong"> Just</label>
+                        <label class="opt-label"><input type="radio" name="q2" value="correct"> Already</label>
+                        <label class="opt-label"><input type="radio" name="q2" value="wrong"> Yet</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p class="q-text">3. Identify the <strong>incorrect</strong> sentence:</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q3" value="wrong"> I have just eaten lunch.</label>
+                        <label class="opt-label"><input type="radio" name="q3" value="wrong"> Have you finished the report yet?</label>
+                        <label class="opt-label"><input type="radio" name="q3" value="correct"> I haven't already seen that movie.</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btn-quiz">Submit Quiz</button>
+                <div id="feedback-quiz" class="feedback-box"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // --- READING EVALUATION ---
+        function evaluateReading() {
+            const selects = document.querySelectorAll('.gap-select');
+            let score = 0;
+            let total = selects.length;
+            let allAnswered = true;
+
+            selects.forEach(select => {
+                if (select.value === "") allAnswered = false;
+            });
+
+            if (!allAnswered) {
+                alert("Please fill in all the blanks in the reading first!");
+                return;
+            }
+
+            selects.forEach(select => {
+                const correctAnswer = select.getAttribute('data-answer');
+                select.classList.remove('correct', 'wrong');
+
+                if (select.value === correctAnswer) {
+                    select.classList.add('correct');
+                    score++;
+                } else {
+                    select.classList.add('wrong');
+                }
+            });
+
+            const feedback = document.getElementById('feedback-reading');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; 
+            
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Perfect! You found all the correct words (${score}/${total}).`;
+                document.getElementById('btn-reading').disabled = true;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `You got ${score} out of ${total}. Fix the red boxes and try again!`;
+            }
+        }
+
+        // --- QUIZ EVALUATION ---
+        function evaluateQuiz(e) {
+            e.preventDefault();
+            const form = document.getElementById('rules-quiz');
+            const feedback = document.getElementById('feedback-quiz');
+            let score = 0;
+            let total = 3;
+
+            // Reset classes
+            form.querySelectorAll('.opt-label').forEach(label => {
+                label.classList.remove('correct-ans', 'wrong-ans');
+            });
+
+            // Evaluate
+            for(let i = 1; i <= total; i++) {
+                const selected = form.querySelector(`input[name="q${i}"]:checked`);
+                const correctOption = form.querySelector(`input[name="q${i}"][value="correct"]`);
+                
+                // Highlight the correct answer always
+                if(correctOption) correctOption.parentElement.classList.add('correct-ans');
+
+                if (selected) {
+                    if (selected.value === "correct") {
+                        score++;
+                    } else {
+                        selected.parentElement.classList.add('wrong-ans');
+                    }
+                }
+            }
+
+            // Provide Feedback
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box'; 
+
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Excellent! You master the grammar rules (${score}/${total}).`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `Review the rules at the top. You scored ${score}/${total}.`;
+            }
+
+            // Disable form
+            document.getElementById('btn-quiz').disabled = true;
+            form.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+        }
+    </script>
+</body>
+</html>
