@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Been vs Gone | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, #e0f2f1, var(--bg-light));
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* RULES SECTION */
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        @media (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+
+        .rule-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            text-align: center; border-top: 6px solid; position: relative; overflow: hidden;
+        }
+        .rule-been { border-color: var(--primary-teal); }
+        .rule-gone { border-color: var(--accent-coral); }
+        
+        .flight-path { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 20px 0; color: #aaa;}
+        .flight-icon { font-size: 2.5rem; }
+        .rule-been .flight-icon { color: var(--primary-teal); }
+        .rule-gone .flight-icon { color: var(--accent-coral); }
+
+        .rule-title { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+        .rule-been .rule-title { color: var(--primary-dark); }
+        .rule-gone .rule-title { color: #d9534f; }
+        
+        .rule-desc { font-size: 1.1rem; font-weight: 600; color: #555; margin-bottom: 15px;}
+        .rule-examples { text-align: left; background: #f0f8f8; padding: 15px; border-radius: 10px; font-size: 0.95rem; line-height: 1.8;}
+        .rule-gone .rule-examples { background: #fff0f0; }
+
+        /* INTERACTIVE GAME: TRAVEL AGENT */
+        .game-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark); margin-bottom: 40px;
+        }
+        
+        .game-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 25px;}
+        .game-header h2 { margin: 0; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;}
+        .score-badge { background: var(--primary-teal); color: white; padding: 8px 15px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;}
+
+        .scenario-card {
+            background: #fdfdfd; border: 2px dashed #ccc; padding: 30px; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.2rem; line-height: 1.8; text-align: center;
+            margin-bottom: 30px; position: relative; transition: 0.3s;
+        }
+        .blank-space { display: inline-block; width: 80px; border-bottom: 3px solid var(--text-dark); margin: 0 10px; }
+
+        .action-buttons { display: flex; gap: 20px; justify-content: center; }
+        .btn-choice {
+            flex: 1; max-width: 200px; padding: 15px; border-radius: 12px; font-size: 1.3rem; font-weight: bold;
+            cursor: pointer; transition: 0.2s; border: 3px solid transparent; font-family: 'Poppins', sans-serif;
+        }
+        .btn-been { background: #e0f2f1; color: var(--primary-dark); border-color: var(--primary-teal); }
+        .btn-been:hover { background: var(--primary-teal); color: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(93,203,195,0.3);}
+        
+        .btn-gone { background: #ffe4e1; color: #c0392b; border-color: var(--accent-coral); }
+        .btn-gone:hover { background: var(--accent-coral); color: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,154,139,0.3);}
+
+        .feedback-text { text-align: center; font-size: 1.2rem; font-weight: bold; margin-top: 20px; min-height: 30px;}
+
+        /* PASSPORT SENTENCE BUILDER */
+        .writing-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .writing-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .passport-prompt {
+            background: #fff9e6; border: 1px solid #f5b041; padding: 20px; border-radius: 12px;
+            font-size: 1.1rem; color: #926c15; margin-bottom: 20px; text-align: center; font-weight: 600;
+        }
+        .random-country-badge { background: white; padding: 5px 15px; border-radius: 8px; border: 2px solid #f5b041; color: #d68910; font-size: 1.3rem; margin: 10px; display: inline-block;}
+
+        .custom-input {
+            width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; box-sizing: border-box; transition: 0.3s;
+        }
+        .custom-input:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        .btn-refresh {
+            background: var(--text-dark); color: white; border: none; padding: 12px 25px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 15px;
+            display: inline-flex; align-items: center; gap: 8px; font-family: 'Poppins', sans-serif;
+        }
+        .btn-refresh:hover { background: #444; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">flight_takeoff</span> Travel Experiences</h1>
+        <div class="subtitle">Distinguish between "Been" and "Gone"</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-grid">
+            <div class="rule-card rule-been">
+                <div class="rule-title">BEEN (to)</div>
+                <div class="rule-desc">Completed Trip (Return)</div>
+                
+                <div class="flight-path">
+                    <span class="material-icons-round flight-icon">flight_takeoff</span>
+                    <span style="font-weight: bold;">➔</span>
+                    <span class="material-icons-round" style="font-size: 2rem;">place</span>
+                    <span style="font-weight: bold;">➔</span>
+                    <span class="material-icons-round flight-icon" style="transform: scaleX(-1);">flight_land</span>
+                </div>
+
+                <div class="rule-examples">
+                    Use <strong>been</strong> when someone went to a place and has already returned. It's a life experience.<br><br>
+                    • "I have <strong>been</strong> to Italy twice." <em>(I am not in Italy now).</em><br>
+                    • "Has she ever <strong>been</strong> to Colegio Fielding?"
+                </div>
+            </div>
+            
+            <div class="rule-card rule-gone">
+                <div class="rule-title">GONE (to)</div>
+                <div class="rule-desc">One-Way Trip (Still there)</div>
+                
+                <div class="flight-path">
+                    <span class="material-icons-round flight-icon">flight_takeoff</span>
+                    <span style="font-weight: bold;">➔ ➔ ➔</span>
+                    <span class="material-icons-round" style="font-size: 2rem;">place</span>
+                </div>
+
+                <div class="rule-examples">
+                    Use <strong>gone</strong> when someone went to a place and has NOT returned yet. They are still there.<br><br>
+                    • "Where is Mark? He has <strong>gone</strong> to Spain." <em>(He is in Spain right now).</em><br>
+                    • "My parents have <strong>gone</strong> to the supermarket."
+                </div>
+            </div>
+        </div>
+
+        <div class="game-box">
+            <div class="game-header">
+                <h2><span class="material-icons-round">support_agent</span> The Travel Agent Quiz</h2>
+                <div class="score-badge">Score: <span id="score">0</span>/10</div>
+            </div>
+            
+            <p style="color: #666; text-align: center; margin-bottom: 25px;">Read the scenario carefully. Did they return, or are they still there?</p>
+
+            <div class="scenario-card" id="scenario-display">
+                </div>
+
+            <div class="action-buttons">
+                <button class="btn-choice btn-been" onclick="checkAnswer('been')">BEEN</button>
+                <button class="btn-choice btn-gone" onclick="checkAnswer('gone')">GONE</button>
+            </div>
+
+            <div class="feedback-text" id="quiz-feedback"></div>
+        </div>
+
+        <div class="writing-box">
+            <h2><span class="material-icons-round">edit_document</span> Passport Sentence Builder</h2>
+            
+            <div class="passport-prompt">
+                Your destination is: <br>
+                <span class="random-country-badge" id="random-country-badge">Loading...</span><br>
+                Write ONE sentence using <strong>"have/has been"</strong> and ONE sentence using <strong>"have/has gone"</strong> for this country.
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; color: var(--primary-dark);">1. Experience (Been):</label>
+                <input type="text" class="custom-input" placeholder="e.g., I have been to [Country] three times...">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; color: #d9534f;">2. Current Location (Gone):</label>
+                <input type="text" class="custom-input" placeholder="e.g., My sister is not here, she has gone to [Country]...">
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-refresh" onclick="generateNewCountry()">
+                    <span class="material-icons-round">autorenew</span> Give me another country
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Array of random countries to make exercises dynamic
+        const countries = ["Japan", "Australia", "Brazil", "Canada", "Egypt", "South Korea", "Bolivia", "France", "Morocco", "Italy", "Greece", "Mexico", "Thailand", "Germany", "Peru"];
+        
+        // Scenario Templates
+        // Answer is either 'been' or 'gone'
+        const scenarioTemplates = [
+            { text: "Where is David? Oh, he took a flight yesterday. He has <span class='blank-space'></span> to [COUNTRY].", answer: "gone" },
+            { text: "I can highly recommend the food in [COUNTRY]. I have <span class='blank-space'></span> there several times.", answer: "been" },
+            { text: "Teacher Ivan is not at Colegio Fielding today. He has <span class='blank-space'></span> to [COUNTRY] for a conference.", answer: "gone" },
+            { text: "We don't need to visit [COUNTRY] on our next vacation. We have already <span class='blank-space'></span> there.", answer: "been" },
+            { text: "Have you ever <span class='blank-space'></span> to [COUNTRY]? The architecture is amazing.", answer: "been" },
+            { text: "My parents' house is empty. They have <span class='blank-space'></span> to [COUNTRY] for the summer and will return in August.", answer: "gone" },
+            { text: "She knows a lot about [COUNTRY]'s culture because she has <span class='blank-space'></span> there before.", answer: "been" },
+            { text: "I tried calling Sarah, but her phone is off. She has probably <span class='blank-space'></span> to [COUNTRY] and is still on the plane.", answer: "gone" },
+            { text: "I have <span class='blank-space'></span> to [COUNTRY] once, but I'd love to go back someday.", answer: "been" },
+            { text: "The office is very quiet. Half the team has <span class='blank-space'></span> to [COUNTRY] for the international summit.", answer: "gone" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let activeScenario = null;
+
+        // Shuffle function
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        let gameScenarios = [];
+
+        function initGame() {
+            // Prepare 10 questions with random countries
+            gameScenarios = shuffle([...scenarioTemplates]).slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('score').innerText = score;
+            loadScenario();
+            generateNewCountry(); // Initialize writing section
+        }
+
+        function loadScenario() {
+            if (currentQuestionIndex >= gameScenarios.length) {
+                document.getElementById('scenario-display').innerHTML = `<strong>✈️ Flight Complete!</strong><br>You scored ${score} out of 10.`;
+                document.querySelector('.action-buttons').style.display = 'none';
+                document.getElementById('quiz-feedback').innerText = "Excellent work, Travel Agent!";
+                return;
+            }
+
+            activeScenario = gameScenarios[currentQuestionIndex];
+            
+            // Pick a random country
+            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            
+            // Replace [COUNTRY] tag with the random country
+            const scenarioText = activeScenario.text.replace("[COUNTRY]", `<strong>${randomCountry}</strong>`);
+            
+            const display = document.getElementById('scenario-display');
+            display.style.animation = 'none';
+            display.offsetHeight; /* trigger reflow */
+            display.style.animation = 'fadeIn 0.5s ease';
+            display.innerHTML = scenarioText;
+            
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+
+        function checkAnswer(playerChoice) {
+            const feedback = document.getElementById('quiz-feedback');
+            const display = document.getElementById('scenario-display');
+            
+            if (playerChoice === activeScenario.answer) {
+                // Correct
+                score++;
+                document.getElementById('score').innerText = score;
+                feedback.innerHTML = `<span style="color: #10b981;">Correct! The context implies they ${playerChoice === 'been' ? 'returned' : 'are still there'}.</span>`;
+                
+                // Fill the blank temporarily
+                display.innerHTML = display.innerHTML.replace("<span class=\"blank-space\"></span>", `<span style="color: ${playerChoice==='been'?'var(--primary-teal)':'var(--accent-coral)'}; font-weight:bold; text-transform:uppercase;">${playerChoice}</span>`);
+                
+                // Move to next
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadScenario();
+                }, 1500);
+
+            } else {
+                // Wrong
+                display.style.animation = 'none';
+                display.offsetHeight; /* trigger reflow */
+                display.style.animation = 'shake 0.4s';
+                feedback.innerHTML = `<span style="color: #ef4444;">Oops! Read the context again. Did they return?</span>`;
+            }
+        }
+
+        // WRITING SECTION LOGIC
+        function generateNewCountry() {
+            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            document.getElementById('random-country-badge').innerText = `📍 ${randomCountry}`;
+            
+            // Clear inputs for the student
+            const inputs = document.querySelectorAll('.custom-input');
+            inputs.forEach(input => input.value = "");
+        }
+
+        // Start everything on load
+        window.onload = initGame;
+    </script>
+</body>
+</html>
