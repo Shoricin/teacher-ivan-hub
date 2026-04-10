@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professions & Yes/No Questions | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* GRAMMAR RULES */
+        .rules-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 40px;
+        }
+        .rules-box h2 { margin-top: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-dark);}
+        
+        .grammar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        @media (max-width: 600px) { .grammar-grid { grid-template-columns: 1fr; } }
+        
+        .g-col { background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
+        .g-col h3 { margin-top: 0; color: var(--primary-dark); font-size: 1.1rem; border-bottom: 2px solid #ddd; padding-bottom: 8px;}
+        .g-list { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; line-height: 1.8; color: #444;}
+        .g-list li { margin-bottom: 5px; }
+        .hl-verb { color: var(--accent-coral); font-weight: bold; }
+
+        /* GAME BOARD */
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .score-badge { background: var(--primary-teal); color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;}
+        
+        .card-deck {
+            background: white; padding: 40px 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal); text-align: center; position: relative; min-height: 350px;
+        }
+
+        .emoji-display {
+            font-size: 6rem; margin: 20px 0; display: inline-block;
+            background: #f0f8f8; width: 150px; height: 150px; line-height: 150px; border-radius: 50%;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .question-text { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 30px; }
+
+        /* INTERFACES */
+        .tf-interface, .spell-interface { display: none; }
+        .tf-interface.active, .spell-interface.active { display: block; animation: fadeIn 0.4s ease; }
+
+        .btn-tf {
+            background: white; border: 2px solid #ddd; padding: 15px 30px; border-radius: 12px;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif;
+            width: 45%; margin: 0 2%; color: #555;
+        }
+        @media (max-width: 500px) { .btn-tf { width: 100%; margin: 10px 0; } }
+        
+        .btn-tf:hover { border-color: var(--primary-teal); color: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(93,203,195,0.2);}
+
+        .spell-input {
+            width: 80%; max-width: 300px; padding: 15px; border: 2px solid #ddd; border-radius: 12px;
+            font-size: 1.2rem; font-family: 'Poppins', sans-serif; text-align: center; outline: none; transition: 0.3s;
+            text-transform: lowercase;
+        }
+        .spell-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        .btn-action {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 30px; border-radius: 50px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;
+            margin-top: 20px; box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-action:hover { background: #ff7e6b; transform: translateY(-2px); }
+
+        /* FEEDBACK OVERLAY */
+        .feedback-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--radius);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.95); z-index: 10; animation: fadeIn 0.3s ease;
+        }
+        .fb-icon { font-size: 5rem; margin-bottom: 15px; }
+        .fb-msg { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; text-align: center; padding: 0 20px;}
+        
+        .fb-correct { color: #10b981; }
+        .fb-wrong { color: #ef4444; }
+
+        /* RESULTS SCREEN */
+        #results-screen { display: none; text-align: center; }
+        .result-box { background: white; padding: 50px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--primary-teal);}
+        .final-score { font-size: 4rem; font-weight: 700; color: var(--primary-teal); margin: 20px 0;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">badge</span> Are you a student?</h1>
+        <div class="subtitle">Professions & Short Answers (Yes / No)</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-box">
+            <h2><span class="material-icons-round">rule</span> Grammar Rules: Short Answers</h2>
+            <p style="color: #666; font-size: 0.95rem; margin-top: -10px;">In English, we don't just say "Yes" or "No". We use short answers with the verb <strong>To Be</strong>.</p>
+            
+            <div class="grammar-grid">
+                <div class="g-col">
+                    <h3>✅ Affirmative (Yes)</h3>
+                    <ul class="g-list">
+                        <li><span class="hl-verb">Are</span> you a student? ➔ Yes, I <span class="hl-verb">am</span>.</li>
+                        <li><span class="hl-verb">Is</span> he a doctor? ➔ Yes, he <span class="hl-verb">is</span>.</li>
+                        <li><span class="hl-verb">Are</span> they teachers? ➔ Yes, they <span class="hl-verb">are</span>.</li>
+                    </ul>
+                </div>
+                <div class="g-col">
+                    <h3>❌ Negative (No)</h3>
+                    <ul class="g-list">
+                        <li><span class="hl-verb">Are</span> you a pilot? ➔ No, I'<span class="hl-verb">m not</span>.</li>
+                        <li><span class="hl-verb">Is</span> she a nurse? ➔ No, she <span class="hl-verb">isn't</span>.</li>
+                        <li><span class="hl-verb">Are</span> we singers? ➔ No, we <span class="hl-verb">aren't</span>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-screen">
+            <div class="game-header">
+                <div style="font-weight: bold; color: #666; font-size: 1.1rem;">Card: <span id="card-counter">1</span>/12</div>
+                <div class="score-badge">Score: <span id="score">0</span></div>
+            </div>
+
+            <div class="card-deck">
+                
+                <div class="emoji-display" id="emoji-display">👨‍🎓</div>
+                <div class="question-text" id="question-text">Are you a student?</div>
+
+                <div class="tf-interface" id="ui-tf">
+                    <button class="btn-tf" id="btn-yes" onclick="checkTF(true)">Yes, I am.</button>
+                    <button class="btn-tf" id="btn-no" onclick="checkTF(false)">No, I'm not.</button>
+                </div>
+
+                <div class="spell-interface" id="ui-spell">
+                    <input type="text" id="spell-input" class="spell-input" placeholder="Type the profession..." autocomplete="off" onkeypress="if(event.key==='Enter') checkSpell()">
+                    <br>
+                    <button class="btn-action" onclick="checkSpell()">Check Spelling</button>
+                </div>
+
+                <div class="feedback-overlay" id="feedback-overlay">
+                    <div class="material-icons-round fb-icon" id="fb-icon">check_circle</div>
+                    <div class="fb-msg" id="fb-msg">Correct!</div>
+                    <button class="btn-action" onclick="nextCard()">Next Card ➔</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="results-screen">
+            <div class="result-box">
+                <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-coral);">school</div>
+                <h2 style="color: var(--text-dark); margin-bottom: 0;">Deck Completed!</h2>
+                <div class="final-score" id="final-score">0/12</div>
+                <p id="final-msg" style="font-size: 1.2rem; color: #555;"></p>
+                <button class="btn-action" style="background: var(--primary-teal);" onclick="location.reload()">Play Again <span class="material-icons-round" style="vertical-align: middle;">refresh</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Database of questions (Mixing Yes/No Grammar and Spelling)
+        const deck = [
+            { type: "tf", emoji: "👨‍🏫", question: "Is he a teacher?", isYes: true, btnYes: "Yes, he is.", btnNo: "No, he isn't." },
+            { type: "tf", emoji: "👩‍⚕️", question: "Is she a chef?", isYes: false, btnYes: "Yes, she is.", btnNo: "No, she isn't.", correction: "She is a doctor." },
+            { type: "spell", emoji: "👨‍🍳", question: "Are you a _ _ _ _?", answer: "chef" },
+            { type: "tf", emoji: "👮‍♀️", question: "Are you a police officer?", isYes: true, btnYes: "Yes, I am.", btnNo: "No, I'm not." },
+            { type: "tf", emoji: "👨‍🚒", question: "Is he a singer?", isYes: false, btnYes: "Yes, he is.", btnNo: "No, he isn't.", correction: "He is a firefighter." },
+            { type: "spell", emoji: "👩‍✈️", question: "Is she a _ _ _ _ _?", answer: "pilot" },
+            { type: "tf", emoji: "👩‍🔬", question: "Are they scientists?", isYes: true, btnYes: "Yes, they are.", btnNo: "No, they aren't." },
+            { type: "tf", emoji: "👨‍🔧", question: "Is he a doctor?", isYes: false, btnYes: "Yes, he is.", btnNo: "No, he isn't.", correction: "He is a mechanic." },
+            { type: "spell", emoji: "👩‍🎨", question: "Is she an _ _ _ _ _ _?", answer: "artist" },
+            { type: "tf", emoji: "👨‍🎤", question: "Are you singers?", isYes: true, btnYes: "Yes, we are.", btnNo: "No, we aren't." },
+            { type: "tf", emoji: "👩‍💻", question: "Is she an engineer?", isYes: false, btnYes: "Yes, she is.", btnNo: "No, she isn't.", correction: "She is a programmer." },
+            { type: "spell", emoji: "👨‍🎓", question: "Are you a _ _ _ _ _ _ _?", answer: "student" }
+        ];
+
+        let currentCard = 0;
+        let score = 0;
+
+        function loadCard() {
+            if (currentCard >= deck.length) {
+                showResults();
+                return;
+            }
+
+            const cardData = deck[currentCard];
+            document.getElementById('card-counter').innerText = currentCard + 1;
+            document.getElementById('emoji-display').innerText = cardData.emoji;
+            document.getElementById('question-text').innerText = cardData.question;
+
+            const uiTf = document.getElementById('ui-tf');
+            const uiSpell = document.getElementById('ui-spell');
+            
+            uiTf.classList.remove('active');
+            uiSpell.classList.remove('active');
+
+            if (cardData.type === "tf") {
+                uiTf.classList.add('active');
+                document.getElementById('btn-yes').innerText = cardData.btnYes;
+                document.getElementById('btn-no').innerText = cardData.btnNo;
+            } else {
+                uiSpell.classList.add('active');
+                const input = document.getElementById('spell-input');
+                input.value = "";
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+
+        function checkTF(userAnswerIsYes) {
+            const cardData = deck[currentCard];
+            const isCorrect = (userAnswerIsYes === cardData.isYes);
+            let msg = "";
+
+            if (isCorrect) {
+                score++;
+                msg = "Correct!";
+            } else {
+                msg = `Oops! The correct answer is: <br><span style="color:#333; font-size:1.2rem;">${cardData.isYes ? cardData.btnYes : cardData.btnNo}</span>`;
+                if(cardData.correction) {
+                    msg += `<br><span style="color:#666; font-size:1rem;">(${cardData.correction})</span>`;
+                }
+            }
+            updateScore();
+            showFeedback(isCorrect, msg);
+        }
+
+        function checkSpell() {
+            const input = document.getElementById('spell-input');
+            const userAnswer = input.value.trim().toLowerCase();
+            const cardData = deck[currentCard];
+            
+            if(userAnswer === "") return;
+
+            const isCorrect = (userAnswer === cardData.answer.toLowerCase());
+            let msg = "";
+
+            if (isCorrect) {
+                score++;
+                msg = "Perfect spelling!";
+            } else {
+                msg = `Watch your spelling! <br>The correct word is: <span style="color:#333; font-size:1.3rem;">${cardData.answer.toUpperCase()}</span>`;
+            }
+            updateScore();
+            showFeedback(isCorrect, msg);
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = score;
+        }
+
+        function showFeedback(isCorrect, htmlMessage) {
+            const overlay = document.getElementById('feedback-overlay');
+            const icon = document.getElementById('fb-icon');
+            const msgBox = document.getElementById('fb-msg');
+
+            overlay.style.display = "flex";
+            
+            if (isCorrect) {
+                icon.innerText = "check_circle";
+                icon.className = "material-icons-round fb-icon fb-correct";
+                msgBox.className = "fb-msg fb-correct";
+            } else {
+                icon.innerText = "cancel";
+                icon.className = "material-icons-round fb-icon fb-wrong";
+                msgBox.className = "fb-msg fb-wrong";
+            }
+            
+            msgBox.innerHTML = htmlMessage;
+        }
+
+        function nextCard() {
+            document.getElementById('feedback-overlay').style.display = "none";
+            currentCard++;
+            loadCard();
+        }
+
+        function showResults() {
+            document.getElementById('game-screen').style.display = "none";
+            document.getElementById('results-screen').style.display = "block";
+            
+            document.getElementById('final-score').innerText = `${score}/${deck.length}`;
+            
+            const msg = document.getElementById('final-msg');
+            if (score === deck.length) {
+                msg.innerText = "Outstanding! You know your professions and short answers perfectly.";
+            } else if (score >= 8) {
+                msg.innerText = "Great job! Just a few minor mistakes to review.";
+            } else {
+                msg.innerText = "Keep practicing! Review the Grammar Rules at the top of the page.";
+            }
+        }
+
+        // Initialize Game
+        window.onload = loadCard;
+
+    </script>
+</body>
+</html>
