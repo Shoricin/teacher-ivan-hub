@@ -88,6 +88,11 @@
         .song-info { margin-top: 15px; text-align: center; }
         .song-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
         .song-artist { font-size: 1rem; color: #6b7280; margin: 5px 0 0 0; }
+        
+        .warning-msg {
+            font-size: 0.85rem; color: #dc2626; background: #fee2e2; padding: 8px; 
+            border-radius: 8px; margin-top: 10px; font-weight: 600;
+        }
 
         /* LYRICS SECTION */
         .lyrics-section {
@@ -152,12 +157,16 @@
                 <div class="song-info">
                     <h2 class="song-title" id="display-title">Cargando...</h2>
                     <p class="song-artist" id="display-artist">Cargando...</p>
+                    <div class="warning-msg">
+                        <span class="material-icons-round" style="font-size: 1rem; vertical-align: middle;">info</span>
+                        Si el video dice "No disponible", haz clic en <u>Ver en YouTube</u> para escucharlo en otra pestaña.
+                    </div>
                 </div>
             </div>
 
             <div class="lyrics-section">
                 <div class="instructions">
-                    <strong>🎧 Instrucciones:</strong> Reproduce el video y escucha atentamente. Escribe las palabras que faltan en las casillas. ¡Presta atención a la ortografía!
+                    <strong>🎧 Instrucciones:</strong> Reproduce el video (oficial) y escucha atentamente. Escribe las palabras que faltan en las casillas. ¡Presta atención a la ortografía!
                 </div>
                 
                 <div class="lyrics-content" id="lyrics-container">
@@ -172,12 +181,12 @@
     </div>
 
     <script>
-        // BASE DE DATOS: 10 Canciones Populares (ENLACES VERIFICADOS PARA EMBED)
+        // BASE DE DATOS: 10 Canciones (VIDEOS OFICIALES)
         const songDatabase = [
             {
                 title: "Vivir Mi Vida",
                 artist: "Marc Anthony",
-                youtubeId: "MNCiaGu8flE", 
+                youtubeId: "YXnjy5YlDwk", // Oficial
                 lyrics: `Voy a [reír], voy a bailar<br>
                         Vivir mi [vida], la la la la<br>
                         Voy a reír, voy a gozar<br>
@@ -192,7 +201,7 @@
             {
                 title: "Color Esperanza",
                 artist: "Diego Torres",
-                youtubeId: "s6SRUZofFV4",
+                youtubeId: "zOQIoI0xQqk", // Oficial
                 lyrics: `Saber que se [puede], querer que se pueda<br>
                         Quitarse los miedos, sacarlos [afuera]<br>
                         Pintarse la cara color [esperanza]<br>
@@ -205,7 +214,7 @@
             {
                 title: "Bailando",
                 artist: "Enrique Iglesias",
-                youtubeId: "5Q7PIOEmB9w",
+                youtubeId: "NUsoVlDFqZg", // Oficial
                 lyrics: `Yo te [miro], se me corta la respiración<br>
                         Cuando tú me miras se me sube el [corazón]<br>
                         Y en un silencio tu mirada dice mil [palabras]<br>
@@ -218,7 +227,7 @@
             {
                 title: "Limón y Sal",
                 artist: "Julieta Venegas",
-                youtubeId: "Bugx2eim5hk",
+                youtubeId: "tIpzfs5tBJU", // Oficial
                 lyrics: `Tengo que [confesar] que a veces<br>
                         No me gusta tu forma de ser<br>
                         Luego te me [desapareces]<br>
@@ -232,7 +241,7 @@
             {
                 title: "Waka Waka (Esto es África)",
                 artist: "Shakira",
-                youtubeId: "fSNxuAxjBCg",
+                youtubeId: "DZCGy1U0_aM", // Oficial
                 lyrics: `Llegó el momento, caen las [murallas]<br>
                         Va a comenzar la única justa de las [batallas]<br>
                         No duele el golpe, no existe el [miedo]<br>
@@ -247,7 +256,7 @@
             {
                 title: "Rayando el Sol",
                 artist: "Maná",
-                youtubeId: "bE3ABNHDnAc",
+                youtubeId: "EN_lK1E5w70", // Oficial
                 lyrics: `Rayando el [sol], desesperación<br>
                         Es más fácil llegar al sol que a tu [corazón]<br>
                         Me muero por [ti], viviendo sin ti<br>
@@ -259,7 +268,7 @@
             {
                 title: "La Bamba",
                 artist: "Los Lobos",
-                youtubeId: "-BnmuJ1bsqo",
+                youtubeId: "nLAWPrCUQQ0", // Oficial
                 lyrics: `Para bailar la [bamba]<br>
                         Para bailar la bamba se [necesita]<br>
                         Una poca de [gracia]<br>
@@ -273,7 +282,7 @@
             {
                 title: "Me Gustas Tú",
                 artist: "Manu Chao",
-                youtubeId: "AmoBIMjRgKQ",
+                youtubeId: "rs6Y4kZ8qtw", // Oficial
                 lyrics: `Me gustan los [aviones], me gustas tú<br>
                         Me gusta viajar, me [gustas] tú<br>
                         Me gusta la mañana, me gustas [tú]<br>
@@ -288,7 +297,7 @@
             {
                 title: "La Camisa Negra",
                 artist: "Juanes",
-                youtubeId: "GmJKivKSy6g",
+                youtubeId: "kRt2sRyup6A", // Oficial
                 lyrics: `Tengo la [camisa] negra<br>
                         Hoy mi [amor] está de luto<br>
                         Hoy tengo en el alma una [pena]<br>
@@ -303,7 +312,7 @@
             {
                 title: "Despacito",
                 artist: "Luis Fonsi",
-                youtubeId: "TsjU_DzcMZE",
+                youtubeId: "kJQP7kiw5Fk", // Oficial
                 lyrics: `Pasito a pasito, suave suavecito<br>
                         Nos vamos pegando poquito a [poquito]<br>
                         Cuando tú me besas con esa [destreza]<br>
@@ -350,7 +359,6 @@
 
             // Procesar Letra (Convertir [palabra] en inputs)
             const parsedLyrics = song.lyrics.replace(/\[(.*?)\]/g, (match, p1) => {
-                // Removemos acentos para la validación (opcional, pero ayuda a los estudiantes)
                 const cleanAns = p1.toLowerCase();
                 return `<input type="text" class="gap-input" data-ans="${cleanAns}">`;
             });
