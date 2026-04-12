@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Song Analyzer | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+            color: white;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: white; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #d1d8e0; margin-top: 5px; font-weight: 300; }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 1200px; margin: 30px auto 50px; width: 95%; }
+
+        /* SONG SELECTOR */
+        .song-selector {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 20px;
+            scrollbar-width: thin; scrollbar-color: var(--accent-coral) #eee;
+        }
+        .song-selector::-webkit-scrollbar { height: 8px; }
+        .song-selector::-webkit-scrollbar-thumb { background-color: var(--accent-coral); border-radius: 10px; }
+        
+        .song-btn {
+            background: white; border: 2px solid transparent; padding: 10px 20px; border-radius: 50px;
+            font-family: 'Poppins', sans-serif; font-weight: 600; color: #666; cursor: pointer;
+            white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px;
+        }
+        .song-btn:hover { border-color: var(--accent-coral); }
+        .song-btn.active {
+            background: var(--accent-coral); color: white; transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 154, 139, 0.4); border-color: var(--accent-coral);
+        }
+
+        /* TWO COLUMN LAYOUT */
+        .analyzer-layout {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .analyzer-layout { grid-template-columns: 1fr; }
+            .video-section { position: static !important; }
+        }
+
+        /* VIDEO SECTION (STICKY) */
+        .video-section {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--primary-teal); position: sticky; top: 20px;
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        .song-info { margin-top: 15px; text-align: center; }
+        .song-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+        .song-artist { font-size: 1rem; color: #777; margin: 5px 0 0 0; }
+
+        /* LYRICS SECTION */
+        .lyrics-section {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--text-dark);
+        }
+        .instructions {
+            background: #fff0f0; padding: 15px; border-left: 4px solid var(--accent-coral);
+            border-radius: 8px; font-size: 0.95rem; color: #444; margin-bottom: 25px;
+        }
+
+        .lyrics-content {
+            font-family: 'Merriweather', serif; font-size: 1.2rem; line-height: 2.5; color: #333;
+        }
+
+        .gap-input {
+            width: 140px; padding: 5px 10px; border: 2px solid #ccc; border-radius: 6px;
+            font-family: 'Poppins', sans-serif; font-weight: bold; text-align: center;
+            outline: none; transition: 0.3s; font-size: 1rem; margin: 0 5px; background: #fafafa;
+            color: var(--primary-dark);
+        }
+        .gap-input:focus { border-color: var(--primary-teal); background: white; box-shadow: 0 0 0 3px rgba(93,203,195,0.2);}
+        
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+        
+        .correction-text { font-size: 0.8rem; color: #ef4444; font-weight: bold; display: inline-block; position: absolute; transform: translateY(20px); margin-left: -140px;}
+
+        /* BUTTONS & FEEDBACK */
+        .btn-check {
+            background: var(--primary-teal); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-check:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(93,203,195,0.3);}
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">graphic_eq</span> Advanced Song Analyzer</h1>
+        <div class="subtitle">B2-C1 Vocabulary, Idioms & Metaphors</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="song-selector" id="song-tabs">
+            </div>
+
+        <div class="analyzer-layout">
+            
+            <div class="video-section">
+                <div class="video-wrapper">
+                    <iframe id="yt-player" src="" allowfullscreen></iframe>
+                </div>
+                <div class="song-info">
+                    <h2 class="song-title" id="display-title">Loading...</h2>
+                    <p class="song-artist" id="display-artist">Loading...</p>
+                </div>
+            </div>
+
+            <div class="lyrics-section">
+                <div class="instructions">
+                    <strong>🎧 Hard Mode:</strong> These songs feature advanced spelling, complex metaphors, and fast pronunciation. Listen closely and type the missing words perfectly!
+                </div>
+                
+                <div class="lyrics-content" id="lyrics-container">
+                    </div>
+
+                <button class="btn-check" id="check-btn" onclick="checkAnswers()">Verify Advanced Lyrics <span class="material-icons-round">fact_check</span></button>
+                <div id="feedback-display" class="feedback-box"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // DATABASE: 10 Advanced Songs (B2/C1 level vocabulary and idioms)
+        const songDatabase = [
+            {
+                title: "Viva La Vida",
+                artist: "Coldplay",
+                youtubeId: "dvgZvnPRtd4",
+                lyrics: `Shattered windows and the sound of [drums]<br>
+                        People couldn't believe what I'd [become]<br>
+                        [Revolutionaries] wait<br>
+                        For my head on a silver [plate]<br>
+                        Just a puppet on a lonely [string]<br>
+                        Oh, who would ever want to be [king]?`
+            },
+            {
+                title: "Take Me To Church",
+                artist: "Hozier",
+                youtubeId: "PVjiKRfKpPI",
+                lyrics: `Take me to church<br>
+                        I'll [worship] like a dog at the [shrine] of your lies<br>
+                        I'll tell you my sins and you can sharpen your [knife]<br>
+                        Offer me that deathless [death]<br>
+                        Good God, let me give you my [life]`
+            },
+            {
+                title: "Rolling In The Deep",
+                artist: "Adele",
+                youtubeId: "rYEDA3JcQqw",
+                lyrics: `The [scars] of your love remind me of us<br>
+                        They keep me thinking that we almost had it [all]<br>
+                        The scars of your love, they leave me [breathless]<br>
+                        I can't help feeling<br>
+                        We could have had it all<br>
+                        Rolling in the [deep]<br>
+                        You had my heart inside of your [hand]<br>
+                        And you played it to the [beat]`
+            },
+            {
+                title: "Unstoppable",
+                artist: "Sia",
+                youtubeId: "cxjvTXo9WWM",
+                lyrics: `I'll put my [armor] on, show you how strong I am<br>
+                        I'll put my armor on, I'll show you that I am<br>
+                        I'm [unstoppable]<br>
+                        I'm a Porsche with no brakes<br>
+                        I'm [invincible]<br>
+                        Yeah, I win every single game<br>
+                        I'm so [powerful]<br>
+                        I don't need batteries to play<br>
+                        I'm so [confident]`
+            },
+            {
+                title: "No Time To Die",
+                artist: "Billie Eilish",
+                youtubeId: "BboMpayJomw",
+                lyrics: `I should have known<br>
+                        I'd leave alone<br>
+                        Just goes to show<br>
+                        That the blood you [bleed] is just the blood you owe<br>
+                        We were a pair<br>
+                        But I saw you there<br>
+                        Too much to [bear]<br>
+                        You were my life, but I'm [ruined] now<br>
+                        Was I a fool to let you break down my [walls]?<br>
+                        Are you death or [paradise]?`
+            },
+            {
+                title: "Bohemian Rhapsody",
+                artist: "Queen",
+                youtubeId: "fJ9rUzIMcZQ",
+                lyrics: `Is this the real life?<br>
+                        Is this just [fantasy]?<br>
+                        Caught in a [landslide]<br>
+                        No escape from [reality]<br>
+                        Open your eyes<br>
+                        Look up to the skies and see<br>
+                        I'm just a poor boy, I need no [sympathy]<br>
+                        Because I'm easy come, easy go<br>
+                        Little [high], little low`
+            },
+            {
+                title: "Radioactive",
+                artist: "Imagine Dragons",
+                youtubeId: "ktvTqknDobU",
+                lyrics: `I'm waking up to ash and [dust]<br>
+                        I wipe my brow and I sweat my [rust]<br>
+                        I'm breathing in the [chemicals]<br>
+                        I'm breaking in, shaping up, then checking out on the prison [bus]<br>
+                        This is it, the [apocalypse]<br>
+                        Whoa`
+            },
+            {
+                title: "Photograph",
+                artist: "Ed Sheeran",
+                youtubeId: "nSDgHBxUbVQ",
+                lyrics: `We keep this love in a [photograph]<br>
+                        We made these [memories] for ourselves<br>
+                        Where our eyes are never closing<br>
+                        Hearts are never [broken]<br>
+                        And time's forever frozen [still]<br>
+                        So you can keep me<br>
+                        Inside the pocket of your ripped [jeans]`
+            },
+            {
+                title: "Sign of the Times",
+                artist: "Harry Styles",
+                youtubeId: "qN4ooNx77u0",
+                lyrics: `Just stop your crying<br>
+                        It's a [sign] of the times<br>
+                        Welcome to the final show<br>
+                        Hope you're wearing your best [clothes]<br>
+                        You can't bribe the door on your way to the [sky]<br>
+                        You look pretty good down here<br>
+                        But you ain't really [good]`
+            },
+            {
+                title: "Someone You Loved",
+                artist: "Lewis Capaldi",
+                youtubeId: "bCuhuePlP8o",
+                lyrics: `Now the day [bleeds]<br>
+                        Into nightfall<br>
+                        And you're not here<br>
+                        To get me [through] it all<br>
+                        I let my guard down<br>
+                        And then you pulled the [rug]<br>
+                        I was getting kinda used to being [someone] you loved`
+            }
+        ];
+
+        let currentSongIndex = 0;
+
+        // Initialize App
+        function initApp() {
+            const tabsContainer = document.getElementById('song-tabs');
+            
+            // Generate Tabs
+            songDatabase.forEach((song, index) => {
+                const btn = document.createElement('button');
+                btn.className = `song-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<span class="material-icons-round" style="font-size: 1.2rem;">music_note</span> ${song.artist}`;
+                btn.onclick = (e) => loadSong(index, e.currentTarget);
+                tabsContainer.appendChild(btn);
+            });
+
+            // Load first song
+            loadSong(0, tabsContainer.firstChild);
+        }
+
+        // Load specific song
+        function loadSong(index, btnElement) {
+            currentSongIndex = index;
+            const song = songDatabase[index];
+
+            // Update Tabs UI
+            document.querySelectorAll('.song-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            // Update Video and Info
+            document.getElementById('yt-player').src = `https://www.youtube.com/embed/${song.youtubeId}`;
+            document.getElementById('display-title').innerText = song.title;
+            document.getElementById('display-artist').innerText = song.artist;
+
+            // Parse Lyrics
+            const parsedLyrics = song.lyrics.replace(/\[(.*?)\]/g, (match, p1) => {
+                return `<input type="text" class="gap-input" data-ans="${p1.toLowerCase()}">`;
+            });
+
+            document.getElementById('lyrics-container').innerHTML = parsedLyrics;
+            
+            // Reset Feedback and Button
+            document.getElementById('feedback-display').style.display = "none";
+            document.getElementById('check-btn').style.display = "flex";
+        }
+
+        // Check Answers
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('.gap-input');
+            let score = 0;
+            let total = inputs.length;
+            let allFilled = true;
+
+            // Remove previous correction texts if they exist
+            document.querySelectorAll('.correction-text').forEach(el => el.remove());
+
+            inputs.forEach(input => {
+                if(input.value.trim() === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("Please fill in all the blanks before checking!");
+                return;
+            }
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans');
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.add('wrong');
+                    // Show correct answer below
+                    const span = document.createElement('span');
+                    span.className = 'correction-text';
+                    span.innerText = correctAnswer;
+                    input.parentNode.insertBefore(span, input.nextSibling);
+                }
+            });
+
+            // Feedback
+            const feedback = document.getElementById('feedback-display');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box';
+
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 Outstanding! You successfully identified all the advanced vocabulary (${score}/${total}).`;
+                document.getElementById('check-btn').style.display = "none";
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `You got ${score} out of ${total}. These are tricky! Check the red boxes for the correct spelling and try again.`;
+            }
+        }
+
+        // Start
+        window.onload = initApp;
+
+    </script>
+</body>
+</html>
