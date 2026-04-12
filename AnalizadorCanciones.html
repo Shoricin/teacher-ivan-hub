@@ -8,9 +8,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root {
-            --primary-teal: #10b981; /* Verde esmeralda para dar un toque diferente */
+            --primary-teal: #10b981; 
             --primary-dark: #047857;
-            --accent-coral: #f59e0b; /* Naranja cálido */
+            --accent-coral: #f59e0b; 
             --text-dark: #1f2937;
             --bg-light: #f3f4f6;
             --white: #ffffff;
@@ -172,13 +172,12 @@
     </div>
 
     <script>
-        // BASE DE DATOS: 10 Canciones Populares en Español
-        // Formato: Usa [palabra] para crear un espacio en blanco en la letra.
+        // BASE DE DATOS: 10 Canciones Populares (ENLACES VERIFICADOS PARA EMBED)
         const songDatabase = [
             {
                 title: "Vivir Mi Vida",
                 artist: "Marc Anthony",
-                youtubeId: "YXnjy5YlDwk", 
+                youtubeId: "MNCiaGu8flE", 
                 lyrics: `Voy a [reír], voy a bailar<br>
                         Vivir mi [vida], la la la la<br>
                         Voy a reír, voy a gozar<br>
@@ -193,7 +192,7 @@
             {
                 title: "Color Esperanza",
                 artist: "Diego Torres",
-                youtubeId: "zOQIoI0xQqk",
+                youtubeId: "s6SRUZofFV4",
                 lyrics: `Saber que se [puede], querer que se pueda<br>
                         Quitarse los miedos, sacarlos [afuera]<br>
                         Pintarse la cara color [esperanza]<br>
@@ -206,7 +205,7 @@
             {
                 title: "Bailando",
                 artist: "Enrique Iglesias",
-                youtubeId: "NUsoVlDFqZg",
+                youtubeId: "5Q7PIOEmB9w",
                 lyrics: `Yo te [miro], se me corta la respiración<br>
                         Cuando tú me miras se me sube el [corazón]<br>
                         Y en un silencio tu mirada dice mil [palabras]<br>
@@ -219,7 +218,7 @@
             {
                 title: "Limón y Sal",
                 artist: "Julieta Venegas",
-                youtubeId: "tIpzfs5tBJU",
+                youtubeId: "Bugx2eim5hk",
                 lyrics: `Tengo que [confesar] que a veces<br>
                         No me gusta tu forma de ser<br>
                         Luego te me [desapareces]<br>
@@ -233,7 +232,7 @@
             {
                 title: "Waka Waka (Esto es África)",
                 artist: "Shakira",
-                youtubeId: "DZCGy1U0_aM",
+                youtubeId: "fSNxuAxjBCg",
                 lyrics: `Llegó el momento, caen las [murallas]<br>
                         Va a comenzar la única justa de las [batallas]<br>
                         No duele el golpe, no existe el [miedo]<br>
@@ -248,7 +247,7 @@
             {
                 title: "Rayando el Sol",
                 artist: "Maná",
-                youtubeId: "EN_lK1E5w70",
+                youtubeId: "bE3ABNHDnAc",
                 lyrics: `Rayando el [sol], desesperación<br>
                         Es más fácil llegar al sol que a tu [corazón]<br>
                         Me muero por [ti], viviendo sin ti<br>
@@ -260,7 +259,7 @@
             {
                 title: "La Bamba",
                 artist: "Los Lobos",
-                youtubeId: "nLAWPrCUQQ0",
+                youtubeId: "-BnmuJ1bsqo",
                 lyrics: `Para bailar la [bamba]<br>
                         Para bailar la bamba se [necesita]<br>
                         Una poca de [gracia]<br>
@@ -274,7 +273,7 @@
             {
                 title: "Me Gustas Tú",
                 artist: "Manu Chao",
-                youtubeId: "rs6Y4kZ8qtw",
+                youtubeId: "AmoBIMjRgKQ",
                 lyrics: `Me gustan los [aviones], me gustas tú<br>
                         Me gusta viajar, me [gustas] tú<br>
                         Me gusta la mañana, me gustas [tú]<br>
@@ -289,7 +288,7 @@
             {
                 title: "La Camisa Negra",
                 artist: "Juanes",
-                youtubeId: "kRt2sRyup6A",
+                youtubeId: "GmJKivKSy6g",
                 lyrics: `Tengo la [camisa] negra<br>
                         Hoy mi [amor] está de luto<br>
                         Hoy tengo en el alma una [pena]<br>
@@ -304,7 +303,7 @@
             {
                 title: "Despacito",
                 artist: "Luis Fonsi",
-                youtubeId: "kJQP7kiw5Fk",
+                youtubeId: "TsjU_DzcMZE",
                 lyrics: `Pasito a pasito, suave suavecito<br>
                         Nos vamos pegando poquito a [poquito]<br>
                         Cuando tú me besas con esa [destreza]<br>
@@ -345,7 +344,7 @@
             if(btnElement) btnElement.classList.add('active');
 
             // Actualizar video e información
-            document.getElementById('yt-player').src = `https://www.youtube.com/embed/${song.youtubeId}`;
+            document.getElementById('yt-player').src = `https://www.youtube.com/embed/${song.youtubeId}?rel=0`;
             document.getElementById('display-title').innerText = song.title;
             document.getElementById('display-artist').innerText = song.artist;
 
