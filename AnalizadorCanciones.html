@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Canciones | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #10b981; /* Verde esmeralda para dar un toque diferente */
+            --primary-dark: #047857;
+            --accent-coral: #f59e0b; /* Naranja cálido */
+            --text-dark: #1f2937;
+            --bg-light: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+            color: white;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #9ca3af; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: white; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #d1d5db; margin-top: 5px; font-weight: 300; }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 1200px; margin: 30px auto 50px; width: 95%; }
+
+        /* SONG SELECTOR */
+        .song-selector {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 20px;
+            scrollbar-width: thin; scrollbar-color: var(--primary-teal) #e5e7eb;
+        }
+        .song-selector::-webkit-scrollbar { height: 8px; }
+        .song-selector::-webkit-scrollbar-thumb { background-color: var(--primary-teal); border-radius: 10px; }
+        
+        .song-btn {
+            background: white; border: 2px solid transparent; padding: 10px 20px; border-radius: 50px;
+            font-family: 'Poppins', sans-serif; font-weight: 600; color: #4b5563; cursor: pointer;
+            white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px;
+        }
+        .song-btn:hover { border-color: var(--primary-teal); }
+        .song-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* TWO COLUMN LAYOUT */
+        .analyzer-layout {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .analyzer-layout { grid-template-columns: 1fr; }
+            .video-section { position: static !important; }
+        }
+
+        /* VIDEO SECTION (STICKY) */
+        .video-section {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--accent-coral); position: sticky; top: 20px;
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        .song-info { margin-top: 15px; text-align: center; }
+        .song-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+        .song-artist { font-size: 1rem; color: #6b7280; margin: 5px 0 0 0; }
+
+        /* LYRICS SECTION */
+        .lyrics-section {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--primary-teal);
+        }
+        .instructions {
+            background: #ecfdf5; padding: 15px; border-left: 4px solid var(--primary-teal);
+            border-radius: 8px; font-size: 0.95rem; color: #374151; margin-bottom: 25px;
+        }
+
+        .lyrics-content {
+            font-family: 'Merriweather', serif; font-size: 1.2rem; line-height: 2.5; color: #1f2937;
+        }
+
+        .gap-input {
+            width: 120px; padding: 5px 10px; border: 2px solid #d1d5db; border-radius: 6px;
+            font-family: 'Poppins', sans-serif; font-weight: bold; text-align: center;
+            outline: none; transition: 0.3s; font-size: 1rem; margin: 0 5px; background: #f9fafb;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); background: white; box-shadow: 0 0 0 3px rgba(16,185,129,0.2);}
+        
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+        
+        .correction-text { font-size: 0.8rem; color: #ef4444; font-weight: bold; display: inline-block; position: absolute; transform: translateY(20px); margin-left: -120px;}
+
+        /* BUTTONS & FEEDBACK */
+        .btn-check {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-check:hover { background: #374151; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><span class="material-icons-round">queue_music</span> Analizador de Canciones</h1>
+        <div class="subtitle">Escucha con atención y completa la letra que falta</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="song-selector" id="song-tabs">
+            </div>
+
+        <div class="analyzer-layout">
+            
+            <div class="video-section">
+                <div class="video-wrapper">
+                    <iframe id="yt-player" src="" allowfullscreen></iframe>
+                </div>
+                <div class="song-info">
+                    <h2 class="song-title" id="display-title">Cargando...</h2>
+                    <p class="song-artist" id="display-artist">Cargando...</p>
+                </div>
+            </div>
+
+            <div class="lyrics-section">
+                <div class="instructions">
+                    <strong>🎧 Instrucciones:</strong> Reproduce el video y escucha atentamente. Escribe las palabras que faltan en las casillas. ¡Presta atención a la ortografía!
+                </div>
+                
+                <div class="lyrics-content" id="lyrics-container">
+                    </div>
+
+                <button class="btn-check" id="check-btn" onclick="checkAnswers()">Verificar Letra <span class="material-icons-round">spellcheck</span></button>
+                <div id="feedback-display" class="feedback-box"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // BASE DE DATOS: 10 Canciones Populares en Español
+        // Formato: Usa [palabra] para crear un espacio en blanco en la letra.
+        const songDatabase = [
+            {
+                title: "Vivir Mi Vida",
+                artist: "Marc Anthony",
+                youtubeId: "YXnjy5YlDwk", 
+                lyrics: `Voy a [reír], voy a bailar<br>
+                        Vivir mi [vida], la la la la<br>
+                        Voy a reír, voy a gozar<br>
+                        Vivir mi vida, la la la la<br><br>
+                        A veces llega la lluvia<br>
+                        Para [limpiar] las heridas<br>
+                        A veces solo una gota<br>
+                        Puede vencer la [sequía]<br><br>
+                        Y para qué [llorar], pa' qué<br>
+                        Si duele una pena, se olvida`
+            },
+            {
+                title: "Color Esperanza",
+                artist: "Diego Torres",
+                youtubeId: "zOQIoI0xQqk",
+                lyrics: `Saber que se [puede], querer que se pueda<br>
+                        Quitarse los miedos, sacarlos [afuera]<br>
+                        Pintarse la cara color [esperanza]<br>
+                        Tentar al futuro con el [corazón]<br><br>
+                        Es mejor perderse que nunca [embarcar]<br>
+                        Mejor tentarse a dejar de intentar<br>
+                        Aunque ya ves que no es tan [fácil] empezar<br>
+                        Sé que lo imposible se puede [lograr]`
+            },
+            {
+                title: "Bailando",
+                artist: "Enrique Iglesias",
+                youtubeId: "NUsoVlDFqZg",
+                lyrics: `Yo te [miro], se me corta la respiración<br>
+                        Cuando tú me miras se me sube el [corazón]<br>
+                        Y en un silencio tu mirada dice mil [palabras]<br>
+                        La noche en la que te suplico que no salga el [sol]<br><br>
+                        Bailando, bailando, bailando, [bailando]<br>
+                        Tu cuerpo y el mío llenando el vacío<br>
+                        Subiendo y [bajando]<br>
+                        Con esa melodía, tu color, tu [fantasía]`
+            },
+            {
+                title: "Limón y Sal",
+                artist: "Julieta Venegas",
+                youtubeId: "tIpzfs5tBJU",
+                lyrics: `Tengo que [confesar] que a veces<br>
+                        No me gusta tu forma de ser<br>
+                        Luego te me [desapareces]<br>
+                        Y no entiendo muy bien por qué<br><br>
+                        Yo te quiero con [limón] y sal<br>
+                        Yo te quiero tal y como [estás]<br>
+                        No hace falta cambiarte nada<br>
+                        Yo te quiero si vienes o si [vas]<br>
+                        Si subes y bajas y no estás [seguro]`
+            },
+            {
+                title: "Waka Waka (Esto es África)",
+                artist: "Shakira",
+                youtubeId: "DZCGy1U0_aM",
+                lyrics: `Llegó el momento, caen las [murallas]<br>
+                        Va a comenzar la única justa de las [batallas]<br>
+                        No duele el golpe, no existe el [miedo]<br>
+                        Quítate el polvo, ponte de pie y vuelves al [ruedo]<br><br>
+                        Y la presión se siente<br>
+                        Espera en ti, tu [gente]<br><br>
+                        Porque esto es [África]<br>
+                        Tsamina mina eh eh<br>
+                        Waka waka eh [eh]<br>
+                        Tsamina mina zangalewa`
+            },
+            {
+                title: "Rayando el Sol",
+                artist: "Maná",
+                youtubeId: "EN_lK1E5w70",
+                lyrics: `Rayando el [sol], desesperación<br>
+                        Es más fácil llegar al sol que a tu [corazón]<br>
+                        Me muero por [ti], viviendo sin ti<br>
+                        Y no aguanto, me duele tanto estar [así]<br><br>
+                        A tu casa yo fui y no te [encontré]<br>
+                        En el parque, en la plaza, en el [cine] yo te busqué<br>
+                        Te tengo atrapada entre mi piel y mi [alma]`
+            },
+            {
+                title: "La Bamba",
+                artist: "Los Lobos",
+                youtubeId: "nLAWPrCUQQ0",
+                lyrics: `Para bailar la [bamba]<br>
+                        Para bailar la bamba se [necesita]<br>
+                        Una poca de [gracia]<br>
+                        Una poca de gracia y otra [cosita]<br>
+                        Y arriba y [arriba]<br><br>
+                        Y arriba y arriba y arriba iré<br>
+                        Yo no soy [marinero]<br>
+                        Yo no soy marinero, soy [capitán]<br>
+                        Soy capitán, soy capitán`
+            },
+            {
+                title: "Me Gustas Tú",
+                artist: "Manu Chao",
+                youtubeId: "rs6Y4kZ8qtw",
+                lyrics: `Me gustan los [aviones], me gustas tú<br>
+                        Me gusta viajar, me [gustas] tú<br>
+                        Me gusta la mañana, me gustas [tú]<br>
+                        Me gusta el viento, me gustas tú<br>
+                        Me gusta [soñar], me gustas tú<br>
+                        Me gusta la [mar], me gustas tú<br><br>
+                        ¿Qué voy a [hacer]?<br>
+                        Je ne sais pas<br>
+                        ¿Qué voy a hacer?<br>
+                        Je ne sais [plus]`
+            },
+            {
+                title: "La Camisa Negra",
+                artist: "Juanes",
+                youtubeId: "kRt2sRyup6A",
+                lyrics: `Tengo la [camisa] negra<br>
+                        Hoy mi [amor] está de luto<br>
+                        Hoy tengo en el alma una [pena]<br>
+                        Y es por culpa de tu embrujo<br><br>
+                        Hoy sé que tú ya no me [quieres]<br>
+                        Y eso es lo que más me hiere<br>
+                        Que tengo la camisa [negra]<br>
+                        Y una pena que me duele<br><br>
+                        Mal parece que solo me quedé<br>
+                        Y fue pura [mentira] lo que me diste`
+            },
+            {
+                title: "Despacito",
+                artist: "Luis Fonsi",
+                youtubeId: "kJQP7kiw5Fk",
+                lyrics: `Pasito a pasito, suave suavecito<br>
+                        Nos vamos pegando poquito a [poquito]<br>
+                        Cuando tú me besas con esa [destreza]<br>
+                        Veo que eres malicia con [delicadeza]<br><br>
+                        Pasito a pasito, suave suavecito<br>
+                        Nos vamos pegando, poquito a [poquito]<br>
+                        Y es que esa [belleza] es un rompecabezas<br>
+                        Pero pa' montarlo aquí tengo la [pieza]`
+            }
+        ];
+
+        let currentSongIndex = 0;
+
+        // Iniciar la Aplicación
+        function initApp() {
+            const tabsContainer = document.getElementById('song-tabs');
+            
+            // Generar Pestañas
+            songDatabase.forEach((song, index) => {
+                const btn = document.createElement('button');
+                btn.className = `song-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<span class="material-icons-round" style="font-size: 1.2rem;">music_note</span> ${song.artist}`;
+                btn.onclick = (e) => loadSong(index, e.currentTarget);
+                tabsContainer.appendChild(btn);
+            });
+
+            // Cargar la primera canción
+            loadSong(0, tabsContainer.firstChild);
+        }
+
+        // Cargar canción específica
+        function loadSong(index, btnElement) {
+            currentSongIndex = index;
+            const song = songDatabase[index];
+
+            // Actualizar interfaz de pestañas
+            document.querySelectorAll('.song-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            // Actualizar video e información
+            document.getElementById('yt-player').src = `https://www.youtube.com/embed/${song.youtubeId}`;
+            document.getElementById('display-title').innerText = song.title;
+            document.getElementById('display-artist').innerText = song.artist;
+
+            // Procesar Letra (Convertir [palabra] en inputs)
+            const parsedLyrics = song.lyrics.replace(/\[(.*?)\]/g, (match, p1) => {
+                // Removemos acentos para la validación (opcional, pero ayuda a los estudiantes)
+                const cleanAns = p1.toLowerCase();
+                return `<input type="text" class="gap-input" data-ans="${cleanAns}">`;
+            });
+
+            document.getElementById('lyrics-container').innerHTML = parsedLyrics;
+            
+            // Reiniciar botones y feedback
+            document.getElementById('feedback-display').style.display = "none";
+            document.getElementById('check-btn').style.display = "flex";
+        }
+
+        // Función auxiliar para quitar acentos al comparar
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // Verificar Respuestas
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('.gap-input');
+            let score = 0;
+            let total = inputs.length;
+            let allFilled = true;
+
+            // Eliminar textos de corrección previos
+            document.querySelectorAll('.correction-text').forEach(el => el.remove());
+
+            inputs.forEach(input => {
+                if(input.value.trim() === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("¡Por favor, completa todos los espacios antes de verificar!");
+                return;
+            }
+
+            inputs.forEach(input => {
+                // Obtenemos la respuesta correcta original (con acento si lo tiene)
+                const correctAnswer = input.getAttribute('data-ans');
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                // Comparamos sin importar los acentos para ser un poco más flexibles
+                if (removeAccents(studentAnswer) === removeAccents(correctAnswer)) {
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.add('wrong');
+                    // Mostrar respuesta correcta debajo
+                    const span = document.createElement('span');
+                    span.className = 'correction-text';
+                    span.innerText = correctAnswer;
+                    input.parentNode.insertBefore(span, input.nextSibling);
+                }
+            });
+
+            // Mostrar Feedback
+            const feedback = document.getElementById('feedback-display');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box';
+
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🌟 ¡Puntuación Perfecta! Tienes ${score}/${total} palabras correctas. ¡Excelente!`;
+                document.getElementById('check-btn').style.display = "none";
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `Obtuviste ${score} de ${total}. ¡Revisa las casillas rojas y vuelve a escuchar!`;
+            }
+        }
+
+        // Iniciar
+        window.onload = initApp;
+
+    </script>
+</body>
+</html>
