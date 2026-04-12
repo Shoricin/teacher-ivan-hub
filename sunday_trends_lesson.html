@@ -6,7 +6,10 @@
     <title>Sunday Lesson: Trends & Contrasts | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         :root {
             --primary-teal: #5dcbc3;
@@ -60,14 +63,14 @@
         }
 
         /* CONTENT AREA */
-        .container { max-width: 1000px; margin: 0 auto 50px; width: 90%; }
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
 
         /* READING MASTERCLASS */
         .reading-box {
             background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
-            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; max-width: 900px; margin-left: auto; margin-right: auto;
         }
         .reading-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px;}
         
@@ -87,18 +90,15 @@
 
         .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
         
-        /* Highlight Classes (Toggled by JS) */
-        .txt-contrast { transition: 0.3s; }
-        .txt-adjnoun { transition: 0.3s; }
-        .txt-verbadv { transition: 0.3s; }
-        
+        /* Highlight Classes */
+        .txt-contrast, .txt-adjnoun, .txt-verbadv { transition: 0.3s; }
         .show-contrast .txt-contrast { background: #e0e7ff; color: #6d28d9; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #8b5cf6;}
         .show-adjnoun .txt-adjnoun { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
         .show-verbadv .txt-verbadv { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
 
         /* REDEMPTION WRITING */
         .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media (max-width: 800px) { .student-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .student-grid { grid-template-columns: 1fr; } }
 
         .student-card {
             background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
@@ -113,12 +113,22 @@
         .avatar-v { background: var(--accent-coral); }
         .student-name { font-size: 1.5rem; font-weight: 700; margin: 0; }
 
+        /* CHARTS CONTAINER */
+        .charts-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;
+            background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
+        }
+        @media (max-width: 1200px) and (min-width: 901px) { .charts-container { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .charts-container { grid-template-columns: 1fr; } }
+        
+        .chart-wrapper { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
         .redemption-checklist {
-            background: #fafafa; border: 1px dashed #ccc; padding: 15px; border-radius: 8px; margin-bottom: 20px;
+            background: #fdfdfd; border: 1px dashed #ccc; padding: 15px; border-radius: 8px; margin-bottom: 20px;
         }
         .redemption-checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px; font-size: 1rem;}
         .checklist-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: #444; margin-bottom: 8px;}
-        .checklist-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--primary-teal); transform: scale(1.2);}
+        .checklist-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--primary-teal); transform: scale(1.2); cursor: pointer;}
 
         .writing-area {
             width: 100%; height: 250px; padding: 15px; border: 2px solid #ddd; border-radius: 10px;
@@ -133,7 +143,7 @@
             background: var(--text-dark); color: white; border: none; padding: 12px 20px; border-radius: 50px;
             font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
-        .btn-submit:hover { background: #444; transform: translateY(-2px); }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -180,7 +190,7 @@
             
             <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
                 <h3 style="margin: 0 0 10px 0;"><span class="material-icons-round" style="vertical-align: middle;">verified</span> The Redemption Task</h3>
-                <p style="margin: 0; font-size: 1.05rem;">Chicas, es hora de demostrar lo aprendido. Redacten un reporte describiendo la <strong>"Producción de Energía en Country A"</strong> usando la teoría de arriba, pero respetando estrictamente su Checklist personal.</p>
+                <p style="margin: 0; font-size: 1.05rem;">Chicas, es hora de redimirse. Observen sus respectivos gráficos y reescriban su IELTS Task 1 aplicando la teoría y respetando estrictamente su Checklist personal para corregir los errores del jueves.</p>
             </div>
 
             <div class="student-grid">
@@ -188,18 +198,23 @@
                 <div class="student-card card-diana">
                     <div class="student-header">
                         <div class="student-avatar avatar-d">D</div>
-                        <h2 class="student-name">Diana</h2>
+                        <h2 class="student-name">Diana (Task A)</h2>
                     </div>
                     
-                    <div class="redemption-checklist">
-                        <h4>✅ Diana's Checklist:</h4>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-1"> I wrote more than 150 words.</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> I used "On the other hand" (NOT for the other hand).</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> I used words like "categories" or "sections" (NO aparts/scopes).</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-4"> I alternated Adjective+Noun and Verb+Adverb.</label>
+                    <div class="charts-container">
+                        <div class="chart-wrapper"><canvas id="dianaBar"></canvas></div>
+                        <div class="chart-wrapper"><canvas id="dianaPie"></canvas></div>
                     </div>
 
-                    <textarea class="writing-area" id="diana-essay" placeholder="The bar chart illustrates..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
+                    <div class="redemption-checklist">
+                        <h4>✅ Diana's Checklist:</h4>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-1"> Escribí más de 150 palabras.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> Usé "On the other hand" (NO "for the other hand").</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> Usé palabras como "categories" (NO aparts/scopes).</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-4"> Alterné Adjective+Noun y Verb+Adverb.</label>
+                    </div>
+
+                    <textarea class="writing-area" id="diana-essay" placeholder="The charts illustrate the average weekly spending..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
                     <div class="word-counter" id="diana-count">Words: 0 / 150</div>
                     
                     <button class="btn-submit" onclick="generatePDF('Diana', 'diana-essay', ['d-chk-1', 'd-chk-2', 'd-chk-3', 'd-chk-4'])">
@@ -210,18 +225,23 @@
                 <div class="student-card card-valeria">
                     <div class="student-header">
                         <div class="student-avatar avatar-v">V</div>
-                        <h2 class="student-name">Valeria</h2>
+                        <h2 class="student-name">Valeria (Task B)</h2>
                     </div>
                     
-                    <div class="redemption-checklist">
-                        <h4>✅ Valeria's Checklist:</h4>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-1"> I was 100% objective (No opinions or fake reasons).</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> I correctly used "decreased to" vs "decreased by".</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> I used "significantly/rapidly" (NO exponentially).</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-4"> Checked Subject-Verb agreement (The chart showS).</label>
+                    <div class="charts-container">
+                        <div class="chart-wrapper"><canvas id="valeriaLine"></canvas></div>
+                        <div class="chart-wrapper"><canvas id="valeriaDoughnut"></canvas></div>
                     </div>
 
-                    <textarea class="writing-area" id="valeria-essay" placeholder="The provided graph shows..." onkeyup="countWords('valeria-essay', 'valeria-count')"></textarea>
+                    <div class="redemption-checklist">
+                        <h4>✅ Valeria's Checklist:</h4>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-1"> Fui 100% objetiva (Cero menciones de pandemia/inversiones).</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> Usé correctamente "decreased to" vs "decreased by".</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> Usé "significantly/rapidly" (NO exponentially).</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-4"> Revisé la concordancia (The chart showS).</label>
+                    </div>
+
+                    <textarea class="writing-area" id="valeria-essay" placeholder="The line graph depicts the annual number of visitors..." onkeyup="countWords('valeria-essay', 'valeria-count')"></textarea>
                     <div class="word-counter" id="valeria-count">Words: 0 / 150</div>
                     
                     <button class="btn-submit" onclick="generatePDF('Valeria', 'valeria-essay', ['v-chk-1', 'v-chk-2', 'v-chk-3', 'v-chk-4'])">
@@ -242,6 +262,12 @@
             
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
+
+            // Render charts only when writing tab is opened to ensure proper sizing
+            if (tabId === 'writing-tab' && !chartsRendered) {
+                renderCharts();
+                chartsRendered = true;
+            }
         }
 
         // Highlighter Logic
@@ -266,6 +292,60 @@
             } else {
                 display.classList.remove('valid');
             }
+        }
+
+        // --- CHART GENERATION ---
+        let chartsRendered = false;
+
+        function renderCharts() {
+            // DIANA'S CHARTS (Task A)
+            const ctxDianaBar = document.getElementById('dianaBar').getContext('2d');
+            new Chart(ctxDianaBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Housing', 'Food', 'Transport', 'Leisure'],
+                    datasets: [
+                        { label: '2010', data: [250, 200, 100, 150], backgroundColor: '#c4b5fd' }, // Light Purple
+                        { label: '2020', data: [400, 300, 150, 100], backgroundColor: '#8b5cf6' }  // Dark Purple
+                    ]
+                },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Weekly Spending ($)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 12 } } } }
+            });
+
+            const ctxDianaPie = document.getElementById('dianaPie').getContext('2d');
+            new Chart(ctxDianaPie, {
+                type: 'pie',
+                data: {
+                    labels: ['Cars (60%)', 'Public (25%)', 'Cycling (10%)', 'Walking (5%)'],
+                    datasets: [{ data: [60, 25, 10, 5], backgroundColor: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ede9fe'] }]
+                },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Transport Modes (2020)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+            });
+
+            // VALERIA'S CHARTS (Task B)
+            const ctxValeriaLine = document.getElementById('valeriaLine').getContext('2d');
+            new Chart(ctxValeriaLine, {
+                type: 'line',
+                data: {
+                    labels: ['2015', '2016', '2017', '2018', '2019', '2020'],
+                    datasets: [
+                        { label: 'History', data: [50000, 48000, 45000, 42000, 38000, 35000], borderColor: '#ff9a8b', fill: false, tension: 0.1 },
+                        { label: 'Art', data: [30000, 35000, 40000, 48000, 55000, 60000], borderColor: '#5dcbc3', fill: false, tension: 0.1 },
+                        { label: 'Science', data: [20000, 22000, 25000, 27000, 29000, 30000], borderColor: '#f5b041', fill: false, tension: 0.1 }
+                    ]
+                },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Annual Visitors', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+            });
+
+            const ctxValeriaDoughnut = document.getElementById('valeriaDoughnut').getContext('2d');
+            new Chart(ctxValeriaDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Very Sat. (55%)', 'Sat. (30%)', 'Dissat. (15%)'],
+                    datasets: [{ data: [55, 30, 15], backgroundColor: ['#5dcbc3', '#a3e4df', '#ff9a8b'] }]
+                },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Satisfaction (2020)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+            });
         }
 
         // Generate PDF
@@ -297,14 +377,14 @@
             // Header
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.setTextColor(studentName === 'Diana' ? 139 : 255, studentName === 'Diana' ? 92 : 154, studentName === 'Diana' ? 246 : 139); // Purple for Diana, Coral for Valeria
-            doc.text("IELTS Task 1: Redemption Essay", 105, 25, null, null, "center");
+            doc.setTextColor(studentName === 'Diana' ? 139 : 255, studentName === 'Diana' ? 92 : 154, studentName === 'Diana' ? 246 : 139); 
+            doc.text(`IELTS Task 1: Redemption Essay (${studentName})`, 105, 25, null, null, "center");
 
             // Meta Info
             doc.setFontSize(12);
             doc.setFont("helvetica", "italic");
             doc.setTextColor(100, 100, 100);
-            doc.text(`Student: ${studentName}`, 105, 33, null, null, "center");
+            doc.text(`Author: ${studentName}`, 105, 33, null, null, "center");
             doc.text(`Word Count: ${words} words`, 105, 40, null, null, "center");
             doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 47, null, null, "center");
 
