@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History in Passive Voice | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* GRAMMAR RULES */
+        .rules-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 40px;
+        }
+        .rules-box h2 { margin-top: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-dark);}
+        
+        .grammar-visual {
+            background: #fafafa; padding: 20px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-size: 1.1rem; margin-top: 20px;
+        }
+        .hl-subject { color: #d9534f; font-weight: bold; }
+        .hl-verb { color: var(--primary-dark); font-weight: bold; }
+        .hl-object { color: #8b5cf6; font-weight: bold; }
+        
+        .transformation-arrow { display: block; margin: 15px 0; font-size: 2rem; color: #ccc;}
+
+        /* GAME BOARD */
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .score-badge { background: var(--primary-teal); color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 1.1rem;}
+        
+        .card-deck {
+            background: white; padding: 40px 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal); text-align: center; position: relative; min-height: 350px;
+        }
+
+        .instruction-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .badge-to-passive { background: #e0f2f1; color: var(--primary-dark); border: 1px solid var(--primary-teal); }
+        .badge-to-active { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        .original-sentence {
+            font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 30px; line-height: 1.6;
+        }
+
+        .transformation-input {
+            width: 100%; max-width: 600px; padding: 15px 20px; border: 2px solid #ddd; border-radius: 12px;
+            font-size: 1.2rem; font-family: 'Poppins', sans-serif; text-align: center; outline: none; transition: 0.3s;
+            background: #fafafa;
+        }
+        .transformation-input:focus { border-color: var(--primary-teal); background: white; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        
+        .transformation-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; font-weight: bold; pointer-events: none;}
+        .transformation-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; animation: shake 0.4s;}
+
+        .btn-action {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;
+            margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-action:hover { background: #444; transform: translateY(-2px); }
+
+        .feedback-text { margin-top: 20px; font-size: 1.1rem; font-weight: bold; min-height: 30px; }
+        .correction-hint { color: #555; font-size: 0.95rem; font-weight: normal; margin-top: 5px; display: none;}
+
+        /* RESULTS SCREEN */
+        #results-screen { display: none; text-align: center; }
+        .result-box { background: white; padding: 50px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-coral);}
+        .final-score { font-size: 4rem; font-weight: 700; color: var(--accent-coral); margin: 20px 0;}
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">account_balance</span> History & Facts</h1>
+        <div class="subtitle">Transforming sentences using the Passive Voice</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-box">
+            <h2><span class="material-icons-round">rule</span> Grammar Rules: The Passive Voice</h2>
+            <p style="color: #666; font-size: 0.95rem; margin-top: -10px;">We use the passive voice when the <strong>action</strong> or the <strong>object</strong> is more important than who did it. It is very common in history.</p>
+            
+            <div class="grammar-visual">
+                <div>Active: <span class="hl-subject">Shakespeare</span> <span class="hl-verb">wrote</span> <span class="hl-object">Hamlet</span>.</div>
+                <span class="material-icons-round transformation-arrow">swap_vert</span>
+                <div>Passive: <span class="hl-object">Hamlet</span> <span class="hl-verb">was written</span> by <span class="hl-subject">Shakespeare</span>.</div>
+                
+                <div style="margin-top: 20px; font-size: 0.9rem; color: #555; text-align: left; background: white; padding: 15px; border-radius: 8px;">
+                    <strong>Formula:</strong> Object + Verb To Be (in the same tense) + Past Participle (V3) + [by Agent]
+                </div>
+            </div>
+        </div>
+
+        <div id="game-screen">
+            <div class="game-header">
+                <div style="font-weight: bold; color: #666; font-size: 1.1rem;">Sentence: <span id="card-counter">1</span>/10</div>
+                <div class="score-badge">Score: <span id="score">0</span></div>
+            </div>
+
+            <div class="card-deck">
+                
+                <div class="instruction-badge" id="instruction-badge">Change to Passive</div>
+                <div class="original-sentence" id="original-sentence">Loading...</div>
+
+                <input type="text" id="user-input" class="transformation-input" placeholder="Type the transformed sentence here..." autocomplete="off" onkeypress="if(event.key==='Enter') checkAnswer()">
+                
+                <div class="feedback-text" id="feedback"></div>
+                <div class="correction-hint" id="correction-hint"></div>
+
+                <button class="btn-action" id="action-btn" onclick="checkAnswer()">
+                    Check Answer <span class="material-icons-round">spellcheck</span>
+                </button>
+
+            </div>
+        </div>
+
+        <div id="results-screen">
+            <div class="result-box">
+                <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-coral);">history_edu</div>
+                <h2 style="color: var(--text-dark); margin-bottom: 0;">Historical Mission Complete!</h2>
+                <div class="final-score" id="final-score">0/10</div>
+                <p id="final-msg" style="font-size: 1.2rem; color: #555;"></p>
+                <button class="btn-action" style="background: var(--primary-teal);" onclick="location.reload()">Play Again <span class="material-icons-round">refresh</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Database of Sentences. Multiple valid answers to account for punctuation or optional agents.
+        const sentences = [
+            {
+                direction: "to-passive",
+                original: "The Romans built the Colosseum.",
+                answers: ["the colosseum was built by the romans", "the colosseum was built by the romans.", "the colosseum was built"],
+                correctDisplay: "The Colosseum was built by the Romans."
+            },
+            {
+                direction: "to-active",
+                original: "America was discovered by Columbus in 1492.",
+                answers: ["columbus discovered america in 1492", "columbus discovered america in 1492.", "columbus discovered america"],
+                correctDisplay: "Columbus discovered America in 1492."
+            },
+            {
+                direction: "to-passive",
+                original: "Alexander Fleming discovered penicillin.",
+                answers: ["penicillin was discovered by alexander fleming", "penicillin was discovered by alexander fleming.", "penicillin was discovered"],
+                correctDisplay: "Penicillin was discovered by Alexander Fleming."
+            },
+            {
+                direction: "to-passive",
+                original: "They founded Sucre in 1538.",
+                answers: ["sucre was founded in 1538", "sucre was founded in 1538.", "sucre was founded in 1538 by them", "sucre was founded by them in 1538"],
+                correctDisplay: "Sucre was founded in 1538. (Omit 'by them' as it's unknown)."
+            },
+            {
+                direction: "to-active",
+                original: "The Mona Lisa was painted by Leonardo da Vinci.",
+                answers: ["leonardo da vinci painted the mona lisa", "leonardo da vinci painted the mona lisa."],
+                correctDisplay: "Leonardo da Vinci painted the Mona Lisa."
+            },
+            {
+                direction: "to-passive",
+                original: "Edison invented the first light bulb.",
+                answers: ["the first light bulb was invented by edison", "the first light bulb was invented by edison."],
+                correctDisplay: "The first light bulb was invented by Edison."
+            },
+            {
+                direction: "to-active",
+                original: "The internet is used by millions of people every day.",
+                answers: ["millions of people use the internet every day", "millions of people use the internet every day."],
+                correctDisplay: "Millions of people use the internet every day. (Notice: Present Tense!)"
+            },
+            {
+                direction: "to-passive",
+                original: "People speak English all over the world.",
+                answers: ["english is spoken all over the world", "english is spoken all over the world.", "english is spoken by people all over the world"],
+                correctDisplay: "English is spoken all over the world. (Present Tense)."
+            },
+            {
+                direction: "to-active",
+                original: "The World Cup was won by Argentina in 2022.",
+                answers: ["argentina won the world cup in 2022", "argentina won the world cup in 2022."],
+                correctDisplay: "Argentina won the World Cup in 2022."
+            },
+            {
+                direction: "to-passive",
+                original: "Simon Bolivar liberated many countries in South America.",
+                answers: ["many countries in south america were liberated by simon bolivar", "many countries in south america were liberated by simon bolivar.", "many countries were liberated by simon bolivar in south america"],
+                correctDisplay: "Many countries in South America were liberated by Simon Bolivar."
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+        let isLevelComplete = false;
+
+        function loadSentence() {
+            if (currentIndex >= sentences.length) {
+                showResults();
+                return;
+            }
+
+            const data = sentences[currentIndex];
+            document.getElementById('card-counter').innerText = currentIndex + 1;
+            
+            const badge = document.getElementById('instruction-badge');
+            if (data.direction === "to-passive") {
+                badge.innerText = "Change to PASSIVE";
+                badge.className = "instruction-badge badge-to-passive";
+            } else {
+                badge.innerText = "Change to ACTIVE";
+                badge.className = "instruction-badge badge-to-active";
+            }
+
+            document.getElementById('original-sentence').innerText = data.original;
+            
+            const input = document.getElementById('user-input');
+            input.value = "";
+            input.classList.remove('correct', 'wrong', 'shake');
+            input.readOnly = false;
+            
+            document.getElementById('feedback').innerHTML = "";
+            document.getElementById('correction-hint').style.display = "none";
+            
+            const actionBtn = document.getElementById('action-btn');
+            actionBtn.innerHTML = `Check Answer <span class="material-icons-round">spellcheck</span>`;
+            actionBtn.style.background = "var(--text-dark)";
+            
+            isLevelComplete = false;
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function cleanString(str) {
+            // Remove double spaces and lowercase for comparison
+            return str.replace(/\s{2,}/g, " ").trim().toLowerCase();
+        }
+
+        function checkAnswer() {
+            if (isLevelComplete) {
+                nextSentence();
+                return;
+            }
+
+            const input = document.getElementById('user-input');
+            const feedback = document.getElementById('feedback');
+            const hint = document.getElementById('correction-hint');
+            const actionBtn = document.getElementById('action-btn');
+            
+            const userAnswer = cleanString(input.value);
+            if (userAnswer === "") return;
+
+            const data = sentences[currentIndex];
+            // Check if user answer matches any of the accepted variations
+            const isCorrect = data.answers.includes(userAnswer);
+
+            if (isCorrect) {
+                score++;
+                updateScore();
+                input.classList.remove('wrong', 'shake');
+                input.classList.add('correct');
+                input.readOnly = true;
+                
+                feedback.innerHTML = `<span style="color: #10b981;">Correct! Well structured.</span>`;
+                
+                isLevelComplete = true;
+                actionBtn.innerHTML = `Next Sentence <span class="material-icons-round">arrow_forward</span>`;
+                actionBtn.style.background = "var(--primary-teal)";
+
+            } else {
+                input.classList.remove('shake');
+                void input.offsetWidth; // trigger reflow
+                input.classList.add('shake', 'wrong');
+                
+                feedback.innerHTML = `<span style="color: #ef4444;">Incorrect. Look at the Subject and the Verb Tense.</span>`;
+                
+                // Show the correct answer so they can learn and move on
+                hint.style.display = "block";
+                hint.innerHTML = `<strong>Correct structure:</strong> ${data.correctDisplay}`;
+                
+                input.readOnly = true;
+                isLevelComplete = true;
+                actionBtn.innerHTML = `Next Sentence <span class="material-icons-round">arrow_forward</span>`;
+                actionBtn.style.background = "var(--accent-coral)";
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = score;
+        }
+
+        function nextSentence() {
+            currentIndex++;
+            loadSentence();
+        }
+
+        function showResults() {
+            document.getElementById('game-screen').style.display = "none";
+            document.getElementById('results-screen').style.display = "block";
+            
+            document.getElementById('final-score').innerText = `${score}/${sentences.length}`;
+            
+            const msg = document.getElementById('final-msg');
+            if (score === sentences.length) {
+                msg.innerText = "Flawless! You are a master of historical facts and the Passive Voice.";
+            } else if (score >= 7) {
+                msg.innerText = "Great job! Review the ones you missed, especially the verb tenses.";
+            } else {
+                msg.innerText = "Keep practicing! Remember to conjugate the verb 'To Be' correctly.";
+            }
+        }
+
+        // Initialize Game
+        window.onload = loadSentence;
+
+    </script>
+</body>
+</html>
