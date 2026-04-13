@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Info Exchange | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 30px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 90%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* GRAMMAR RULES */
+        .rules-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;
+        }
+        .rules-box h2 { margin-top: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-dark);}
+        
+        .grammar-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fafafa; border-radius: 8px; overflow: hidden; border: 1px solid #eee;}
+        .grammar-table th { background: var(--bg-light); padding: 12px; text-align: left; color: var(--primary-dark); }
+        .grammar-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.95rem;}
+        .hl-wh { color: #d9534f; font-weight: bold; }
+        .hl-be { color: var(--primary-dark); font-weight: bold; }
+
+        /* CHAT INTERFACE */
+        .chat-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal); display: flex; flex-direction: column; gap: 20px;
+        }
+        .chat-header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 10px;}
+        .chat-header h3 { margin: 0; color: var(--text-dark); }
+        .chat-header p { margin: 5px 0 0 0; color: #777; font-size: 0.9rem; }
+
+        .bubble {
+            max-width: 75%; padding: 15px 20px; border-radius: 20px; font-size: 1.05rem; line-height: 1.6;
+            position: relative; font-family: 'Merriweather', serif;
+        }
+        
+        /* Other Person (Left) */
+        .bubble.left {
+            background: #f0f0f0; color: #333; align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .bubble.left .speaker { font-size: 0.8rem; font-weight: bold; color: #777; margin-bottom: 5px; display: block; font-family: 'Poppins', sans-serif;}
+
+        /* Student (Right) */
+        .bubble.right {
+            background: #e0f2f1; color: var(--primary-dark); align-self: flex-end;
+            border-bottom-right-radius: 5px; border: 1px solid var(--primary-teal);
+        }
+        .bubble.right .speaker { font-size: 0.8rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 5px; display: block; font-family: 'Poppins', sans-serif;}
+
+        .bubble.right-coral {
+            background: #fff0f0; color: #b91c1c; align-self: flex-end;
+            border-bottom-right-radius: 5px; border: 1px solid var(--accent-coral);
+        }
+        .bubble.right-coral .speaker { font-size: 0.8rem; font-weight: bold; color: #b91c1c; margin-bottom: 5px; display: block; font-family: 'Poppins', sans-serif;}
+
+        /* INPUTS */
+        .gap-input {
+            padding: 5px 10px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 1rem; margin: 0 5px; background: white;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        /* BUTTONS & FEEDBACK */
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 15px 30px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 20px;
+        }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15);}
+
+        .feedback-text { margin-top: 15px; font-size: 1.1rem; font-weight: bold; text-align: center; min-height: 25px;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">contact_phone</span> Contact Info Exchange</h1>
+        <div class="subtitle">Wh- Questions & The verb To Be</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="rules-box">
+            <h2><span class="material-icons-round">rule</span> Grammar Rules</h2>
+            <p style="color: #666; font-size: 0.95rem; margin-top: -10px;">To ask for contact information, we use <strong>What</strong> (for things/numbers) or <strong>Who</strong> (for people) + the verb <strong>To Be</strong> (is/are).</p>
+            
+            <table class="grammar-table">
+                <tr>
+                    <th>Wh- Word</th>
+                    <th>Verb To Be</th>
+                    <th>Subject</th>
+                    <th>Answer</th>
+                </tr>
+                <tr>
+                    <td><span class="hl-wh">What</span></td>
+                    <td><span class="hl-be">is</span></td>
+                    <td>your phone number?</td>
+                    <td><strong>It is</strong> 555-1234.</td>
+                </tr>
+                <tr>
+                    <td><span class="hl-wh">What</span></td>
+                    <td><span class="hl-be">are</span></td>
+                    <td>their email addresses?</td>
+                    <td><strong>They are</strong> alex@mail.com and...</td>
+                </tr>
+                <tr>
+                    <td><span class="hl-wh">Who</span></td>
+                    <td><span class="hl-be">is</span></td>
+                    <td>your emergency contact?</td>
+                    <td><strong>She is</strong> my sister.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('part1')"><span class="material-icons-round">person</span> Part 1: The Interviewee</button>
+            <button class="tab-btn" onclick="switchTab('part2')"><span class="material-icons-round">record_voice_over</span> Part 2: The Interviewer</button>
+        </div>
+
+        <div id="part1" class="view-section active">
+            <div class="chat-box">
+                <div class="chat-header">
+                    <h3>Role: The Athlete</h3>
+                    <p>You are registering for a competition at CrossFit Sucre. Complete your answers.</p>
+                </div>
+
+                <div class="bubble left">
+                    <span class="speaker">Coach Carlos</span>
+                    Welcome to the gym! I need to register you. What is your full name?
+                </div>
+                
+                <div class="bubble right">
+                    <span class="speaker">You</span>
+                    My name <input type="text" class="gap-input" style="width: 60px;" id="p1-q1" data-ans="is"> Alex Taylor.
+                </div>
+
+                <div class="bubble left">
+                    <span class="speaker">Coach Carlos</span>
+                    Great. What is your phone number?
+                </div>
+                
+                <div class="bubble right">
+                    <span class="speaker">You</span>
+                    It <input type="text" class="gap-input" style="width: 60px;" id="p1-q2" data-ans="is"> 77123456.
+                </div>
+
+                <div class="bubble left">
+                    <span class="speaker">Coach Carlos</span>
+                    And what is your email address? We send the workout routines there.
+                </div>
+                
+                <div class="bubble right">
+                    <span class="speaker">You</span>
+                    <input type="text" class="gap-input" style="width: 70px;" id="p1-q3" data-ans="my"> email address <input type="text" class="gap-input" style="width: 60px;" id="p1-q4" data-ans="is"> alex@mail.com.
+                </div>
+
+                <div class="bubble left">
+                    <span class="speaker">Coach Carlos</span>
+                    Perfect. Just one last question: Who is your emergency contact?
+                </div>
+                
+                <div class="bubble right">
+                    <span class="speaker">You</span>
+                    My emergency contact <input type="text" class="gap-input" style="width: 60px;" id="p1-q5" data-ans="is"> my brother. His phone number <input type="text" class="gap-input" style="width: 60px;" id="p1-q6" data-ans="is"> 77987654.
+                </div>
+
+                <button class="btn-submit" onclick="checkAnswers('p1', 6)">Send Messages <span class="material-icons-round" style="vertical-align: middle;">send</span></button>
+                <div class="feedback-text" id="fb-p1"></div>
+            </div>
+        </div>
+
+        <div id="part2" class="view-section">
+            <div class="chat-box" style="border-color: var(--accent-coral);">
+                <div class="chat-header">
+                    <h3>Role: The Secretary</h3>
+                    <p>You work at Colegio Fielding. A new transfer student arrives. Formulate the questions.</p>
+                </div>
+
+                <div class="bubble right-coral">
+                    <span class="speaker">You (Secretary)</span>
+                    Welcome to Colegio Fielding! <input type="text" class="gap-input" style="width: 80px;" id="p2-q1" data-ans="what"> <input type="text" class="gap-input" style="width: 60px;" id="p2-q2" data-ans="is"> your full name?
+                </div>
+                
+                <div class="bubble left">
+                    <span class="speaker">Student</span>
+                    My name is Sofia Mendez.
+                </div>
+
+                <div class="bubble right-coral">
+                    <span class="speaker">You (Secretary)</span>
+                    <input type="text" class="gap-input" style="width: 80px;" id="p2-q3" data-ans="what"> <input type="text" class="gap-input" style="width: 60px;" id="p2-q4" data-ans="is"> your email address, Sofia?
+                </div>
+                
+                <div class="bubble left">
+                    <span class="speaker">Student</span>
+                    It is sofia@student.com.
+                </div>
+
+                <div class="bubble right-coral">
+                    <span class="speaker">You (Secretary)</span>
+                    Thank you. <input type="text" class="gap-input" style="width: 80px;" id="p2-q5" data-ans="who"> <input type="text" class="gap-input" style="width: 60px;" id="p2-q6" data-ans="are"> your parents?
+                </div>
+                
+                <div class="bubble left">
+                    <span class="speaker">Student</span>
+                    My parents are Maria and Carlos.
+                </div>
+
+                <div class="bubble right-coral">
+                    <span class="speaker">You (Secretary)</span>
+                    And <input type="text" class="gap-input" style="width: 80px;" id="p2-q7" data-ans="what"> <input type="text" class="gap-input" style="width: 60px;" id="p2-q8" data-ans="are"> their phone numbers?
+                </div>
+                
+                <div class="bubble left">
+                    <span class="speaker">Student</span>
+                    They are 6612300 and 6612400.
+                </div>
+
+                <button class="btn-submit" style="background: var(--accent-coral);" onclick="checkAnswers('p2', 8)">Send Questions <span class="material-icons-round" style="vertical-align: middle;">send</span></button>
+                <div class="feedback-text" id="fb-p2"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Input Checker
+        function checkAnswers(prefix, totalQuestions) {
+            let score = 0;
+            let allFilled = true;
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                const el = document.getElementById(`${prefix}-q${i}`);
+                if (el.value.trim() === "") allFilled = false;
+            }
+
+            if (!allFilled) {
+                alert("Please fill in all the text boxes before sending the messages.");
+                return;
+            }
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const el = document.getElementById(`${prefix}-q${i}`);
+                const answer = el.getAttribute('data-ans').toLowerCase();
+                const studentInput = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+
+                if(studentInput === answer) {
+                    el.classList.add('correct');
+                    score++;
+                } else {
+                    el.classList.add('wrong');
+                }
+            }
+
+            const fb = document.getElementById(`fb-${prefix}`);
+            if(score === totalQuestions) {
+                fb.style.color = "#10b981";
+                fb.innerHTML = "🌟 Perfect conversation! All grammar is correct.";
+            } else {
+                fb.style.color = "#ef4444";
+                fb.innerHTML = `You got ${score} out of ${totalQuestions} correct. Check the red boxes and try again!`;
+            }
+        }
+    </script>
+</body>
+</html>
