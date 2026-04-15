@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Gramática de Nivel B1</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #quiz-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 30px;
+        }
+
+        p.intro {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border-left: 5px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .question p {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 0;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .options li {
+            margin-bottom: 12px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        label {
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        #submit-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 15px;
+            background-color: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #submit-button:hover {
+            background-color: #1565c0;
+        }
+
+        #submit-button:active {
+            transform: scale(0.98);
+        }
+
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .correct {
+            color: #2e7d32;
+        }
+
+        .incorrect {
+            color: #c62828;
+        }
+
+        .question.correct-border {
+            border-color: #2e7d32;
+        }
+
+        .question.incorrect-border {
+            border-color: #c62828;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <h1>B1 Grammar Quick Review Test</h1>
+        <p class="intro">Pon a prueba tus conocimientos gramaticales basados en el repaso rápido adjunto. ¡Buena suerte!</p>
+        
+        <div id="quiz"></div>
+        <button id="submit-button">Verificar respuestas</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            // Present Perfect - Unfinished Time
+            {
+                question: "1. I ______ (not/see) my grandparents this month.",
+                options: ["haven't seen", "didn't see", "not seen"],
+                correct: 0,
+                feedback: "Correct! Use Present Perfect ('haven't seen') with unfinished time periods like 'this month'."
+            },
+            // Present Perfect - Experiences
+            {
+                question: "2. ______ you ever ______ (be) to New York?",
+                options: ["Did / eat", "Have / eaten", "Have / been"],
+                correct: 2,
+                feedback: "Correct! Use Present Perfect ('Have... been') to talk about life experiences."
+            },
+            // Present Perfect vs Past Simple (Zoom In)
+            {
+                question: "3. A: Have you visited London? B: Yes, I ______ there last summer.",
+                options: ["went", "have been", "have went"],
+                correct: 0,
+                feedback: "Correct! Use Past Simple ('went') for specific past details like 'last summer'."
+            },
+            // For vs Since
+            {
+                question: "4. We have known each other ______ we were children.",
+                options: ["for", "since", "ago"],
+                correct: 1,
+                feedback: "Correct! Use 'since' with a specific point in time (e.g., 'we were children')."
+            },
+            {
+                question: "5. She has lived here ______ ten years.",
+                options: ["since", "from", "for"],
+                correct: 2,
+                feedback: "Correct! Use 'for' with a number or period of time (e.g., 'ten years')."
+            },
+            // Adverb Position (Just/Already/Yet)
+            {
+                question: "6. 'Where is Sarah?' 'She's ______ to the supermarket. She'll be back soon.'",
+                options: ["just gone", "already been", "yet gone"],
+                correct: 0,
+                feedback: "Correct! 'Just gone' means she left a short moment ago and is still gone. Adverbs like 'just' and 'already' go in the middle, between 'have' and the V3."
+            },
+            // Been vs Gone
+            {
+                question: "7. The Smiths are on holiday. They have ______ to Spain.",
+                options: ["been", "gone", "went"],
+                correct: 1,
+                feedback: "Correct! 'Gone' means they are currently away on holiday."
+            },
+            // Passive Voice
+            {
+                question: "8. This famous song ______ (write) by John Lennon in 1970.",
+                options: ["written", "was wrote", "was written"],
+                correct: 2,
+                feedback: "Correct! The structure is 'Be + V3'. 'Was written' is Past Simple Passive."
+            },
+            // Modals Meaning
+            {
+                question: "9. You ______ smoke in here. It's strictly prohibited.",
+                options: ["shouldn't", "mustn't", "don't have to"],
+                correct: 1,
+                feedback: "Correct! 'Mustn't' indicates a strong rule or prohibition."
+            },
+            // Modals Form
+            {
+                question: "10. He must ______ (be) more careful.",
+                options: ["to be", "being", "be"],
+                correct: 2,
+                feedback: "Correct! NEVER use 'to' after 'should' or 'must'."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit-button');
+        const resultsContainer = document.getElementById('results');
+
+        function loadQuiz() {
+            quizData.forEach((questionData, questionIndex) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('question');
+                questionElement.id = `question-${questionIndex}`;
+
+                const questionText = document.createElement('p');
+                questionText.textContent = questionData.question;
+                questionElement.appendChild(questionText);
+
+                const optionsList = document.createElement('ul');
+                optionsList.classList.add('options');
+
+                questionData.options.forEach((option, optionIndex) => {
+                    const optionItem = document.createElement('li');
+                    const radioButton = document.createElement('input');
+                    radioButton.type = 'radio';
+                    radioButton.name = `question-${questionIndex}`;
+                    radioButton.value = optionIndex;
+                    radioButton.id = `q${questionIndex}o${optionIndex}`;
+
+                    const optionLabel = document.createElement('label');
+                    optionLabel.textContent = option;
+                    optionLabel.setAttribute('for', `q${questionIndex}o${optionIndex}`);
+
+                    optionItem.appendChild(radioButton);
+                    optionItem.appendChild(optionLabel);
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionElement.appendChild(optionsList);
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            const allFilled = true;
+
+            quizData.forEach((questionData, questionIndex) => {
+                const selectedOption = document.querySelector(`input[name="question-${questionIndex}"]:checked`);
+                const questionElement = document.getElementById(`question-${questionIndex}`);
+
+                // Clear previous feedback
+                const previousFeedback = questionElement.querySelector('.feedback');
+                if (previousFeedback) {
+                    previousFeedback.remove();
+                }
+
+                if (selectedOption) {
+                    const userAnswer = parseInt(selectedOption.value);
+                    if (userAnswer === questionData.correct) {
+                        score++;
+                        questionElement.classList.remove('incorrect-border');
+                        questionElement.classList.add('correct-border');
+                        showFeedback(questionElement, questionData.feedback, 'correct');
+                    } else {
+                        questionElement.classList.remove('correct-border');
+                        questionElement.classList.add('incorrect-border');
+                        showFeedback(questionElement, `Incorrect. The correct answer is: ${questionData.options[questionData.correct]}. ${questionData.feedback.split('. ')[1] || ''}`, 'incorrect');
+                    }
+                } else {
+                    questionElement.classList.add('incorrect-border');
+                    showFeedback(questionElement, "This question has not been answered.", 'incorrect');
+                }
+            });
+
+            // Show final score
+            resultsContainer.style.display = 'block';
+            resultsContainer.textContent = `Puntuación: ${score} / ${quizData.length}`;
+            resultsContainer.classList.add(score === quizData.length ? 'correct' : (score > 6 ? 'feedback' : 'incorrect'));
+        }
+
+        function showFeedback(element, text, className) {
+            const feedbackText = document.createElement('p');
+            feedbackText.classList.add('feedback');
+            feedbackText.classList.add(className);
+            feedbackText.textContent = text;
+            element.appendChild(feedbackText);
+        }
+
+        loadQuiz();
+        submitButton.addEventListener('click', checkAnswers);
+
+    </script>
+</body>
+</html>
