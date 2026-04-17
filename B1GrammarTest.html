@@ -3,301 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Gramática de Nivel B1</title>
+    <title>B1 Grammar Quick Review Test | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
             min-height: 100vh;
         }
 
-        #quiz-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1 {
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
             text-align: center;
-            color: #1976d2;
-            margin-bottom: 30px;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
         }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
 
-        p.intro {
-            text-align: center;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            color: #555;
-        }
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
 
-        .question {
-            margin-bottom: 25px;
-            padding: 20px;
-            background-color: #fafafa;
-            border-radius: 8px;
-            border-left: 5px solid transparent;
-            transition: border-color 0.3s;
+        .intro-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; text-align: center;
         }
+        .intro-box p { color: #555; font-size: 1.05rem; margin: 0; line-height: 1.6;}
 
-        .question p {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 0;
+        /* QUIZ CARDS */
+        .question-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 25px; border-left: 6px solid var(--primary-teal); transition: 0.3s;
         }
+        
+        .q-text { font-size: 1.15rem; font-weight: 600; color: var(--text-dark); margin-top: 0; margin-bottom: 20px; font-family: 'Merriweather', serif;}
+        
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 768px) { .options { grid-template-columns: 1fr 1fr 1fr; } }
 
-        .options {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .opt-label {
+            padding: 15px 20px; border: 2px solid #eee; background: #fafafa; border-radius: 10px;
+            cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #555;
         }
+        .opt-label:hover { border-color: var(--primary-teal); background: white;}
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); cursor: pointer;}
+        
+        /* Evaluation Classes */
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important;}
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important;}
+        
+        .feedback-text {
+            margin-top: 15px; font-size: 0.95rem; font-weight: 600; display: none; padding: 10px; border-radius: 8px;
+        }
+        .fb-correct { background: #d1fae5; color: #065f46; }
+        .fb-wrong { background: #fee2e2; color: #991b1b; }
 
-        .options li {
-            margin-bottom: 12px;
+        /* SUBMIT BUTTON */
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 18px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 40px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); width: 100%; max-width: 400px;
         }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
 
-        input[type="radio"] {
-            margin-right: 10px;
-            cursor: pointer;
+        /* RESULTS SCREEN */
+        #results-container {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral); text-align: center; display: none; margin-bottom: 50px;
         }
-
-        label {
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        #submit-button {
-            display: block;
-            width: 200px;
-            margin: 30px auto;
-            padding: 15px;
-            background-color: #1976d2;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        #submit-button:hover {
-            background-color: #1565c0;
-        }
-
-        #submit-button:active {
-            transform: scale(0.98);
-        }
-
-        #results {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .feedback {
-            font-size: 1em;
-            margin-top: 10px;
-        }
-
-        .correct {
-            color: #2e7d32;
-        }
-
-        .incorrect {
-            color: #c62828;
-        }
-
-        .question.correct-border {
-            border-color: #2e7d32;
-        }
-
-        .question.incorrect-border {
-            border-color: #c62828;
-        }
+        .score-display { font-size: 4rem; font-weight: 700; color: var(--primary-teal); margin: 10px 0;}
+        .score-msg { font-size: 1.2rem; color: #555; margin-bottom: 20px; }
 
     </style>
 </head>
 <body>
 
-    <div id="quiz-container">
-        <h1>B1 Grammar Quick Review Test</h1>
-        <p class="intro">Pon a prueba tus conocimientos gramaticales basados en el repaso rápido adjunto. ¡Buena suerte!</p>
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">assignment_turned_in</span> B1 Grammar Quick Review</h1>
+        <div class="subtitle">40-Question Comprehensive Test</div>
+    </header>
+
+    <div class="container">
         
-        <div id="quiz"></div>
-        <button id="submit-button">Verificar respuestas</button>
-        <div id="results"></div>
+        <div class="intro-box">
+            <p><strong>Instructions:</strong> This test evaluates your mastery of the Present Perfect, "Power Words" (For/Since/Just/Already/Yet), Passive Voice, and Modals. Read carefully and select the best option for each sentence.</p>
+        </div>
+
+        <div id="quiz-form">
+            </div>
+
+        <button class="btn-submit" id="btn-submit" onclick="evaluateQuiz()">Submit Answers</button>
+
+        <div id="results-container">
+            <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-yellow);">emoji_events</div>
+            <h2>Test Completed!</h2>
+            <div class="score-display" id="final-score">0 / 40</div>
+            <p class="score-msg" id="final-msg"></p>
+            <button class="btn-submit" style="background: var(--primary-teal);" onclick="location.reload()">Take Test Again</button>
+        </div>
+
     </div>
 
     <script>
         const quizData = [
-            // Present Perfect - Unfinished Time
-            {
-                question: "1. I ______ (not/see) my grandparents this month.",
-                options: ["haven't seen", "didn't see", "not seen"],
-                correct: 0,
-                feedback: "Correct! Use Present Perfect ('haven't seen') with unfinished time periods like 'this month'."
-            },
-            // Present Perfect - Experiences
-            {
-                question: "2. ______ you ever ______ (be) to New York?",
-                options: ["Did / eat", "Have / eaten", "Have / been"],
-                correct: 2,
-                feedback: "Correct! Use Present Perfect ('Have... been') to talk about life experiences."
-            },
-            // Present Perfect vs Past Simple (Zoom In)
-            {
-                question: "3. A: Have you visited London? B: Yes, I ______ there last summer.",
-                options: ["went", "have been", "have went"],
-                correct: 0,
-                feedback: "Correct! Use Past Simple ('went') for specific past details like 'last summer'."
-            },
-            // For vs Since
-            {
-                question: "4. We have known each other ______ we were children.",
-                options: ["for", "since", "ago"],
-                correct: 1,
-                feedback: "Correct! Use 'since' with a specific point in time (e.g., 'we were children')."
-            },
-            {
-                question: "5. She has lived here ______ ten years.",
-                options: ["since", "from", "for"],
-                correct: 2,
-                feedback: "Correct! Use 'for' with a number or period of time (e.g., 'ten years')."
-            },
-            // Adverb Position (Just/Already/Yet)
-            {
-                question: "6. 'Where is Sarah?' 'She's ______ to the supermarket. She'll be back soon.'",
-                options: ["just gone", "already been", "yet gone"],
-                correct: 0,
-                feedback: "Correct! 'Just gone' means she left a short moment ago and is still gone. Adverbs like 'just' and 'already' go in the middle, between 'have' and the V3."
-            },
-            // Been vs Gone
-            {
-                question: "7. The Smiths are on holiday. They have ______ to Spain.",
-                options: ["been", "gone", "went"],
-                correct: 1,
-                feedback: "Correct! 'Gone' means they are currently away on holiday."
-            },
-            // Passive Voice
-            {
-                question: "8. This famous song ______ (write) by John Lennon in 1970.",
-                options: ["written", "was wrote", "was written"],
-                correct: 2,
-                feedback: "Correct! The structure is 'Be + V3'. 'Was written' is Past Simple Passive."
-            },
-            // Modals Meaning
-            {
-                question: "9. You ______ smoke in here. It's strictly prohibited.",
-                options: ["shouldn't", "mustn't", "don't have to"],
-                correct: 1,
-                feedback: "Correct! 'Mustn't' indicates a strong rule or prohibition."
-            },
-            // Modals Form
-            {
-                question: "10. He must ______ (be) more careful.",
-                options: ["to be", "being", "be"],
-                correct: 2,
-                feedback: "Correct! NEVER use 'to' after 'should' or 'must'."
-            }
+            // --- ORIGINAL 10 QUESTIONS ---
+            { q: "1. I ______ (not/see) my grandparents this month.", options: ["haven't seen", "didn't see", "not seen"], correct: 0, fb: "Use Present Perfect ('haven't seen') with unfinished time periods like 'this month'." },
+            { q: "2. ______ you ever ______ (be) to New York?", options: ["Did / eat", "Have / eaten", "Have / been"], correct: 2, fb: "Use Present Perfect ('Have... been') to talk about life experiences." },
+            { q: "3. A: Have you visited London? B: Yes, I ______ there last summer.", options: ["went", "have been", "have went"], correct: 0, fb: "Use Past Simple ('went') for specific past details like 'last summer'." },
+            { q: "4. We have known each other ______ we were children.", options: ["for", "since", "ago"], correct: 1, fb: "Use 'since' with a specific point in time (e.g., 'we were children')." },
+            { q: "5. She has lived here ______ ten years.", options: ["since", "from", "for"], correct: 2, fb: "Use 'for' with a number or period of time (e.g., 'ten years')." },
+            { q: "6. 'Where is Sarah?' 'She's ______ to the supermarket. She'll be back soon.'", options: ["just gone", "already been", "yet gone"], correct: 0, fb: "'Just gone' means she left recently and is still there. Adverbs like 'just' go in the middle." },
+            { q: "7. The Smiths are on holiday. They have ______ to Spain.", options: ["been", "gone", "went"], correct: 1, fb: "'Gone' means they are currently away on holiday and haven't returned." },
+            { q: "8. This famous song ______ (write) by John Lennon in 1970.", options: ["written", "was wrote", "was written"], correct: 2, fb: "Passive Voice structure is 'Verb To Be + V3'. 'Was written' is Past Simple Passive." },
+            { q: "9. You ______ smoke in here. It's strictly prohibited.", options: ["shouldn't", "mustn't", "don't have to"], correct: 1, fb: "'Mustn't' indicates a strong rule or prohibition." },
+            { q: "10. He must ______ (be) more careful.", options: ["to be", "being", "be"], correct: 2, fb: "NEVER use 'to' after modal verbs like 'should' or 'must'." },
+            
+            // --- NEW 30 QUESTIONS ---
+            // Present Perfect vs Past Simple
+            { q: "11. I ______ (live) in this city since 2015.", options: ["lived", "have lived", "am living"], correct: 1, fb: "Use Present Perfect for an action that started in the past and continues today." },
+            { q: "12. She ______ (eat) sushi for the first time yesterday.", options: ["ate", "has eaten", "eats"], correct: 0, fb: "Use Past Simple ('ate') because 'yesterday' is a finished time." },
+            { q: "13. We ______ (not / finish) the project yet.", options: ["didn't finish", "haven't finished", "aren't finishing"], correct: 1, fb: "Use Present Perfect with 'yet' for expectations." },
+            { q: "14. ______ (you / ever / meet) a famous actor?", options: ["Did you ever meet", "Do you ever meet", "Have you ever met"], correct: 2, fb: "Use Present Perfect to ask about general life experiences." },
+            { q: "15. I ______ (read) three books so far this month.", options: ["read", "have read", "reading"], correct: 1, fb: "'This month' is an unfinished time period, so we use Present Perfect." },
+            { q: "16. When ______ (you / arrive) at the hotel last night?", options: ["have you arrived", "did you arrive", "are you arriving"], correct: 1, fb: "Use Past Simple to ask for specific details like 'When' and 'last night'." },
+            { q: "17. He ______ (never / fly) in a helicopter.", options: ["has never flown", "didn't never fly", "has never flew"], correct: 0, fb: "Present perfect for experiences. The V3 of fly is 'flown'." },
+            { q: "18. They ______ (be) married for 20 years.", options: ["are", "were", "have been"], correct: 2, fb: "Use Present Perfect ('have been') to show duration from past to present." },
+            { q: "19. I lost my keys. ______ (you / see) them?", options: ["Did you see", "Have you seen", "Do you see"], correct: 1, fb: "Use Present Perfect for a past action with a result in the present." },
+            { q: "20. Shakespeare ______ (write) Hamlet many years ago.", options: ["has written", "writes", "wrote"], correct: 2, fb: "Shakespeare is dead, his life period is finished. Use Past Simple." },
+
+            // Power Words (For/Since/Just/Already/Yet/Been/Gone)
+            { q: "21. I haven't done my English homework ______.", options: ["already", "just", "yet"], correct: 2, fb: "'Yet' goes at the END of negative sentences." },
+            { q: "22. We have been waiting for the bus ______ three hours.", options: ["since", "for", "during"], correct: 1, fb: "Use 'for' + a number/period of time." },
+            { q: "23. He has been my best friend ______ we were in primary school.", options: ["for", "since", "until"], correct: 1, fb: "Use 'since' + a specific point in time or a date." },
+            { q: "24. Don't worry, I have ______ sent the email.", options: ["already", "yet", "since"], correct: 0, fb: "'Already' means sooner than expected. It goes in the middle." },
+            { q: "25. I'm not thirsty. I have ______ drank a large glass of water.", options: ["just", "yet", "for"], correct: 0, fb: "'Just' means a very short time ago." },
+            { q: "26. Have you finished the financial report ______?", options: ["already", "just", "yet"], correct: 2, fb: "'Yet' is used at the end of questions to ask about expectations." },
+            { q: "27. My brother is not here. He has ______ to the gym.", options: ["been", "gone", "went"], correct: 1, fb: "He hasn't returned yet, so we use 'gone'." },
+            { q: "28. I have ______ to London twice. It's a fantastic city.", options: ["been", "gone", "was"], correct: 0, fb: "I went and returned (experience). We use 'been'." },
+            { q: "29. She has ______ finished her exams, so she is celebrating right now.", options: ["just", "yet", "since"], correct: 0, fb: "'Just' indicates the action happened very recently." },
+            { q: "30. We have lived in this house ______ 2018.", options: ["for", "in", "since"], correct: 2, fb: "2018 is a specific date, so we use 'since'." },
+
+            // Passive Voice & Modals
+            { q: "31. The Colosseum ______ (build) in Rome centuries ago.", options: ["built", "was built", "is built"], correct: 1, fb: "Passive Voice in the past: Was + V3." },
+            { q: "32. Millions of emails ______ (send) every single day.", options: ["are sent", "were sent", "sent"], correct: 0, fb: "Passive Voice in the present (every day): Are + V3." },
+            { q: "33. My bicycle ______ (steal) from the garage last night!", options: ["stole", "was stolen", "has stolen"], correct: 1, fb: "Passive Voice focusing on the object: Was + V3." },
+            { q: "34. This beautiful book ______ (write) by J.K. Rowling.", options: ["wrote", "was written", "is written"], correct: 1, fb: "Passive Voice (Past) with the agent 'by'." },
+            { q: "35. You ______ wear a seatbelt when you drive. It's the law.", options: ["must", "should", "might"], correct: 0, fb: "'Must' (or have to) is used for strong rules and laws." },
+            { q: "36. I have a terrible headache. I think I ______ see a doctor.", options: ["mustn't", "should", "have to"], correct: 1, fb: "'Should' is used to give advice or a good idea." },
+            { q: "37. We ______ leave now or we will miss the flight.", options: ["shouldn't", "have to", "might"], correct: 1, fb: "'Have to' expresses an external obligation or necessity." },
+            { q: "38. You ______ use your phone during the final exam.", options: ["don't have to", "mustn't", "shouldn't"], correct: 1, fb: "'Mustn't' means something is strictly prohibited." },
+            { q: "39. She should ______ (study) more for her test.", options: ["to study", "studying", "study"], correct: 2, fb: "Never use 'to' after modal verbs like should/must." },
+            { q: "40. The Olympic Games ______ (hold) every four years.", options: ["are held", "were held", "hold"], correct: 0, fb: "Present Passive Voice for regular events (are + V3)." }
         ];
 
-        const quizContainer = document.getElementById('quiz');
-        const submitButton = document.getElementById('submit-button');
-        const resultsContainer = document.getElementById('results');
+        const quizContainer = document.getElementById('quiz-form');
 
-        function loadQuiz() {
-            quizData.forEach((questionData, questionIndex) => {
-                const questionElement = document.createElement('div');
-                questionElement.classList.add('question');
-                questionElement.id = `question-${questionIndex}`;
-
-                const questionText = document.createElement('p');
-                questionText.textContent = questionData.question;
-                questionElement.appendChild(questionText);
-
-                const optionsList = document.createElement('ul');
-                optionsList.classList.add('options');
-
-                questionData.options.forEach((option, optionIndex) => {
-                    const optionItem = document.createElement('li');
-                    const radioButton = document.createElement('input');
-                    radioButton.type = 'radio';
-                    radioButton.name = `question-${questionIndex}`;
-                    radioButton.value = optionIndex;
-                    radioButton.id = `q${questionIndex}o${optionIndex}`;
-
-                    const optionLabel = document.createElement('label');
-                    optionLabel.textContent = option;
-                    optionLabel.setAttribute('for', `q${questionIndex}o${optionIndex}`);
-
-                    optionItem.appendChild(radioButton);
-                    optionItem.appendChild(optionLabel);
-                    optionsList.appendChild(optionItem);
-                });
-
-                questionElement.appendChild(optionsList);
-                quizContainer.appendChild(questionElement);
+        function renderQuiz() {
+            let html = "";
+            quizData.forEach((q, index) => {
+                html += `
+                <div class="question-card" id="q-card-${index}">
+                    <p class="q-text">${q.q}</p>
+                    <div class="options">
+                        <label class="opt-label"><input type="radio" name="q${index}" value="0"> ${q.options[0]}</label>
+                        <label class="opt-label"><input type="radio" name="q${index}" value="1"> ${q.options[1]}</label>
+                        <label class="opt-label"><input type="radio" name="q${index}" value="2"> ${q.options[2]}</label>
+                    </div>
+                    <div class="feedback-text" id="fb-${index}"></div>
+                </div>`;
             });
+            quizContainer.innerHTML = html;
         }
 
-        function checkAnswers() {
+        function evaluateQuiz() {
             let score = 0;
-            const allFilled = true;
+            let allAnswered = true;
 
-            quizData.forEach((questionData, questionIndex) => {
-                const selectedOption = document.querySelector(`input[name="question-${questionIndex}"]:checked`);
-                const questionElement = document.getElementById(`question-${questionIndex}`);
+            // Reset UI
+            document.querySelectorAll('.opt-label').forEach(label => label.classList.remove('correct-ans', 'wrong-ans'));
+            document.querySelectorAll('.feedback-text').forEach(fb => { fb.style.display = 'none'; fb.className = 'feedback-text'; });
 
-                // Clear previous feedback
-                const previousFeedback = questionElement.querySelector('.feedback');
-                if (previousFeedback) {
-                    previousFeedback.remove();
+            for (let i = 0; i < quizData.length; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const card = document.getElementById(`q-card-${i}`);
+                const feedback = document.getElementById(`fb-${i}`);
+
+                if (!selected) {
+                    allAnswered = false;
+                    card.style.borderLeftColor = "var(--accent-yellow)";
+                    continue;
                 }
 
-                if (selectedOption) {
-                    const userAnswer = parseInt(selectedOption.value);
-                    if (userAnswer === questionData.correct) {
-                        score++;
-                        questionElement.classList.remove('incorrect-border');
-                        questionElement.classList.add('correct-border');
-                        showFeedback(questionElement, questionData.feedback, 'correct');
-                    } else {
-                        questionElement.classList.remove('correct-border');
-                        questionElement.classList.add('incorrect-border');
-                        showFeedback(questionElement, `Incorrect. The correct answer is: ${questionData.options[questionData.correct]}. ${questionData.feedback.split('. ')[1] || ''}`, 'incorrect');
-                    }
+                const userVal = parseInt(selected.value);
+                const correctVal = quizData[i].correct;
+                const correctInput = document.querySelector(`input[name="q${i}"][value="${correctVal}"]`);
+                
+                // Highlight the correct answer regardless
+                correctInput.parentElement.classList.add('correct-ans');
+
+                feedback.style.display = "block";
+
+                if (userVal === correctVal) {
+                    score++;
+                    card.style.borderLeftColor = "#10b981";
+                    feedback.classList.add('fb-correct');
+                    feedback.innerHTML = `✅ ${quizData[i].fb}`;
                 } else {
-                    questionElement.classList.add('incorrect-border');
-                    showFeedback(questionElement, "This question has not been answered.", 'incorrect');
+                    card.style.borderLeftColor = "#ef4444";
+                    selected.parentElement.classList.add('wrong-ans');
+                    feedback.classList.add('fb-wrong');
+                    feedback.innerHTML = `❌ Incorrect. ${quizData[i].fb}`;
                 }
-            });
+            }
 
-            // Show final score
-            resultsContainer.style.display = 'block';
-            resultsContainer.textContent = `Puntuación: ${score} / ${quizData.length}`;
-            resultsContainer.classList.add(score === quizData.length ? 'correct' : (score > 6 ? 'feedback' : 'incorrect'));
+            if (!allAnswered) {
+                alert("Please answer all 40 questions before submitting.");
+                return;
+            }
+
+            // Disable inputs and button
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+            document.getElementById('btn-submit').style.display = "none";
+
+            // Show Final Results
+            const results = document.getElementById('results-container');
+            results.style.display = "block";
+            document.getElementById('final-score').innerText = `${score} / 40`;
+            
+            const msg = document.getElementById('final-msg');
+            if (score === 40) {
+                msg.innerText = "🌟 Perfect Score! You have completely mastered the B1 Grammar rules.";
+            } else if (score >= 30) {
+                msg.innerText = "👍 Great job! You have a solid understanding of the concepts. Review your mistakes.";
+            } else {
+                msg.innerText = "📚 Keep practicing! Check the red feedback boxes to learn from your mistakes.";
+            }
+
+            // Scroll to results
+            results.scrollIntoView({ behavior: "smooth" });
         }
 
-        function showFeedback(element, text, className) {
-            const feedbackText = document.createElement('p');
-            feedbackText.classList.add('feedback');
-            feedbackText.classList.add(className);
-            feedbackText.textContent = text;
-            element.appendChild(feedbackText);
-        }
-
-        loadQuiz();
-        submitButton.addEventListener('click', checkAnswers);
-
+        // Initialize
+        window.onload = renderQuiz;
     </script>
 </body>
 </html>
