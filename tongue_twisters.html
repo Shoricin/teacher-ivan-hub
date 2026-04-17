@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tongue Twister Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, #e0f2f1, var(--bg-light));
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* SCREENS */
+        .screen { display: none; animation: fadeIn 0.4s ease; }
+        .screen.active { display: block; }
+
+        /* --- SETUP SCREEN --- */
+        .setup-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-top: 6px solid var(--primary-teal); text-align: center;
+        }
+        .setup-box h2 { margin-top: 0; color: var(--primary-dark); }
+        
+        .team-input-group { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .team-input-group input {
+            padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem; width: 60%; outline: none; transition: 0.3s;
+        }
+        .team-input-group input:focus { border-color: var(--primary-teal); }
+        
+        .btn-add {
+            background: var(--primary-teal); color: white; border: none; padding: 0 25px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+        .btn-add:hover { background: var(--primary-dark); }
+
+        .team-list {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; list-style: none; padding: 0;
+        }
+        .team-chip {
+            background: #f0f8f8; color: var(--primary-dark); padding: 10px 20px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; border: 2px solid var(--primary-teal); display: flex; align-items: center; gap: 5px;
+        }
+
+        /* --- GAME SCREEN --- */
+        /* Scoreboard */
+        .scoreboard {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px;
+        }
+        .score-card {
+            background: white; border: 2px solid var(--primary-teal); border-radius: 12px;
+            padding: 15px 25px; min-width: 120px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .s-name { font-weight: bold; font-size: 1.1rem; color: #555; }
+        .s-points { font-size: 2rem; font-weight: 700; color: var(--accent-coral); }
+
+        /* Game Box */
+        .game-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral); text-align: center; position: relative; overflow: hidden;
+        }
+
+        .level-badge {
+            background: var(--accent-yellow); color: #fff; padding: 5px 20px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; display: inline-block; margin-bottom: 10px;
+        }
+        .difficulty-text { color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 30px;}
+
+        .twister-text {
+            font-family: 'Merriweather', serif; font-size: 2.2rem; font-weight: 700; color: var(--text-dark);
+            line-height: 1.5; margin-bottom: 40px; padding: 0 20px;
+        }
+
+        /* Award Buttons */
+        .award-section {
+            background: #fafafa; padding: 20px; border-radius: 12px; border: 1px dashed #ccc;
+        }
+        .award-title { font-size: 1.1rem; font-weight: bold; color: #555; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        
+        .award-grid {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+        .btn-award {
+            background: white; border: 2px solid var(--primary-teal); color: var(--primary-dark);
+            padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+            transition: 0.2s; display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif;
+        }
+        .btn-award:hover { background: var(--primary-teal); color: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(93,203,195,0.3);}
+
+        .btn-skip {
+            background: transparent; color: #999; border: none; font-weight: bold; cursor: pointer;
+            margin-top: 20px; text-decoration: underline; font-family: 'Poppins', sans-serif; transition: 0.2s;
+        }
+        .btn-skip:hover { color: var(--accent-coral); }
+
+        /* Progress Bar */
+        .progress-container { width: 100%; height: 10px; background: #eee; border-radius: 10px; margin-top: 40px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-teal), var(--accent-coral)); width: 0%; transition: 0.5s; }
+
+        /* BUTTONS */
+        .btn-main {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-main:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4); }
+
+        /* RESULTS SCREEN */
+        .results-box { background: white; padding: 50px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-yellow); text-align: center;}
+        
+        .podium { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 30px auto; }
+        .podium-row { display: flex; justify-content: space-between; background: #fafafa; padding: 15px 20px; border-radius: 10px; font-size: 1.2rem; font-weight: bold; border: 2px solid #eee;}
+        .podium-row.winner { background: #fff9e6; border-color: var(--accent-yellow); color: #b9770e; transform: scale(1.05); box-shadow: 0 5px 15px rgba(245, 176, 65, 0.2);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">record_voice_over</span> Tongue Twisters</h1>
+        <div class="subtitle">20 Levels of Pronunciation & Fluency Challenge</div>
+    </header>
+
+    <div class="container">
+        
+        <div id="setup-screen" class="screen active">
+            <div class="setup-box">
+                <h2>Add Teams or Players</h2>
+                <p style="color: #666;">Registra a los equipos. El equipo que pronuncie el trabalenguas correctamente ganará 10 puntos y desbloqueará el siguiente nivel.</p>
+                
+                <div class="team-input-group">
+                    <input type="text" id="team-input" placeholder="Ej. Equipo Rojo, Ana, etc." onkeypress="if(event.key==='Enter') addTeam()">
+                    <button class="btn-add" onclick="addTeam()">Add</button>
+                </div>
+
+                <ul class="team-list" id="team-list">
+                    </ul>
+
+                <button class="btn-main" onclick="startGame()">Start Challenge <span class="material-icons-round">play_arrow</span></button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            
+            <div class="scoreboard" id="scoreboard">
+                </div>
+
+            <div class="game-box" id="game-box">
+                <div class="level-badge">Level <span id="level-display">1</span> / 20</div>
+                <div class="difficulty-text" id="difficulty-display">Difficulty: Easy</div>
+
+                <div class="twister-text" id="twister-display">
+                    Loading tongue twister...
+                </div>
+
+                <div class="award-section">
+                    <div class="award-title"><span class="material-icons-round" style="color: #10b981;">check_circle</span> Who said it correctly? (+10 pts)</div>
+                    <div class="award-grid" id="award-buttons">
+                        </div>
+                    <button class="btn-skip" onclick="nextLevel()">Nadie lo logró. Skip Level ➔</button>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-box">
+                <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-yellow);">emoji_events</div>
+                <h2 style="font-size: 2.5rem; color: var(--text-dark); margin-bottom: 10px;">Challenge Completed!</h2>
+                <p style="font-size: 1.2rem; color: #666;">Sobrevivieron a los 20 niveles de rompelenguas. Aquí están los resultados finales:</p>
+                
+                <div class="podium" id="podium">
+                    </div>
+
+                <button class="btn-main" onclick="location.reload()">Play Again <span class="material-icons-round">refresh</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Database of 20 Tongue Twisters (Progressive Difficulty)
+        const twisters = [
+            { text: "I scream, you scream, we all scream for ice cream.", diff: "Easy (A1)" },
+            { text: "Four fine fresh fish for you.", diff: "Easy (A1)" },
+            { text: "I saw a kitten eating chicken in the kitchen.", diff: "Easy (A1)" },
+            { text: "A big black bug bit a big black bear.", diff: "Easy (A1)" },
+            { text: "She sells seashells by the seashore.", diff: "Medium (A2)" },
+            { text: "He threw three free throws.", diff: "Medium (A2)" },
+            { text: "Nine nice night nurses nursing nicely.", diff: "Medium (A2)" },
+            { text: "We surely shall see the sun shine soon.", diff: "Medium (A2)" },
+            { text: "Which witch is which?", diff: "Medium (A2)" },
+            { text: "Double bubble gum, bubbles double.", diff: "Medium (A2)" },
+            { text: "Peter Piper picked a peck of pickled peppers.", diff: "Hard (B1)" },
+            { text: "How much wood would a woodchuck chuck if a woodchuck could chuck wood?", diff: "Hard (B1)" },
+            { text: "Betty Botter bought some butter but she said the butter's bitter.", diff: "Hard (B1)" },
+            { text: "Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair.", diff: "Hard (B1)" },
+            { text: "I thought a thought. But the thought I thought wasn't the thought I thought I thought.", diff: "Hard (B1)" },
+            { text: "Six slippery snails slid slowly seaward.", diff: "Hard (B2)" },
+            { text: "Any noise annoys an oyster, but a noisy noise annoys an oyster most.", diff: "Expert (C1)" },
+            { text: "A proper copper coffee pot.", diff: "Expert (C1)" },
+            { text: "The sixth sick sheik's sixth sheep's sick.", diff: "Expert (C1)" },
+            { text: "Pad kid poured curd pulled cod.", diff: "Native (C2+)" }
+        ];
+
+        let teams = [];
+        let currentLevel = 0;
+
+        // --- SETUP LOGIC ---
+        function addTeam() {
+            const input = document.getElementById('team-input');
+            const name = input.value.trim();
+            if (name !== "") {
+                teams.push({ name: name, score: 0 });
+                input.value = "";
+                renderTeams();
+            }
+        }
+
+        function renderTeams() {
+            const list = document.getElementById('team-list');
+            list.innerHTML = "";
+            teams.forEach(t => {
+                list.innerHTML += `<li class="team-chip"><span class="material-icons-round" style="font-size: 1.2rem;">group</span> ${t.name}</li>`;
+            });
+        }
+
+        // --- GAME LOGIC ---
+        function startGame() {
+            if (teams.length === 0) {
+                alert("Por favor, agrega al menos un equipo o jugador para empezar.");
+                return;
+            }
+            document.getElementById('setup-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
+            
+            initScoreboard();
+            initAwardButtons();
+            loadLevel();
+        }
+
+        function initScoreboard() {
+            const board = document.getElementById('scoreboard');
+            board.innerHTML = "";
+            teams.forEach((t, index) => {
+                board.innerHTML += `
+                    <div class="score-card" id="card-team-${index}">
+                        <div class="s-name">${t.name}</div>
+                        <div class="s-points" id="score-team-${index}">0</div>
+                    </div>
+                `;
+            });
+        }
+
+        function initAwardButtons() {
+            const grid = document.getElementById('award-buttons');
+            grid.innerHTML = "";
+            teams.forEach((t, index) => {
+                grid.innerHTML += `
+                    <button class="btn-award" onclick="awardPoints(${index})">
+                        <span class="material-icons-round">add_task</span> ${t.name}
+                    </button>
+                `;
+            });
+        }
+
+        function loadLevel() {
+            if (currentLevel >= twisters.length) {
+                showResults();
+                return;
+            }
+
+            const twister = twisters[currentLevel];
+            document.getElementById('level-display').innerText = currentLevel + 1;
+            
+            const diffDisplay = document.getElementById('difficulty-display');
+            diffDisplay.innerText = `Difficulty: ${twister.diff}`;
+            
+            // Change color based on difficulty
+            if(twister.diff.includes("Easy")) diffDisplay.style.color = "#10b981";
+            else if(twister.diff.includes("Medium")) diffDisplay.style.color = "#f5b041";
+            else if(twister.diff.includes("Hard")) diffDisplay.style.color = "#f97316";
+            else diffDisplay.style.color = "#ef4444";
+
+            document.getElementById('twister-display').innerText = twister.text;
+
+            // Update Progress Bar
+            const progress = (currentLevel / twisters.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function awardPoints(teamIndex) {
+            // Add points
+            teams[teamIndex].score += 10;
+            
+            // Update UI with pop animation
+            const scoreEl = document.getElementById(`score-team-${teamIndex}`);
+            scoreEl.innerText = teams[teamIndex].score;
+            
+            const cardEl = document.getElementById(`card-team-${teamIndex}`);
+            cardEl.style.animation = 'none';
+            cardEl.offsetHeight; // trigger reflow
+            cardEl.style.animation = 'pop 0.4s ease';
+
+            // Visual feedback on the game box
+            const gameBox = document.getElementById('game-box');
+            gameBox.style.boxShadow = "0 0 30px rgba(16, 185, 129, 0.4)";
+            setTimeout(() => gameBox.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)", 400);
+
+            // Move to next level
+            nextLevel();
+        }
+
+        function nextLevel() {
+            currentLevel++;
+            loadLevel();
+        }
+
+        // --- RESULTS LOGIC ---
+        function showResults() {
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.add('active');
+
+            // Sort teams by score descending
+            teams.sort((a, b) => b.score - a.score);
+
+            const podium = document.getElementById('podium');
+            podium.innerHTML = "";
+
+            teams.forEach((t, index) => {
+                let isWinnerClass = index === 0 ? "winner" : "";
+                let medal = index === 0 ? "🥇" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : ""));
+                
+                podium.innerHTML += `
+                    <div class="podium-row ${isWinnerClass}">
+                        <span>${medal} ${t.name}</span>
+                        <span>${t.score} pts</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
