@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redemption Review & Lesson Prep | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 30px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* STUDENT GRID */
+        .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .student-grid { grid-template-columns: 1fr; } }
+
+        .student-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid; display: flex; flex-direction: column;
+        }
+        .card-diana { border-color: #8b5cf6; } 
+        .card-valeria { border-color: var(--accent-coral); } 
+
+        .student-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;}
+        .student-avatar { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.5rem;}
+        .avatar-d { background: #8b5cf6; }
+        .avatar-v { background: var(--accent-coral); }
+        .student-name { font-size: 1.5rem; font-weight: 700; margin: 0; }
+
+        /* ERROR BOXES */
+        .quote-box { background: #fff0f0; border-left: 4px solid #ef4444; padding: 12px 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-family: 'Merriweather', serif; font-size: 0.95rem; color: #7f1d1d; line-height: 1.6;}
+        .error-hl { background: #fecaca; font-weight: bold; padding: 0 4px; border-radius: 3px; }
+        .info-badge { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+
+        /* EXERCISE BOX */
+        .exercise-box { background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ddd;}
+        .gap-input {
+            padding: 5px 10px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 0.95rem;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check {
+            background: var(--text-dark); color: white; border: none; padding: 12px 20px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 15px;
+        }
+        .btn-check:hover { background: #444; transform: translateY(-2px);}
+        .feedback-text { margin-top: 15px; font-size: 0.95rem; font-weight: bold; text-align: center; min-height: 20px;}
+
+        /* LESSON PREP STYLES */
+        .lesson-card { background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;}
+        .lesson-card h2 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .rule-display { background: #fdfdfd; border: 2px dashed var(--primary-teal); padding: 20px; border-radius: 12px; margin-bottom: 25px;}
+        .rule-display h3 { margin-top: 0; color: var(--primary-dark); }
+        .rule-display p { line-height: 1.8; color: #444; }
+        .rule-display .hl-word { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>IELTS Task 1: Bootcamp</h1>
+        <div class="subtitle">Redemption Review & Next Steps</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('review-tab')"><span class="material-icons-round">rate_review</span> Part 1: Redemption Review</button>
+        <button class="tab-btn" onclick="switchTab('prep-tab')"><span class="material-icons-round">model_training</span> Part 2: Upcoming Lessons</button>
+    </div>
+
+    <div class="container">
+
+        <div id="review-tab" class="view-section active">
+            
+            <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
+                <h3 style="margin: 0 0 5px 0;">Análisis del Redemption Essay</h3>
+                <p style="margin: 0; font-size: 1.05rem;">Revisemos qué salió bien y qué falló en sus últimas entregas.</p>
+            </div>
+
+            <div class="student-grid">
+                
+                <div class="student-card card-diana">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-d">D</div>
+                        <h2 class="student-name">Diana</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-red">Word Count: 86 words (Failed)</div>
+                    <p style="font-size: 0.9rem; color: #555;">Diana, tu ensayo se cortó abruptamente al final y no llegaste al mínimo de 150 palabras. Además, creaste "Run-on sentences" (oraciones larguísimas sin puntos).</p>
+                    
+                    <div class="quote-box">
+                        "The bar graph shows weekly families spending in different categories: housing, food leisure and transport in two years 2010 and 2020 <span class="error-hl">on the other hand</span> detailing one of these categories the pie chart presents their transport modes..."
+                    </div>
+
+                    <div class="exercise-box">
+                        <p style="margin-top: 0; font-weight: bold;">Interactive Fix: Split the sentence</p>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Separa esa oración gigante en dos ideas claras. No uses "on the other hand" para la introducción.</p>
+                        
+                        <p style="line-height: 2.2; font-size: 0.95rem;">
+                            The bar graph shows weekly family spending across four categories in 2010 and 2020<input type="text" class="gap-input" style="width: 30px;" id="d-rev-1" data-ans="."> (punto). 
+                            <input type="text" class="gap-input" style="width: 100px;" id="d-rev-2" data-ans="Meanwhile"> (Mientras tanto), the pie chart presents the transport modes used in 2020.
+                        </p>
+                        <button class="btn-check" onclick="checkInputs(['d-rev-1', 'd-rev-2'], 'fb-d-rev')">Fix Sentence</button>
+                        <div class="feedback-text" id="fb-d-rev"></div>
+                    </div>
+                </div>
+
+                <div class="student-card card-valeria">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-v">V</div>
+                        <h2 class="student-name">Valeria</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-green">Word Count: 153 words (Passed)</div>
+                    <div class="info-badge badge-green">Objectivity: 100% (Passed)</div>
+                    <p style="font-size: 0.9rem; color: #555;">Valeria, ¡excelente longitud y objetividad! Sin embargo, reprobaste tu checklist de preposiciones y trataste de forzar dos gráficos distintos en una misma oración.</p>
+                    
+                    <div class="quote-box">
+                        "...The numbers showed in 2015 with 50,000 visitors, a <span class="error-hl">decreased by 35,000</span> visitors in 2020"
+                    </div>
+
+                    <div class="exercise-box">
+                        <p style="margin-top: 0; font-weight: bold;">Interactive Fix: Prepositions of data</p>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">El museo no perdió 35,000 visitantes. El museo cayó *hasta* 35,000 visitantes.</p>
+                        
+                        <p style="line-height: 2.2; font-size: 0.95rem;">
+                            In 2015, there were 50,000 visitors. However, this number decreased 
+                            <input type="text" class="gap-input" style="width: 50px;" id="v-rev-1" data-ans="to"> (by/to) 35,000 in 2020. This means it decreased 
+                            <input type="text" class="gap-input" style="width: 50px;" id="v-rev-2" data-ans="by"> (by/to) 15,000 visitors overall.
+                        </p>
+                        <button class="btn-check" onclick="checkInputs(['v-rev-1', 'v-rev-2'], 'fb-v-rev')">Fix Prepositions</button>
+                        <div class="feedback-text" id="fb-v-rev"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="prep-tab" class="view-section">
+            
+            <div class="lesson-card">
+                <h2><span class="material-icons-round">pie_chart</span> Lesson 1: Pie Charts & Proportions</h2>
+                
+                <div class="rule-display">
+                    <h3>The "Respectively" Rule</h3>
+                    <p>Cuando reportamos datos de un Pie Chart, enumerar los números uno por uno es aburrido. Agrupa dos categorías y usa <span class="hl-word">respectively</span> (respectivamente) al final para conectar los nombres con los porcentajes en orden.</p>
+                    <p style="font-style: italic; border-left: 3px solid #ccc; padding-left: 10px; color: #666;">"Cars and public transport were the most popular modes, accounting for <strong>60%</strong> and <strong>25%</strong>, <span class="hl-word">respectively</span>."</p>
+                </div>
+
+                <div class="exercise-box" style="border-color: var(--primary-teal);">
+                    <p style="margin-top: 0; font-weight: bold;">Practice: Use fractions and "respectively"</p>
+                    <p style="line-height: 2.2; font-size: 0.95rem;">
+                        <em>(Data: Cars = 60%, Walking = 5%)</em><br>
+                        The percentages for cars and walking were 60% and 5% 
+                        <input type="text" class="gap-input" style="width: 120px;" id="prep-1-1" data-ans="respectively">. <br>
+                        This means cars accounted for over 
+                        <input type="text" class="gap-input" style="width: 80px;" id="prep-1-2" data-ans="half"> (half/third) of the total, while walking was a small 
+                        <input type="text" class="gap-input" style="width: 100px;" id="prep-1-3" data-ans="fraction"> (fraction/double).
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['prep-1-1', 'prep-1-2', 'prep-1-3'], 'fb-prep-1')">Check Understanding</button>
+                    <div class="feedback-text" id="fb-prep-1"></div>
+                </div>
+            </div>
+
+            <div class="lesson-card" style="border-top-color: var(--accent-coral);">
+                <h2><span class="material-icons-round">grid_on</span> Lesson 2: Complex Tables & Extremes</h2>
+                
+                <div class="rule-display" style="border-color: var(--accent-coral);">
+                    <h3 style="color: #b91c1c;">Identifying Extremes (Superlatives)</h3>
+                    <p>En tablas con mucha información, NO debes describir cada celda. Debes buscar los extremos: <span class="hl-word" style="background:#fee2e2; color:#991b1b;">the highest</span> (el más alto), <span class="hl-word" style="background:#fee2e2; color:#991b1b;">the lowest</span> (el más bajo) o <span class="hl-word" style="background:#fee2e2; color:#991b1b;">the most significant</span>.</p>
+                </div>
+
+                <div class="exercise-box" style="border-color: var(--accent-coral);">
+                    <p style="margin-top: 0; font-weight: bold;">Practice: Superlative Structures</p>
+                    <p style="line-height: 2.2; font-size: 0.95rem;">
+                        Looking at the table, London had 
+                        <input type="text" class="gap-input" style="width: 60px;" id="prep-2-1" data-ans="the"> 
+                        <input type="text" class="gap-input" style="width: 80px;" id="prep-2-2" data-ans="highest"> (highest/higher) population growth in 2020. Conversely, Paris recorded the 
+                        <input type="text" class="gap-input" style="width: 80px;" id="prep-2-3" data-ans="lowest"> (lowest/lower) number of new residents during 
+                        <input type="text" class="gap-input" style="width: 60px;" id="prep-2-4" data-ans="the"> same period.
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['prep-2-1', 'prep-2-2', 'prep-2-3', 'prep-2-4'], 'fb-prep-2')">Check Understanding</button>
+                    <div class="feedback-text" id="fb-prep-2"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Input Checker
+        function checkInputs(inputIds, feedbackId) {
+            let allCorrect = true;
+            
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                const answer = el.getAttribute('data-ans').toLowerCase();
+                const studentInput = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+
+                if(studentInput === answer) {
+                    el.classList.add('correct');
+                } else {
+                    el.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            const fb = document.getElementById(feedbackId);
+            if(allCorrect) {
+                fb.style.color = "#10b981";
+                fb.innerText = "¡Excelente! Estructura gramatical correcta.";
+            } else {
+                fb.style.color = "#ef4444";
+                fb.innerText = "Revisa los recuadros en rojo e intenta de nuevo.";
+            }
+        }
+    </script>
+</body>
+</html>
