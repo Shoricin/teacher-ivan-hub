@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunday Lesson: Trends & Contrasts | Teacher Ivan</title>
+    <title>IELTS Masterclass: Proportions & Extremes | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     
@@ -52,7 +52,7 @@
             display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 12px 30px; background: white; border: 2px solid transparent; border-radius: 50px;
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
             cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
             transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
         }
@@ -67,36 +67,7 @@
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
 
-        /* READING MASTERCLASS */
-        .reading-box {
-            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
-            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; max-width: 900px; margin-left: auto; margin-right: auto;
-        }
-        .reading-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px;}
-        
-        .highlighter-controls {
-            display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center;
-            background: #f0f8f8; padding: 15px; border-radius: 12px;
-        }
-        .hl-btn {
-            padding: 8px 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
-            transition: 0.2s; font-family: 'Poppins', sans-serif; opacity: 0.6;
-        }
-        .hl-btn.active { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        .btn-hl-contrast { background: #e0e7ff; color: #6d28d9; border: 1px solid #8b5cf6; }
-        .btn-hl-adjnoun { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
-        .btn-hl-verbadv { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
-
-        .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
-        
-        /* Highlight Classes */
-        .txt-contrast, .txt-adjnoun, .txt-verbadv { transition: 0.3s; }
-        .show-contrast .txt-contrast { background: #e0e7ff; color: #6d28d9; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #8b5cf6;}
-        .show-adjnoun .txt-adjnoun { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
-        .show-verbadv .txt-verbadv { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
-
-        /* REDEMPTION WRITING */
+        /* STUDENT GRID */
         .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         @media (max-width: 900px) { .student-grid { grid-template-columns: 1fr; } }
 
@@ -113,7 +84,45 @@
         .avatar-v { background: var(--accent-coral); }
         .student-name { font-size: 1.5rem; font-weight: 700; margin: 0; }
 
-        /* CHARTS CONTAINER */
+        /* ERROR & ALTERNATIVE BOXES */
+        .quote-box { background: #fff0f0; border-left: 4px solid #ef4444; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-family: 'Merriweather', serif; font-size: 0.95rem; color: #7f1d1d; line-height: 1.6;}
+        .alt-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-family: 'Merriweather', serif; font-size: 0.95rem; color: #064e3b; line-height: 1.6;}
+        .error-hl { background: #fecaca; font-weight: bold; padding: 0 4px; border-radius: 3px; }
+        .correct-hl { background: #bbf7d0; font-weight: bold; padding: 0 4px; border-radius: 3px; }
+        .info-badge { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+
+        /* READING MASTERCLASS */
+        .reading-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; max-width: 1000px; margin-left: auto; margin-right: auto;
+        }
+        .reading-box h2 { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        
+        .highlighter-controls {
+            display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center;
+            background: #f0f8f8; padding: 15px; border-radius: 12px;
+        }
+        .hl-btn {
+            padding: 8px 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: 0.2s; font-family: 'Poppins', sans-serif; opacity: 0.6;
+        }
+        .hl-btn.active { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        .btn-hl-resp { background: #e0e7ff; color: #6d28d9; border: 1px solid #8b5cf6; }
+        .btn-hl-frac { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .btn-hl-sup { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
+        
+        /* Highlight Classes */
+        .txt-resp, .txt-frac, .txt-sup { transition: 0.3s; }
+        .show-resp .txt-resp { background: #e0e7ff; color: #6d28d9; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #8b5cf6;}
+        .show-frac .txt-frac { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
+        .show-sup .txt-sup { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
+
+        /* CHARTS & WRITING */
         .charts-container {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;
             background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
@@ -152,36 +161,103 @@
 
     <header>
         <a href="index.html" class="back-link">← Return to HUB</a>
-        <h1>IELTS Task 1: Sunday Lesson</h1>
-        <div class="subtitle">Trends, Contrasts, and The Redemption Task</div>
+        <h1>IELTS Task 1: Proportions & Extremes</h1>
+        <div class="subtitle">Review, Learn, and Write</div>
     </header>
 
     <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('reading-tab')"><span class="material-icons-round">menu_book</span> Part 1: Masterclass</button>
-        <button class="tab-btn" onclick="switchTab('writing-tab')"><span class="material-icons-round">edit_note</span> Part 2: The Redemption</button>
+        <button class="tab-btn active" onclick="switchTab('review-tab')"><span class="material-icons-round">rate_review</span> 1. Error Review</button>
+        <button class="tab-btn" onclick="switchTab('lesson-tab')"><span class="material-icons-round">model_training</span> 2. Band 9 Model</button>
+        <button class="tab-btn" onclick="switchTab('writing-tab')"><span class="material-icons-round">edit_note</span> 3. Writing Task</button>
     </div>
 
     <div class="container">
 
-        <div id="reading-tab" class="view-section active">
+        <div id="review-tab" class="view-section active">
+            <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
+                <h3 style="margin: 0 0 5px 0;">Análisis del Redemption Essay Anterior</h3>
+                <p style="margin: 0; font-size: 1.05rem;">Revisemos los errores específicos de su última entrega antes de aplicar las nuevas reglas.</p>
+            </div>
+
+            <div class="student-grid">
+                <div class="student-card card-diana">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-d">D</div>
+                        <h2 class="student-name">Diana</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-red">Word Count: 86 words (Failed)</div>
+                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Tu ensayo no llegó al mínimo de 150 palabras y se cortó abruptamente en una oración que no tiene sentido gramatical. Además, tus oraciones son demasiado largas y carecen de puntuación (Run-on sentences).</p>
+                    
+                    <div class="quote-box">
+                        <strong>Tu error:</strong><br>
+                        "Overall whereas in 2020 categories, in weekly spending graph, presented a little increase in 2010 families weekly spending plateau While the transport modes in 2020 presented a vast majority prefer cars."
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta (Dividir ideas):</strong><br>
+                        "Overall, weekly spending saw an increase across most categories, whereas it plateaued in others. Regarding transport, the vast majority preferred cars."
+                    </div>
+
+                    <div class="quote-box">
+                        <strong>Tu error (Ensayo cortado):</strong><br>
+                        "<span class="error-hl">Starting with the details housing was the category Conversely</span>"
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta:</strong><br>
+                        "Starting with the details, housing was the most significant category. Conversely, leisure was the lowest."
+                    </div>
+                </div>
+
+                <div class="student-card card-valeria">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-v">V</div>
+                        <h2 class="student-name">Valeria</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-green">Word Count: 153 words (Passed)</div>
+                    <div class="info-badge badge-green">Objectivity: 100% (Passed)</div>
+                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Muy bien con la objetividad. Sin embargo, fallaste en las preposiciones numéricas ("by" vs "to") y tus transiciones entre el gráfico de líneas y el de anillos suenan muy forzadas y confusas.</p>
+                    
+                    <div class="quote-box">
+                        <strong>Tu error (Preposiciones):</strong><br>
+                        "The numbers showed in 2015 with 50,000 visitors, a <span class="error-hl">decreased by 35,000</span> visitors in 2020"
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta:</strong><br>
+                        "In 2015, there were 50,000 visitors. This number decreased <span class="correct-hl">to</span> 35,000 in 2020." <em>(Nota: Cayó HASTA 35k, no perdió 35k).</em>
+                    </div>
+
+                    <div class="quote-box">
+                        <strong>Tu error (Transición forzada):</strong><br>
+                        "The history museum dropped sharply since 2016, <span class="error-hl">comparing with the doughnut graphic, the percentage of dissatisfaction</span> in 2020 showed a clearly short amount."
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta (Separar ideas):</strong><br>
+                        "The history museum dropped sharply after 2016. <span class="correct-hl">Turning to the doughnut chart</span>, the percentage of dissatisfaction in 2020 was a small minority."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="lesson-tab" class="view-section">
             <div class="reading-box">
-                <h2>Group Data & Describe Changes (Band 9 Model)</h2>
-                <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Utiliza los botones para identificar cómo el autor contrasta información y alterna estructuras para no sonar repetitivo.</p>
+                <h2>Proportions & Extremes (Band 9 Model)</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Utiliza los botones para identificar la nueva teoría: La regla del "Respectively", el uso de Fracciones, y los Superlativos para marcar extremos en Tablas o Gráficos complejos.</p>
                 
                 <div class="highlighter-controls">
-                    <button class="hl-btn btn-hl-contrast" id="btn-contrast" onclick="toggleHighlight('show-contrast', 'btn-contrast')">1. Contrast Language</button>
-                    <button class="hl-btn btn-hl-adjnoun" id="btn-adjnoun" onclick="toggleHighlight('show-adjnoun', 'btn-adjnoun')">2. Adjective + Noun</button>
-                    <button class="hl-btn btn-hl-verbadv" id="btn-verbadv" onclick="toggleHighlight('show-verbadv', 'btn-verbadv')">3. Verb + Adverb</button>
+                    <button class="hl-btn btn-hl-resp" id="btn-resp" onclick="toggleHighlight('show-resp', 'btn-resp')">1. The 'Respectively' Rule</button>
+                    <button class="hl-btn btn-hl-frac" id="btn-frac" onclick="toggleHighlight('show-frac', 'btn-frac')">2. Fractions & Proportions</button>
+                    <button class="hl-btn btn-hl-sup" id="btn-sup" onclick="toggleHighlight('show-sup', 'btn-sup')">3. Superlatives (Extremes)</button>
                 </div>
 
                 <div class="reading-text" id="reading-content">
-                    The bar chart illustrates the amount of electricity produced using three different energy sources in Country A from 2010 to 2020.
+                    The table and pie chart illustrate the population growth in three cities from 2010 to 2020, and the preferred modes of transport among residents in 2020.
                     <br><br>
-                    Overall, the production of electricity from renewable sources experienced <span class="txt-adjnoun">a significant increase</span> over the decade, <span class="txt-contrast">whereas</span> the reliance on coal <span class="txt-verbadv">decreased steadily</span>. <span class="txt-contrast">In contrast</span> to these two, gas production remained relatively stable throughout the period.
+                    Overall, City A experienced <span class="txt-sup">the most significant</span> population increase, while City C recorded <span class="txt-sup">the lowest</span> growth. Regarding transportation, cars and public transit were <span class="txt-sup">the most popular</span> choices.
                     <br><br>
-                    Looking at the details, renewable energy started as the lowest source in 2010 at exactly 20 units. However, there was <span class="txt-adjnoun">a dramatic rise</span> in its production, reaching a peak of 80 units by 2020. <span class="txt-contrast">Conversely</span>, coal was the dominant source at the beginning of the period with 100 units, but it <span class="txt-verbadv">dropped sharply</span> to just 40 units by the end of the decade.
+                    Looking at the table in detail, City A had 500,000 residents in 2010, reaching <span class="txt-sup">the highest peak</span> of 800,000 by 2020. City B and City C started with 400,000 and 300,000 people, <span class="txt-resp">respectively</span>. While City B grew steadily, City C remained relatively stable, showing <span class="txt-sup">the smallest</span> change overall.
                     <br><br>
-                    <span class="txt-contrast">While</span> coal and renewables saw major shifts, gas production <span class="txt-verbadv">fluctuated mildly</span> between 40 and 50 units. Ultimately, it ended the period at 45 units, showing <span class="txt-adjnoun">a minimal change</span> overall.
+                    Turning to the pie chart, cars dominated the transport sector, accounting for 60% of the total, which represents <span class="txt-frac">over a half</span> of the population. Public transport constituted <span class="txt-frac">a quarter</span> (25%). Meanwhile, cycling and walking were the least preferred options, comprising 10% and 5% <span class="txt-resp">respectively</span>. This demonstrates that walking represents only <span class="txt-frac">a tiny fraction</span> of commuter habits.
                 </div>
             </div>
         </div>
@@ -189,8 +265,8 @@
         <div id="writing-tab" class="view-section">
             
             <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
-                <h3 style="margin: 0 0 10px 0;"><span class="material-icons-round" style="vertical-align: middle;">verified</span> The Redemption Task</h3>
-                <p style="margin: 0; font-size: 1.05rem;">Chicas, es hora de redimirse. Observen sus respectivos gráficos y reescriban su IELTS Task 1 aplicando la teoría y respetando estrictamente su Checklist personal para corregir los errores del jueves.</p>
+                <h3 style="margin: 0 0 10px 0;"><span class="material-icons-round" style="vertical-align: middle;">verified</span> The Ultimate Task 1</h3>
+                <p style="margin: 0; font-size: 1.05rem;">Chicas, es hora de escribir el ensayo definitivo. Analicen sus gráficos y apliquen las reglas de <strong>Respectively</strong>, <strong>Fracciones</strong> y <strong>Superlativos</strong>. ¡Cumplan su Checklist!</p>
             </div>
 
             <div class="student-grid">
@@ -208,13 +284,13 @@
 
                     <div class="redemption-checklist">
                         <h4>✅ Diana's Checklist:</h4>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-1"> Escribí más de 150 palabras.</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> Usé "On the other hand" (NO "for the other hand").</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> Usé palabras como "categories" (NO aparts/scopes).</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-4"> Alterné Adjective+Noun y Verb+Adverb.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-1"> Escribí más de 150 palabras y no corté el final.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> Usé puntos seguidos para evitar oraciones gigantes.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> Usé la regla <strong>"respectively"</strong> para agrupar dos datos del Pie Chart.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-4"> Usé una fracción (ej. <em>over a half, a quarter</em>).</label>
                     </div>
 
-                    <textarea class="writing-area" id="diana-essay" placeholder="The charts illustrate the average weekly spending..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
+                    <textarea class="writing-area" id="diana-essay" placeholder="The bar chart illustrates the average weekly spending..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
                     <div class="word-counter" id="diana-count">Words: 0 / 150</div>
                     
                     <button class="btn-submit" onclick="generatePDF('Diana', 'diana-essay', ['d-chk-1', 'd-chk-2', 'd-chk-3', 'd-chk-4'])">
@@ -235,10 +311,10 @@
 
                     <div class="redemption-checklist">
                         <h4>✅ Valeria's Checklist:</h4>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-1"> Fui 100% objetiva (Cero menciones de pandemia/inversiones).</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> Usé correctamente "decreased to" vs "decreased by".</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> Usé "significantly/rapidly" (NO exponentially).</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-4"> Revisé la concordancia (The chart showS).</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-1"> Usé "decreased <strong>to</strong> 35,000" (no "by").</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> Hice una transición limpia ("Turning to the doughnut chart...").</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> Usé superlativos (<strong>the highest / the lowest</strong>) para marcar extremos.</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-4"> Usé la regla <strong>"respectively"</strong> o fracciones.</label>
                     </div>
 
                     <textarea class="writing-area" id="valeria-essay" placeholder="The line graph depicts the annual number of visitors..." onkeyup="countWords('valeria-essay', 'valeria-count')"></textarea>
@@ -305,8 +381,8 @@
                 data: {
                     labels: ['Housing', 'Food', 'Transport', 'Leisure'],
                     datasets: [
-                        { label: '2010', data: [250, 200, 100, 150], backgroundColor: '#c4b5fd' }, // Light Purple
-                        { label: '2020', data: [400, 300, 150, 100], backgroundColor: '#8b5cf6' }  // Dark Purple
+                        { label: '2010', data: [250, 200, 100, 150], backgroundColor: '#c4b5fd' },
+                        { label: '2020', data: [400, 300, 150, 100], backgroundColor: '#8b5cf6' } 
                     ]
                 },
                 options: { responsive: true, plugins: { title: { display: true, text: 'Weekly Spending ($)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 12 } } } }
@@ -350,7 +426,6 @@
 
         // Generate PDF
         function generatePDF(studentName, inputId, checklistIds) {
-            // Validate Checkboxes
             let allChecked = true;
             checklistIds.forEach(id => {
                 if (!document.getElementById(id).checked) allChecked = false;
@@ -361,7 +436,6 @@
                 return;
             }
 
-            // Validate Word Count
             const text = document.getElementById(inputId).value.trim();
             const words = text === "" ? 0 : text.split(/\s+/).length;
             
@@ -370,17 +444,14 @@
                 if (!proceed) return;
             }
 
-            // jsPDF Generation
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Header
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
             doc.setTextColor(studentName === 'Diana' ? 139 : 255, studentName === 'Diana' ? 92 : 154, studentName === 'Diana' ? 246 : 139); 
-            doc.text(`IELTS Task 1: Redemption Essay (${studentName})`, 105, 25, null, null, "center");
+            doc.text(`IELTS Task 1: Final Draft (${studentName})`, 105, 25, null, null, "center");
 
-            // Meta Info
             doc.setFontSize(12);
             doc.setFont("helvetica", "italic");
             doc.setTextColor(100, 100, 100);
@@ -388,12 +459,10 @@
             doc.text(`Word Count: ${words} words`, 105, 40, null, null, "center");
             doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 47, null, null, "center");
 
-            // Line
             doc.setDrawColor(200, 200, 200); 
             doc.setLineWidth(1);
             doc.line(20, 52, 190, 52); 
 
-            // Essay Content
             doc.setFont("helvetica", "normal");
             doc.setFontSize(12);
             doc.setTextColor(40, 40, 40);
@@ -401,14 +470,12 @@
             const splitText = doc.splitTextToSize(text, 170);
             doc.text(splitText, 20, 65, { lineHeightFactor: 1.6 });
 
-            // Final message at bottom
             doc.setFont("helvetica", "bolditalic");
             doc.setFontSize(10);
             doc.setTextColor(93, 203, 195);
-            doc.text("Checklist completed successfully. Ready for grading.", 105, 280, null, null, "center");
+            doc.text("Masterclass Checklist completed successfully.", 105, 280, null, null, "center");
 
-            // Save
-            const fileName = `${studentName}_IELTS_Redemption.pdf`;
+            const fileName = `${studentName}_IELTS_Final_Draft.pdf`;
             doc.save(fileName);
         }
     </script>
