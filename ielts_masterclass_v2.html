@@ -49,12 +49,12 @@
 
         /* TABS */
         .tabs-container {
-            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0 20px; padding: 0 10px; flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            padding: 10px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
             cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
-            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;
         }
         .tab-btn:hover { border-color: var(--primary-teal); }
         .tab-btn.active {
@@ -63,9 +63,23 @@
         }
 
         /* CONTENT AREA */
-        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; position: relative;}
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
+
+        /* TIMER STYLES */
+        .timer-container {
+            background: var(--text-dark); color: white; padding: 10px 25px; border-radius: 50px;
+            display: inline-flex; align-items: center; gap: 15px; box-shadow: var(--shadow);
+            position: sticky; top: 15px; z-index: 100; margin: 0 auto 25px; border: 2px solid var(--accent-yellow);
+        }
+        .time-display { font-size: 1.5rem; font-weight: bold; font-family: monospace; letter-spacing: 2px; color: var(--accent-yellow);}
+        .timer-btn {
+            background: var(--accent-coral); color: white; border: none; padding: 5px 15px; border-radius: 20px;
+            font-weight: bold; cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .timer-btn:hover { background: #ff7e6b; }
+        .time-warning { color: #ef4444 !important; animation: pulse 1s infinite; }
 
         /* STUDENT GRID */
         .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
@@ -77,11 +91,13 @@
         }
         .card-diana { border-color: #8b5cf6; } 
         .card-valeria { border-color: var(--accent-coral); } 
+        .card-general { border-color: var(--primary-teal); grid-column: 1 / -1; max-width: 800px; margin: 0 auto;}
 
         .student-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;}
         .student-avatar { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.5rem;}
         .avatar-d { background: #8b5cf6; }
         .avatar-v { background: var(--accent-coral); }
+        .avatar-g { background: var(--primary-teal); }
         .student-name { font-size: 1.5rem; font-weight: 700; margin: 0; }
 
         /* ERROR & ALTERNATIVE BOXES */
@@ -122,7 +138,7 @@
         .show-frac .txt-frac { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
         .show-sup .txt-sup { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
 
-        /* CHARTS & WRITING */
+        /* CHARTS, TABLES & WRITING */
         .charts-container {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;
             background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
@@ -131,6 +147,13 @@
         @media (max-width: 600px) { .charts-container { grid-template-columns: 1fr; } }
         
         .chart-wrapper { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+        .data-table {
+            width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; font-size: 0.9rem;
+        }
+        .data-table th { background: var(--primary-dark); color: white; padding: 10px; text-align: left; }
+        .data-table td { border: 1px solid #ddd; padding: 10px; color: #333; }
+        .data-table tr:nth-child(even) { background-color: #f9f9f9; }
 
         .redemption-checklist {
             background: #fdfdfd; border: 1px dashed #ccc; padding: 15px; border-radius: 8px; margin-bottom: 20px;
@@ -155,6 +178,7 @@
         .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -167,8 +191,9 @@
 
     <div class="tabs-container">
         <button class="tab-btn active" onclick="switchTab('review-tab')"><span class="material-icons-round">rate_review</span> 1. Error Review</button>
-        <button class="tab-btn" onclick="switchTab('lesson-tab')"><span class="material-icons-round">model_training</span> 2. Band 9 Model</button>
-        <button class="tab-btn" onclick="switchTab('writing-tab')"><span class="material-icons-round">edit_note</span> 3. Writing Task</button>
+        <button class="tab-btn" onclick="switchTab('lesson-tab')"><span class="material-icons-round">model_training</span> 2. Band 9 Models</button>
+        <button class="tab-btn" onclick="switchTab('writing-tab')"><span class="material-icons-round">edit_note</span> 3. The Redemption</button>
+        <button class="tab-btn" onclick="switchTab('table-task-tab')" style="background: var(--accent-coral); color: white; border-color: var(--accent-coral);"><span class="material-icons-round">grid_on</span> 4. Table Task</button>
     </div>
 
     <div class="container">
@@ -197,15 +222,6 @@
                         <strong>Alternativa correcta (Dividir ideas):</strong><br>
                         "Overall, weekly spending saw an increase across most categories, whereas it plateaued in others. Regarding transport, the vast majority preferred cars."
                     </div>
-
-                    <div class="quote-box">
-                        <strong>Tu error (Ensayo cortado):</strong><br>
-                        "<span class="error-hl">Starting with the details housing was the category Conversely</span>"
-                    </div>
-                    <div class="alt-box">
-                        <strong>Alternativa correcta:</strong><br>
-                        "Starting with the details, housing was the most significant category. Conversely, leisure was the lowest."
-                    </div>
                 </div>
 
                 <div class="student-card card-valeria">
@@ -216,7 +232,7 @@
                     
                     <div class="info-badge badge-green">Word Count: 153 words (Passed)</div>
                     <div class="info-badge badge-green">Objectivity: 100% (Passed)</div>
-                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Muy bien con la objetividad. Sin embargo, fallaste en las preposiciones numéricas ("by" vs "to") y tus transiciones entre el gráfico de líneas y el de anillos suenan muy forzadas y confusas.</p>
+                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Fallaste en las preposiciones numéricas ("by" vs "to") y tus transiciones entre el gráfico de líneas y el de anillos suenan muy forzadas y confusas.</p>
                     
                     <div class="quote-box">
                         <strong>Tu error (Preposiciones):</strong><br>
@@ -226,47 +242,47 @@
                         <strong>Alternativa correcta:</strong><br>
                         "In 2015, there were 50,000 visitors. This number decreased <span class="correct-hl">to</span> 35,000 in 2020." <em>(Nota: Cayó HASTA 35k, no perdió 35k).</em>
                     </div>
-
-                    <div class="quote-box">
-                        <strong>Tu error (Transición forzada):</strong><br>
-                        "The history museum dropped sharply since 2016, <span class="error-hl">comparing with the doughnut graphic, the percentage of dissatisfaction</span> in 2020 showed a clearly short amount."
-                    </div>
-                    <div class="alt-box">
-                        <strong>Alternativa correcta (Separar ideas):</strong><br>
-                        "The history museum dropped sharply after 2016. <span class="correct-hl">Turning to the doughnut chart</span>, the percentage of dissatisfaction in 2020 was a small minority."
-                    </div>
                 </div>
             </div>
         </div>
 
         <div id="lesson-tab" class="view-section">
-            <div class="reading-box">
-                <h2>Proportions & Extremes (Band 9 Model)</h2>
-                <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Utiliza los botones para identificar la nueva teoría: La regla del "Respectively", el uso de Fracciones, y los Superlativos para marcar extremos en Tablas o Gráficos complejos.</p>
-                
-                <div class="highlighter-controls">
-                    <button class="hl-btn btn-hl-resp" id="btn-resp" onclick="toggleHighlight('show-resp', 'btn-resp')">1. The 'Respectively' Rule</button>
-                    <button class="hl-btn btn-hl-frac" id="btn-frac" onclick="toggleHighlight('show-frac', 'btn-frac')">2. Fractions & Proportions</button>
-                    <button class="hl-btn btn-hl-sup" id="btn-sup" onclick="toggleHighlight('show-sup', 'btn-sup')">3. Superlatives (Extremes)</button>
-                </div>
+            
+            <div class="highlighter-controls">
+                <button class="hl-btn btn-hl-resp" id="btn-resp" onclick="toggleHighlight('show-resp', 'btn-resp')">1. The 'Respectively' Rule</button>
+                <button class="hl-btn btn-hl-frac" id="btn-frac" onclick="toggleHighlight('show-frac', 'btn-frac')">2. Fractions & Proportions</button>
+                <button class="hl-btn btn-hl-sup" id="btn-sup" onclick="toggleHighlight('show-sup', 'btn-sup')">3. Superlatives (Extremes)</button>
+            </div>
 
-                <div class="reading-text" id="reading-content">
-                    The table and pie chart illustrate the population growth in three cities from 2010 to 2020, and the preferred modes of transport among residents in 2020.
-                    <br><br>
-                    Overall, City A experienced <span class="txt-sup">the most significant</span> population increase, while City C recorded <span class="txt-sup">the lowest</span> growth. Regarding transportation, cars and public transit were <span class="txt-sup">the most popular</span> choices.
-                    <br><br>
-                    Looking at the table in detail, City A had 500,000 residents in 2010, reaching <span class="txt-sup">the highest peak</span> of 800,000 by 2020. City B and City C started with 400,000 and 300,000 people, <span class="txt-resp">respectively</span>. While City B grew steadily, City C remained relatively stable, showing <span class="txt-sup">the smallest</span> change overall.
-                    <br><br>
+            <div class="reading-box">
+                <h2>Model 1: Proportions (Pie Charts)</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Cómo describir gráficos de anillo o pastel de manera avanzada.</p>
+                
+                <div class="reading-text" id="reading-content-1">
                     Turning to the pie chart, cars dominated the transport sector, accounting for 60% of the total, which represents <span class="txt-frac">over a half</span> of the population. Public transport constituted <span class="txt-frac">a quarter</span> (25%). Meanwhile, cycling and walking were the least preferred options, comprising 10% and 5% <span class="txt-resp">respectively</span>. This demonstrates that walking represents only <span class="txt-frac">a tiny fraction</span> of commuter habits.
+                </div>
+            </div>
+
+            <div class="reading-box" style="border-top-color: var(--accent-coral);">
+                <h2>Model 2: Complex Tables (Superlatives)</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">Cómo navegar tablas con mucha información enfocándote en los extremos.</p>
+                
+                <div class="reading-text" id="reading-content-2">
+                    The table compares four cities across three categories: population, average income, and pollution levels. Overall, City A has <span class="txt-sup">the highest</span> population and income, whereas City D records <span class="txt-sup">the lowest</span> in both, but suffers from <span class="txt-sup">the most significant</span> pollution.
+                    <br><br>
+                    Looking at the details, City A and City B registered incomes of $50,000 and $40,000 <span class="txt-resp">respectively</span>. In contrast, City D represented <span class="txt-sup">the poorest</span> demographic. Although City C had <span class="txt-sup">the smallest</span> population, it produced <span class="txt-frac">almost a third</span> of the regional pollution.
                 </div>
             </div>
         </div>
 
         <div id="writing-tab" class="view-section">
             
-            <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
-                <h3 style="margin: 0 0 10px 0;"><span class="material-icons-round" style="vertical-align: middle;">verified</span> The Ultimate Task 1</h3>
-                <p style="margin: 0; font-size: 1.05rem;">Chicas, es hora de escribir el ensayo definitivo. Analicen sus gráficos y apliquen las reglas de <strong>Respectively</strong>, <strong>Fracciones</strong> y <strong>Superlativos</strong>. ¡Cumplan su Checklist!</p>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="timer-container" id="timer-box-1">
+                    <span class="material-icons-round">timer</span>
+                    <span class="time-display" id="time-display-1">30:00</span>
+                    <button class="timer-btn" onclick="startTimer()">Start Exam</button>
+                </div>
             </div>
 
             <div class="student-grid">
@@ -285,16 +301,15 @@
                     <div class="redemption-checklist">
                         <h4>✅ Diana's Checklist:</h4>
                         <label class="checklist-item"><input type="checkbox" id="d-chk-1"> Escribí más de 150 palabras y no corté el final.</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> Usé puntos seguidos para evitar oraciones gigantes.</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> Usé la regla <strong>"respectively"</strong> para agrupar dos datos del Pie Chart.</label>
-                        <label class="checklist-item"><input type="checkbox" id="d-chk-4"> Usé una fracción (ej. <em>over a half, a quarter</em>).</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-2"> Usé la regla <strong>"respectively"</strong> para agrupar dos datos.</label>
+                        <label class="checklist-item"><input type="checkbox" id="d-chk-3"> Usé una fracción (ej. <em>over a half, a quarter</em>).</label>
                     </div>
 
-                    <textarea class="writing-area" id="diana-essay" placeholder="The bar chart illustrates the average weekly spending..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
+                    <textarea class="writing-area" id="diana-essay" placeholder="The charts illustrate the average weekly spending..." onkeyup="countWords('diana-essay', 'diana-count')"></textarea>
                     <div class="word-counter" id="diana-count">Words: 0 / 150</div>
                     
-                    <button class="btn-submit" onclick="generatePDF('Diana', 'diana-essay', ['d-chk-1', 'd-chk-2', 'd-chk-3', 'd-chk-4'])">
-                        <span class="material-icons-round">picture_as_pdf</span> Submit Final Essay
+                    <button class="btn-submit" onclick="generatePDF('Diana', 'diana-essay', ['d-chk-1', 'd-chk-2', 'd-chk-3'])">
+                        <span class="material-icons-round">picture_as_pdf</span> Submit Task A
                     </button>
                 </div>
 
@@ -312,26 +327,83 @@
                     <div class="redemption-checklist">
                         <h4>✅ Valeria's Checklist:</h4>
                         <label class="checklist-item"><input type="checkbox" id="v-chk-1"> Usé "decreased <strong>to</strong> 35,000" (no "by").</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> Hice una transición limpia ("Turning to the doughnut chart...").</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> Usé superlativos (<strong>the highest / the lowest</strong>) para marcar extremos.</label>
-                        <label class="checklist-item"><input type="checkbox" id="v-chk-4"> Usé la regla <strong>"respectively"</strong> o fracciones.</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-2"> Usé superlativos (<strong>the highest / the lowest</strong>).</label>
+                        <label class="checklist-item"><input type="checkbox" id="v-chk-3"> Usé la regla <strong>"respectively"</strong> o fracciones.</label>
                     </div>
 
                     <textarea class="writing-area" id="valeria-essay" placeholder="The line graph depicts the annual number of visitors..." onkeyup="countWords('valeria-essay', 'valeria-count')"></textarea>
                     <div class="word-counter" id="valeria-count">Words: 0 / 150</div>
                     
-                    <button class="btn-submit" onclick="generatePDF('Valeria', 'valeria-essay', ['v-chk-1', 'v-chk-2', 'v-chk-3', 'v-chk-4'])">
-                        <span class="material-icons-round">picture_as_pdf</span> Submit Final Essay
+                    <button class="btn-submit" onclick="generatePDF('Valeria', 'valeria-essay', ['v-chk-1', 'v-chk-2', 'v-chk-3'])">
+                        <span class="material-icons-round">picture_as_pdf</span> Submit Task B
                     </button>
                 </div>
 
             </div>
         </div>
 
+        <div id="table-task-tab" class="view-section">
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="timer-container" id="timer-box-2">
+                    <span class="material-icons-round">timer</span>
+                    <span class="time-display" id="time-display-2">30:00</span>
+                    <button class="timer-btn" onclick="startTimer()">Start Exam</button>
+                </div>
+            </div>
+
+            <div class="student-card card-general">
+                <div class="student-header">
+                    <div class="student-avatar avatar-g">T</div>
+                    <h2 class="student-name">Common Task: Complex Table</h2>
+                </div>
+                
+                <p style="color: #555; margin-top: 0;"><strong>Instrucción:</strong> La tabla a continuación muestra datos sobre los sistemas de trenes subterráneos (Metro) en seis ciudades importantes. Resuman la información seleccionando y reportando las características principales (extremos), y hagan comparaciones relevantes.</p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>City</th>
+                            <th>Date opened</th>
+                            <th>Kilometres of route</th>
+                            <th>Passengers per year (millions)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>London</td><td>1863</td><td>394</td><td>775</td></tr>
+                        <tr><td>Paris</td><td>1900</td><td>199</td><td>1191</td></tr>
+                        <tr><td>Tokyo</td><td>1927</td><td>155</td><td>1927</td></tr>
+                        <tr><td>Washington DC</td><td>1976</td><td>126</td><td>144</td></tr>
+                        <tr><td>Kyoto</td><td>1981</td><td>11</td><td>45</td></tr>
+                        <tr><td>Los Angeles</td><td>2001</td><td>28</td><td>50</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="redemption-checklist">
+                    <h4>✅ Table Task Checklist:</h4>
+                    <label class="checklist-item"><input type="checkbox" id="t-chk-1"> Escribí al menos 150 palabras.</label>
+                    <label class="checklist-item"><input type="checkbox" id="t-chk-2"> Identifiqué el metro <strong>más antiguo (the oldest)</strong> y el <strong>más nuevo (the newest)</strong>.</label>
+                    <label class="checklist-item"><input type="checkbox" id="t-chk-3"> Identifiqué el sistema con <strong>la mayor cantidad (the highest)</strong> y <strong>la menor cantidad (the lowest)</strong> de pasajeros.</label>
+                    <label class="checklist-item"><input type="checkbox" id="t-chk-4"> Usé la palabra "respectively" al menos una vez.</label>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <input type="text" id="table-student-name" placeholder="Escribe tu nombre (Diana / Valeria)" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-family: 'Poppins';">
+                </div>
+
+                <textarea class="writing-area" id="table-essay" placeholder="The table illustrates data regarding the underground railway systems in six major cities..." onkeyup="countWords('table-essay', 'table-count')"></textarea>
+                <div class="word-counter" id="table-count">Words: 0 / 150</div>
+                
+                <button class="btn-submit" onclick="generateTablePDF()">
+                    <span class="material-icons-round">picture_as_pdf</span> Submit Table Task
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Tab Navigation
+        // --- TAB NAVIGATION ---
         function switchTab(tabId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -339,23 +411,25 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
 
-            // Render charts only when writing tab is opened to ensure proper sizing
+            // Render charts only when writing tab is opened
             if (tabId === 'writing-tab' && !chartsRendered) {
                 renderCharts();
                 chartsRendered = true;
             }
         }
 
-        // Highlighter Logic
+        // --- HIGHLIGHTER LOGIC ---
         function toggleHighlight(className, btnId) {
-            const content = document.getElementById('reading-content');
+            const content1 = document.getElementById('reading-content-1');
+            const content2 = document.getElementById('reading-content-2');
             const btn = document.getElementById(btnId);
             
-            content.classList.toggle(className);
+            content1.classList.toggle(className);
+            content2.classList.toggle(className);
             btn.classList.toggle('active');
         }
 
-        // Word Counter
+        // --- WORD COUNTER ---
         function countWords(inputId, counterId) {
             const text = document.getElementById(inputId).value.trim();
             const words = text === "" ? 0 : text.split(/\s+/).length;
@@ -370,69 +444,87 @@
             }
         }
 
+        // --- TIMER LOGIC (Global 30 Minutes) ---
+        let timeRemaining = 1800; // 30 minutes in seconds
+        let timerInterval = null;
+        let timerStarted = false;
+
+        function startTimer() {
+            if (timerStarted) return;
+            timerStarted = true;
+            
+            // Hide start buttons
+            document.querySelectorAll('.timer-btn').forEach(btn => btn.style.display = 'none');
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                
+                const timeString = `${minutes}:${seconds}`;
+                
+                // Update both timer displays
+                document.getElementById('time-display-1').innerText = timeString;
+                document.getElementById('time-display-2').innerText = timeString;
+
+                if (timeRemaining <= 300) { // 5 minutes left warning
+                    document.getElementById('time-display-1').classList.add('time-warning');
+                    document.getElementById('time-display-2').classList.add('time-warning');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("¡TIEMPO AGOTADO! Deben enviar sus ensayos inmediatamente.");
+                }
+            }, 1000);
+        }
+
         // --- CHART GENERATION ---
         let chartsRendered = false;
 
         function renderCharts() {
-            // DIANA'S CHARTS (Task A)
+            // DIANA
             const ctxDianaBar = document.getElementById('dianaBar').getContext('2d');
             new Chart(ctxDianaBar, {
                 type: 'bar',
-                data: {
-                    labels: ['Housing', 'Food', 'Transport', 'Leisure'],
-                    datasets: [
-                        { label: '2010', data: [250, 200, 100, 150], backgroundColor: '#c4b5fd' },
-                        { label: '2020', data: [400, 300, 150, 100], backgroundColor: '#8b5cf6' } 
-                    ]
-                },
-                options: { responsive: true, plugins: { title: { display: true, text: 'Weekly Spending ($)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 12 } } } }
+                data: { labels: ['Housing', 'Food', 'Transport', 'Leisure'], datasets: [{ label: '2010', data: [250, 200, 100, 150], backgroundColor: '#c4b5fd' }, { label: '2020', data: [400, 300, 150, 100], backgroundColor: '#8b5cf6' }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Weekly Spending ($)' }, legend: { position: 'bottom', labels: { boxWidth: 12 } } } }
             });
 
             const ctxDianaPie = document.getElementById('dianaPie').getContext('2d');
             new Chart(ctxDianaPie, {
                 type: 'pie',
-                data: {
-                    labels: ['Cars (60%)', 'Public (25%)', 'Cycling (10%)', 'Walking (5%)'],
-                    datasets: [{ data: [60, 25, 10, 5], backgroundColor: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ede9fe'] }]
-                },
-                options: { responsive: true, plugins: { title: { display: true, text: 'Transport Modes (2020)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+                data: { labels: ['Cars (60%)', 'Public (25%)', 'Cycling (10%)', 'Walking (5%)'], datasets: [{ data: [60, 25, 10, 5], backgroundColor: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ede9fe'] }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Transport Modes (2020)' }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
 
-            // VALERIA'S CHARTS (Task B)
+            // VALERIA
             const ctxValeriaLine = document.getElementById('valeriaLine').getContext('2d');
             new Chart(ctxValeriaLine, {
                 type: 'line',
-                data: {
-                    labels: ['2015', '2016', '2017', '2018', '2019', '2020'],
-                    datasets: [
-                        { label: 'History', data: [50000, 48000, 45000, 42000, 38000, 35000], borderColor: '#ff9a8b', fill: false, tension: 0.1 },
-                        { label: 'Art', data: [30000, 35000, 40000, 48000, 55000, 60000], borderColor: '#5dcbc3', fill: false, tension: 0.1 },
-                        { label: 'Science', data: [20000, 22000, 25000, 27000, 29000, 30000], borderColor: '#f5b041', fill: false, tension: 0.1 }
-                    ]
-                },
-                options: { responsive: true, plugins: { title: { display: true, text: 'Annual Visitors', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+                data: { labels: ['2015', '2016', '2017', '2018', '2019', '2020'], datasets: [{ label: 'History', data: [50000, 48000, 45000, 42000, 38000, 35000], borderColor: '#ff9a8b', fill: false, tension: 0.1 }, { label: 'Art', data: [30000, 35000, 40000, 48000, 55000, 60000], borderColor: '#5dcbc3', fill: false, tension: 0.1 }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Annual Visitors' }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
             });
 
             const ctxValeriaDoughnut = document.getElementById('valeriaDoughnut').getContext('2d');
             new Chart(ctxValeriaDoughnut, {
                 type: 'doughnut',
-                data: {
-                    labels: ['Very Sat. (55%)', 'Sat. (30%)', 'Dissat. (15%)'],
-                    datasets: [{ data: [55, 30, 15], backgroundColor: ['#5dcbc3', '#a3e4df', '#ff9a8b'] }]
-                },
-                options: { responsive: true, plugins: { title: { display: true, text: 'Satisfaction (2020)', font: { family: 'Poppins' } }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+                data: { labels: ['Very Sat. (55%)', 'Sat. (30%)', 'Dissat. (15%)'], datasets: [{ data: [55, 30, 15], backgroundColor: ['#5dcbc3', '#a3e4df', '#ff9a8b'] }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'Satisfaction (2020)' }, legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
         }
 
-        // Generate PDF
+        // --- PDF GENERATION ---
         function generatePDF(studentName, inputId, checklistIds) {
             let allChecked = true;
-            checklistIds.forEach(id => {
-                if (!document.getElementById(id).checked) allChecked = false;
-            });
+            checklistIds.forEach(id => { if (!document.getElementById(id).checked) allChecked = false; });
 
             if (!allChecked) {
-                alert(`Hey ${studentName}! Debes asegurarte de cumplir TODO tu Checklist y marcar las casillas antes de enviar.`);
+                alert(`Hey ${studentName}! Debes asegurar de cumplir TODO tu Checklist antes de enviar.`);
                 return;
             }
 
@@ -440,17 +532,41 @@
             const words = text === "" ? 0 : text.split(/\s+/).length;
             
             if (words < 150) {
-                const proceed = confirm(`Cuidado, solo tienes ${words} palabras. IELTS penaliza por menos de 150. ¿Quieres enviar de todos modos?`);
-                if (!proceed) return;
+                if (!confirm(`Tienes ${words} palabras. IELTS penaliza por menos de 150. ¿Enviar igual?`)) return;
             }
 
+            createPDFDoc(studentName, "Redemption Essay", text, words);
+        }
+
+        function generateTablePDF() {
+            const studentName = document.getElementById('table-student-name').value.trim() || "Student";
+            
+            let allChecked = true;
+            ['t-chk-1', 't-chk-2', 't-chk-3', 't-chk-4'].forEach(id => { if (!document.getElementById(id).checked) allChecked = false; });
+
+            if (!allChecked) {
+                alert(`Debes asegurar de cumplir TODO tu Checklist de la Tabla antes de enviar.`);
+                return;
+            }
+
+            const text = document.getElementById('table-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            
+            if (words < 150) {
+                if (!confirm(`Tienes ${words} palabras. IELTS penaliza por menos de 150. ¿Enviar igual?`)) return;
+            }
+
+            createPDFDoc(studentName, "Table Task Essay", text, words);
+        }
+
+        function createPDFDoc(studentName, taskTitle, text, words) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.setTextColor(studentName === 'Diana' ? 139 : 255, studentName === 'Diana' ? 92 : 154, studentName === 'Diana' ? 246 : 139); 
-            doc.text(`IELTS Task 1: Final Draft (${studentName})`, 105, 25, null, null, "center");
+            doc.setTextColor(studentName.includes('Diana') ? 139 : (studentName.includes('Valeria') ? 255 : 50), studentName.includes('Diana') ? 92 : (studentName.includes('Valeria') ? 154 : 50), studentName.includes('Diana') ? 246 : (studentName.includes('Valeria') ? 139 : 50)); 
+            doc.text(`IELTS Task 1: ${taskTitle}`, 105, 25, null, null, "center");
 
             doc.setFontSize(12);
             doc.setFont("helvetica", "italic");
@@ -473,9 +589,9 @@
             doc.setFont("helvetica", "bolditalic");
             doc.setFontSize(10);
             doc.setTextColor(93, 203, 195);
-            doc.text("Masterclass Checklist completed successfully.", 105, 280, null, null, "center");
+            doc.text("Task submitted successfully via The HUB.", 105, 280, null, null, "center");
 
-            const fileName = `${studentName}_IELTS_Final_Draft.pdf`;
+            const fileName = `${studentName}_IELTS_${taskTitle.replace(/\s+/g, '_')}.pdf`;
             doc.save(fileName);
         }
     </script>
