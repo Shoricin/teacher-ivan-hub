@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Continuous vs Past Simple | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0 20px; padding: 0 10px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 90%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* ANIMATIONS AREA */
+        .card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            text-align: center; margin-bottom: 30px;
+        }
+        .rule-text { font-size: 1.2rem; line-height: 1.6; color: #555; margin-bottom: 40px; }
+        .rule-text b { color: var(--primary-dark); }
+        .hl-orange { color: var(--accent-coral); font-weight: bold; }
+
+        .animation-box {
+            height: 200px; background: #fafafa; border-radius: 15px; position: relative;
+            overflow: hidden; border: 1px dashed #ccc; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* WHEN Animation */
+        .long-action-bar {
+            width: 70%; height: 20px; background: var(--primary-teal); border-radius: 10px;
+            position: absolute; left: 10%;
+        }
+        .interruption-bolt {
+            font-size: 3rem; color: var(--accent-coral); position: absolute;
+            top: -60px; left: 50%; opacity: 0;
+            animation: boltDrop 3s infinite;
+        }
+        @keyframes boltDrop {
+            0% { top: -60px; opacity: 0; }
+            45% { top: 70px; opacity: 1; transform: scale(1); }
+            50% { transform: scale(1.5); }
+            55% { transform: scale(1); }
+            100% { top: 70px; opacity: 0; }
+        }
+
+        /* WHILE Animation */
+        .parallel-bar {
+            width: 70%; height: 20px; background: var(--primary-teal); border-radius: 10px;
+            position: absolute; opacity: 0.7;
+        }
+        .bar-top { top: 70px; animation: slideIn 4s infinite; }
+        .bar-bottom { top: 110px; background: var(--accent-yellow); animation: slideIn 4s infinite 0.5s; }
+        @keyframes slideIn {
+            0% { width: 0; left: 10%; }
+            100% { width: 80%; left: 10%; }
+        }
+
+        /* READING */
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 2.2; color: #333; text-align: left;}
+
+        /* QUIZ */
+        .quiz-container { text-align: left; }
+        .question-card { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .opt-label {
+            display: block; padding: 10px 15px; border: 1px solid #ddd; margin: 8px 0;
+            border-radius: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); background: #f0f8f8; }
+        .opt-label.correct { background: #d1fae5; border-color: #10b981; }
+        .opt-label.wrong { background: #fee2e2; border-color: #ef4444; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 30px; display: block; width: 100%;
+        }
+        .btn-submit:hover { background: #444; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">bolt</span> Interrupted Actions</h1>
+        <div class="subtitle">Past Continuous & Past Simple</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('when-tab')"><span class="material-icons-round">history</span> Usando WHEN</button>
+        <button class="tab-btn" onclick="switchTab('while-tab')"><span class="material-icons-round">sync</span> Usando WHILE</button>
+        <button class="tab-btn" onclick="switchTab('reading-tab')"><span class="material-icons-round">menu_book</span> Reading & Quiz</button>
+    </div>
+
+    <div class="container">
+        
+        <div id="when-tab" class="view-section active">
+            <div class="card">
+                <h2>La Regla de la Interrupción</h2>
+                <p class="rule-text">Usamos el <b>Past Continuous</b> para una acción larga que estaba en progreso y el <b>Past Simple</b> para una acción corta que la interrumpe. <br> Generalmente usamos <span class="hl-orange">WHEN</span> antes del Past Simple.</p>
+                
+                <div class="animation-box">
+                    <div class="long-action-bar"></div>
+                    <div class="interruption-bolt material-icons-round">bolt</div>
+                </div>
+                <p style="font-style: italic; color: #666;">"I was taking a shower <b>when</b> the phone rang."</p>
+            </div>
+        </div>
+
+        <div id="while-tab" class="view-section">
+            <div class="card">
+                <h2>Acciones de Fondo</h2>
+                <p class="rule-text">Usamos <span class="hl-orange">WHILE</span> (mientras) para introducir la acción larga (Past Continuous). Indica que algo estaba sucediendo en ese momento del pasado.</p>
+                
+                <div class="animation-box">
+                    <div class="parallel-bar bar-top"></div>
+                    <div class="parallel-bar bar-bottom"></div>
+                </div>
+                <p style="font-style: italic; color: #666;">"<b>While</b> I was cooking, my sister was doing her homework."</p>
+            </div>
+        </div>
+
+        <div id="reading-tab" class="view-section">
+            <div class="card">
+                <h2>The Stormy Night</h2>
+                <div class="reading-text">
+                    Last Friday, it was raining heavily in the city. <b>While</b> Sarah <b>was reading</b> a book in her living room, her cat was sleeping on the sofa. Suddenly, the lights went out. Sarah was confused. She <b>was looking</b> for a candle <b>when</b> someone knocked on her door. It was her neighbor, Mark. He <b>was carrying</b> a flashlight. While they <b>were talking</b> in the hallway, the power came back on. They laughed and Sarah thanked him for his help.
+                </div>
+            </div>
+
+            <div class="card quiz-container">
+                <h2>Reading Comprehension Quiz</h2>
+                <div id="quiz-content"></div>
+                <button class="btn-submit" onclick="evaluateQuiz()">Verificar Respuestas</button>
+                <div id="score-display" style="text-align: center; margin-top: 20px; font-weight: bold; font-size: 1.2rem;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        const quizData = [
+            { q: "What was the weather like last Friday?", options: ["It was snowing", "It was raining heavily", "It was sunny"], a: 1 },
+            { q: "What was Sarah doing when the lights went out?", options: ["She was sleeping", "She was cooking", "She was reading a book"], a: 2 },
+            { q: "Where was the cat sleeping?", options: ["On the sofa", "On Sarah's bed", "In the kitchen"], a: 0 },
+            { q: "What happened while Sarah was reading?", options: ["The phone rang", "The lights went out", "Mark arrived"], a: 1 },
+            { q: "What was Sarah doing when Mark knocked?", options: ["She was looking for a candle", "She was crying", "She was sleeping"], a: 0 },
+            { q: "What was Mark carrying?", options: ["A book", "A candle", "A flashlight"], a: 2 },
+            { q: "Which word introduces the short action (Mark knocking)?", options: ["While", "When", "Because"], a: 1 },
+            { q: "When did the power come back on?", options: ["While they were talking", "After Sarah went to sleep", "When Mark left"], a: 0 },
+            { q: "How did Sarah feel when the lights went out?", options: ["Angry", "Confused", "Happy"], a: 1 },
+            { q: "Which structure is 'He was carrying a flashlight'?", options: ["Past Simple", "Past Continuous", "Present Continuous"], a: 1 }
+        ];
+
+        function loadQuiz() {
+            const container = document.getElementById('quiz-content');
+            let html = "";
+            quizData.forEach((item, index) => {
+                html += `
+                    <div class="question-card">
+                        <p><b>${index + 1}. ${item.q}</b></p>
+                        ${item.options.map((opt, i) => `
+                            <label class="opt-label" id="q${index}opt${i}">
+                                <input type="radio" name="q${index}" value="${i}" style="margin-right:10px;"> ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function evaluateQuiz() {
+            let score = 0;
+            quizData.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const labels = document.querySelectorAll(`[id^="q${index}opt"]`);
+                
+                labels.forEach(l => l.classList.remove('correct', 'wrong'));
+
+                if(selected) {
+                    const val = parseInt(selected.value);
+                    if(val === item.a) {
+                        score++;
+                        document.getElementById(`q${index}opt${val}`).classList.add('correct');
+                    } else {
+                        document.getElementById(`q${index}opt${val}`).classList.add('wrong');
+                        document.getElementById(`q${index}opt${item.a}`).classList.add('correct');
+                    }
+                }
+            });
+            document.getElementById('score-display').innerText = `Tu puntaje: ${score} / 10`;
+        }
+
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>
