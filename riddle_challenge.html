@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Riddle Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 20px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, #fff0f0, var(--bg-light));
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        /* SCREENS */
+        .screen { display: none; animation: fadeIn 0.4s ease; }
+        .screen.active { display: block; }
+
+        /* --- SETUP SCREEN --- */
+        .setup-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-top: 6px solid var(--primary-teal); text-align: center;
+        }
+        .setup-box h2 { margin-top: 0; color: var(--primary-dark); }
+        
+        .team-input-group { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .team-input-group input {
+            padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem; width: 60%; outline: none; transition: 0.3s;
+        }
+        .team-input-group input:focus { border-color: var(--primary-teal); }
+        
+        .btn-add {
+            background: var(--primary-teal); color: white; border: none; padding: 0 25px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+        .btn-add:hover { background: var(--primary-dark); }
+
+        .team-list {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; list-style: none; padding: 0;
+        }
+        .team-chip {
+            background: #f0f8f8; color: var(--primary-dark); padding: 10px 20px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; border: 2px solid var(--primary-teal); display: flex; align-items: center; gap: 5px;
+        }
+
+        /* --- GAME SCREEN --- */
+        .scoreboard {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px;
+        }
+        .score-card {
+            background: white; border: 2px solid var(--primary-teal); border-radius: 12px;
+            padding: 15px 25px; min-width: 120px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .s-name { font-weight: bold; font-size: 1.1rem; color: #555; }
+        .s-points { font-size: 2.2rem; font-weight: 700; color: var(--accent-coral); }
+
+        /* Riddle Box */
+        .game-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral); text-align: center; position: relative;
+        }
+
+        .level-badge {
+            background: var(--accent-yellow); color: #fff; padding: 5px 20px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; display: inline-block; margin-bottom: 25px;
+        }
+
+        .riddle-text {
+            font-family: 'Merriweather', serif; font-size: 2rem; font-weight: 700; color: var(--text-dark);
+            line-height: 1.5; margin-bottom: 30px; padding: 0 20px; min-height: 120px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Answer Reveal Area */
+        .answer-box {
+            background: #fdfdfd; border: 2px dashed #ccc; border-radius: 12px; padding: 20px;
+            margin-bottom: 30px; display: none; animation: fadeIn 0.5s ease;
+        }
+        .answer-box.visible { display: block; }
+        .answer-icon { font-size: 3rem; margin-bottom: 10px; }
+        .answer-word { font-size: 1.8rem; font-weight: bold; color: var(--primary-teal); text-transform: uppercase; letter-spacing: 2px;}
+
+        /* Controls */
+        .btn-reveal {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .btn-reveal:hover { background: #444; transform: translateY(-2px); }
+
+        /* Award Buttons */
+        .award-section {
+            background: #fafafa; padding: 20px; border-radius: 12px; border: 1px dashed #ccc;
+            display: none; animation: fadeIn 0.4s ease; margin-top: 20px;
+        }
+        .award-section.visible { display: block; }
+        .award-title { font-size: 1.1rem; font-weight: bold; color: #555; margin-bottom: 15px; }
+        
+        .award-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn-award {
+            background: white; border: 2px solid var(--accent-coral); color: #c0392b;
+            padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+            transition: 0.2s; display: flex; align-items: center; gap: 5px; font-family: 'Poppins', sans-serif;
+        }
+        .btn-award:hover { background: var(--accent-coral); color: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,154,139,0.3);}
+
+        .btn-skip {
+            background: transparent; color: #999; border: none; font-weight: bold; cursor: pointer;
+            margin-top: 20px; text-decoration: underline; font-family: 'Poppins', sans-serif; transition: 0.2s;
+        }
+        .btn-skip:hover { color: var(--primary-teal); }
+
+        /* --- RESULTS SCREEN --- */
+        .results-box { background: white; padding: 50px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-yellow); text-align: center;}
+        
+        .podium { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 30px auto; }
+        .podium-row { display: flex; justify-content: space-between; background: #fafafa; padding: 15px 20px; border-radius: 10px; font-size: 1.2rem; font-weight: bold; border: 2px solid #eee;}
+        .podium-row.winner { background: #fff9e6; border-color: var(--accent-yellow); color: #b9770e; transform: scale(1.05); box-shadow: 0 5px 15px rgba(245, 176, 65, 0.2);}
+
+        .btn-main {
+            background: var(--primary-teal); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">psychology_alt</span> The Riddle Challenge</h1>
+        <div class="subtitle">Think outside the box! (20 Riddles)</div>
+    </header>
+
+    <div class="container">
+        
+        <div id="setup-screen" class="screen active">
+            <div class="setup-box">
+                <h2>Add Teams</h2>
+                <p style="color: #666;">Registra a los equipos que van a participar. El equipo que adivine la respuesta primero ganará los puntos.</p>
+                
+                <div class="team-input-group">
+                    <input type="text" id="team-input" placeholder="Team Name..." autocomplete="off" onkeypress="if(event.key==='Enter') addTeam()">
+                    <button class="btn-add" onclick="addTeam()">Add</button>
+                </div>
+
+                <ul class="team-list" id="team-list">
+                    </ul>
+
+                <button class="btn-main" onclick="startGame()">Start Challenge <span class="material-icons-round">play_arrow</span></button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            
+            <div class="scoreboard" id="scoreboard">
+                </div>
+
+            <div class="game-box" id="game-box">
+                <div class="level-badge">Riddle <span id="level-display">1</span> / 20</div>
+
+                <div class="riddle-text" id="riddle-display">
+                    Loading riddle...
+                </div>
+
+                <button class="btn-reveal" id="btn-reveal" onclick="revealAnswer()">Show Answer <span class="material-icons-round" style="vertical-align: middle;">visibility</span></button>
+
+                <div class="answer-box" id="answer-box">
+                    <div class="answer-icon" id="answer-icon">❓</div>
+                    <div class="answer-word" id="answer-word">ANSWER</div>
+                </div>
+
+                <div class="award-section" id="award-section">
+                    <div class="award-title">Who got it right? (+10 pts)</div>
+                    <div class="award-grid" id="award-buttons">
+                        </div>
+                    <button class="btn-skip" onclick="nextRiddle()">Nobody got it. Skip ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-box">
+                <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-yellow);">emoji_events</div>
+                <h2 style="font-size: 2.5rem; color: var(--text-dark); margin-bottom: 10px;">Game Over!</h2>
+                <p style="font-size: 1.2rem; color: #666;">Here are the final scores of the smartest minds:</p>
+                
+                <div class="podium" id="podium">
+                    </div>
+
+                <button class="btn-main" onclick="location.reload()">Play Again <span class="material-icons-round">refresh</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Database of 20 Riddles (A2/B1 Vocabulary)
+        const riddles = [
+            { text: "I have hands but I cannot clap. What am I?", answer: "A clock", icon: "🕰️" },
+            { text: "I have a tail and a head, but no body. What am I?", answer: "A coin", icon: "🪙" },
+            { text: "What has to be broken before you can use it?", answer: "An egg", icon: "🥚" },
+            { text: "I am tall when I am young, and I am short when I am old. What am I?", answer: "A pencil / candle", icon: "✏️" },
+            { text: "What goes up but never comes down?", answer: "Your age", icon: "🎂" },
+            { text: "What has words, but never speaks?", answer: "A book", icon: "📖" },
+            { text: "I have branches, but no fruit, trunk or leaves. What am I?", answer: "A bank", icon: "🏦" },
+            { text: "The more of this there is, the less you see. What is it?", answer: "Darkness", icon: "🌌" },
+            { text: "What has many keys but can't open a single door?", answer: "A piano", icon: "🎹" },
+            { text: "What can you catch but not throw?", answer: "A cold", icon: "🤧" },
+            { text: "I am full of holes but I can still hold water. What am I?", answer: "A sponge", icon: "🧽" },
+            { text: "What gets wetter as it dries?", answer: "A towel", icon: "🧖‍♀️" },
+            { text: "I have teeth but cannot bite. What am I?", answer: "A comb", icon: "🪮" },
+            { text: "What has a neck but no head?", answer: "A bottle", icon: "🍾" },
+            { text: "I run but never walk, I murmur but never talk. What am I?", answer: "A river", icon: "🏞️" },
+            { text: "I belong to you, but other people use me more than you do. What am I?", answer: "Your name", icon: "🗣️" },
+            { text: "What has legs, but doesn't walk?", answer: "A table / chair", icon: "🪑" },
+            { text: "What begins with T, ends with T, and has T in it?", answer: "A teapot", icon: "🫖" },
+            { text: "I start with an M and end with an X, and I have a never-ending amount of letters. What am I?", answer: "A mailbox", icon: "📫" },
+            { text: "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", answer: "A map", icon: "🗺️" }
+        ];
+
+        let teams = [];
+        let gameDeck = [];
+        let currentIndex = 0;
+
+        // Shuffle utility
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- SETUP LOGIC ---
+        function addTeam() {
+            const input = document.getElementById('team-input');
+            const name = input.value.trim();
+            if (name !== "") {
+                teams.push({ name: name, score: 0 });
+                input.value = "";
+                renderTeams();
+            }
+        }
+
+        function renderTeams() {
+            const list = document.getElementById('team-list');
+            list.innerHTML = "";
+            teams.forEach(t => {
+                list.innerHTML += `<li class="team-chip"><span class="material-icons-round">emoji_people</span> ${t.name}</li>`;
+            });
+        }
+
+        // --- GAME LOGIC ---
+        function startGame() {
+            if (teams.length === 0) {
+                alert("Por favor, agrega al menos un equipo o jugador para empezar.");
+                return;
+            }
+            
+            gameDeck = shuffle([...riddles]); // Randomize order
+            
+            document.getElementById('setup-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
+            
+            initScoreboard();
+            initAwardButtons();
+            loadRiddle();
+        }
+
+        function initScoreboard() {
+            const board = document.getElementById('scoreboard');
+            board.innerHTML = "";
+            teams.forEach((t, index) => {
+                board.innerHTML += `
+                    <div class="score-card" id="card-team-${index}">
+                        <div class="s-name">${t.name}</div>
+                        <div class="s-points" id="score-team-${index}">0</div>
+                    </div>
+                `;
+            });
+        }
+
+        function initAwardButtons() {
+            const grid = document.getElementById('award-buttons');
+            grid.innerHTML = "";
+            teams.forEach((t, index) => {
+                grid.innerHTML += `
+                    <button class="btn-award" onclick="awardPoints(${index})">
+                        <span class="material-icons-round">add_circle</span> ${t.name}
+                    </button>
+                `;
+            });
+        }
+
+        function loadRiddle() {
+            if (currentIndex >= gameDeck.length) {
+                showResults();
+                return;
+            }
+
+            const riddle = gameDeck[currentIndex];
+            document.getElementById('level-display').innerText = currentIndex + 1;
+            document.getElementById('riddle-display').innerText = riddle.text;
+
+            // Reset UI States
+            document.getElementById('btn-reveal').style.display = "inline-block";
+            document.getElementById('answer-box').classList.remove('visible');
+            document.getElementById('award-section').classList.remove('visible');
+            
+            document.getElementById('answer-word').innerText = riddle.answer;
+            document.getElementById('answer-icon').innerText = riddle.icon;
+        }
+
+        function revealAnswer() {
+            document.getElementById('btn-reveal').style.display = "none";
+            document.getElementById('answer-box').classList.add('visible');
+            document.getElementById('award-section').classList.add('visible');
+        }
+
+        function awardPoints(teamIndex) {
+            // Add points
+            teams[teamIndex].score += 10;
+            
+            // Update Score UI with pop animation
+            const scoreEl = document.getElementById(`score-team-${teamIndex}`);
+            scoreEl.innerText = teams[teamIndex].score;
+            
+            const cardEl = document.getElementById(`card-team-${teamIndex}`);
+            cardEl.style.animation = 'none';
+            cardEl.offsetHeight; 
+            cardEl.style.animation = 'pop 0.4s ease';
+            cardEl.style.borderColor = "var(--accent-yellow)";
+            setTimeout(() => cardEl.style.borderColor = "var(--primary-teal)", 1000);
+
+            nextRiddle();
+        }
+
+        function nextRiddle() {
+            currentIndex++;
+            loadRiddle();
+        }
+
+        // --- RESULTS LOGIC ---
+        function showResults() {
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('results-screen').classList.add('active');
+
+            // Sort descending
+            teams.sort((a, b) => b.score - a.score);
+
+            const podium = document.getElementById('podium');
+            podium.innerHTML = "";
+
+            teams.forEach((t, index) => {
+                let isWinnerClass = index === 0 ? "winner" : "";
+                let medal = index === 0 ? "🏆" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : "🏅"));
+                
+                podium.innerHTML += `
+                    <div class="podium-row ${isWinnerClass}">
+                        <span>${medal} ${t.name}</span>
+                        <span>${t.score} pts</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
