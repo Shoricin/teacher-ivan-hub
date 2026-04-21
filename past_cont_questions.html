@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Continuous Questions & Just As | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 90%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* GRAMMAR RULES */
+        .rules-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;
+        }
+        @media (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+
+        .rule-card {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid;
+        }
+        .rule-questions { border-color: var(--primary-teal); }
+        .rule-justas { border-color: var(--accent-coral); }
+        
+        .rule-card h3 { margin-top: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; color: var(--text-dark);}
+        .rule-desc { font-size: 0.95rem; color: #555; line-height: 1.6; }
+        .rule-example { background: #fafafa; padding: 12px; border-left: 4px solid var(--text-dark); border-radius: 4px; font-style: italic; margin-top: 10px; font-size: 0.95rem;}
+
+        /* READING */
+        .reading-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .reading-box h2 { margin-top: 0; font-size: 1.8rem; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;}
+        .reading-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2; color: #333; }
+        
+        /* Highlight specific grammar in text */
+        .hl-q { color: var(--primary-dark); font-weight: bold; }
+        .hl-j { color: #d9534f; font-weight: bold; background: #fff0f0; padding: 0 4px; border-radius: 4px;}
+
+        /* QUIZ CARDS */
+        .quiz-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        .quiz-title { margin-top: 0; font-size: 1.6rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 25px;}
+
+        .question-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #eee;}
+        .question-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        .q-text { font-size: 1.15rem; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-label {
+            padding: 12px 20px; border: 2px solid #eee; background: #fafafa; border-radius: 10px;
+            cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; color: #555; font-weight: 600;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); background: white; }
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); }
+
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important;}
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important;}
+
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 30px auto 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); width: 100%; max-width: 300px;
+        }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+
+        .feedback-text {
+            margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: bold; text-align: center; display: none; font-size: 1.2rem;
+        }
+        .fb-success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .fb-danger { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">policy</span> The Midnight Interrogation</h1>
+        <div class="subtitle">Questions & Dramatic Interruptions</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('reading-tab')"><span class="material-icons-round">menu_book</span> 1. The Investigation</button>
+        <button class="tab-btn" onclick="switchTab('quiz-reading-tab')"><span class="material-icons-round">quiz</span> 2. Reading Quiz</button>
+        <button class="tab-btn" onclick="switchTab('quiz-grammar-tab')" style="border-color: var(--accent-coral); color: var(--accent-coral);"><span class="material-icons-round">spellcheck</span> 3. Grammar Quiz</button>
+    </div>
+
+    <div class="container">
+
+        <div id="reading-tab" class="view-section active">
+            
+            <div class="rules-grid">
+                <div class="rule-card rule-questions">
+                    <h3><span class="material-icons-round">help_outline</span> Past Continuous Questions</h3>
+                    <div class="rule-desc">
+                        Para preguntar qué estaba sucediendo en un momento específico, invertimos el verbo <strong>To Be</strong> y el sujeto: <em>(Wh-) + Was/Were + Subject + Verb(-ing)?</em>
+                    </div>
+                    <div class="rule-example">"What <strong>were you doing</strong> at 8 PM?"</div>
+                </div>
+                <div class="rule-card rule-justas">
+                    <h3><span class="material-icons-round">bolt</span> "Just As" (Dramatic Interruption)</h3>
+                    <div class="rule-desc">
+                        Significa "Justo cuando". Lo usamos para enfatizar que dos eventos sucedieron en el <strong>mismo segundo exacto</strong>, creando mucha tensión dramática.
+                    </div>
+                    <div class="rule-example">"<span class="hl-j">Just as</span> I was locking the door, the alarm went off."</div>
+                </div>
+            </div>
+
+            <div class="reading-box">
+                <h2>The Art Gallery Heist</h2>
+                <div class="reading-text">
+                    Detective Harris arrived at the National Art Gallery. The famous diamond necklace was missing, and the glass case was shattered. He immediately gathered the staff to start the interrogation.
+                    <br><br>
+                    <span class="hl-q">"What were you doing when the alarm went off?"</span> he asked the museum curator.
+                    <br><br>
+                    "I was organizing the new paintings in the basement," she answered nervously.
+                    <br><br>
+                    <span class="hl-q">"Were you standing near the diamond at any point tonight?"</span> Harris pressed.
+                    <br><br>
+                    "No, I wasn't. I was working far away in the East Wing."
+                    <br><br>
+                    Next, Harris interrogated the security guard. <span class="hl-q">"Where were you looking at exactly midnight?"</span>
+                    <br><br>
+                    "I was watching the security monitors. Everything was quiet and completely normal. But then, <span class="hl-j">just as</span> I was reaching for my cup of coffee, all the screens went completely black!" the guard explained, sweating.
+                    <br><br>
+                    <span class="hl-q">"Was anyone else walking in the corridors?"</span>
+                    <br><br>
+                    "Yes, the janitor was sweeping the floor near the entrance."
+                    <br><br>
+                    Harris found the janitor immediately. <span class="hl-q">"What were you cleaning when the lights went out?"</span>
+                    <br><br>
+                    "I was mopping the main hall. <span class="hl-j">Just as</span> I was finishing my shift, I heard a loud crash. I ran to the vault, but it was too late."
+                    <br><br>
+                    Harris smiled. He knew exactly who the thief was. "<span class="hl-j">Just as</span> the thief was escaping through the window, he made one crucial mistake... he dropped his silver watch." Harris held up the watch. "And this watch belongs to the guard."
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-reading-tab" class="view-section">
+            <div class="quiz-box">
+                <h2 class="quiz-title">Reading Comprehension</h2>
+                
+                <form id="reading-form">
+                    <div class="question-item">
+                        <p class="q-text">1. What was the curator doing when the alarm went off?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="rq1" value="0"> She was sweeping the floor.</label>
+                            <label class="opt-label"><input type="radio" name="rq1" value="1"> She was organizing the new paintings.</label>
+                            <label class="opt-label"><input type="radio" name="rq1" value="0"> She was looking at the diamond.</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">2. What happened "just as" the guard was reaching for his coffee?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="rq2" value="0"> He heard a loud crash.</label>
+                            <label class="opt-label"><input type="radio" name="rq2" value="0"> The detective arrived.</label>
+                            <label class="opt-label"><input type="radio" name="rq2" value="1"> All the security screens went black.</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">3. Who was mopping the main hall?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="rq3" value="1"> The janitor.</label>
+                            <label class="opt-label"><input type="radio" name="rq3" value="0"> The security guard.</label>
+                            <label class="opt-label"><input type="radio" name="rq3" value="0"> The curator.</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">4. How did Detective Harris know the guard was the thief?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="rq4" value="0"> The janitor saw him stealing it.</label>
+                            <label class="opt-label"><input type="radio" name="rq4" value="1"> The guard dropped his silver watch while escaping.</label>
+                            <label class="opt-label"><input type="radio" name="rq4" value="0"> The guard had coffee on his shirt.</label>
+                        </div>
+                    </div>
+                </form>
+
+                <button class="btn-submit" onclick="evaluateQuiz('reading-form', 'fb-reading', 4)">Submit Answers</button>
+                <div class="feedback-text" id="fb-reading"></div>
+            </div>
+        </div>
+
+        <div id="quiz-grammar-tab" class="view-section">
+            <div class="quiz-box" style="border-top-color: var(--accent-coral);">
+                <h2 class="quiz-title">Grammar Check: Questions & "Just As"</h2>
+                
+                <form id="grammar-form">
+                    <div class="question-item">
+                        <p class="q-text">1. Choose the correct question structure:</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="gq1" value="0"> What you were doing at 9 PM?</label>
+                            <label class="opt-label"><input type="radio" name="gq1" value="1"> What were you doing at 9 PM?</label>
+                            <label class="opt-label"><input type="radio" name="gq1" value="0"> What did you doing at 9 PM?</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">2. Fill in the blank: "_____ she sleeping when the earthquake started?"</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="gq2" value="0"> Was</label>
+                            <label class="opt-label"><input type="radio" name="gq2" value="1"> Were</label>
+                            <label class="opt-label"><input type="radio" name="gq2" value="0"> Did</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">3. How do we create a dramatic interruption using "Just as"?</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="gq3" value="0"> Just as + Past Simple, Past Continuous.</label>
+                            <label class="opt-label"><input type="radio" name="gq3" value="1"> Just as + Past Continuous, Past Simple.</label>
+                            <label class="opt-label"><input type="radio" name="gq3" value="0"> Just as + Present Simple, Past Simple.</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p class="q-text">4. Choose the correctly formed dramatic sentence:</p>
+                        <div class="options">
+                            <label class="opt-label"><input type="radio" name="gq4" value="1"> Just as I was leaving the house, it started to rain.</label>
+                            <label class="opt-label"><input type="radio" name="gq4" value="0"> Just as I left the house, it was starting to rain.</label>
+                            <label class="opt-label"><input type="radio" name="gq4" value="0"> Just as I was leaving the house, it was raining.</label>
+                        </div>
+                    </div>
+                </form>
+
+                <button class="btn-submit" style="background: var(--accent-coral);" onclick="evaluateQuiz('grammar-form', 'fb-grammar', 4)">Submit Answers</button>
+                <div class="feedback-text" id="fb-grammar"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Quiz Evaluator
+        function evaluateQuiz(formId, feedbackId, totalQ) {
+            let score = 0;
+            let allAnswered = true;
+            const form = document.getElementById(formId);
+            const prefix = formId === 'reading-form' ? 'rq' : 'gq';
+
+            // Reset styles
+            form.querySelectorAll('.opt-label').forEach(label => {
+                label.classList.remove('correct-ans', 'wrong-ans');
+            });
+
+            for (let i = 1; i <= totalQ; i++) {
+                const selected = form.querySelector(`input[name="${prefix}${i}"]:checked`);
+                
+                if (!selected) {
+                    allAnswered = false;
+                    continue;
+                }
+
+                const val = parseInt(selected.value);
+                const correctInput = form.querySelector(`input[name="${prefix}${i}"][value="1"]`);
+                
+                // Highlight the correct answer
+                correctInput.parentElement.classList.add('correct-ans');
+
+                if (val === 1) {
+                    score++;
+                } else {
+                    selected.parentElement.classList.add('wrong-ans');
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Please answer all questions before submitting.");
+                return;
+            }
+
+            // Show Feedback
+            const feedback = document.getElementById(feedbackId);
+            feedback.style.display = "block";
+            feedback.className = "feedback-text";
+
+            if (score === totalQ) {
+                feedback.classList.add('fb-success');
+                feedback.innerHTML = `🌟 Perfect! You got ${score} out of ${totalQ}.`;
+            } else {
+                feedback.classList.add('fb-danger');
+                feedback.innerHTML = `You got ${score} out of ${totalQ}. Check the red boxes to see your mistakes.`;
+            }
+        }
+    </script>
+</body>
+</html>
