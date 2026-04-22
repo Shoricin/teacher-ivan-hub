@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Simple: He, She, It | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; width: 90%; }
+
+        .intro-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; text-align: center;
+        }
+        .intro-box p { color: #555; font-size: 1.05rem; margin: 0; line-height: 1.6;}
+        
+        .section-title {
+            background: var(--primary-teal); color: white; padding: 15px 25px; border-radius: 12px;
+            margin: 40px 0 20px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem; box-shadow: var(--shadow);
+        }
+
+        /* QUIZ CARDS */
+        .question-card {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 20px; border-left: 5px solid transparent; transition: 0.3s;
+        }
+        
+        .q-text { font-size: 1.15rem; font-weight: 600; color: var(--text-dark); margin-top: 0; margin-bottom: 15px; font-family: 'Merriweather', serif;}
+        
+        /* Multiple Choice & T/F */
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 600px) { .options { grid-template-columns: 1fr 1fr; } }
+
+        .opt-label {
+            padding: 12px 20px; border: 2px solid #eee; background: #fafafa; border-radius: 10px;
+            cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #555;
+        }
+        .opt-label:hover { border-color: var(--primary-teal); background: white;}
+        input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2); cursor: pointer;}
+        
+        /* Fill in the blanks */
+        .gap-input {
+            width: 100%; max-width: 250px; padding: 12px 15px; border: 2px solid #ccc; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: bold; color: var(--primary-dark);
+            outline: none; transition: 0.3s; background: #fafafa; margin-top: 10px;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); background: white; box-shadow: 0 0 0 3px rgba(93,203,195,0.2);}
+
+        /* Evaluation Classes */
+        .correct-ans { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important;}
+        .wrong-ans { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important;}
+        .correct-input { border-color: #10b981 !important; background: #d1fae5 !important; color: #065f46 !important;}
+        .wrong-input { border-color: #ef4444 !important; background: #fee2e2 !important; color: #991b1b !important;}
+        
+        .feedback-text {
+            margin-top: 10px; font-size: 0.95rem; font-weight: 600; display: none; padding: 10px; border-radius: 8px;
+        }
+        .fb-correct { background: #d1fae5; color: #065f46; }
+        .fb-wrong { background: #fee2e2; color: #991b1b; }
+
+        /* SUBMIT BUTTON */
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 18px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: block; margin: 40px auto;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3); width: 100%; max-width: 400px;
+        }
+        .btn-submit:hover { background: #ff7e6b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,154,139,0.4);}
+
+        /* RESULTS SCREEN */
+        #results-container {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal); text-align: center; display: none; margin-bottom: 50px;
+        }
+        .score-display { font-size: 4rem; font-weight: 700; color: var(--primary-teal); margin: 10px 0;}
+        .score-msg { font-size: 1.2rem; color: #555; margin-bottom: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">person</span> Present Simple: He, She, It</h1>
+        <div class="subtitle">20-Question Comprehensive Quiz</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="intro-box">
+            <p><strong>Instrucciones:</strong> Este quiz evalúa tu dominio del Presente Simple con la tercera persona del singular (He, She, It). Recuerda las reglas de la terminación <strong>-s, -es, -ies</strong> y el uso correcto de <strong>does / doesn't</strong>.</p>
+        </div>
+
+        <form id="quiz-form" onsubmit="evaluateQuiz(event)">
+            
+            <div class="section-title"><span class="material-icons-round">list_alt</span> Part 1: Multiple Choice</div>
+            
+            <div class="question-card" id="q-card-1">
+                <p class="q-text">1. My brother _____ tennis every weekend.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q1" value="wrong"> play</label>
+                    <label class="opt-label"><input type="radio" name="q1" value="correct"> plays</label>
+                    <label class="opt-label"><input type="radio" name="q1" value="wrong"> playing</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-2">
+                <p class="q-text">2. She _____ broccoli.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q2" value="wrong"> don't like</label>
+                    <label class="opt-label"><input type="radio" name="q2" value="wrong"> doesn't likes</label>
+                    <label class="opt-label"><input type="radio" name="q2" value="correct"> doesn't like</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-3">
+                <p class="q-text">3. _____ TV in the evening?</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q3" value="wrong"> Does he watches</label>
+                    <label class="opt-label"><input type="radio" name="q3" value="correct"> Does he watch</label>
+                    <label class="opt-label"><input type="radio" name="q3" value="wrong"> Do he watch</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-4">
+                <p class="q-text">4. The mechanic _____ cars.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q4" value="correct"> fixes</label>
+                    <label class="opt-label"><input type="radio" name="q4" value="wrong"> fixs</label>
+                    <label class="opt-label"><input type="radio" name="q4" value="wrong"> fix</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-5">
+                <p class="q-text">5. _____ in a bank?</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q5" value="wrong"> Do your mother work</label>
+                    <label class="opt-label"><input type="radio" name="q5" value="wrong"> Does your mother works</label>
+                    <label class="opt-label"><input type="radio" name="q5" value="correct"> Does your mother work</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-6">
+                <p class="q-text">6. He _____ English at the university.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q6" value="wrong"> studys</label>
+                    <label class="opt-label"><input type="radio" name="q6" value="correct"> studies</label>
+                    <label class="opt-label"><input type="radio" name="q6" value="wrong"> studyes</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-7">
+                <p class="q-text">7. My dog _____ for 14 hours a day.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q7" value="correct"> sleeps</label>
+                    <label class="opt-label"><input type="radio" name="q7" value="wrong"> sleep</label>
+                    <label class="opt-label"><input type="radio" name="q7" value="wrong"> sleepes</label>
+                </div>
+            </div>
+
+            <div class="section-title" style="background: var(--accent-coral);"><span class="material-icons-round">rule</span> Part 2: True or False</div>
+            
+            <div class="question-card" id="q-card-8">
+                <p class="q-text">8. "She go to school by bus." is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q8" value="wrong"> True</label>
+                    <label class="opt-label"><input type="radio" name="q8" value="correct"> False (goes)</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-9">
+                <p class="q-text">9. "Does he play football?" is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q9" value="correct"> True</label>
+                    <label class="opt-label"><input type="radio" name="q9" value="wrong"> False</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-10">
+                <p class="q-text">10. "He doesn't likes pizza." is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q10" value="wrong"> True</label>
+                    <label class="opt-label"><input type="radio" name="q10" value="correct"> False (doesn't like)</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-11">
+                <p class="q-text">11. "The cat catches mice." is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q11" value="correct"> True</label>
+                    <label class="opt-label"><input type="radio" name="q11" value="wrong"> False</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-12">
+                <p class="q-text">12. "Sarah washs her car every Sunday." is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q12" value="wrong"> True</label>
+                    <label class="opt-label"><input type="radio" name="q12" value="correct"> False (washes)</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="q-card-13">
+                <p class="q-text">13. "The teacher explains the lesson clearly." is grammatically correct.</p>
+                <div class="options">
+                    <label class="opt-label"><input type="radio" name="q13" value="correct"> True</label>
+                    <label class="opt-label"><input type="radio" name="q13" value="wrong"> False</label>
+                </div>
+            </div>
+
+            <div class="section-title" style="background: var(--accent-yellow); color: var(--text-dark);"><span class="material-icons-round">edit</span> Part 3: Fill in the blanks</div>
+            <p style="color: #666; margin-top: -10px; margin-bottom: 20px;">Escribe el verbo en el recuadro con la conjugación correcta de la tercera persona.</p>
+
+            <div class="question-card" id="q-card-14">
+                <p class="q-text">14. He _________ (watch) Netflix on Fridays.</p>
+                <input type="text" class="gap-input" id="q14" data-ans="watches" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-14"></div>
+            </div>
+
+            <div class="question-card" id="q-card-15">
+                <p class="q-text">15. She _________ (not / eat) meat.</p>
+                <input type="text" class="gap-input" id="q15" data-ans="doesn't eat" placeholder="Type the answer...">
+                <div class="feedback-text" id="fb-15"></div>
+            </div>
+
+            <div class="question-card" id="q-card-16">
+                <p class="q-text">16. The baby _________ (cry) when he is hungry.</p>
+                <input type="text" class="gap-input" id="q16" data-ans="cries" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-16"></div>
+            </div>
+
+            <div class="question-card" id="q-card-17">
+                <p class="q-text">17. It _________ (rain) a lot in April.</p>
+                <input type="text" class="gap-input" id="q17" data-ans="rains" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-17"></div>
+            </div>
+
+            <div class="question-card" id="q-card-18">
+                <p class="q-text">18. My sister _________ (have) a new laptop.</p>
+                <input type="text" class="gap-input" id="q18" data-ans="has" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-18"></div>
+            </div>
+
+            <div class="question-card" id="q-card-19">
+                <p class="q-text">19. He _________ (carry) a heavy backpack to school.</p>
+                <input type="text" class="gap-input" id="q19" data-ans="carries" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-19"></div>
+            </div>
+
+            <div class="question-card" id="q-card-20">
+                <p class="q-text">20. The train _________ (arrive) at 8:00 AM.</p>
+                <input type="text" class="gap-input" id="q20" data-ans="arrives" placeholder="Type the verb...">
+                <div class="feedback-text" id="fb-20"></div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">Submit All Answers</button>
+        </form>
+
+        <div id="results-container">
+            <div class="material-icons-round" style="font-size: 5rem; color: var(--accent-yellow);">emoji_events</div>
+            <h2>Quiz Completed!</h2>
+            <div class="score-display" id="final-score">0 / 20</div>
+            <p class="score-msg" id="final-msg"></p>
+            <button class="btn-submit" style="background: var(--primary-teal); margin-top: 10px;" onclick="location.reload()">Try Again</button>
+        </div>
+
+    </div>
+
+    <script>
+        function evaluateQuiz(e) {
+            e.preventDefault();
+            let score = 0;
+            let allAnswered = true;
+
+            // Reset UI styles
+            document.querySelectorAll('.opt-label').forEach(label => {
+                label.classList.remove('correct-ans', 'wrong-ans');
+            });
+            document.querySelectorAll('.gap-input').forEach(input => {
+                input.classList.remove('correct-input', 'wrong-input');
+            });
+            document.querySelectorAll('.feedback-text').forEach(fb => {
+                fb.style.display = 'none';
+                fb.className = 'feedback-text';
+            });
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.style.borderLeftColor = "transparent";
+            });
+
+            // 1. Evaluate Multiple Choice & T/F (Questions 1 to 13)
+            for (let i = 1; i <= 13; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const card = document.getElementById(`q-card-${i}`);
+                
+                if (!selected) {
+                    allAnswered = false;
+                    card.style.borderLeftColor = "var(--accent-yellow)"; // Mark unanswered
+                    continue;
+                }
+
+                // Find the visually correct label to highlight it regardless
+                const correctInput = document.querySelector(`input[name="q${i}"][value="correct"]`);
+                correctInput.parentElement.classList.add('correct-ans');
+
+                if (selected.value === "correct") {
+                    score++;
+                    card.style.borderLeftColor = "#10b981";
+                } else {
+                    selected.parentElement.classList.add('wrong-ans');
+                    card.style.borderLeftColor = "#ef4444";
+                }
+            }
+
+            // 2. Evaluate Fill in the Blanks (Questions 14 to 20)
+            for (let i = 14; i <= 20; i++) {
+                const inputEl = document.getElementById(`q${i}`);
+                const card = document.getElementById(`q-card-${i}`);
+                const feedback = document.getElementById(`fb-${i}`);
+                
+                const userAnswer = inputEl.value.trim().toLowerCase();
+                const correctAnswer = inputEl.getAttribute('data-ans').toLowerCase();
+
+                if (userAnswer === "") {
+                    allAnswered = false;
+                    card.style.borderLeftColor = "var(--accent-yellow)";
+                    continue;
+                }
+
+                feedback.style.display = "block";
+
+                // Allow small variation for apostrophes in doesn't
+                let cleanUserAns = userAnswer.replace("’", "'");
+                
+                if (cleanUserAns === correctAnswer) {
+                    score++;
+                    inputEl.classList.add('correct-input');
+                    card.style.borderLeftColor = "#10b981";
+                    feedback.classList.add('fb-correct');
+                    feedback.innerHTML = "✅ Correct!";
+                } else {
+                    inputEl.classList.add('wrong-input');
+                    card.style.borderLeftColor = "#ef4444";
+                    feedback.classList.add('fb-wrong');
+                    feedback.innerHTML = `❌ Incorrect. The correct answer is: <strong>${correctAnswer}</strong>`;
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Por favor, responde todas las preguntas antes de enviar.");
+                return;
+            }
+
+            // Disable all inputs after submission
+            document.querySelectorAll('input').forEach(input => input.readOnly = true);
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+            document.getElementById('btn-submit').style.display = "none";
+
+            // Show Results
+            const results = document.getElementById('results-container');
+            results.style.display = "block";
+            document.getElementById('final-score').innerText = `${score} / 20`;
+            
+            const msg = document.getElementById('final-msg');
+            if (score === 20) {
+                msg.innerText = "🌟 Perfect Score! Tienes un dominio total del Presente Simple.";
+            } else if (score >= 15) {
+                msg.innerText = "👍 Great job! Entiendes las reglas, pero revisa tus pequeños errores de ortografía.";
+            } else {
+                msg.innerText = "📚 Keep practicing! Recuerda que He, She e It siempre sufren modificaciones en afirmativo y usan 'doesn't' en negativo.";
+            }
+
+            // Smooth scroll to results
+            results.scrollIntoView({ behavior: "smooth" });
+        }
+    </script>
+</body>
+</html>
