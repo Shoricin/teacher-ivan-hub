@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processes & Maps | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* STUDENT GRID */
+        .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .student-grid { grid-template-columns: 1fr; } }
+
+        .student-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid; display: flex; flex-direction: column;
+        }
+        .card-diana { border-color: #8b5cf6; } 
+        .card-valeria { border-color: var(--accent-coral); } 
+
+        .student-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;}
+        .student-avatar { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.5rem;}
+        .avatar-d { background: #8b5cf6; }
+        .avatar-v { background: var(--accent-coral); }
+        .student-name { font-size: 1.5rem; font-weight: 700; margin: 0; }
+
+        /* ERROR & ALTERNATIVE BOXES */
+        .quote-box { background: #fff0f0; border-left: 4px solid #ef4444; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-family: 'Merriweather', serif; font-size: 0.95rem; color: #7f1d1d; line-height: 1.6;}
+        .alt-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 15px; font-family: 'Merriweather', serif; font-size: 0.95rem; color: #064e3b; line-height: 1.6;}
+        .error-hl { background: #fecaca; font-weight: bold; padding: 0 4px; border-radius: 3px; }
+        .correct-hl { background: #bbf7d0; font-weight: bold; padding: 0 4px; border-radius: 3px; }
+        .info-badge { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+
+        /* LESSON BOXES */
+        .lesson-card { background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;}
+        .lesson-card h2 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .rule-display { background: #fdfdfd; border: 2px dashed var(--primary-teal); padding: 20px; border-radius: 12px; margin-bottom: 25px;}
+        .rule-display h3 { margin-top: 0; color: var(--primary-dark); }
+        .rule-display p { line-height: 1.8; color: #444; }
+        .rule-display ul { margin: 0; padding-left: 20px; color: #444; line-height: 1.8; }
+        .hl-word { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+
+        .exercise-box { background: var(--bg-light); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ddd;}
+        .gap-input {
+            padding: 5px 10px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 0.95rem;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check {
+            background: var(--text-dark); color: white; border: none; padding: 12px 20px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 15px;
+        }
+        .btn-check:hover { background: #444; transform: translateY(-2px);}
+        .feedback-text { margin-top: 15px; font-size: 0.95rem; font-weight: bold; text-align: center; min-height: 20px;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>IELTS Task 1: Processes & Maps</h1>
+        <div class="subtitle">Reviewing Errors & Learning New Structures</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('review-tab')"><span class="material-icons-round">rate_review</span> 1. Error Review</button>
+        <button class="tab-btn" onclick="switchTab('lesson1-tab')"><span class="material-icons-round">precision_manufacturing</span> 2. Lesson: Processes</button>
+        <button class="tab-btn" onclick="switchTab('lesson2-tab')" style="border-color: var(--accent-coral); color: var(--accent-coral);"><span class="material-icons-round">map</span> 3. Lesson: Maps</button>
+    </div>
+
+    <div class="container">
+
+        <div id="review-tab" class="view-section active">
+            <div style="background: var(--primary-teal); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
+                <h3 style="margin: 0 0 5px 0;">Análisis del Redemption Essay</h3>
+                <p style="margin: 0; font-size: 1.05rem;">Revisemos los detalles del último envío antes de entrar a los nuevos temas.</p>
+            </div>
+
+            <div class="student-grid">
+                
+                <div class="student-card card-diana">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-d">D</div>
+                        <h2 class="student-name">Diana</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-red">Word Count: 86 words (Failed)</div>
+                    <div class="info-badge badge-yellow">Missing Task: Table</div>
+                    
+                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Diana, no pudiste iniciar la tabla y tu ensayo principal se cortó en 86 palabras. Además, tus oraciones son muy largas y se mezclan (Run-on sentences).</p>
+                    
+                    <div class="quote-box">
+                        <strong>Tu error (Falta de puntuación):</strong><br>
+                        "The bar graph shows weekly families spending... <span class="error-hl">on the other hand detailing one of these categories the pie chart presents</span> their transport modes..."
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta (Dividir en dos oraciones):</strong><br>
+                        "The bar graph shows weekly family spending... <span class="correct-hl">. On the other hand, the pie chart presents</span> their transport modes..."
+                    </div>
+
+                    <div class="quote-box">
+                        <strong>Tu error (Idea cortada):</strong><br>
+                        "<span class="error-hl">Starting with the details housing was the category Conversely</span>"
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta:</strong><br>
+                        "Starting with the details, housing was the most expensive category. Conversely, leisure was the cheapest."
+                    </div>
+                </div>
+
+                <div class="student-card card-valeria">
+                    <div class="student-header">
+                        <div class="student-avatar avatar-v">V</div>
+                        <h2 class="student-name">Valeria</h2>
+                    </div>
+                    
+                    <div class="info-badge badge-green">Word Count: 153 words (Passed)</div>
+                    <div class="info-badge badge-green">Objectivity: 100% (Passed)</div>
+                    
+                    <p style="font-size: 0.9rem; color: #555;"><strong>Problema:</strong> Valeria, cumpliste las reglas principales muy bien. Pero seguimos fallando en la exactitud de las preposiciones numéricas y mezclando gráficos en una misma idea.</p>
+                    
+                    <div class="quote-box">
+                        <strong>Tu error (Preposiciones y Conectores):</strong><br>
+                        "...between 2015 <span class="error-hl">to</span> 2020"<br>
+                        "...a <span class="error-hl">decreased by</span> 35,000 visitors in 2020"
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta:</strong><br>
+                        "...between 2015 <span class="correct-hl">and</span> 2020" <em>(o 'from 2015 to 2020')</em><br>
+                        "...it decreased <span class="correct-hl">to</span> 35,000 visitors in 2020." <em>(Cayó HASTA 35k).</em>
+                    </div>
+
+                    <div class="quote-box">
+                        <strong>Tu error (Mezclar gráficos):</strong><br>
+                        "The history museum dropped sharply since 2016, <span class="error-hl">comparing with the doughnut graphic</span>, the percentage..."
+                    </div>
+                    <div class="alt-box">
+                        <strong>Alternativa correcta (Transición clara):</strong><br>
+                        "The history museum dropped sharply after 2016. <span class="correct-hl">Turning to the doughnut chart</span>, the percentage..."
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="lesson1-tab" class="view-section">
+            <div class="lesson-card">
+                <h2><span class="material-icons-round">precision_manufacturing</span> Lesson 1: Describing Processes</h2>
+                
+                <div class="rule-display">
+                    <h3>Sequencing Connectors & Present Passive</h3>
+                    <p>Para describir procesos de manufactura (ej. cómo se hace el papel, el ciclo del agua), el objetivo del IELTS es evaluar tu capacidad para:</p>
+                    <ul>
+                        <li><strong>Ordenar los pasos:</strong> <em>First, To begin with, Following this, Subsequently, Finally.</em></li>
+                        <li><strong>Usar la Voz Pasiva (Presente):</strong> Porque lo importante es el producto, no quién lo hace. La fórmula es: <strong>is / are + Verb (Past Participle)</strong>.</li>
+                    </ul>
+                    <p style="font-style: italic; border-left: 3px solid #ccc; padding-left: 10px; color: #666; margin-top: 15px;">"First, the raw materials <span class="hl-word">are collected</span>. Following this, they <span class="hl-word">are processed</span> in the factory."</p>
+                </div>
+
+                <div class="exercise-box" style="border-color: var(--primary-teal);">
+                    <p style="margin-top: 0; font-weight: bold;">Practice: The Recycling Process</p>
+                    <p style="line-height: 2.2; font-size: 0.95rem;">
+                        <input type="text" class="gap-input" style="width: 80px;" id="prep-1-1" data-ans="first"> (First/Although), the used plastic bottles 
+                        <input type="text" class="gap-input" style="width: 120px;" id="prep-1-2" data-ans="are collected"> (is collected / are collected) from the bins. 
+                        <input type="text" class="gap-input" style="width: 120px;" id="prep-1-3" data-ans="subsequently"> (Subsequently / Whereas), they are transported to the recycling center where they 
+                        <input type="text" class="gap-input" style="width: 110px;" id="prep-1-4" data-ans="are washed"> (was washed / are washed) thoroughly.
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['prep-1-1', 'prep-1-2', 'prep-1-3', 'prep-1-4'], 'fb-prep-1')">Check Understanding</button>
+                    <div class="feedback-text" id="fb-prep-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="lesson2-tab" class="view-section">
+            <div class="lesson-card" style="border-top-color: var(--accent-coral);">
+                <h2><span class="material-icons-round">map</span> Lesson 2: Describing Maps</h2>
+                
+                <div class="rule-display" style="border-color: var(--accent-coral);">
+                    <h3 style="color: #b91c1c;">Spatial Prepositions & Past Passive</h3>
+                    <p>En el Task 1 a menudo te dan dos mapas de una ciudad (ej. 1990 vs 2020). Debes describir las transformaciones arquitectónicas:</p>
+                    <ul>
+                        <li><strong>Ubicación:</strong> <em>To the north of, in the south-west corner, adjacent to, opposite.</em></li>
+                        <li><strong>Cambios (Past Passive):</strong> <em>was demolished (destruido), was constructed/built (construido), was replaced by (reemplazado por).</em></li>
+                    </ul>
+                    <p style="font-style: italic; border-left: 3px solid #ccc; padding-left: 10px; color: #666; margin-top: 15px;">"The old factory <span class="hl-word" style="background:#fee2e2; color:#991b1b;">was demolished</span> and it <span class="hl-word" style="background:#fee2e2; color:#991b1b;">was replaced</span> by a modern shopping mall."</p>
+                </div>
+
+                <div class="exercise-box" style="border-color: var(--accent-coral);">
+                    <p style="margin-top: 0; font-weight: bold;">Practice: Urban Transformations</p>
+                    <p style="line-height: 2.2; font-size: 0.95rem;">
+                        Looking at the 2020 map, the old residential area in the south 
+                        <input type="text" class="gap-input" style="width: 140px;" id="prep-2-1" data-ans="was demolished"> (was demolished / is demolished). It was replaced 
+                        <input type="text" class="gap-input" style="width: 50px;" id="prep-2-2" data-ans="by"> (for / by) a large park. Additionally, a new hospital 
+                        <input type="text" class="gap-input" style="width: 140px;" id="prep-2-3" data-ans="was constructed"> (constructed / was constructed) 
+                        <input type="text" class="gap-input" style="width: 100px;" id="prep-2-4" data-ans="adjacent to"> (adjacent to / inside) the school.
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['prep-2-1', 'prep-2-2', 'prep-2-3', 'prep-2-4'], 'fb-prep-2')">Check Understanding</button>
+                    <div class="feedback-text" id="fb-prep-2"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Input Checker
+        function checkInputs(inputIds, feedbackId) {
+            let allCorrect = true;
+            
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                const answer = el.getAttribute('data-ans').toLowerCase();
+                // Clean student input
+                const studentInput = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+
+                if(studentInput === answer) {
+                    el.classList.add('correct');
+                } else {
+                    el.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            const fb = document.getElementById(feedbackId);
+            fb.style.display = "block";
+            if(allCorrect) {
+                fb.style.color = "#10b981";
+                fb.innerText = "¡Excelente! Has aplicado las reglas correctamente.";
+            } else {
+                fb.style.color = "#ef4444";
+                fb.innerText = "Revisa los recuadros en rojo. Presta atención a la voz pasiva (is vs are / was vs were).";
+            }
+        }
+    </script>
+</body>
+</html>
