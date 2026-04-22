@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So & Because Narratives | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 30px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 90%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* TAB 1: GRAMMAR RULES */
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        @media (max-width: 768px) { .rules-grid { grid-template-columns: 1fr; } }
+
+        .rule-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid;
+        }
+        .rule-because { border-color: var(--primary-teal); }
+        .rule-so { border-color: var(--accent-coral); }
+        
+        .rule-card h2 { margin-top: 0; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;}
+        .rule-because h2 { color: var(--primary-dark); }
+        .rule-so h2 { color: #d9534f; }
+        
+        .rule-desc { font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 20px; }
+        .rule-example { background: #fafafa; padding: 15px; border-left: 4px solid #ccc; border-radius: 8px; font-size: 1.1rem;}
+        .hl-b { color: var(--primary-dark); font-weight: bold; }
+        .hl-s { color: #d9534f; font-weight: bold; }
+
+        /* TAB 2: VOCABULARY */
+        .vocab-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); text-align: center;
+        }
+        .vocab-box h2 { margin-top: 0; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 10px;}
+        
+        .vocab-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 30px; }
+        .v-chip {
+            background: #fff9e6; border: 2px solid #f5b041; color: #b9770e; padding: 12px 25px; border-radius: 50px;
+            font-weight: 600; font-size: 1.1rem; cursor: help; position: relative; transition: 0.2s;
+        }
+        .v-chip:hover { background: #f5b041; color: white; transform: translateY(-2px);}
+        
+        .v-chip::after {
+            content: attr(data-spa); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--text-dark); color: white; padding: 8px 15px; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: normal;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: none; z-index: 10;
+        }
+        .v-chip:hover::after { opacity: 1; visibility: visible; bottom: 120%; }
+
+        /* TAB 3: WRITING & TIMER */
+        .writing-card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark);
+        }
+
+        .timer-container {
+            background: var(--text-dark); color: white; padding: 15px 30px; border-radius: 50px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 15px; box-shadow: var(--shadow);
+            margin-bottom: 25px; border: 2px solid var(--accent-yellow); width: max-content; margin-left: auto; margin-right: auto;
+        }
+        .timer-wrapper { display: flex; justify-content: center; }
+        .time-display { font-size: 2rem; font-weight: bold; font-family: monospace; letter-spacing: 2px; color: var(--accent-yellow);}
+        .timer-btn {
+            background: var(--accent-coral); color: white; border: none; padding: 8px 20px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif; font-size: 1rem;
+        }
+        .timer-btn:hover { background: #ff7e6b; transform: scale(1.05);}
+        .time-warning { color: #ef4444 !important; animation: pulse 1s infinite; }
+
+        .writing-instructions {
+            background: #f0f8f8; padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-teal); margin-bottom: 25px;
+        }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group input {
+            width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem; box-sizing: border-box; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary-teal); }
+
+        .writing-area {
+            width: 100%; height: 280px; padding: 20px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.1rem; resize: vertical; box-sizing: border-box; transition: 0.3s; line-height: 1.8;
+        }
+        .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        .word-counter { text-align: right; font-size: 1rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
+        .word-counter.valid { color: #10b981; }
+
+        .checklist {
+            background: #fafafa; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; margin-top: 20px;
+        }
+        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 15px; font-size: 1.1rem;}
+        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 1rem; color: #444; margin-bottom: 10px;}
+        .checklist-item input[type="checkbox"] { accent-color: var(--primary-teal); transform: scale(1.3); cursor: pointer;}
+
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 15px 30px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 1.2rem;
+        }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.2);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">link</span> Narrative Connections</h1>
+        <div class="subtitle">Linking past events using So and Because</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('grammar-tab')"><span class="material-icons-round">rule</span> 1. Grammar Rules</button>
+        <button class="tab-btn" onclick="switchTab('vocab-tab')"><span class="material-icons-round">spellcheck</span> 2. Story Vocabulary</button>
+        <button class="tab-btn" onclick="switchTab('writing-tab')" style="border-color: var(--accent-coral); color: var(--accent-coral);"><span class="material-icons-round">timer</span> 3. Writing Challenge</button>
+    </div>
+
+    <div class="container">
+
+        <div id="grammar-tab" class="view-section active">
+            <div class="rules-grid">
+                <div class="rule-card rule-because">
+                    <h2>BECAUSE (The Reason)</h2>
+                    <div class="rule-desc">
+                        Usamos <strong>because</strong> para explicar <em>el porqué</em> de algo. Nos da la razón o causa de la acción principal.
+                    </div>
+                    <div class="rule-example">
+                        "I stayed at home <span class="hl-b">because</span> it was raining heavily."<br>
+                        <span style="font-size: 0.9rem; color: #777;">(Razón: Estaba lloviendo).</span>
+                    </div>
+                </div>
+
+                <div class="rule-card rule-so">
+                    <h2>SO (The Result)</h2>
+                    <div class="rule-desc">
+                        Usamos <strong>so</strong> para mostrar <em>el resultado</em> o la consecuencia de una acción previa. Suele llevar una coma antes.
+                    </div>
+                    <div class="rule-example">
+                        "It was raining heavily<span class="hl-s">, so</span> I stayed at home."<br>
+                        <span style="font-size: 0.9rem; color: #777;">(Resultado: Me quedé en casa).</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 25px; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                <h3 style="color: var(--primary-dark); margin-top: 0;">💡 The Golden Flip</h3>
+                <p style="font-size: 1.1rem; color: #555;">Recuerda que son opuestos. Si cambias el orden de la oración, debes cambiar la palabra.</p>
+                <p style="font-family: 'Merriweather', serif; font-size: 1.1rem; background: #fdfdfd; border: 1px dashed #ccc; padding: 15px; border-radius: 8px;">
+                    "I lost my passport <strong>because</strong> I was careless."<br>
+                    <em>is the exact same as...</em><br>
+                    "I was careless<strong>, so</strong> I lost my passport."
+                </p>
+            </div>
+        </div>
+
+        <div id="vocab-tab" class="view-section">
+            <div class="vocab-box">
+                <h2><span class="material-icons-round" style="font-size: 2rem; vertical-align: middle;">flight_takeoff</span> "A Disastrous Trip"</h2>
+                <p style="color: #666; font-size: 1.1rem;">Preparémonos para escribir. Pasa el ratón (o toca) estas palabras clave que te ayudarán a contar una historia de viaje llena de problemas.</p>
+                
+                <div class="vocab-grid">
+                    <span class="v-chip" data-spa="Perdí mi vuelo">I missed my flight</span>
+                    <span class="v-chip" data-spa="Atasco de tráfico">Traffic jam</span>
+                    <span class="v-chip" data-spa="Perder la noción del tiempo">Lost track of time</span>
+                    <span class="v-chip" data-spa="Me di cuenta (que)">I realized (that)</span>
+                    <span class="v-chip" data-spa="Exhausto / Muy cansado">Exhausted</span>
+                    <span class="v-chip" data-spa="Aliviado">Relieved</span>
+                    <span class="v-chip" data-spa="Decepcionado">Disappointed</span>
+                    <span class="v-chip" data-spa="Olvidé mi billetera">Forgot my wallet</span>
+                    <span class="v-chip" data-spa="Nos perdimos">We got lost</span>
+                    <span class="v-chip" data-spa="Arruinar el viaje">Ruin the trip</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="writing-tab" class="view-section">
+            <div class="writing-card">
+                
+                <div class="timer-wrapper">
+                    <div class="timer-container" id="timer-box">
+                        <span class="material-icons-round">timer</span>
+                        <span class="time-display" id="time-display">15:00</span>
+                        <button class="timer-btn" onclick="startTimer()">Start Timer</button>
+                    </div>
+                </div>
+
+                <div class="writing-instructions">
+                    <h3 style="margin-top: 0; color: var(--primary-dark);"><span class="material-icons-round" style="vertical-align: middle;">assignment</span> Writing Prompt</h3>
+                    <p style="margin-bottom: 0; color: #444; font-size: 1.05rem;">
+                        Write a short story about a disastrous trip or a very bad day in the past. Explain the reasons for the problems and their results. 
+                    </p>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="student-name" placeholder="Escribe tu nombre y apellido completo" required>
+                </div>
+
+                <textarea class="writing-area" id="narrative-essay" placeholder="Last summer, my family and I decided to go to the beach. However, it was a terrible day..." onkeyup="countWords()"></textarea>
+                <div class="word-counter" id="word-count">Words: 0 / 100</div>
+
+                <div class="checklist">
+                    <h4>✅ Pre-flight Checklist:</h4>
+                    <label class="checklist-item"><input type="checkbox" id="chk-so"> I used <strong>SO</strong> to explain a result.</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-because"> I used <strong>BECAUSE</strong> to explain a reason.</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-past"> I wrote the story in the <strong>Past Tense</strong>.</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-words"> I reached the 100-word minimum.</label>
+                </div>
+
+                <button class="btn-submit" onclick="generatePDF()">
+                    <span class="material-icons-round">picture_as_pdf</span> Submit Narrative
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- WORD COUNTER ---
+        function countWords() {
+            const text = document.getElementById('narrative-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById('word-count');
+            
+            display.innerText = `Words: ${words} / 100`;
+            
+            if (words >= 100) {
+                display.classList.add('valid');
+                document.getElementById('chk-words').checked = true; // Auto-check if words >= 100
+            } else {
+                display.classList.remove('valid');
+                document.getElementById('chk-words').checked = false;
+            }
+        }
+
+        // --- TIMER LOGIC (15 Minutes) ---
+        let timeRemaining = 900; // 15 minutes in seconds
+        let timerInterval = null;
+        let timerStarted = false;
+
+        function startTimer() {
+            if (timerStarted) return;
+            timerStarted = true;
+            
+            // Hide start button
+            document.querySelector('.timer-btn').style.display = 'none';
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                
+                const timeString = `${minutes}:${seconds}`;
+                document.getElementById('time-display').innerText = timeString;
+
+                if (timeRemaining <= 180) { // 3 minutes left warning
+                    document.getElementById('time-display').classList.add('time-warning');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("¡TIEMPO AGOTADO! Debes enviar tu historia inmediatamente.");
+                }
+            }, 1000);
+        }
+
+        // --- PDF GENERATION ---
+        function generatePDF() {
+            const studentName = document.getElementById('student-name').value.trim();
+            
+            if (!studentName) {
+                alert("Por favor, ingresa tu nombre antes de enviar.");
+                return;
+            }
+
+            let allChecked = true;
+            ['chk-so', 'chk-because', 'chk-past', 'chk-words'].forEach(id => { 
+                if (!document.getElementById(id).checked) allChecked = false; 
+            });
+
+            if (!allChecked) {
+                alert(`Hey ${studentName}, debes asegurarte de cumplir TODO tu Checklist y marcar las casillas antes de enviar.`);
+                return;
+            }
+
+            const text = document.getElementById('narrative-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            
+            if (words < 100) {
+                alert(`Solo tienes ${words} palabras. El mínimo es 100.`);
+                return;
+            }
+
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Document Styling
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(93, 203, 195); // Teal
+            doc.text("A Disastrous Trip (Narrative)", 105, 25, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Student: ${studentName}`, 105, 33, null, null, "center");
+            doc.text(`Word Count: ${words} words`, 105, 40, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 47, null, null, "center");
+
+            doc.setDrawColor(255, 154, 139); // Coral Line
+            doc.setLineWidth(1);
+            doc.line(20, 52, 190, 52); 
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            const splitText = doc.splitTextToSize(text, 170);
+            doc.text(splitText, 20, 65, { lineHeightFactor: 1.6 });
+
+            doc.setFont("helvetica", "bolditalic");
+            doc.setFontSize(10);
+            doc.setTextColor(93, 203, 195);
+            doc.text("Checklist verified. Sent via Teacher Ivan's HUB.", 105, 280, null, null, "center");
+
+            const fileName = `${studentName.replace(/\s+/g, '_')}_Narrative.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
