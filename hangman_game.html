@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hangman Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+
+        .container { max-width: 1000px; margin: 30px auto 50px; width: 95%; }
+        .screen { display: none; animation: fadeIn 0.4s ease; }
+        .screen.active { display: block; }
+
+        /* --- SETUP SCREEN --- */
+        .setup-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: var(--shadow); border-top: 6px solid var(--primary-teal); text-align: center;
+        }
+        .team-input-group { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .team-input-group input {
+            padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem; width: 60%; outline: none; transition: 0.3s; text-transform: uppercase;
+        }
+        .team-input-group input:focus { border-color: var(--primary-teal); }
+        
+        .btn-add {
+            background: var(--primary-teal); color: white; border: none; padding: 0 25px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+        .btn-add:hover { background: var(--primary-dark); }
+
+        .team-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; list-style: none; padding: 0; }
+        .team-chip {
+            background: #f0f8f8; color: var(--primary-dark); padding: 10px 20px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; border: 2px solid var(--primary-teal);
+        }
+
+        .btn-main {
+            background: var(--accent-coral); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            transition: 0.3s; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(255,154,139,0.3);
+        }
+        .btn-main:hover { background: #ff7e6b; transform: translateY(-2px); }
+
+        /* --- GAME SCREEN --- */
+        .scoreboard {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;
+        }
+        .score-card {
+            background: white; border: 2px solid var(--primary-teal); border-radius: 12px;
+            padding: 10px 20px; min-width: 100px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+        .score-card:hover { background: var(--primary-teal); color: white; transform: translateY(-3px);}
+        .score-card:hover .s-name, .score-card:hover .s-points { color: white; }
+        .s-name { font-weight: bold; font-size: 1rem; color: #555; pointer-events: none;}
+        .s-points { font-size: 1.5rem; font-weight: 700; color: var(--accent-coral); pointer-events: none;}
+        .award-tooltip { font-size: 0.75rem; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 4px 8px; border-radius: 4px; opacity: 0; transition: 0.2s; white-space: nowrap; pointer-events: none;}
+        .score-card:hover .award-tooltip { opacity: 1; }
+
+        .game-layout {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;
+        }
+        @media (max-width: 768px) { .game-layout { grid-template-columns: 1fr; } }
+
+        .drawing-box, .word-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--text-dark); text-align: center;
+        }
+
+        /* HANGMAN SVG */
+        .hangman-svg { width: 100%; max-width: 250px; height: auto; }
+        .hm-part { stroke: var(--text-dark); stroke-width: 4; stroke-linecap: round; fill: none; opacity: 0; transition: opacity 0.5s ease; }
+        .hm-base { stroke: var(--text-dark); stroke-width: 6; stroke-linecap: round; fill: none; }
+        .hm-rope { stroke: var(--accent-coral); stroke-width: 4; stroke-dasharray: 5,5; }
+
+        /* WORD AREA */
+        .category-badge {
+            background: var(--accent-yellow); color: white; padding: 5px 15px; border-radius: 50px;
+            font-weight: bold; font-size: 1rem; display: inline-block; margin-bottom: 10px; text-transform: uppercase;
+        }
+        .hint-text {
+            color: #666; font-size: 1.1rem; font-style: italic; margin-bottom: 30px; min-height: 50px;
+        }
+        
+        .word-display {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; font-family: 'monospace';
+        }
+        .letter-box {
+            width: 40px; height: 50px; border-bottom: 4px solid var(--text-dark);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; font-weight: bold; color: var(--primary-dark); text-transform: uppercase;
+        }
+        .letter-box.space { border-bottom: none; width: 20px; }
+
+        /* KEYBOARD */
+        .keyboard {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px;
+        }
+        .key-btn {
+            background: #f0f8f8; border: 2px solid #ddd; color: var(--text-dark);
+            width: 40px; height: 45px; border-radius: 8px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; transition: 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .key-btn:hover { background: var(--primary-teal); color: white; border-color: var(--primary-teal);}
+        .key-btn.correct { background: #10b981; color: white; border-color: #10b981; opacity: 0.8; pointer-events: none; }
+        .key-btn.wrong { background: #ef4444; color: white; border-color: #ef4444; opacity: 0.5; pointer-events: none; }
+
+        .game-over-msg {
+            font-size: 1.5rem; font-weight: bold; margin-top: 20px; display: none; padding: 15px; border-radius: 12px;
+        }
+        .msg-win { background: #d1fae5; color: #065f46; border: 2px solid #10b981; }
+        .msg-lose { background: #fee2e2; color: #991b1b; border: 2px solid #ef4444; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">accessibility_new</span> The Hangman Challenge</h1>
+        <div class="subtitle">100 Words • 6 Categories • Team Play</div>
+    </header>
+
+    <div class="container">
+        
+        <div id="setup-screen" class="screen active">
+            <div class="setup-box">
+                <h2 style="font-size: 2rem;">Add Teams</h2>
+                <p style="color: #666; font-size: 1.1rem;">Registra los equipos. Cuando un equipo adivine la palabra completa, haz clic en su tarjeta de puntaje para otorgarles 10 puntos.</p>
+                
+                <div class="team-input-group">
+                    <input type="text" id="team-input" placeholder="TEAM NAME..." autocomplete="off" onkeypress="if(event.key==='Enter') addTeam()">
+                    <button class="btn-add" onclick="addTeam()">Add</button>
+                </div>
+
+                <ul class="team-list" id="team-list"></ul>
+
+                <button class="btn-main" onclick="startGame()">Start Game <span class="material-icons-round">play_arrow</span></button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            
+            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 5px;">Click on a team to award 10 pts & load the next word.</p>
+            <div class="scoreboard" id="scoreboard"></div>
+
+            <div class="game-layout">
+                
+                <div class="drawing-box">
+                    <svg class="hangman-svg" viewBox="0 0 200 250">
+                        <line x1="20" y1="230" x2="100" y2="230" class="hm-base" />
+                        <line x1="60" y1="230" x2="60" y2="20" class="hm-base" />
+                        <line x1="60" y1="20" x2="140" y2="20" class="hm-base" />
+                        <line x1="140" y1="20" x2="140" y2="50" class="hm-rope" />
+                        
+                        <circle cx="140" cy="70" r="20" class="hm-part" id="part-1" /> <line x1="140" y1="90" x2="140" y2="150" class="hm-part" id="part-2" /> <line x1="140" y1="100" x2="110" y2="130" class="hm-part" id="part-3" /> <line x1="140" y1="100" x2="170" y2="130" class="hm-part" id="part-4" /> <line x1="140" y1="150" x2="120" y2="200" class="hm-part" id="part-5" /> <line x1="140" y1="150" x2="160" y2="200" class="hm-part" id="part-6" /> <g class="hm-part" id="part-dead">
+                            <line x1="132" y1="65" x2="138" y2="71" style="stroke-width:2;" />
+                            <line x1="138" y1="65" x2="132" y2="71" style="stroke-width:2;" />
+                            <line x1="142" y1="65" x2="148" y2="71" style="stroke-width:2;" />
+                            <line x1="148" y1="65" x2="142" y2="71" style="stroke-width:2;" />
+                        </g>
+                    </svg>
+                    
+                    <button class="btn-add" style="margin-top: 20px; width: 100%; padding: 15px;" onclick="loadNextWord()">
+                        Skip Word <span class="material-icons-round" style="vertical-align: middle; font-size: 1.2rem;">skip_next</span>
+                    </button>
+                </div>
+
+                <div class="word-box">
+                    <div class="category-badge" id="category-display">CATEGORY</div>
+                    <div class="hint-text" id="hint-display">Hint goes here...</div>
+                    
+                    <div class="word-display" id="word-display"></div>
+                    
+                    <div class="keyboard" id="keyboard"></div>
+
+                    <div class="game-over-msg" id="game-over-msg"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 100 WORDS DATABASE ---
+        const wordDB = [
+            // Vocabulary (20)
+            { c: "Vocabulary", w: "ENVIRONMENT", h: "The natural world around us." },
+            { c: "Vocabulary", w: "KNOWLEDGE", h: "Information and skills acquired through experience." },
+            { c: "Vocabulary", w: "CHALLENGE", h: "A task or situation that tests someone's abilities." },
+            { c: "Vocabulary", w: "DEVELOPMENT", h: "The process of growing or advancing." },
+            { c: "Vocabulary", w: "GOVERNMENT", h: "The group of people who rule a country." },
+            { c: "Vocabulary", w: "TECHNOLOGY", h: "Scientific knowledge used for practical purposes." },
+            { c: "Vocabulary", w: "BEAUTIFUL", h: "Pleasing the senses or mind aesthetically." },
+            { c: "Vocabulary", w: "SUCCESSFUL", h: "Accomplishing a desired aim or result." },
+            { c: "Vocabulary", w: "IMAGINATION", h: "The faculty of forming new ideas or images." },
+            { c: "Vocabulary", w: "OPPORTUNITY", h: "A set of circumstances that makes it possible to do something." },
+            { c: "Vocabulary", w: "VOCABULARY", h: "The body of words used in a particular language." },
+            { c: "Vocabulary", w: "COMMUNICATION", h: "The exchange of information." },
+            { c: "Vocabulary", w: "TEMPERATURE", h: "The degree or intensity of heat." },
+            { c: "Vocabulary", w: "INDEPENDENT", h: "Free from outside control." },
+            { c: "Vocabulary", w: "TRADITIONAL", h: "Existing in or as part of a long-established custom." },
+            { c: "Vocabulary", w: "COMFORTABLE", h: "Providing physical ease and relaxation." },
+            { c: "Vocabulary", w: "PROFESSIONAL", h: "Relating to or belonging to a profession." },
+            { c: "Vocabulary", w: "RESPONSIBILITY", h: "The state or fact of having a duty to deal with something." },
+            { c: "Vocabulary", w: "INTERESTING", h: "Arousing curiosity or interest." },
+            { c: "Vocabulary", w: "EXPERIENCE", h: "Practical contact with and observation of facts or events." },
+            
+            // Movies (15)
+            { c: "Famous Movies", w: "THE GODFATHER", h: "A famous mafia family movie directed by Coppola." },
+            { c: "Famous Movies", w: "TITANIC", h: "A romance on a doomed ship." },
+            { c: "Famous Movies", w: "AVATAR", h: "Blue aliens on the planet Pandora." },
+            { c: "Famous Movies", w: "THE MATRIX", h: "Neo discovers the truth about reality." },
+            { c: "Famous Movies", w: "INCEPTION", h: "A thief who steals corporate secrets through dreams." },
+            { c: "Famous Movies", w: "JURASSIC PARK", h: "Dinosaurs brought back to life." },
+            { c: "Famous Movies", w: "THE LION KING", h: "Welcome to a park full of dinosaurs." },
+            { c: "Famous Movies", w: "HARRY POTTER", h: "A young boy discovers he is a wizard." },
+            { c: "Famous Movies", w: "STAR WARS", h: "A galaxy far, far away." },
+            { c: "Famous Movies", w: "THE AVENGERS", h: "Marvel superheroes team up." },
+            { c: "Famous Movies", w: "FORREST GUMP", h: "Life is like a box of chocolates." },
+            { c: "Famous Movies", w: "SPIDER MAN", h: "Bitten by a radioactive insect." },
+            { c: "Famous Movies", w: "TOY STORY", h: "Woody, Buzz, and their friends." },
+            { c: "Famous Movies", w: "FROZEN", h: "Elsa and Anna in a snowy kingdom." },
+            { c: "Famous Movies", w: "FINDING NEMO", h: "A clownfish searches for his missing son." },
+
+            // Songs (15)
+            { c: "Songs", w: "BOHEMIAN RHAPSODY", h: "Iconic Queen song with an operatic section." },
+            { c: "Songs", w: "SHAPE OF YOU", h: "Massive hit by Ed Sheeran." },
+            { c: "Songs", w: "BILLIE JEAN", h: "She's not my lover... by Michael Jackson." },
+            { c: "Songs", w: "LET IT BE", h: "A famous ballad by The Beatles." },
+            { c: "Songs", w: "HOTEL CALIFORNIA", h: "You can check out anytime you like, but you can never leave." },
+            { c: "Songs", w: "SMELLS LIKE TEEN SPIRIT", h: "The grunge anthem by Nirvana." },
+            { c: "Songs", w: "ROLLING IN THE DEEP", h: "Powerful breakup song by Adele." },
+            { c: "Songs", w: "IMAGINE", h: "John Lennon's plea for peace." },
+            { c: "Songs", w: "THRILLER", h: "Michael Jackson song with a famous zombie dance." },
+            { c: "Songs", w: "HEY JUDE", h: "Take a sad song and make it better." },
+            { c: "Songs", w: "WONDERWALL", h: "Oasis' most famous acoustic track." },
+            { c: "Songs", w: "HALO", h: "Beyonce's angelic ballad." },
+            { c: "Songs", w: "UPTOWN FUNK", h: "Bruno Mars and Mark Ronson's retro hit." },
+            { c: "Songs", w: "SOMEONE LIKE YOU", h: "Adele's piano-driven emotional song." },
+            { c: "Songs", w: "VIVA LA VIDA", h: "Coldplay's song about a fallen king." },
+
+            // People (15)
+            { c: "Famous People", w: "ALBERT EINSTEIN", h: "Developed the theory of relativity." },
+            { c: "Famous People", w: "NELSON MANDELA", h: "Anti-apartheid revolutionary and South African president." },
+            { c: "Famous People", w: "TAYLOR SWIFT", h: "Pop star famous for the Eras Tour." },
+            { c: "Famous People", w: "ELON MUSK", h: "CEO of Tesla and SpaceX." },
+            { c: "Famous People", w: "MICHAEL JACKSON", h: "The King of Pop." },
+            { c: "Famous People", w: "LEONARDO DA VINCI", h: "Painter of the Mona Lisa." },
+            { c: "Famous People", w: "WILLIAM SHAKESPEARE", h: "Writer of Romeo and Juliet." },
+            { c: "Famous People", w: "MARILYN MONROE", h: "Iconic blonde actress of the 1950s." },
+            { c: "Famous People", w: "CRISTIANO RONALDO", h: "Famous Portuguese football player." },
+            { c: "Famous People", w: "LIONEL MESSI", h: "Famous Argentine football player." },
+            { c: "Famous People", w: "STEVE JOBS", h: "Co-founder of Apple Inc." },
+            { c: "Famous People", w: "BILL GATES", h: "Co-founder of Microsoft." },
+            { c: "Famous People", w: "MARIE CURIE", h: "Physicist who discovered radioactivity." },
+            { c: "Famous People", w: "FRIDA KAHLO", h: "Famous Mexican painter known for self-portraits." },
+            { c: "Famous People", w: "WALT DISNEY", h: "Creator of Mickey Mouse." },
+
+            // Countries (20)
+            { c: "Countries", w: "SWITZERLAND", h: "Known for chocolate, watches, and the Alps." },
+            { c: "Countries", w: "MADAGASCAR", h: "Large island nation off the coast of Africa." },
+            { c: "Countries", w: "ARGENTINA", h: "Home to tango and the Andes." },
+            { c: "Countries", w: "NEW ZEALAND", h: "Where Lord of the Rings was filmed." },
+            { c: "Countries", w: "AUSTRALIA", h: "Home of kangaroos and koalas." },
+            { c: "Countries", w: "JAPAN", h: "The land of the rising sun." },
+            { c: "Countries", w: "CANADA", h: "The second-largest country in the world." },
+            { c: "Countries", w: "BRAZIL", h: "Home of the Amazon rainforest and Carnival." },
+            { c: "Countries", w: "FRANCE", h: "Country of the Eiffel Tower." },
+            { c: "Countries", w: "ITALY", h: "Country shaped like a boot." },
+            { c: "Countries", w: "SPAIN", h: "Famous for flamenco and paella." },
+            { c: "Countries", w: "MEXICO", h: "Home to Chichen Itza and tacos." },
+            { c: "Countries", w: "SOUTH KOREA", h: "Famous for K-Pop and Seoul." },
+            { c: "Countries", w: "EGYPT", h: "Home to the Great Pyramids." },
+            { c: "Countries", w: "SOUTH AFRICA", h: "Country at the southern tip of the African continent." },
+            { c: "Countries", w: "UNITED KINGDOM", h: "Comprises England, Scotland, Wales, and Northern Ireland." },
+            { c: "Countries", w: "GERMANY", h: "Known for Oktoberfest and Berlin." },
+            { c: "Countries", w: "RUSSIA", h: "The largest country in the world." },
+            { c: "Countries", w: "INDIA", h: "Famous for the Taj Mahal." },
+            { c: "Countries", w: "CHINA", h: "Home to the Great Wall." },
+
+            // Dishes (15)
+            { c: "International Dishes", w: "SUSHI", h: "Japanese dish with vinegared rice and seafood." },
+            { c: "International Dishes", w: "CROISSANT", h: "Buttery, flaky, pastry of Austrian origin, famous in France." },
+            { c: "International Dishes", w: "LASAGNA", h: "Stacked layers of pasta, meat, and cheese." },
+            { c: "International Dishes", w: "PAELLA", h: "Spanish rice dish originally from Valencia." },
+            { c: "International Dishes", w: "TACOS", h: "Traditional Mexican dish on a corn or wheat tortilla." },
+            { c: "International Dishes", w: "PIZZA", h: "Italian dish of a round, flat base of dough baked with toppings." },
+            { c: "International Dishes", w: "HAMBURGER", h: "A sandwich consisting of a cooked meat patty." },
+            { c: "International Dishes", w: "SPAGHETTI", h: "Long, thin, solid, cylindrical pasta." },
+            { c: "International Dishes", w: "CURRY", h: "Spicy dish common in Indian cuisine." },
+            { c: "International Dishes", w: "KIMCHI", h: "Traditional Korean side dish of salted and fermented vegetables." },
+            { c: "International Dishes", w: "CEVICHE", h: "Peruvian dish of raw fish cured in citrus juices." },
+            { c: "International Dishes", w: "FISH AND CHIPS", h: "Classic British dish of fried battered fish and hot potato chips." },
+            { c: "International Dishes", w: "RAMEN", h: "Japanese noodle soup." },
+            { c: "International Dishes", w: "BURRITO", h: "Mexican dish consisting of a flour tortilla wrapped around a filling." },
+            { c: "International Dishes", w: "DIM SUM", h: "Variety of bite-sized Chinese dishes." }
+        ];
+
+        let teams = [];
+        let deck = [];
+        let activeWord = "";
+        let guessedLetters = [];
+        let errors = 0;
+        const maxErrors = 6;
+
+        // Shuffle utility
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- SETUP LOGIC ---
+        function addTeam() {
+            const input = document.getElementById('team-input');
+            const name = input.value.trim().toUpperCase();
+            if (name !== "") {
+                teams.push({ name: name, score: 0 });
+                input.value = "";
+                renderTeams();
+            }
+        }
+
+        function renderTeams() {
+            const list = document.getElementById('team-list');
+            list.innerHTML = "";
+            teams.forEach(t => {
+                list.innerHTML += `<li class="team-chip">${t.name}</li>`;
+            });
+        }
+
+        // --- GAME LOGIC ---
+        function startGame() {
+            if (teams.length === 0) {
+                alert("Añade al menos un equipo para jugar.");
+                return;
+            }
+            
+            deck = shuffle([...wordDB]); 
+            
+            document.getElementById('setup-screen').classList.remove('active');
+            document.getElementById('game-screen').classList.add('active');
+            
+            initScoreboard();
+            loadNextWord();
+        }
+
+        function initScoreboard() {
+            const board = document.getElementById('scoreboard');
+            board.innerHTML = "";
+            teams.forEach((t, index) => {
+                board.innerHTML += `
+                    <div class="score-card" id="card-team-${index}" onclick="awardPoints(${index})">
+                        <span class="award-tooltip">Adivinó! +10 pts</span>
+                        <div class="s-name">${t.name}</div>
+                        <div class="s-points" id="score-team-${index}">0</div>
+                    </div>
+                `;
+            });
+        }
+
+        function loadNextWord() {
+            if (deck.length === 0) deck = shuffle([...wordDB]); // Loop if run out
+            
+            const item = deck.pop();
+            activeWord = item.w;
+            guessedLetters = [];
+            errors = 0;
+
+            document.getElementById('category-display').innerText = item.c;
+            document.getElementById('hint-display').innerText = item.h;
+            
+            const msg = document.getElementById('game-over-msg');
+            msg.style.display = "none";
+            msg.className = "game-over-msg";
+            
+            document.getElementById('keyboard').style.pointerEvents = "auto";
+
+            resetHangman();
+            renderWord();
+            generateKeyboard();
+        }
+
+        function renderWord() {
+            const container = document.getElementById('word-display');
+            container.innerHTML = "";
+            let wordComplete = true;
+
+            for (let char of activeWord) {
+                if (char === " ") {
+                    container.innerHTML += `<div class="letter-box space"></div>`;
+                } else if (guessedLetters.includes(char)) {
+                    container.innerHTML += `<div class="letter-box">${char}</div>`;
+                } else {
+                    container.innerHTML += `<div class="letter-box">_</div>`;
+                    wordComplete = false;
+                }
+            }
+
+            if (wordComplete) {
+                endRound(true);
+            }
+        }
+
+        function generateKeyboard() {
+            const container = document.getElementById('keyboard');
+            container.innerHTML = "";
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+            
+            letters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = "key-btn";
+                btn.innerText = letter;
+                btn.onclick = () => handleGuess(letter, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleGuess(letter, btn) {
+            guessedLetters.push(letter);
+            
+            if (activeWord.includes(letter)) {
+                btn.classList.add('correct');
+                renderWord();
+            } else {
+                btn.classList.add('wrong');
+                errors++;
+                updateHangman();
+                
+                if (errors >= maxErrors) {
+                    endRound(false);
+                }
+            }
+        }
+
+        function updateHangman() {
+            if (errors <= 6) {
+                document.getElementById(`part-${errors}`).style.opacity = "1";
+            }
+            if (errors === 6) {
+                document.getElementById(`part-dead`).style.opacity = "1";
+            }
+        }
+
+        function resetHangman() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`part-${i}`).style.opacity = "0";
+            }
+            document.getElementById(`part-dead`).style.opacity = "0";
+        }
+
+        function endRound(isWin) {
+            document.getElementById('keyboard').style.pointerEvents = "none"; // Disable typing
+            const msg = document.getElementById('game-over-msg');
+            msg.style.display = "block";
+            
+            if (isWin) {
+                msg.classList.add('msg-win');
+                msg.innerHTML = "🎉 Word Solved! (Click a team to award points)";
+            } else {
+                msg.classList.add('msg-lose');
+                msg.innerHTML = `💀 Hanged! The word was: <strong>${activeWord}</strong>`;
+                // Show full word
+                guessedLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+                renderWord();
+            }
+        }
+
+        function awardPoints(teamIndex) {
+            teams[teamIndex].score += 10;
+            const scoreEl = document.getElementById(`score-team-${teamIndex}`);
+            scoreEl.innerText = teams[teamIndex].score;
+            
+            // Animation
+            const cardEl = document.getElementById(`card-team-${teamIndex}`);
+            cardEl.style.animation = 'none';
+            cardEl.offsetHeight; 
+            cardEl.style.animation = 'pop 0.4s ease';
+            cardEl.style.borderColor = "var(--accent-yellow)";
+            setTimeout(() => cardEl.style.borderColor = "var(--primary-teal)", 1000);
+
+            // Automatically load next word after awarding
+            setTimeout(loadNextWord, 800);
+        }
+    </script>
+</body>
+</html>
