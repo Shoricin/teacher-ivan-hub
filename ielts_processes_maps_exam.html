@@ -68,6 +68,9 @@
             background: var(--primary-teal); color: white; transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
         }
+        
+        #tab-btn-models { display: none; background: #fef3c7; color: #92400e; border-color: #f5b041; }
+        #tab-btn-models.active { background: var(--accent-yellow); color: white; }
 
         /* CONTENT AREA */
         .container { max-width: 1000px; margin: 0 auto 50px; width: 95%; }
@@ -111,7 +114,7 @@
         .exam-card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px;}
         
         .task-image {
-            width: 100%; max-width: 750px; border-radius: 8px; border: 2px solid #eee; margin: 20px auto; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            width: 100%; max-width: 800px; border-radius: 8px; border: 2px solid #eee; margin: 20px auto; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .checklist {
@@ -141,6 +144,15 @@
         .name-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 20px; outline:none;}
         .name-input:focus { border-color: var(--primary-teal); }
 
+        /* MODELS TAB */
+        .model-card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;
+        }
+        .model-card h2 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .model-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 2.2; color: #333; background: #f9f9f9; padding: 20px; border-radius: 12px; border-left: 4px solid var(--accent-yellow);}
+        .word-badge { display: inline-block; background: #10b981; color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; margin-top: 15px; font-family: 'Poppins';}
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
@@ -159,6 +171,7 @@
         <button class="tab-btn active" onclick="switchTab('warmup-tab')"><span class="material-icons-round">fitness_center</span> 1. Grammar Warm-Up</button>
         <button class="tab-btn" onclick="switchTab('process-tab')"><span class="material-icons-round">precision_manufacturing</span> 2. Task: Process (Exam)</button>
         <button class="tab-btn" onclick="switchTab('map-tab')"><span class="material-icons-round">map</span> 3. Task: Maps (Exam)</button>
+        <button class="tab-btn" id="tab-btn-models" onclick="switchTab('models-tab')"><span class="material-icons-round">workspace_premium</span> 4. Band 9 Models</button>
     </div>
 
     <div class="container">
@@ -166,7 +179,7 @@
         <div id="warmup-tab" class="view-section active">
             <div class="warmup-box">
                 <h2>Grammar & Vocabulary Review</h2>
-                <p style="color: #666; margin-bottom: 25px;">Asegúrense de dominar estas estructuras antes de iniciar el examen (el tiempo no corre en esta pestaña).</p>
+                <p style="color: #666; margin-bottom: 25px;">Asegúrense de dominar estas estructuras antes de iniciar el examen (el tiempo NO corre en esta pestaña).</p>
 
                 <div class="rule-card">
                     <h3>1. Sequencing & Present Passive (For Processes)</h3>
@@ -174,7 +187,7 @@
                     
                     <p style="line-height: 2.2;">
                         <input type="text" class="gap-input" style="width: 80px;" id="w1-1" data-ans="first"> (First/Then), the plastic bottles 
-                        <input type="text" class="gap-input" style="width: 100px;" id="w1-2" data-ans="are washed"> (are washed / washed). 
+                        <input type="text" class="gap-input" style="width: 110px;" id="w1-2" data-ans="are washed"> (are washed / washed). 
                         <input type="text" class="gap-input" style="width: 110px;" id="w1-3" data-ans="subsequently"> (Subsequently/Because), they 
                         <input type="text" class="gap-input" style="width: 100px;" id="w1-4" data-ans="are crushed"> (is crushed / are crushed) into small pieces.
                     </p>
@@ -188,10 +201,10 @@
                     
                     <p style="line-height: 2.2;">
                         In the south, the old houses 
-                        <input type="text" class="gap-input" style="width: 120px;" id="w2-1" data-ans="were demolished"> (was demolished / were demolished). They were replaced 
+                        <input type="text" class="gap-input" style="width: 130px;" id="w2-1" data-ans="were demolished"> (was demolished / were demolished). They were replaced 
                         <input type="text" class="gap-input" style="width: 50px;" id="w2-2" data-ans="by"> (by / for) a park. A new bridge 
-                        <input type="text" class="gap-input" style="width: 120px;" id="w2-3" data-ans="was constructed"> (constructed / was constructed) 
-                        <input type="text" class="gap-input" style="width: 90px;" id="w2-4" data-ans="adjacent to"> (adjacent to / inside) the river.
+                        <input type="text" class="gap-input" style="width: 130px;" id="w2-3" data-ans="was constructed"> (constructed / was constructed) 
+                        <input type="text" class="gap-input" style="width: 100px;" id="w2-4" data-ans="adjacent to"> (adjacent to / inside) the river.
                     </p>
                     <button class="btn-check" onclick="checkInputs(['w2-1', 'w2-2', 'w2-3', 'w2-4'], 'fb-w2')">Check</button>
                     <div class="feedback-text" id="fb-w2"></div>
@@ -222,12 +235,12 @@
                 
                 <p style="color: #444;"><strong>Prompt:</strong> The diagram below shows the process of making recycled paper. Summarise the information by selecting and reporting the main features.</p>
                 
-                <img src="https://i.imgur.com/a9uKg8Y.png" alt="Recycled Paper Process Diagram" class="task-image">
+                <img src="https://i.imgur.com/a9uKg8Y.jpg" alt="Paper Recycling Process" class="task-image">
 
                 <div class="checklist">
                     <h4>✅ Process Task Checklist:</h4>
                     <label class="checklist-item"><input type="checkbox" id="p-chk-1"> Escribí más de 150 palabras.</label>
-                    <label class="checklist-item"><input type="checkbox" id="p-chk-2"> Usé conectores lógicos (First, Subsequently, Finally).</label>
+                    <label class="checklist-item"><input type="checkbox" id="p-chk-2"> Usé conectores lógicos de secuencia (First, Subsequently, Finally).</label>
                     <label class="checklist-item"><input type="checkbox" id="p-chk-3"> Describí los pasos usando <strong>Present Passive Voice</strong> (is/are + V3).</label>
                 </div>
 
@@ -244,12 +257,12 @@
 
                 <p style="color: #444;"><strong>Prompt:</strong> The maps below show the center of a small town called Islip as it was in 2010, and its current development in 2020. Summarise the changes.</p>
                 
-                <img src="https://i.imgur.com/sbaHEM5.png" alt="Islip Town Center 2010 vs 2020 Maps" class="task-image">
+                <img src="https://i.imgur.com/sbaHEM5.jpg" alt="Islip Town Map 2010 vs 2020" class="task-image">
 
                 <div class="checklist">
                     <h4>✅ Maps Task Checklist:</h4>
                     <label class="checklist-item"><input type="checkbox" id="m-chk-1"> Escribí más de 150 palabras.</label>
-                    <label class="checklist-item"><input type="checkbox" id="m-chk-2"> Usé preposiciones espaciales (to the north, adjacent to).</label>
+                    <label class="checklist-item"><input type="checkbox" id="m-chk-2"> Usé preposiciones espaciales correctamente (to the north, adjacent to).</label>
                     <label class="checklist-item"><input type="checkbox" id="m-chk-3"> Describí las transformaciones usando <strong>Past Passive Voice</strong> (was demolished, were built).</label>
                 </div>
 
@@ -257,8 +270,39 @@
                 <div class="word-counter" id="map-count">Words: 0 / 150</div>
                 
                 <button class="btn-submit-exam" id="btn-final-submit" onclick="submitExam()">
-                    <span class="material-icons-round">done_all</span> Finish & Export PDF
+                    <span class="material-icons-round">done_all</span> Finish Exam & Export PDF
                 </button>
+            </div>
+        </div>
+
+        <div id="models-tab" class="view-section">
+            <div style="background: var(--accent-yellow); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: var(--shadow);">
+                <h3 style="margin: 0 0 5px 0;"><span class="material-icons-round" style="vertical-align: middle;">workspace_premium</span> Evaluator's Desk</h3>
+                <p style="margin: 0; font-size: 1.05rem;">El examen ha concluido. Compara tus ensayos con estas respuestas ideales de nivel Band 9.</p>
+            </div>
+
+            <div class="model-card">
+                <h2>Task 1: Recycled Paper Process</h2>
+                <div class="model-text">
+                    The diagram illustrates the step-by-step process of producing recycled paper. Overall, the recycling process consists of several distinct stages, beginning with the collection of used paper and culminating in the manufacturing of usable paper rolls.
+                    <br><br>
+                    First, waste paper is collected from public recycling bins or businesses. Subsequently, it is transported by truck to a specialized paper mill. Upon arrival, the paper is sorted by hand to remove any unsuitable materials. Following this, the sorted paper is placed into a large pulping machine where it is mixed with water and chemicals to create a soft mixture.
+                    <br><br>
+                    Next, this pulp is filtered and cleaned to extract impurities like staples or plastics. Once cleaned, it is processed through heated rollers which press out excess water and flatten the material. Finally, the dried sheets are wound into large rolls, ready to be cut, packaged, and distributed as new recycled paper products.
+                </div>
+                <div class="word-badge">Word Count: 150 Words EXACTLY</div>
+            </div>
+
+            <div class="model-card" style="border-top-color: var(--primary-teal);">
+                <h2>Task 2: Islip Town Maps (2010 vs 2020)</h2>
+                <div class="model-text">
+                    The maps illustrate the central area of Islip in 2010 and the subsequent developments it underwent by 2020. Overall, the town center experienced significant modernization, transforming from a largely rural area into a developed commercial and residential hub, characterized by improved infrastructure and new facilities.
+                    <br><br>
+                    In 2010, the main road ran horizontally through the center, surrounded by countryside, a few shops, and a school. However, by 2020, a dual carriageway was constructed around the town center, forming a ring road. The row of shops situated to the north of the main street was demolished and replaced by a large shopping center, a bus station, and a parking lot. 
+                    <br><br>
+                    Meanwhile, the school located in the south-east remained, but a new housing estate was built adjacent to it. Furthermore, the park in the south-west was reduced in size to accommodate newly constructed residential buildings, significantly increasing the town's housing capacity.
+                </div>
+                <div class="word-badge">Word Count: 150 Words EXACTLY</div>
             </div>
         </div>
 
@@ -275,7 +319,12 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // Highlight the corresponding tab button
+            if (tabId === 'warmup-tab') document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            if (tabId === 'process-tab') document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            if (tabId === 'map-tab') document.querySelectorAll('.tab-btn')[2].classList.add('active');
+            if (tabId === 'models-tab') document.getElementById('tab-btn-models').classList.add('active');
 
             // If navigating to an exam tab, start global timer
             if ((tabId === 'process-tab' || tabId === 'map-tab') && !timerStarted) {
@@ -360,10 +409,11 @@
 
             // Hide Submit Button
             document.getElementById('btn-final-submit').style.display = 'none';
+            document.getElementById('global-timer').style.display = 'none';
 
-            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nSe han bloqueado las hojas de escritura. Generando reporte PDF automáticamente...");
+            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nSe han bloqueado las hojas de escritura. Generando reporte PDF y desbloqueando los Modelos Band 9...");
             
-            // Force PDF generation
+            unlockModels();
             generateFinalPDF();
         }
 
@@ -388,13 +438,28 @@
                 if (!proceed) return;
             }
 
+            // If manual submit is successful, stop timer, lock inputs, unlock models, and generate PDF
+            clearInterval(timerInterval);
+            document.getElementById('process-essay').readOnly = true;
+            document.getElementById('process-essay').classList.add('locked');
+            document.getElementById('map-essay').readOnly = true;
+            document.getElementById('map-essay').classList.add('locked');
+            document.getElementById('btn-final-submit').style.display = 'none';
+            document.getElementById('global-timer').style.display = 'none';
+            
+            alert("¡Examen enviado con éxito! Desbloqueando los Modelos Band 9...");
+            
+            unlockModels();
             generateFinalPDF();
+            switchTab('models-tab'); // Switch immediately to models
+        }
+
+        function unlockModels() {
+            document.getElementById('tab-btn-models').style.display = 'flex';
         }
 
         // --- PDF GENERATION ---
         function generateFinalPDF() {
-            clearInterval(timerInterval); // Stop timer
-            
             const studentName = document.getElementById('student-name-process').value.trim() || document.getElementById('student-name-map').value.trim() || "Student";
             
             const processText = document.getElementById('process-essay').value.trim();
