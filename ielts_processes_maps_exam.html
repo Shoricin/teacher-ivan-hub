@@ -111,12 +111,7 @@
         .exam-card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px;}
         
         .task-image {
-            width: 100%; max-width: 700px; border-radius: 8px; border: 2px solid #eee; margin: 20px auto; display: block;
-        }
-        
-        .image-placeholder {
-            width: 100%; height: 300px; background: #f0f0f0; border: 2px dashed #ccc; border-radius: 8px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; margin: 20px 0;
+            width: 100%; max-width: 750px; border-radius: 8px; border: 2px solid #eee; margin: 20px auto; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .checklist {
@@ -227,10 +222,7 @@
                 
                 <p style="color: #444;"><strong>Prompt:</strong> The diagram below shows the process of making recycled paper. Summarise the information by selecting and reporting the main features.</p>
                 
-                <div class="image-placeholder">
-                    <span class="material-icons-round" style="font-size: 4rem; color: #ccc;">image</span>
-                    <p>[https://imgur.com/a9uKg8Y]</p>
-                </div>
+                <img src="https://i.imgur.com/a9uKg8Y.png" alt="Recycled Paper Process Diagram" class="task-image">
 
                 <div class="checklist">
                     <h4>✅ Process Task Checklist:</h4>
@@ -252,10 +244,7 @@
 
                 <p style="color: #444;"><strong>Prompt:</strong> The maps below show the center of a small town called Islip as it was in 2010, and its current development in 2020. Summarise the changes.</p>
                 
-                <div class="image-placeholder" style="background: #f0f8f8; border-color: var(--primary-teal);">
-                    <span class="material-icons-round" style="font-size: 4rem; color: #a5dfda;">image</span>
-                    <p>[https://imgur.com/sbaHEM5]</p>
-                </div>
+                <img src="https://i.imgur.com/sbaHEM5.png" alt="Islip Town Center 2010 vs 2020 Maps" class="task-image">
 
                 <div class="checklist">
                     <h4>✅ Maps Task Checklist:</h4>
