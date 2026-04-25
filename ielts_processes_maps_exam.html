@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Bootcamp: Processes & Maps | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TIMER STICKY */
+        .global-timer {
+            position: fixed; top: 20px; right: 20px; background: var(--text-dark); color: white;
+            padding: 10px 25px; border-radius: 50px; font-size: 1.5rem; font-weight: bold; font-family: monospace;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; border: 2px solid var(--accent-coral); display: none;
+        }
+        .global-timer.warning { color: #ef4444; animation: pulse 1s infinite; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0 20px; padding: 0 10px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* WARM UP TAB (TAB 1) */
+        .warmup-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;
+        }
+        .warmup-box h2 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        
+        .rule-card { background: #fafafa; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; }
+        .rule-card h3 { margin-top: 0; color: var(--primary-dark); }
+        .hl-word { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+        
+        .gap-input {
+            padding: 5px 10px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 0.95rem;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check {
+            background: var(--text-dark); color: white; border: none; padding: 10px 20px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: 10px;
+        }
+        .btn-check:hover { background: #444; }
+        .feedback-text { margin-top: 10px; font-size: 0.95rem; font-weight: bold; min-height: 20px;}
+
+        .vocab-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;}
+        .v-chip { background: #f0f8f8; border: 1px solid var(--primary-teal); color: var(--primary-dark); padding: 8px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 600;}
+
+        /* EXAM TABS (TAB 2 & 3) */
+        .exam-card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .exam-card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px;}
+        
+        .task-image {
+            width: 100%; max-width: 700px; border-radius: 8px; border: 2px solid #eee; margin: 20px auto; display: block;
+        }
+        
+        .image-placeholder {
+            width: 100%; height: 300px; background: #f0f0f0; border: 2px dashed #ccc; border-radius: 8px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; margin: 20px 0;
+        }
+
+        .checklist {
+            background: #fdfdfd; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; margin-bottom: 25px;
+        }
+        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px; font-size: 1.1rem;}
+        .checklist-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.95rem; color: #444; margin-bottom: 8px;}
+        .checklist-item input[type="checkbox"] { margin-top: 4px; accent-color: var(--primary-teal); transform: scale(1.3); cursor: pointer;}
+
+        .writing-area {
+            width: 100%; height: 300px; padding: 20px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.05rem; resize: vertical; box-sizing: border-box; transition: 0.3s; line-height: 1.8;
+        }
+        .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .writing-area.locked { background: #f5f5f5; border-color: #ef4444; color: #666; cursor: not-allowed; }
+
+        .word-counter { text-align: right; font-size: 0.9rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
+        .word-counter.valid { color: #10b981; }
+
+        .btn-submit-exam {
+            background: var(--primary-teal); color: white; border: none; padding: 18px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(93,203,195,0.3);
+        }
+        .btn-submit-exam:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .name-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 20px; outline:none;}
+        .name-input:focus { border-color: var(--primary-teal); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1>IELTS Task 1: Final Exam</h1>
+        <div class="subtitle">Processes, Maps & Strict Time Management</div>
+    </header>
+
+    <div class="global-timer" id="global-timer">40:00</div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('warmup-tab')"><span class="material-icons-round">fitness_center</span> 1. Grammar Warm-Up</button>
+        <button class="tab-btn" onclick="switchTab('process-tab')"><span class="material-icons-round">precision_manufacturing</span> 2. Task: Process (Exam)</button>
+        <button class="tab-btn" onclick="switchTab('map-tab')"><span class="material-icons-round">map</span> 3. Task: Maps (Exam)</button>
+    </div>
+
+    <div class="container">
+
+        <div id="warmup-tab" class="view-section active">
+            <div class="warmup-box">
+                <h2>Grammar & Vocabulary Review</h2>
+                <p style="color: #666; margin-bottom: 25px;">Asegúrense de dominar estas estructuras antes de iniciar el examen (el tiempo no corre en esta pestaña).</p>
+
+                <div class="rule-card">
+                    <h3>1. Sequencing & Present Passive (For Processes)</h3>
+                    <p style="font-size: 0.95rem; color: #555;">La fórmula es: <strong>Conector de secuencia + Is/Are + Verbo en Pasado Participio (V3)</strong>.</p>
+                    
+                    <p style="line-height: 2.2;">
+                        <input type="text" class="gap-input" style="width: 80px;" id="w1-1" data-ans="first"> (First/Then), the plastic bottles 
+                        <input type="text" class="gap-input" style="width: 100px;" id="w1-2" data-ans="are washed"> (are washed / washed). 
+                        <input type="text" class="gap-input" style="width: 110px;" id="w1-3" data-ans="subsequently"> (Subsequently/Because), they 
+                        <input type="text" class="gap-input" style="width: 100px;" id="w1-4" data-ans="are crushed"> (is crushed / are crushed) into small pieces.
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['w1-1', 'w1-2', 'w1-3', 'w1-4'], 'fb-w1')">Check</button>
+                    <div class="feedback-text" id="fb-w1"></div>
+                </div>
+
+                <div class="rule-card">
+                    <h3>2. Spatial Preps & Past Passive (For Maps)</h3>
+                    <p style="font-size: 0.95rem; color: #555;">La fórmula es: <strong>Ubicación + Objeto + Was/Were + Verbo en Pasado Participio (V3)</strong>.</p>
+                    
+                    <p style="line-height: 2.2;">
+                        In the south, the old houses 
+                        <input type="text" class="gap-input" style="width: 120px;" id="w2-1" data-ans="were demolished"> (was demolished / were demolished). They were replaced 
+                        <input type="text" class="gap-input" style="width: 50px;" id="w2-2" data-ans="by"> (by / for) a park. A new bridge 
+                        <input type="text" class="gap-input" style="width: 120px;" id="w2-3" data-ans="was constructed"> (constructed / was constructed) 
+                        <input type="text" class="gap-input" style="width: 90px;" id="w2-4" data-ans="adjacent to"> (adjacent to / inside) the river.
+                    </p>
+                    <button class="btn-check" onclick="checkInputs(['w2-1', 'w2-2', 'w2-3', 'w2-4'], 'fb-w2')">Check</button>
+                    <div class="feedback-text" id="fb-w2"></div>
+                </div>
+
+                <div class="rule-card" style="border-color: var(--primary-teal); background: #fdfdfd;">
+                    <h3 style="color: var(--text-dark);">Vocabulary Bank</h3>
+                    <div class="vocab-grid">
+                        <span class="v-chip">To begin with,</span>
+                        <span class="v-chip">Following this step,</span>
+                        <span class="v-chip">Finally,</span>
+                        <span class="v-chip">is packed</span>
+                        <span class="v-chip">are transported</span>
+                        <span class="v-chip">was expanded</span>
+                        <span class="v-chip">were removed</span>
+                        <span class="v-chip">to the north of</span>
+                        <span class="v-chip">opposite the</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process-tab" class="view-section">
+            <div class="exam-card">
+                <h2 style="color: var(--primary-dark);"><span class="material-icons-round">precision_manufacturing</span> Lesson 6: Describing a Process</h2>
+                
+                <input type="text" class="name-input" id="student-name-process" placeholder="Introduce tu nombre y apellido (Ej. Diana Lopez)" required>
+                
+                <p style="color: #444;"><strong>Prompt:</strong> The diagram below shows the process of making recycled paper. Summarise the information by selecting and reporting the main features.</p>
+                
+                <div class="image-placeholder">
+                    <span class="material-icons-round" style="font-size: 4rem; color: #ccc;">image</span>
+                    <p>[Insertar aquí la imagen de IELTS Task 1: Proceso del Papel Reciclado]</p>
+                </div>
+
+                <div class="checklist">
+                    <h4>✅ Process Task Checklist:</h4>
+                    <label class="checklist-item"><input type="checkbox" id="p-chk-1"> Escribí más de 150 palabras.</label>
+                    <label class="checklist-item"><input type="checkbox" id="p-chk-2"> Usé conectores lógicos (First, Subsequently, Finally).</label>
+                    <label class="checklist-item"><input type="checkbox" id="p-chk-3"> Describí los pasos usando <strong>Present Passive Voice</strong> (is/are + V3).</label>
+                </div>
+
+                <textarea class="writing-area" id="process-essay" placeholder="The diagram illustrates the various stages involved in the production of recycled paper..." onkeyup="countWords('process-essay', 'process-count')"></textarea>
+                <div class="word-counter" id="process-count">Words: 0 / 150</div>
+            </div>
+        </div>
+
+        <div id="map-tab" class="view-section">
+            <div class="exam-card" style="border-top-color: var(--primary-teal);">
+                <h2 style="color: var(--primary-teal);"><span class="material-icons-round">map</span> Lesson 7: Map Comparisons</h2>
+                
+                <input type="text" class="name-input" id="student-name-map" placeholder="Introduce tu nombre y apellido" required>
+
+                <p style="color: #444;"><strong>Prompt:</strong> The maps below show the center of a small town called Islip as it was in 2010, and its current development in 2020. Summarise the changes.</p>
+                
+                <div class="image-placeholder" style="background: #f0f8f8; border-color: var(--primary-teal);">
+                    <span class="material-icons-round" style="font-size: 4rem; color: #a5dfda;">image</span>
+                    <p>[Insertar aquí los mapas de IELTS Task 1: Islip Town Center 2010 vs 2020]</p>
+                </div>
+
+                <div class="checklist">
+                    <h4>✅ Maps Task Checklist:</h4>
+                    <label class="checklist-item"><input type="checkbox" id="m-chk-1"> Escribí más de 150 palabras.</label>
+                    <label class="checklist-item"><input type="checkbox" id="m-chk-2"> Usé preposiciones espaciales (to the north, adjacent to).</label>
+                    <label class="checklist-item"><input type="checkbox" id="m-chk-3"> Describí las transformaciones usando <strong>Past Passive Voice</strong> (was demolished, were built).</label>
+                </div>
+
+                <textarea class="writing-area" id="map-essay" placeholder="The provided maps illustrate the significant transformations that occurred in the center of Islip between 2010 and 2020..." onkeyup="countWords('map-essay', 'map-count')"></textarea>
+                <div class="word-counter" id="map-count">Words: 0 / 150</div>
+                
+                <button class="btn-submit-exam" id="btn-final-submit" onclick="submitExam()">
+                    <span class="material-icons-round">done_all</span> Finish & Export PDF
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3" preload="auto"></audio>
+
+    <script>
+        // --- TAB NAVIGATION & TIMER TRIGGER ---
+        let timerStarted = false;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // If navigating to an exam tab, start global timer
+            if ((tabId === 'process-tab' || tabId === 'map-tab') && !timerStarted) {
+                startGlobalTimer();
+            }
+        }
+
+        // --- WORD COUNTER ---
+        function countWords(inputId, counterId) {
+            const text = document.getElementById(inputId).value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById(counterId);
+            
+            display.innerText = `Words: ${words} / 150`;
+            
+            if (words >= 150) display.classList.add('valid');
+            else display.classList.remove('valid');
+        }
+
+        // --- INPUT CHECKER (WARM UP) ---
+        function checkInputs(inputIds, feedbackId) {
+            let allCorrect = true;
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                const answer = el.getAttribute('data-ans').toLowerCase();
+                const studentInput = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+                if(studentInput === answer) el.classList.add('correct');
+                else { el.classList.add('wrong'); allCorrect = false; }
+            });
+
+            const fb = document.getElementById(feedbackId);
+            fb.style.display = "block";
+            if(allCorrect) { fb.style.color = "#10b981"; fb.innerText = "¡Excelente! Estructura correcta."; } 
+            else { fb.style.color = "#ef4444"; fb.innerText = "Revisa los errores. Recuerda la diferencia entre Is/Are y Was/Were."; }
+        }
+
+        // --- GLOBAL TIMER LOGIC (40 MINUTES) ---
+        let timeRemaining = 2400; // 40 minutes in seconds
+        let timerInterval = null;
+
+        function startGlobalTimer() {
+            timerStarted = true;
+            const timerDisplay = document.getElementById('global-timer');
+            timerDisplay.style.display = "block";
+            
+            alert("⚠️ EL EXAMEN HA COMENZADO.\nTienes 40 minutos en total para escribir ambos ensayos (Process y Maps). Administra bien tu tiempo.");
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                
+                timerDisplay.innerText = `${minutes}:${seconds}`;
+
+                if (timeRemaining <= 300) { // 5 minutes warning
+                    timerDisplay.classList.add('warning');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    lockdownExam();
+                }
+            }, 1000);
+        }
+
+        // --- LOCKDOWN MECHANISM ---
+        function lockdownExam() {
+            // Play Alarm
+            document.getElementById('alarm-sound').play();
+            
+            // Lock Textareas
+            document.getElementById('process-essay').readOnly = true;
+            document.getElementById('process-essay').classList.add('locked');
+            document.getElementById('map-essay').readOnly = true;
+            document.getElementById('map-essay').classList.add('locked');
+
+            // Hide Submit Button
+            document.getElementById('btn-final-submit').style.display = 'none';
+
+            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nSe han bloqueado las hojas de escritura. Generando reporte PDF automáticamente...");
+            
+            // Force PDF generation
+            generateFinalPDF();
+        }
+
+        // --- MANUAL SUBMIT ---
+        function submitExam() {
+            const name1 = document.getElementById('student-name-process').value.trim();
+            const name2 = document.getElementById('student-name-map').value.trim();
+
+            if(!name1 && !name2) {
+                alert("Por favor, ingresa tu nombre en al menos una de las pestañas.");
+                return;
+            }
+
+            // Word counts
+            const text1 = document.getElementById('process-essay').value.trim();
+            const words1 = text1 === "" ? 0 : text1.split(/\s+/).length;
+            const text2 = document.getElementById('map-essay').value.trim();
+            const words2 = text2 === "" ? 0 : text2.split(/\s+/).length;
+
+            if (words1 < 150 || words2 < 150) {
+                const proceed = confirm(`Cuidado: \nProcess Essay: ${words1} palabras.\nMap Essay: ${words2} palabras.\n\nEl IELTS penaliza por menos de 150. ¿Quieres entregar de todos modos?`);
+                if (!proceed) return;
+            }
+
+            generateFinalPDF();
+        }
+
+        // --- PDF GENERATION ---
+        function generateFinalPDF() {
+            clearInterval(timerInterval); // Stop timer
+            
+            const studentName = document.getElementById('student-name-process').value.trim() || document.getElementById('student-name-map').value.trim() || "Student";
+            
+            const processText = document.getElementById('process-essay').value.trim();
+            const processWords = processText === "" ? 0 : processText.split(/\s+/).length;
+            
+            const mapText = document.getElementById('map-essay').value.trim();
+            const mapWords = mapText === "" ? 0 : mapText.split(/\s+/).length;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Cover / Title
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(20);
+            doc.setTextColor(93, 203, 195);
+            doc.text("IELTS Task 1: Final Exam Report", 105, 20, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Student: ${studentName}`, 105, 28, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 34, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); 
+            doc.line(20, 40, 190, 40); 
+
+            // --- ESSAY 1 (PROCESS) ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(40, 40, 40);
+            doc.text("Part 1: Describing a Process", 20, 50);
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "italic");
+            doc.text(`Word Count: ${processWords} words`, 170, 50, null, null, "right");
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            let processSplit = doc.splitTextToSize(processText || "[No answer provided]", 170);
+            doc.text(processSplit, 20, 60, { lineHeightFactor: 1.5 });
+
+            // Calculate Y position for next essay
+            let nextY = 60 + (processSplit.length * 5.5) + 20;
+
+            // Page Break if needed
+            if (nextY > 230) {
+                doc.addPage();
+                nextY = 20;
+            } else {
+                doc.line(20, nextY - 10, 190, nextY - 10);
+            }
+
+            // --- ESSAY 2 (MAPS) ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(40, 40, 40);
+            doc.text("Part 2: Map Comparisons", 20, nextY);
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "italic");
+            doc.text(`Word Count: ${mapWords} words`, 170, nextY, null, null, "right");
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            let mapSplit = doc.splitTextToSize(mapText || "[No answer provided]", 170);
+            doc.text(mapSplit, 20, nextY + 10, { lineHeightFactor: 1.5 });
+
+            // Save File
+            const fileName = `${studentName.replace(/\s+/g, '_')}_IELTS_FinalExam.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
