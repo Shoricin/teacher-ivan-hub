@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hip-Hop Song Analyzer | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #aaa; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .song-section { display: none; animation: fadeIn 0.4s ease; }
+        .song-section.active { display: block; }
+
+        /* LAYOUT GRID */
+        .analyzer-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+        }
+        @media (max-width: 900px) { .analyzer-grid { grid-template-columns: 1fr; } }
+
+        /* MEDIA & DICTIONARY (LEFT) */
+        .media-col { display: flex; flex-direction: column; gap: 20px; }
+        
+        .video-container {
+            background: white; padding: 15px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; /* 16:9 */ height: 0; overflow: hidden; border-radius: 8px;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        .dict-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .dict-box h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--text-dark);}
+        .vocab-list { margin: 0; padding-left: 20px; color: #555; line-height: 1.8; }
+        .vocab-list strong { color: var(--primary-dark); }
+
+        /* LYRICS & HIGHLIGHTER (RIGHT) */
+        .lyrics-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        .lyrics-box h3 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px;}
+
+        .highlighter-controls {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
+        }
+        .hl-btn {
+            padding: 8px 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: 0.2s; font-family: 'Poppins', sans-serif; opacity: 0.6; font-size: 0.9rem;
+        }
+        .hl-btn.active { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        .btn-grammar { background: #e0e7ff; color: #6d28d9; border: 1px solid #8b5cf6; }
+        .btn-slang { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .btn-rhyme { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+
+        .lyrics-text { font-family: 'Merriweather', serif; font-size: 1.15rem; line-height: 2.2; color: #333; }
+        
+        /* Highlight Classes */
+        .txt-grammar, .txt-slang, .txt-rhyme { transition: 0.3s; }
+        
+        .show-grammar .txt-grammar { background: #e0e7ff; color: #6d28d9; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #8b5cf6;}
+        .show-slang .txt-slang { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
+        .show-rhyme .txt-rhyme { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">headphones</span> Rap & Hip-Hop Analyzer</h1>
+        <div class="subtitle">Learn Slang, Reductions & Grammar through Music</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchSong('song1')"><span class="material-icons-round">play_circle</span> Lose Yourself</button>
+        <button class="tab-btn" onclick="switchSong('song2')"><span class="material-icons-round">play_circle</span> Where Is The Love?</button>
+        <button class="tab-btn" onclick="switchSong('song3')"><span class="material-icons-round">play_circle</span> Gangsta's Paradise</button>
+    </div>
+
+    <div class="container">
+
+        <div id="song1" class="song-section active">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/_YCGtT_PNRU" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box">
+                        <h3><span class="material-icons-round">menu_book</span> Vocabulary & Slang</h3>
+                        <ul class="vocab-list">
+                            <li><strong>One shot:</strong> Una sola oportunidad.</li>
+                            <li><strong>Drop bombs:</strong> Rap slang. Significa decir rimas o letras muy buenas y poderosas.</li>
+                            <li><strong>Chokin':</strong> Asfixiándose. En este contexto, significa "congelarse" o entrar en pánico por los nervios.</li>
+                            <li><strong>Run out:</strong> Phrasal verb. Quedarse sin algo (ej. "Time's run out" = el tiempo se acabó).</li>
+                            <li><strong>Blow:</strong> Explotar. En slang significa perder una gran oportunidad.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lyrics-box" id="lyrics-container-1">
+                    <h3>Eminem - Lose Yourself</h3>
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-grammar" id="btn-g1" onclick="toggleHighlight('lyrics-container-1', 'show-grammar', 'btn-g1')">1. 2nd Conditional</button>
+                        <button class="hl-btn btn-slang" id="btn-s1" onclick="toggleHighlight('lyrics-container-1', 'show-slang', 'btn-s1')">2. Slang & Reductions</button>
+                        <button class="hl-btn btn-rhyme" id="btn-r1" onclick="toggleHighlight('lyrics-container-1', 'show-rhyme', 'btn-r1')">3. Internal Rhymes</button>
+                    </div>
+                    <div class="lyrics-text">
+                        Look, <span class="txt-grammar">if you had one shot or one opportunity</span><br>
+                        To seize everything you ever wanted in one moment<br>
+                        <span class="txt-grammar">Would you capture it</span>, or just let it slip?<br>
+                        Yo<br><br>
+                        
+                        His palms are <span class="txt-rhyme">sweaty</span>, knees weak, arms are <span class="txt-rhyme">heavy</span><br>
+                        There's vomit on his sweater <span class="txt-rhyme">already</span>, mom's <span class="txt-rhyme">spaghetti</span><br>
+                        He's nervous, but on the surface he looks calm and <span class="txt-rhyme">ready</span><br>
+                        To <span class="txt-slang">drop bombs</span>, but he keeps on forgettin'<br>
+                        What he wrote down, the whole crowd goes so loud<br>
+                        He opens his mouth, but the words won't come out<br>
+                        He's <span class="txt-slang">chokin'</span>, how? Everybody's jokin' now<br>
+                        The clock's <span class="txt-slang">run out</span>, time's up, over, blaow!<br><br>
+
+                        You better lose yourself in the music, the moment<br>
+                        You own it, you better never let it go<br>
+                        You only get <span class="txt-slang">one shot</span>, do not miss your chance to <span class="txt-slang">blow</span><br>
+                        This opportunity comes once in a lifetime.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="song2" class="song-section">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/WpYeekQkAdc" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box" style="border-top-color: var(--primary-teal);">
+                        <h3 style="color: var(--primary-teal);"><span class="material-icons-round">menu_book</span> Vocabulary & Slang</h3>
+                        <ul class="vocab-list">
+                            <li><strong>Ain't got no:</strong> Doble negación muy común en el hip-hop. Significa "Don't have any" (No tienen ninguna).</li>
+                            <li><strong>Undercover:</strong> En secreto o a escondidas.</li>
+                            <li><strong>Swept under the rug:</strong> Modismo. Ignorar un problema fingiendo que no existe (barrerlo bajo la alfombra).</li>
+                            <li><strong>Madness:</strong> Locura o caos absoluto.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lyrics-box" id="lyrics-container-2" style="border-top-color: var(--accent-coral);">
+                    <h3>The Black Eyed Peas - Where Is The Love?</h3>
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-grammar" id="btn-g2" onclick="toggleHighlight('lyrics-container-2', 'show-grammar', 'btn-g2')">1. 1st Conditional</button>
+                        <button class="hl-btn btn-slang" id="btn-s2" onclick="toggleHighlight('lyrics-container-2', 'show-slang', 'btn-s2')">2. Double Negatives (Slang)</button>
+                        <button class="hl-btn btn-rhyme" id="btn-r2" onclick="toggleHighlight('lyrics-container-2', 'show-rhyme', 'btn-r2')">3. Social Vocab</button>
+                    </div>
+                    <div class="lyrics-text">
+                        What's wrong with the world, mama<br>
+                        People livin' like they <span class="txt-slang">ain't got no mamas</span><br>
+                        I think the whole world's addicted to the drama<br>
+                        Only attracted to things that'll bring you <span class="txt-rhyme">trauma</span><br><br>
+
+                        Overseas, yeah, we try to stop <span class="txt-rhyme">terrorism</span><br>
+                        But we still got terrorists here livin'<br>
+                        In the USA, the big CIA<br>
+                        The Bloods and The Crips and the KKK<br><br>
+
+                        But <span class="txt-grammar">if you only have love for your own race</span><br>
+                        <span class="txt-grammar">Then you only leave space to discriminate</span><br>
+                        And to <span class="txt-rhyme">discriminate</span> only generates hate<br>
+                        And when you hate, then you're bound to get irate, yeah<br><br>
+
+                        Madness is what you demonstrate<br>
+                        And that's exactly how anger works and operates<br>
+                        Man, you gotta have love just to set it straight<br>
+                        Take control of your mind and meditate.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="song3" class="song-section">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/fPO76Jlnz6c" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box" style="border-top-color: #8b5cf6;">
+                        <h3 style="color: #6d28d9;"><span class="material-icons-round">menu_book</span> Vocabulary & Slang</h3>
+                        <ul class="vocab-list">
+                            <li><strong>Valley of the shadow of death:</strong> Metáfora bíblica (Salmo 23) usada para describir un vecindario muy peligroso.</li>
+                            <li><strong>Nothin' left:</strong> No queda nada (Nothing is left).</li>
+                            <li><strong>Blastin':</strong> Slang para disparar armas de fuego.</li>
+                            <li><strong>Homies:</strong> Slang para "amigos" o compañeros de pandilla.</li>
+                            <li><strong>Blind to see:</strong> Ciegos para darse cuenta.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lyrics-box" id="lyrics-container-3" style="border-top-color: #8b5cf6;">
+                    <h3>Coolio - Gangsta's Paradise</h3>
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-grammar" id="btn-g3" onclick="toggleHighlight('lyrics-container-3', 'show-grammar', 'btn-g3')">1. Present Perfect Cont.</button>
+                        <button class="hl-btn btn-slang" id="btn-s3" onclick="toggleHighlight('lyrics-container-3', 'show-slang', 'btn-s3')">2. Slang / Connected Speech</button>
+                        <button class="hl-btn btn-rhyme" id="btn-r3" onclick="toggleHighlight('lyrics-container-3', 'show-rhyme', 'btn-r3')">3. End Rhymes</button>
+                    </div>
+                    <div class="lyrics-text">
+                        As I walk through the valley of the shadow of <span class="txt-rhyme">death</span><br>
+                        I take a look at my life and realize there's nothin' <span class="txt-rhyme">left</span><br>
+                        'Cause <span class="txt-grammar">I've been blastin' and laughin' so long</span>, that<br>
+                        Even my mama thinks that my mind is gone<br><br>
+
+                        But I ain't never crossed a man that didn't deserve it<br>
+                        Me be treated like a punk, you know that's unheard of<br>
+                        You better watch how you're talkin' and where you're walkin'<br>
+                        Or you and your <span class="txt-slang">homies</span> might be lined in chalk<br><br>
+
+                        I really hate to trip but I <span class="txt-slang">gotta loc</span><br>
+                        As they croak, I see myself in the pistol smoke, fool<br>
+                        I'm the kinda G the little <span class="txt-slang">homies</span> wanna be like<br>
+                        On my knees in the night, sayin' prayers in the streetlight<br><br>
+
+                        Tell me why are we so blind to <span class="txt-rhyme">see</span><br>
+                        That the ones we hurt are you and <span class="txt-rhyme">me?</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation for Songs
+        function switchSong(songId) {
+            // Remove active from all sections and buttons
+            document.querySelectorAll('.song-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Add active to selected
+            document.getElementById(songId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Pause iframes when switching tabs to prevent audio overlap
+            document.querySelectorAll('iframe').forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; // Reloading the iframe stops the video
+            });
+        }
+
+        // Highlighter Logic
+        function toggleHighlight(containerId, highlightClass, btnId) {
+            const container = document.getElementById(containerId);
+            const btn = document.getElementById(btnId);
+            
+            container.classList.toggle(highlightClass);
+            btn.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
