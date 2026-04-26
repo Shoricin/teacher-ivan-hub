@@ -96,7 +96,8 @@
             background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
             border-top: 6px solid var(--primary-teal);
         }
-        .lyrics-box h3 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .lyrics-box h3 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .instruction-badge { background: #f0f8f8; color: var(--primary-dark); font-size: 0.85rem; padding: 4px 10px; border-radius: 50px; font-weight: 600;}
 
         .highlighter-controls {
             display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
@@ -120,6 +121,21 @@
         .show-slang .txt-slang { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
         .show-rhyme .txt-rhyme { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
 
+        /* GAPS AND INPUTS */
+        .gap-input {
+            padding: 2px 8px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 1rem; background: white; color: var(--primary-dark);
+        }
+        .gap-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check-lyrics {
+            background: var(--text-dark); color: white; border: none; padding: 12px 25px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: 25px; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem;
+        }
+        .btn-check-lyrics:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -128,7 +144,7 @@
     <header>
         <a href="index.html" class="back-link">← Return to HUB</a>
         <h1><span class="material-icons-round">headphones</span> Rap & Hip-Hop Analyzer</h1>
-        <div class="subtitle">Learn Slang, Reductions & Grammar through Music</div>
+        <div class="subtitle">Listen, Fill in the Blanks, and Learn</div>
     </header>
 
     <div class="tabs-container">
@@ -161,20 +177,20 @@
                 </div>
 
                 <div class="lyrics-box" id="lyrics-container-1">
-                    <h3>Eminem - Lose Yourself</h3>
+                    <h3>Eminem - Lose Yourself <span class="instruction-badge">Listening Task</span></h3>
                     <div class="highlighter-controls">
                         <button class="hl-btn btn-grammar" id="btn-g1" onclick="toggleHighlight('lyrics-container-1', 'show-grammar', 'btn-g1')">1. 2nd Conditional</button>
                         <button class="hl-btn btn-slang" id="btn-s1" onclick="toggleHighlight('lyrics-container-1', 'show-slang', 'btn-s1')">2. Slang & Reductions</button>
                         <button class="hl-btn btn-rhyme" id="btn-r1" onclick="toggleHighlight('lyrics-container-1', 'show-rhyme', 'btn-r1')">3. Internal Rhymes</button>
                     </div>
                     <div class="lyrics-text">
-                        Look, <span class="txt-grammar">if you had one shot or one opportunity</span><br>
-                        To seize everything you ever wanted in one moment<br>
-                        <span class="txt-grammar">Would you capture it</span>, or just let it slip?<br>
+                        Look, <span class="txt-grammar">if you had one shot or one <input type="text" class="gap-input" style="width: 120px;" data-ans="opportunity"></span><br>
+                        To seize everything you ever <input type="text" class="gap-input" style="width: 80px;" data-ans="wanted"> in one moment<br>
+                        <span class="txt-grammar">Would you <input type="text" class="gap-input" style="width: 80px;" data-ans="capture"> it</span>, or just let it slip?<br>
                         Yo<br><br>
                         
-                        His palms are <span class="txt-rhyme">sweaty</span>, knees weak, arms are <span class="txt-rhyme">heavy</span><br>
-                        There's vomit on his sweater <span class="txt-rhyme">already</span>, mom's <span class="txt-rhyme">spaghetti</span><br>
+                        His palms are <span class="txt-rhyme"><input type="text" class="gap-input" style="width: 70px;" data-ans="sweaty"></span>, knees weak, arms are <span class="txt-rhyme">heavy</span><br>
+                        There's vomit on his sweater <span class="txt-rhyme">already</span>, mom's <span class="txt-rhyme"><input type="text" class="gap-input" style="width: 90px;" data-ans="spaghetti"></span><br>
                         He's nervous, but on the surface he looks calm and <span class="txt-rhyme">ready</span><br>
                         To <span class="txt-slang">drop bombs</span>, but he keeps on forgettin'<br>
                         What he wrote down, the whole crowd goes so loud<br>
@@ -187,6 +203,9 @@
                         You only get <span class="txt-slang">one shot</span>, do not miss your chance to <span class="txt-slang">blow</span><br>
                         This opportunity comes once in a lifetime.
                     </div>
+                    <button class="btn-check-lyrics" onclick="checkLyrics('lyrics-container-1')">
+                        <span class="material-icons-round">spellcheck</span> Check Lyrics
+                    </button>
                 </div>
 
             </div>
@@ -213,33 +232,36 @@
                 </div>
 
                 <div class="lyrics-box" id="lyrics-container-2" style="border-top-color: var(--accent-coral);">
-                    <h3>The Black Eyed Peas - Where Is The Love?</h3>
+                    <h3>The Black Eyed Peas - Where Is The Love? <span class="instruction-badge">Listening Task</span></h3>
                     <div class="highlighter-controls">
                         <button class="hl-btn btn-grammar" id="btn-g2" onclick="toggleHighlight('lyrics-container-2', 'show-grammar', 'btn-g2')">1. 1st Conditional</button>
-                        <button class="hl-btn btn-slang" id="btn-s2" onclick="toggleHighlight('lyrics-container-2', 'show-slang', 'btn-s2')">2. Double Negatives (Slang)</button>
+                        <button class="hl-btn btn-slang" id="btn-s2" onclick="toggleHighlight('lyrics-container-2', 'show-slang', 'btn-s2')">2. Double Negatives</button>
                         <button class="hl-btn btn-rhyme" id="btn-r2" onclick="toggleHighlight('lyrics-container-2', 'show-rhyme', 'btn-r2')">3. Social Vocab</button>
                     </div>
                     <div class="lyrics-text">
                         What's wrong with the world, mama<br>
-                        People livin' like they <span class="txt-slang">ain't got no mamas</span><br>
-                        I think the whole world's addicted to the drama<br>
+                        People livin' like they <span class="txt-slang">ain't got no <input type="text" class="gap-input" style="width: 70px;" data-ans="mamas"></span><br>
+                        I think the whole world's addicted to the <input type="text" class="gap-input" style="width: 70px;" data-ans="drama"><br>
                         Only attracted to things that'll bring you <span class="txt-rhyme">trauma</span><br><br>
 
-                        Overseas, yeah, we try to stop <span class="txt-rhyme">terrorism</span><br>
+                        Overseas, yeah, we try to stop <span class="txt-rhyme"><input type="text" class="gap-input" style="width: 100px;" data-ans="terrorism"></span><br>
                         But we still got terrorists here livin'<br>
                         In the USA, the big CIA<br>
                         The Bloods and The Crips and the KKK<br><br>
 
-                        But <span class="txt-grammar">if you only have love for your own race</span><br>
+                        But <span class="txt-grammar">if you only have <input type="text" class="gap-input" style="width: 60px;" data-ans="love"> for your own race</span><br>
                         <span class="txt-grammar">Then you only leave space to discriminate</span><br>
                         And to <span class="txt-rhyme">discriminate</span> only generates hate<br>
-                        And when you hate, then you're bound to get irate, yeah<br><br>
+                        And when you hate, then you're bound to get <input type="text" class="gap-input" style="width: 60px;" data-ans="irate">, yeah<br><br>
 
                         Madness is what you demonstrate<br>
                         And that's exactly how anger works and operates<br>
                         Man, you gotta have love just to set it straight<br>
                         Take control of your mind and meditate.
                     </div>
+                    <button class="btn-check-lyrics" onclick="checkLyrics('lyrics-container-2')">
+                        <span class="material-icons-round">spellcheck</span> Check Lyrics
+                    </button>
                 </div>
 
             </div>
@@ -267,31 +289,34 @@
                 </div>
 
                 <div class="lyrics-box" id="lyrics-container-3" style="border-top-color: #8b5cf6;">
-                    <h3>Coolio - Gangsta's Paradise</h3>
+                    <h3>Coolio - Gangsta's Paradise <span class="instruction-badge">Listening Task</span></h3>
                     <div class="highlighter-controls">
                         <button class="hl-btn btn-grammar" id="btn-g3" onclick="toggleHighlight('lyrics-container-3', 'show-grammar', 'btn-g3')">1. Present Perfect Cont.</button>
                         <button class="hl-btn btn-slang" id="btn-s3" onclick="toggleHighlight('lyrics-container-3', 'show-slang', 'btn-s3')">2. Slang / Connected Speech</button>
                         <button class="hl-btn btn-rhyme" id="btn-r3" onclick="toggleHighlight('lyrics-container-3', 'show-rhyme', 'btn-r3')">3. End Rhymes</button>
                     </div>
                     <div class="lyrics-text">
-                        As I walk through the valley of the shadow of <span class="txt-rhyme">death</span><br>
+                        As I walk through the valley of the shadow of <span class="txt-rhyme"><input type="text" class="gap-input" style="width: 70px;" data-ans="death"></span><br>
                         I take a look at my life and realize there's nothin' <span class="txt-rhyme">left</span><br>
-                        'Cause <span class="txt-grammar">I've been blastin' and laughin' so long</span>, that<br>
+                        'Cause <span class="txt-grammar">I've been <input type="text" class="gap-input" style="width: 80px;" data-ans="blastin'"> and laughin' so long</span>, that<br>
                         Even my mama thinks that my mind is gone<br><br>
 
-                        But I ain't never crossed a man that didn't deserve it<br>
+                        But I ain't never crossed a man that didn't <input type="text" class="gap-input" style="width: 80px;" data-ans="deserve"> it<br>
                         Me be treated like a punk, you know that's unheard of<br>
                         You better watch how you're talkin' and where you're walkin'<br>
                         Or you and your <span class="txt-slang">homies</span> might be lined in chalk<br><br>
 
                         I really hate to trip but I <span class="txt-slang">gotta loc</span><br>
-                        As they croak, I see myself in the pistol smoke, fool<br>
+                        As they croak, I see myself in the pistol <input type="text" class="gap-input" style="width: 70px;" data-ans="smoke">, fool<br>
                         I'm the kinda G the little <span class="txt-slang">homies</span> wanna be like<br>
                         On my knees in the night, sayin' prayers in the streetlight<br><br>
 
-                        Tell me why are we so blind to <span class="txt-rhyme">see</span><br>
+                        Tell me why are we so <input type="text" class="gap-input" style="width: 60px;" data-ans="blind"> to <span class="txt-rhyme">see</span><br>
                         That the ones we hurt are you and <span class="txt-rhyme">me?</span>
                     </div>
+                    <button class="btn-check-lyrics" onclick="checkLyrics('lyrics-container-3')">
+                        <span class="material-icons-round">spellcheck</span> Check Lyrics
+                    </button>
                 </div>
 
             </div>
@@ -313,7 +338,7 @@
             // Pause iframes when switching tabs to prevent audio overlap
             document.querySelectorAll('iframe').forEach(iframe => {
                 let src = iframe.src;
-                iframe.src = src; // Reloading the iframe stops the video
+                iframe.src = src; 
             });
         }
 
@@ -324,6 +349,30 @@
             
             container.classList.toggle(highlightClass);
             btn.classList.toggle('active');
+        }
+
+        // Lyrics Checker Logic
+        function checkLyrics(containerId) {
+            const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans').toLowerCase();
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            if(allCorrect) {
+                alert("¡Felicidades! Has completado la letra correctamente.");
+            }
         }
     </script>
 </body>
