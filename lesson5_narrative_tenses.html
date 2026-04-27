@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 5: Narrative Tenses | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #aaa; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .movie-section { display: none; animation: fadeIn 0.4s ease; }
+        .movie-section.active { display: block; }
+
+        /* LAYOUT GRID */
+        .analyzer-grid {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;
+        }
+        @media (max-width: 900px) { .analyzer-grid { grid-template-columns: 1fr; } }
+
+        /* MEDIA & DICTIONARY (LEFT) */
+        .media-col { display: flex; flex-direction: column; gap: 20px; }
+        
+        .video-container {
+            background: white; padding: 15px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; /* 16:9 */ height: 0; overflow: hidden; border-radius: 8px;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        .dict-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .dict-box h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--text-dark);}
+        .vocab-list { margin: 0; padding-left: 20px; color: #555; line-height: 1.8; font-size: 0.95rem;}
+        .vocab-list strong { color: var(--primary-dark); }
+
+        /* STORY & HIGHLIGHTER (RIGHT) */
+        .story-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        .story-box h3 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .instruction-badge { background: #f0f8f8; color: var(--primary-dark); font-size: 0.85rem; padding: 4px 10px; border-radius: 50px; font-weight: 600;}
+
+        .highlighter-controls {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fafafa; padding: 15px; border-radius: 12px; border: 1px solid #eee;
+        }
+        .hl-btn {
+            padding: 8px 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+            transition: 0.2s; font-family: 'Poppins', sans-serif; opacity: 0.6; font-size: 0.9rem;
+        }
+        .hl-btn.active { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        .btn-simple { background: #e0e7ff; color: #6d28d9; border: 1px solid #8b5cf6; }
+        .btn-cont { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .btn-perf { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        .story-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 2.2; color: #333; margin-bottom: 25px;}
+        
+        /* Highlight Classes */
+        .txt-simple, .txt-cont, .txt-perf { transition: 0.3s; }
+        
+        .show-simple .txt-simple { background: #e0e7ff; color: #6d28d9; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #8b5cf6;}
+        .show-cont .txt-cont { background: #d1fae5; color: #065f46; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #10b981;}
+        .show-perf .txt-perf { background: #fee2e2; color: #991b1b; font-weight: bold; padding: 2px 4px; border-radius: 4px; border-bottom: 2px solid #ef4444;}
+
+        /* GAPS AND INPUTS */
+        .exercise-area { background: #f9f9f9; padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-teal); }
+        .exercise-area p { margin-top: 0; font-weight: bold; color: var(--text-dark); margin-bottom: 15px;}
+        
+        .gap-input {
+            padding: 2px 8px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 0.95rem; background: white; color: var(--primary-dark);
+        }
+        .gap-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check-grammar {
+            background: var(--text-dark); color: white; border: none; padding: 10px 25px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem;
+        }
+        .btn-check-grammar:hover { background: #444; transform: translateY(-2px);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">movie</span> Cinematic Narrative Tenses</h1>
+        <div class="subtitle">Lesson 5: Describe dramatic scenes using Past Tenses</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchScene('scene1')"><span class="material-icons-round">pets</span> Jurassic Park</button>
+        <button class="tab-btn" onclick="switchScene('scene2')"><span class="material-icons-round">slow_motion_video</span> The Matrix</button>
+        <button class="tab-btn" onclick="switchScene('scene3')"><span class="material-icons-round">local_fire_department</span> The Lord of the Rings</button>
+    </div>
+
+    <div class="container">
+
+        <div id="scene1" class="movie-section active">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/Rc_i5TKdmhs?rel=0&start=35" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box">
+                        <h3><span class="material-icons-round">menu_book</span> Action Vocabulary</h3>
+                        <ul class="vocab-list">
+                            <li><strong>Tremble:</strong> Temblar (físicamente, como el agua en el vaso).</li>
+                            <li><strong>Break out:</strong> Escapar por la fuerza de un encierro.</li>
+                            <li><strong>Roar:</strong> Rugir.</li>
+                            <li><strong>Stare:</strong> Mirar fijamente, sin apartar la vista.</li>
+                            <li><strong>Terrified:</strong> Extremadamente asustado.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="story-box" id="story-container-1">
+                    <h3>Scene 1: The T-Rex Attack <span class="instruction-badge">Read & Analyze</span></h3>
+                    
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-simple" id="btn-s1" onclick="toggleHighlight('story-container-1', 'show-simple', 'btn-s1')">Past Simple (Main Action)</button>
+                        <button class="hl-btn btn-cont" id="btn-c1" onclick="toggleHighlight('story-container-1', 'show-cont', 'btn-c1')">Past Continuous (Background)</button>
+                        <button class="hl-btn btn-perf" id="btn-p1" onclick="toggleHighlight('story-container-1', 'show-perf', 'btn-p1')">Past Perfect (Before the past)</button>
+                    </div>
+                    
+                    <div class="story-text">
+                        It <span class="txt-cont">was raining</span> heavily in the park. The children, Lex and Tim, <span class="txt-cont">were waiting</span> inside the electric car because the power <span class="txt-perf">had failed</span> minutes earlier. Suddenly, Lex <span class="txt-simple">noticed</span> the water trembling in her cup. 
+                        <br><br>
+                        While they <span class="txt-cont">were staring</span> into the dark forest, the massive T-Rex <span class="txt-simple">broke out</span> of its enclosure. It <span class="txt-simple">roared</span> loudly. The children <span class="txt-perf">had never seen</span> a real dinosaur so close before. Just as the dinosaur <span class="txt-cont">was looking</span> through the glass, Lex <span class="txt-simple">grabbed</span> a flashlight.
+                    </div>
+
+                    <div class="exercise-area">
+                        <p>Practice: Fill in the correct tense</p>
+                        <p style="line-height: 2;">
+                            When the T-Rex <input type="text" class="gap-input" style="width: 80px;" data-ans="attacked"> (attack), the kids <input type="text" class="gap-input" style="width: 120px;" data-ans="were screaming"> (scream) inside the car. They <input type="text" class="gap-input" style="width: 100px;" data-ans="had lost"> (lose) their radio connection previously.
+                        </p>
+                        <button class="btn-check-grammar" onclick="checkGrammar('story-container-1')">
+                            <span class="material-icons-round">check_circle</span> Check Answers
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="scene2" class="movie-section">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/KNrSNcaYiZg?rel=0&start=15" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box" style="border-top-color: var(--primary-teal);">
+                        <h3 style="color: var(--primary-teal);"><span class="material-icons-round">menu_book</span> Action Vocabulary</h3>
+                        <ul class="vocab-list">
+                            <li><strong>Dodge:</strong> Esquivar un ataque o proyectil.</li>
+                            <li><strong>Rooftop:</strong> El techo o azotea de un edificio.</li>
+                            <li><strong>Lean back:</strong> Inclinarse hacia atrás.</li>
+                            <li><strong>Fire a gun:</strong> Disparar un arma.</li>
+                            <li><strong>Slow motion:</strong> Cámara lenta.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="story-box" id="story-container-2" style="border-top-color: var(--accent-coral);">
+                    <h3>Scene 2: Bullet Time <span class="instruction-badge">Read & Analyze</span></h3>
+                    
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-simple" id="btn-s2" onclick="toggleHighlight('story-container-2', 'show-simple', 'btn-s2')">Past Simple (Main Action)</button>
+                        <button class="hl-btn btn-cont" id="btn-c2" onclick="toggleHighlight('story-container-2', 'show-cont', 'btn-c2')">Past Continuous (Background)</button>
+                        <button class="hl-btn btn-perf" id="btn-p2" onclick="toggleHighlight('story-container-2', 'show-perf', 'btn-p2')">Past Perfect (Before the past)</button>
+                    </div>
+                    
+                    <div class="story-text">
+                        Neo and Trinity <span class="txt-perf">had arrived</span> at the rooftop to save their friend. Before this moment, Neo <span class="txt-perf">had never believed</span> he was "The One". 
+                        <br><br>
+                        While Neo <span class="txt-cont">was pointing</span> his gun at the Agent, the Agent suddenly <span class="txt-simple">fired</span> his weapon. As the bullets <span class="txt-cont">were flying</span> towards him, Neo <span class="txt-simple">leaned back</span> and <span class="txt-simple">dodged</span> them in impossible slow motion. He <span class="txt-perf">had been practicing</span> in the simulation, but this was real. Finally, Trinity <span class="txt-simple">saved</span> him.
+                    </div>
+
+                    <div class="exercise-area">
+                        <p>Practice: Fill in the correct tense</p>
+                        <p style="line-height: 2;">
+                            Trinity <input type="text" class="gap-input" style="width: 80px;" data-ans="shot"> (shoot) the Agent while he <input type="text" class="gap-input" style="width: 120px;" data-ans="was looking"> (look) at Neo. Before that day, Neo <input type="text" class="gap-input" style="width: 150px;" data-ans="had never moved"> (never / move) so fast.
+                        </p>
+                        <button class="btn-check-grammar" onclick="checkGrammar('story-container-2')">
+                            <span class="material-icons-round">check_circle</span> Check Answers
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="scene3" class="movie-section">
+            <div class="analyzer-grid">
+                
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/mJZZNHekEQw?rel=0&start=30" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="dict-box" style="border-top-color: #8b5cf6;">
+                        <h3 style="color: #6d28d9;"><span class="material-icons-round">menu_book</span> Action Vocabulary</h3>
+                        <ul class="vocab-list">
+                            <li><strong>Flee (Fled):</strong> Huir de un gran peligro.</li>
+                            <li><strong>Shatter:</strong> Romper en pedazos (el puente).</li>
+                            <li><strong>Whip:</strong> Látigo (el arma del Balrog).</li>
+                            <li><strong>Abyss:</strong> Abismo o pozo sin fondo.</li>
+                            <li><strong>Sacrifice:</strong> Sacrificar algo/alguien.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="story-box" id="story-container-3" style="border-top-color: #8b5cf6;">
+                    <h3>Scene 3: The Bridge of Khazad-dûm <span class="instruction-badge">Read & Analyze</span></h3>
+                    
+                    <div class="highlighter-controls">
+                        <button class="hl-btn btn-simple" id="btn-s3" onclick="toggleHighlight('story-container-3', 'show-simple', 'btn-s3')">Past Simple (Main Action)</button>
+                        <button class="hl-btn btn-cont" id="btn-c3" onclick="toggleHighlight('story-container-3', 'show-cont', 'btn-c3')">Past Continuous (Background)</button>
+                        <button class="hl-btn btn-perf" id="btn-p3" onclick="toggleHighlight('story-container-3', 'show-perf', 'btn-p3')">Past Perfect (Before the past)</button>
+                    </div>
+                    
+                    <div class="story-text">
+                        The Fellowship <span class="txt-cont">was fleeing</span> through the dark mines because a terrible demon <span class="txt-perf">had awakened</span>. They <span class="txt-perf">had been running</span> for hours when they finally <span class="txt-simple">reached</span> the narrow bridge. 
+                        <br><br>
+                        While the others <span class="txt-cont">were crossing</span> safely, Gandalf <span class="txt-simple">stopped</span>. He <span class="txt-perf">had decided</span> to sacrifice himself. He <span class="txt-simple">shattered</span> the bridge with his staff. The monster <span class="txt-simple">fell</span> into the abyss, but as it <span class="txt-cont">was falling</span>, its fiery whip <span class="txt-simple">caught</span> Gandalf's leg.
+                    </div>
+
+                    <div class="exercise-area">
+                        <p>Practice: Fill in the correct tense</p>
+                        <p style="line-height: 2;">
+                            Frodo <input type="text" class="gap-input" style="width: 80px;" data-ans="cried"> (cry) out when Gandalf <input type="text" class="gap-input" style="width: 80px;" data-ans="fell"> (fall). Gandalf <input type="text" class="gap-input" style="width: 120px;" data-ans="had told"> (tell) them to run before the monster arrived.
+                        </p>
+                        <button class="btn-check-grammar" onclick="checkGrammar('story-container-3')">
+                            <span class="material-icons-round">check_circle</span> Check Answers
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation for Scenes
+        function switchScene(sceneId) {
+            document.querySelectorAll('.movie-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(sceneId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Pause iframes when switching tabs
+            document.querySelectorAll('iframe').forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; 
+            });
+        }
+
+        // Highlighter Logic
+        function toggleHighlight(containerId, highlightClass, btnId) {
+            const container = document.getElementById(containerId);
+            const btn = document.getElementById(btnId);
+            
+            container.classList.toggle(highlightClass);
+            btn.classList.toggle('active');
+        }
+
+        // Grammar Checker Logic
+        function checkGrammar(containerId) {
+            const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans').toLowerCase();
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            if(allCorrect) {
+                alert("¡Excelente! Has conjugado los tiempos narrativos perfectamente.");
+            }
+        }
+    </script>
+</body>
+</html>
