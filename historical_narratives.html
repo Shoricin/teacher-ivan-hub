@@ -29,12 +29,11 @@
             margin: 0; padding: 0;
             display: flex; flex-direction: column;
             min-height: 100vh;
-            scroll-behavior: smooth;
         }
 
         /* HEADER */
         header {
-            background: var(--text-dark);
+            background: var(--white);
             padding: 2rem;
             text-align: center;
             border-bottom: 5px solid var(--primary-teal);
@@ -43,72 +42,90 @@
         }
         
         .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
-        .back-link:hover { color: var(--primary-teal); }
-        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
-        .subtitle { color: #aaa; margin-top: 5px; font-weight: 300; }
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
 
-        /* CONTENT AREA */
-        .container { max-width: 1000px; margin: 40px auto 50px; width: 95%; }
-
-        /* GRAMMAR GUIDE */
-        .guide-box {
-            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
-            border-top: 6px solid var(--accent-yellow); margin-bottom: 40px;
-        }
-        .guide-box h2 { margin-top: 0; display: flex; align-items: center; gap: 10px; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .container { max-width: 1200px; margin: 40px auto 50px; width: 95%; }
         
-        .grammar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        @media (max-width: 768px) { .grammar-grid { grid-template-columns: 1fr; } }
-        
-        .g-card { background: #fafafa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; }
-        .g-card h3 { margin-top: 0; color: var(--primary-dark); font-size: 1.1rem; }
-        .g-card ul { margin: 0; padding-left: 20px; line-height: 1.8; color: #444; }
-        .g-card li strong { color: var(--text-dark); }
-        .g-example { margin-top: 15px; font-style: italic; color: #666; font-size: 0.95rem; border-left: 3px solid var(--accent-coral); padding-left: 10px;}
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
 
-        /* EVENT SELECTOR */
-        .events-title { text-align: center; font-size: 1.8rem; margin-bottom: 20px; color: var(--text-dark); }
+        /* --- STEP 1: EVENT SELECTION --- */
+        .selection-title { text-align: center; margin-bottom: 30px; color: var(--primary-dark); font-size: 1.8rem;}
+        
         .events-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
         }
-        
-        .event-card {
-            background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);
-            cursor: pointer; transition: 0.3s; border: 2px solid transparent; text-align: center;
-            display: flex; flex-direction: column;
-        }
-        .event-card:hover { transform: translateY(-5px); border-color: var(--primary-teal); box-shadow: 0 15px 35px rgba(93,203,195,0.2); }
-        .event-card.selected { border-color: var(--primary-teal); background: #f0f8f8; }
-        
-        .event-icon {
-            background: var(--text-dark); color: white; padding: 25px 0; font-size: 3rem;
-            display: flex; justify-content: center; align-items: center; transition: 0.3s;
-        }
-        .event-card:hover .event-icon { background: var(--primary-teal); }
-        .event-card.selected .event-icon { background: var(--primary-teal); }
-        
-        .event-info { padding: 20px 15px; }
-        .event-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--text-dark); }
-        .event-info p { margin: 0; color: #777; font-size: 0.9rem; }
 
-        /* WORKSPACE (Hidden initially) */
-        .workspace {
-            display: none; background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
-            border-top: 6px solid var(--primary-teal); animation: fadeIn 0.5s ease; margin-bottom: 40px;
+        .event-card {
+            background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+            transition: 0.3s; cursor: pointer; border: 2px solid transparent; display: flex; flex-direction: column;
         }
-        .workspace.active { display: block; }
+        .event-card:hover { transform: translateY(-5px); border-color: var(--primary-teal); box-shadow: 0 15px 35px rgba(93, 203, 195, 0.2); }
         
-        .ws-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;}
-        .ws-title { margin: 0; font-size: 1.6rem; color: var(--primary-dark); }
+        .event-img { height: 180px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 5rem; color: white;}
+        .event-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column;}
+        .event-content h3 { margin: 0 0 10px 0; font-size: 1.4rem; color: var(--text-dark); }
+        .event-date { font-weight: bold; color: var(--accent-coral); font-size: 0.95rem; margin-bottom: 15px; }
+        .event-desc { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;}
+        .btn-select {
+            margin-top: auto; background: #f0f8f8; color: var(--primary-dark); border: 2px solid var(--primary-teal);
+            padding: 10px; border-radius: 50px; font-weight: bold; font-family: 'Poppins'; transition: 0.2s;
+        }
+        .event-card:hover .btn-select { background: var(--primary-teal); color: white; }
+
+        /* Color variations for images */
+        .bg-titanic { background: linear-gradient(135deg, #1e3c72, #2a5298); }
+        .bg-apollo { background: linear-gradient(135deg, #000000, #434343); }
+        .bg-berlin { background: linear-gradient(135deg, #b92b27, #1565C0); }
+
+        /* --- STEP 2: WRITING WORKSPACE --- */
+        .workspace-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .btn-back {
+            background: transparent; border: none; color: #888; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; font-family: 'Poppins'; font-size: 1rem; transition: 0.2s;
+        }
+        .btn-back:hover { color: var(--accent-coral); }
+
+        .workspace-grid {
+            display: grid; grid-template-columns: 350px 1fr; gap: 30px;
+        }
+        @media (max-width: 900px) { .workspace-grid { grid-template-columns: 1fr; } }
+
+        /* LEFT PANEL (Guides) */
+        .guide-panel { display: flex; flex-direction: column; gap: 20px; }
         
-        .vocab-box { background: #fdfdfd; border: 2px dashed #ccc; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
-        .vocab-box h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px; }
-        .vocab-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .v-chip { background: #fff; border: 1px solid var(--accent-coral); color: #b91c1c; padding: 6px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .box-panel {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+        }
+        .box-panel h4 { margin-top: 0; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        
+        /* Grammar Rule Box */
+        .rule-in { color: #3b82f6; font-weight: bold; }
+        .rule-on { color: #10b981; font-weight: bold; }
+        .rule-during { color: #f59e0b; font-weight: bold; }
+        .grammar-list { padding-left: 20px; margin: 0; font-size: 0.95rem; line-height: 1.8; color: #444;}
+
+        /* Vocab Box */
+        .vocab-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;}
+        .vocab-item { background: #f9f9f9; padding: 10px 15px; border-radius: 8px; border-left: 4px solid var(--primary-teal); display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem;}
+        .vocab-en { font-weight: bold; color: var(--text-dark); }
+        .vocab-es { color: #777; font-style: italic; font-size: 0.85rem;}
+
+        /* RIGHT PANEL (Writing) */
+        .writing-panel {
+            background: white; padding: 35px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-dark);
+        }
+        .event-title-display { font-size: 1.8rem; color: var(--primary-dark); margin-top: 0; margin-bottom: 10px;}
+        .event-prompt { color: #555; font-size: 1.05rem; line-height: 1.6; margin-bottom: 25px; padding: 15px; background: #f0f8f8; border-radius: 8px;}
 
         .input-group { margin-bottom: 20px; }
-        .input-group input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-group input:focus { border-color: var(--primary-teal); }
+        .name-input { width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-family: 'Poppins'; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s;}
+        .name-input:focus { border-color: var(--primary-teal); }
 
         .writing-area {
             width: 100%; height: 350px; padding: 20px; border: 2px solid #ddd; border-radius: 12px;
@@ -116,21 +133,23 @@
         }
         .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
 
-        .word-counter { text-align: right; font-size: 1rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
+        .word-counter { text-align: right; font-size: 0.95rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
         .word-counter.valid { color: #10b981; }
 
-        .checklist { background: #fafafa; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-top: 25px; }
-        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 15px;}
-        .checklist-item { display: flex; align-items: flex-start; gap: 10px; font-size: 1rem; color: #444; margin-bottom: 10px;}
-        .checklist-item input[type="checkbox"] { margin-top: 4px; accent-color: var(--primary-teal); transform: scale(1.3); cursor: pointer;}
+        .checklist {
+            background: #fafafa; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; margin-top: 20px;
+        }
+        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px;}
+        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #444; margin-bottom: 8px;}
+        .checklist-item input[type="checkbox"] { accent-color: var(--primary-teal); transform: scale(1.3); cursor: pointer;}
 
         .btn-submit {
-            background: var(--text-dark); color: white; border: none; padding: 15px 40px; border-radius: 50px;
-            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+            background: var(--text-dark); color: white; border: none; padding: 15px 30px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins'; margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);}
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.2);}
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -138,171 +157,184 @@
     <header>
         <a href="index.html" class="back-link">← Return to HUB</a>
         <h1><span class="material-icons-round">history_edu</span> Historical Narratives</h1>
-        <div class="subtitle">Advanced Time Prepositions & Past Tenses</div>
+        <div class="subtitle">Time Prepositions (In, On, During) & Past Tenses</div>
     </header>
 
     <div class="container">
 
-        <div class="guide-box">
-            <h2><span class="material-icons-round">menu_book</span> Grammar Guide</h2>
-            <p style="color: #555; margin-bottom: 0;">Para narrar eventos históricos de forma profesional, debes conectar los tiempos del pasado con preposiciones de tiempo avanzadas. Evita usar solo "before", "after" y "then".</p>
+        <div id="selection-view" class="view-section active">
+            <h2 class="selection-title">Step 1: Choose a Historical Event</h2>
             
-            <div class="grammar-grid">
-                <div class="g-card">
-                    <h3>Advanced Time Prepositions</h3>
-                    <ul>
-                        <li><strong>Prior to:</strong> Antes de (reemplaza a <em>before</em>).</li>
-                        <li><strong>Throughout:</strong> A lo largo de / Durante todo (reemplaza a <em>during all of</em>).</li>
-                        <li><strong>Following:</strong> Después de / A raíz de (reemplaza a <em>after</em>).</li>
-                        <li><strong>In the aftermath of:</strong> Como consecuencia de / Tras (eventos grandes o desastres).</li>
-                        <li><strong>During:</strong> Durante (acompañado de un sustantivo).</li>
-                    </ul>
+            <div class="events-grid">
+                <div class="event-card" onclick="openWorkspace('titanic')">
+                    <div class="event-img bg-titanic"><span class="material-icons-round" style="font-size: 5rem;">sailing</span></div>
+                    <div class="event-content">
+                        <h3>The Sinking of the Titanic</h3>
+                        <div class="event-date">April 15, 1912</div>
+                        <div class="event-desc">The tragic maiden voyage of the famous unsinkable ship that struck an iceberg in the North Atlantic Ocean.</div>
+                        <button class="btn-select">Write this Narrative</button>
+                    </div>
                 </div>
-                <div class="g-card">
-                    <h3>Narrative Tenses Mix</h3>
-                    <ul>
-                        <li><strong>Past Simple:</strong> Eventos principales y hechos terminados.</li>
-                        <li><strong>Past Continuous:</strong> Contexto, acciones en progreso en el fondo.</li>
-                        <li><strong>Past Perfect:</strong> El "pasado del pasado" (lo que había ocurrido <em>prior to</em> el evento principal).</li>
-                    </ul>
-                    <div class="g-example">
-                        "<span style="color:#d9534f; font-weight:bold;">Prior to</span> the revolution, the citizens <span style="font-weight:bold;">had been suffering</span> for decades. <span style="color:#d9534f; font-weight:bold;">Following</span> the protests, a new government <span style="font-weight:bold;">was formed</span>."
+
+                <div class="event-card" onclick="openWorkspace('apollo')">
+                    <div class="event-img bg-apollo"><span class="material-icons-round" style="font-size: 5rem;">rocket_launch</span></div>
+                    <div class="event-content">
+                        <h3>Apollo 11 Moon Landing</h3>
+                        <div class="event-date">July 20, 1969</div>
+                        <div class="event-desc">The historic moment when mankind first stepped on the lunar surface, winning the Space Race.</div>
+                        <button class="btn-select">Write this Narrative</button>
+                    </div>
+                </div>
+
+                <div class="event-card" onclick="openWorkspace('berlin')">
+                    <div class="event-img bg-berlin"><span class="material-icons-round" style="font-size: 5rem;">account_balance</span></div>
+                    <div class="event-content">
+                        <h3>The Fall of the Berlin Wall</h3>
+                        <div class="event-date">November 9, 1989</div>
+                        <div class="event-desc">The historic night when the barrier dividing East and West Germany was finally torn down by citizens.</div>
+                        <button class="btn-select">Write this Narrative</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2 class="events-title">Choose Your Historical Event</h2>
-        <div class="events-grid">
-            <div class="event-card" id="card-berlin" onclick="selectEvent('berlin')">
-                <div class="event-icon"><span class="material-icons-round">public</span></div>
-                <div class="event-info">
-                    <h3>Fall of the Berlin Wall</h3>
-                    <p>1989, Germany</p>
-                </div>
-            </div>
+        <div id="workspace-view" class="view-section">
             
-            <div class="event-card" id="card-moon" onclick="selectEvent('moon')">
-                <div class="event-icon"><span class="material-icons-round">rocket_launch</span></div>
-                <div class="event-info">
-                    <h3>The Moon Landing</h3>
-                    <p>1969, Space</p>
-                </div>
+            <div class="workspace-header">
+                <button class="btn-back" onclick="goBack()"><span class="material-icons-round">arrow_back</span> Change Event</button>
+                <div style="background: var(--accent-yellow); color: white; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 0.9rem;">Target: 150 Words</div>
             </div>
 
-            <div class="event-card" id="card-titanic" onclick="selectEvent('titanic')">
-                <div class="event-icon"><span class="material-icons-round">sailing</span></div>
-                <div class="event-info">
-                    <h3>Sinking of the Titanic</h3>
-                    <p>1912, Atlantic Ocean</p>
-                </div>
-            </div>
-
-            <div class="event-card" id="card-america" onclick="selectEvent('america')">
-                <div class="event-icon"><span class="material-icons-round">explore</span></div>
-                <div class="event-info">
-                    <h3>Discovery of America</h3>
-                    <p>1492, The New World</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="workspace" class="workspace">
-            <div class="ws-header">
-                <h2 class="ws-title" id="ws-title">Event Title</h2>
-                <span style="color: #777; font-weight: bold;" id="ws-date">Date</span>
-            </div>
-
-            <p style="color: #444; font-size: 1.05rem; margin-top: 0;" id="ws-prompt">Instructions will appear here.</p>
-
-            <div class="vocab-box">
-                <h4><span class="material-icons-round" style="vertical-align: middle; font-size: 1.2rem; color: var(--accent-coral);">key</span> Key Vocabulary:</h4>
-                <div class="vocab-grid" id="ws-vocab">
+            <div class="workspace-grid">
+                
+                <div class="guide-panel">
+                    
+                    <div class="box-panel" style="border-top: 4px solid var(--accent-coral);">
+                        <h4 style="color: var(--text-dark);"><span class="material-icons-round" style="color: var(--accent-coral);">rule</span> Time Prepositions</h4>
+                        <ul class="grammar-list">
+                            <li><span class="rule-in">IN:</span> Months, Years, Decades, Centuries. <br><em>(e.g., in 1912, in July, in the 20th century)</em></li>
+                            <li><span class="rule-on">ON:</span> Specific Days and Dates. <br><em>(e.g., on July 20th, on Monday)</em></li>
+                            <li><span class="rule-during">DURING:</span> A period of time (followed by a noun). <br><em>(e.g., during the night, during the flight)</em></li>
+                        </ul>
                     </div>
+
+                    <div class="box-panel" style="border-top: 4px solid var(--primary-teal);">
+                        <h4 style="color: var(--text-dark);"><span class="material-icons-round" style="color: var(--primary-teal);">translate</span> Vocabulary Bank</h4>
+                        <ul class="vocab-list" id="dynamic-vocab">
+                            </ul>
+                    </div>
+
+                </div>
+
+                <div class="writing-panel">
+                    <h2 class="event-title-display" id="dynamic-title">Event Title</h2>
+                    <div class="event-prompt" id="dynamic-prompt">
+                        Prompt description goes here.
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="student-name" class="name-input" placeholder="Enter your full name (e.g. Valeria Perez)" required>
+                    </div>
+
+                    <textarea class="writing-area" id="narrative-essay" placeholder="Write your historical narrative here. Remember to combine Past Simple for actions, Past Continuous for background details, and Past Perfect for earlier events..." onkeyup="countWords()"></textarea>
+                    <div class="word-counter" id="word-count">Words: 0 / 150</div>
+
+                    <div class="checklist">
+                        <h4>✅ Narrative Checklist:</h4>
+                        <label class="checklist-item"><input type="checkbox" id="chk-words"> I wrote at least 150 words.</label>
+                        <label class="checklist-item"><input type="checkbox" id="chk-in"> I used <strong>IN</strong> + Year/Month.</label>
+                        <label class="checklist-item"><input type="checkbox" id="chk-on"> I used <strong>ON</strong> + Specific Date.</label>
+                        <label class="checklist-item"><input type="checkbox" id="chk-during"> I used <strong>DURING</strong> + Noun.</label>
+                        <label class="checklist-item"><input type="checkbox" id="chk-past"> I combined Narrative Tenses (Simple, Continuous, Perfect).</label>
+                    </div>
+
+                    <button class="btn-submit" onclick="generatePDF()">
+                        <span class="material-icons-round">picture_as_pdf</span> Submit Narrative
+                    </button>
+                </div>
+
             </div>
-
-            <div class="input-group">
-                <input type="text" id="student-name" placeholder="Author's Name" required>
-            </div>
-
-            <textarea class="writing-area" id="narrative-essay" placeholder="Write your historical narrative here..." onkeyup="countWords()"></textarea>
-            <div class="word-counter" id="word-count">Words: 0 / 150</div>
-
-            <div class="checklist">
-                <h4>✅ Editorial Checklist:</h4>
-                <label class="checklist-item"><input type="checkbox" id="chk-prep"> I used advanced prepositions (Prior to, Following, Throughout, etc.).</label>
-                <label class="checklist-item"><input type="checkbox" id="chk-perf"> I used the Past Perfect to describe background history.</label>
-                <label class="checklist-item"><input type="checkbox" id="chk-words"> I wrote at least 150 words.</label>
-            </div>
-
-            <button class="btn-submit" onclick="generatePDF()">
-                <span class="material-icons-round">picture_as_pdf</span> Publish & Export PDF
-            </button>
         </div>
 
     </div>
 
     <script>
-        // Data Structure for Events
-        const eventsData = {
-            berlin: {
-                title: "The Fall of the Berlin Wall",
-                date: "1989",
-                prompt: "Write a historical narrative about the fall of the Berlin Wall. Describe the situation before the event, the night the wall opened, and the consequences.",
-                vocab: ["The Iron Curtain", "Reunification", "Dismantle", "Overjoyed citizens", "Checkpoint", "Divide", "Oppression"]
-            },
-            moon: {
-                title: "The Apollo 11 Moon Landing",
-                date: "1969",
-                prompt: "Narrate the events of the Apollo 11 mission. Describe the preparation, the tense moments during the descent, and the famous first steps on the moon.",
-                vocab: ["Astronauts", "Lunar module", "Giant leap", "Broadcast", "Orbit", "Mankind", "Lunar surface"]
-            },
+        // --- EVENT DATABASE ---
+        const eventData = {
             titanic: {
                 title: "The Sinking of the Titanic",
-                date: "1912",
-                prompt: "Write a dramatic narrative about the Titanic's tragedy. Describe the luxurious maiden voyage, the collision, and the aftermath of the disaster.",
-                vocab: ["Maiden voyage", "Iceberg", "Unsinkable", "Passengers", "Lifeboats", "Tragic", "Plunge into the ocean"]
+                prompt: "Narrate the tragic events of the Titanic. Describe the atmosphere on the ship before the accident, what happened when it struck the iceberg, and the chaos during the rescue efforts.",
+                vocab: [
+                    { en: "Maiden voyage", es: "Viaje inaugural" },
+                    { en: "Unsinkable", es: "Insumergible" },
+                    { en: "Iceberg", es: "Iceberg" },
+                    { en: "Passengers", es: "Pasajeros" },
+                    { en: "Lifeboats", es: "Botes salvavidas" },
+                    { en: "Rescue", es: "Rescate" },
+                    { en: "To sink (sank)", es: "Hundirse" }
+                ]
             },
-            america: {
-                title: "The Discovery of America",
-                date: "1492",
-                prompt: "Narrate Christopher Columbus's voyage across the Atlantic. Describe the long journey, the despair of the crew, and the moment they sighted land.",
-                vocab: ["Expedition", "Continent", "Voyage", "Indigenous people", "Set sail", "The New World", "Navigate"]
+            apollo: {
+                title: "The Apollo 11 Moon Landing",
+                prompt: "Narrate the historic Apollo 11 mission. Describe the preparations, the journey through space, and the specific moment when Neil Armstrong stepped on the lunar surface.",
+                vocab: [
+                    { en: "Spacecraft", es: "Nave espacial" },
+                    { en: "Launch", es: "Lanzamiento" },
+                    { en: "Lunar surface", es: "Superficie lunar" },
+                    { en: "Mankind", es: "Humanidad" },
+                    { en: "Orbit", es: "Órbita" },
+                    { en: "To step (stepped)", es: "Dar un paso / pisar" },
+                    { en: "Achievement", es: "Logro" }
+                ]
+            },
+            berlin: {
+                title: "The Fall of the Berlin Wall",
+                prompt: "Narrate the events leading up to and during the fall of the Berlin Wall. Describe how citizens felt, what they were doing, and the historic moment the borders were opened.",
+                vocab: [
+                    { en: "Border", es: "Frontera" },
+                    { en: "To divide (divided)", es: "Dividir" },
+                    { en: "Citizens", es: "Ciudadanos" },
+                    { en: "To tear down", es: "Derribar" },
+                    { en: "Guards", es: "Guardias" },
+                    { en: "Reunification", es: "Reunificación" },
+                    { en: "Crowd", es: "Multitud" }
+                ]
             }
         };
 
-        let currentEvent = null;
+        let currentEventKey = "";
 
-        // Select Event Function
-        function selectEvent(eventId) {
-            // Update cards UI
-            document.querySelectorAll('.event-card').forEach(card => card.classList.remove('selected'));
-            document.getElementById(`card-${eventId}`).classList.add('selected');
+        // --- NAVIGATION LOGIC ---
+        function openWorkspace(eventKey) {
+            currentEventKey = eventKey;
+            const data = eventData[eventKey];
 
-            // Load data
-            currentEvent = eventsData[eventId];
+            // Populate Workspace
+            document.getElementById('dynamic-title').innerText = data.title;
+            document.getElementById('dynamic-prompt').innerText = data.prompt;
             
-            document.getElementById('ws-title').innerText = currentEvent.title;
-            document.getElementById('ws-date').innerText = currentEvent.date;
-            document.getElementById('ws-prompt').innerText = currentEvent.prompt;
-
-            // Load Vocab
-            const vocabContainer = document.getElementById('ws-vocab');
+            const vocabContainer = document.getElementById('dynamic-vocab');
             vocabContainer.innerHTML = "";
-            currentEvent.vocab.forEach(word => {
-                vocabContainer.innerHTML += `<span class="v-chip">${word}</span>`;
+            data.vocab.forEach(v => {
+                vocabContainer.innerHTML += `
+                    <li class="vocab-item">
+                        <span class="vocab-en">${v.en}</span>
+                        <span class="vocab-es">${v.es}</span>
+                    </li>
+                `;
             });
 
-            // Show Workspace & Scroll to it
-            const workspace = document.getElementById('workspace');
-            workspace.classList.add('active');
-            
-            setTimeout(() => {
-                workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            // Switch Views
+            document.getElementById('selection-view').classList.remove('active');
+            document.getElementById('workspace-view').classList.add('active');
         }
 
-        // Word Counter
+        function goBack() {
+            document.getElementById('workspace-view').classList.remove('active');
+            document.getElementById('selection-view').classList.add('active');
+        }
+
+        // --- WORD COUNTER ---
         function countWords() {
             const text = document.getElementById('narrative-essay').value.trim();
             const words = text === "" ? 0 : text.split(/\s+/).length;
@@ -319,23 +351,22 @@
             }
         }
 
-        // PDF Generation
+        // --- PDF GENERATOR ---
         function generatePDF() {
-            if (!currentEvent) return;
-
             const studentName = document.getElementById('student-name').value.trim();
+            
             if (!studentName) {
-                alert("Por favor, ingresa el nombre del autor.");
+                alert("Por favor, ingresa tu nombre antes de enviar.");
                 return;
             }
 
             let allChecked = true;
-            ['chk-prep', 'chk-perf', 'chk-words'].forEach(id => {
-                if (!document.getElementById(id).checked) allChecked = false;
+            ['chk-words', 'chk-in', 'chk-on', 'chk-during', 'chk-past'].forEach(id => { 
+                if (!document.getElementById(id).checked) allChecked = false; 
             });
 
             if (!allChecked) {
-                alert("Debes marcar todas las casillas del Editorial Checklist antes de publicar.");
+                alert(`Hey ${studentName}, debes asegurarte de cumplir TODO tu Checklist y marcar las casillas antes de enviar.`);
                 return;
             }
 
@@ -343,47 +374,47 @@
             const words = text === "" ? 0 : text.split(/\s+/).length;
             
             if (words < 150) {
-                alert(`Solo tienes ${words} palabras. El mínimo para este ensayo es 150.`);
+                alert(`Solo tienes ${words} palabras. El mínimo es 150.`);
                 return;
             }
 
-            // Generate jsPDF
+            const eventTitle = eventData[currentEventKey].title;
+
+            // Initialize jsPDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Cover/Header
+            // Document Styling
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
+            doc.setFontSize(20);
             doc.setTextColor(58, 163, 155); // Primary Dark
-            doc.text(currentEvent.title, 105, 25, null, null, "center");
+            doc.text(`Historical Narrative: ${eventTitle}`, 105, 25, null, null, "center");
 
             doc.setFontSize(12);
             doc.setFont("helvetica", "italic");
             doc.setTextColor(100, 100, 100);
-            doc.text(`Author: ${studentName} | Date: ${new Date().toLocaleDateString()}`, 105, 33, null, null, "center");
+            doc.text(`Author: ${studentName}`, 105, 33, null, null, "center");
             doc.text(`Word Count: ${words} words`, 105, 40, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 47, null, null, "center");
 
-            doc.setDrawColor(255, 154, 139); // Accent Coral
+            doc.setDrawColor(200, 200, 200);
             doc.setLineWidth(1);
-            doc.line(20, 48, 190, 48); 
+            doc.line(20, 52, 190, 52); 
 
-            // Body
             doc.setFont("helvetica", "normal");
             doc.setFontSize(12);
             doc.setTextColor(40, 40, 40);
             
             const splitText = doc.splitTextToSize(text, 170);
-            doc.text(splitText, 20, 60, { lineHeightFactor: 1.6 });
+            doc.text(splitText, 20, 65, { lineHeightFactor: 1.6 });
 
-            // Footer
             doc.setFont("helvetica", "bolditalic");
             doc.setFontSize(10);
-            doc.setTextColor(150, 150, 150);
-            doc.text("Generated via Teacher Ivan's HUB", 105, 280, null, null, "center");
+            doc.setTextColor(93, 203, 195);
+            doc.text("Task submitted successfully via The HUB.", 105, 280, null, null, "center");
 
-            const safeTitle = currentEvent.title.replace(/\s+/g, '_');
-            const safeName = studentName.replace(/\s+/g, '_');
-            doc.save(`${safeName}_${safeTitle}.pdf`);
+            const fileName = `${studentName.replace(/\s+/g, '_')}_History.pdf`;
+            doc.save(fileName);
         }
     </script>
 </body>
