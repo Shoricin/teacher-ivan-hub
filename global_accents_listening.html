@@ -77,11 +77,20 @@
             border-top: 6px solid var(--accent-yellow);
         }
         .video-wrapper {
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px;
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;
         }
         .video-wrapper iframe {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
         }
+
+        /* FALLBACK BUTTON */
+        .fallback-link {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #f0f8f8; color: var(--text-dark); text-decoration: none;
+            padding: 10px; border-radius: 8px; margin-top: 15px; font-weight: 600;
+            font-size: 0.9rem; border: 1px solid #ddd; transition: 0.2s;
+        }
+        .fallback-link:hover { background: var(--primary-teal); color: white; border-color: var(--primary-teal); }
 
         .features-box {
             background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
@@ -142,14 +151,17 @@
                 <div class="media-col">
                     <div class="video-container">
                         <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/gkjW9PZBRfk?rel=0&start=64" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/gkjW9PZBRfk?rel=0&start=64" allowfullscreen></iframe>
                         </div>
+                        <a href="https://youtu.be/gkjW9PZBRfk?t=64" target="_blank" class="fallback-link">
+                            <span class="material-icons-round">open_in_new</span> ¿Video bloqueado? Abrir en YouTube
+                        </a>
                     </div>
                     <div class="features-box">
                         <h3><span class="material-icons-round">hearing</span> British (RP) Features</h3>
                         <ul class="features-list">
-                            <li><strong>Non-rhotic 'R':</strong> La 'r' al final de las palabras no suena fuerte (ej. <em>water</em> suena como "watah").</li>
-                            <li><strong>Crisp 'T':</strong> Pronuncian la 'T' de manera muy clara y marcada, sin convertirla en una 'D' suave (ej. <em>better, water</em>).</li>
+                            <li><strong>Non-rhotic 'R':</strong> La 'R' al final de las palabras es suave o silenciosa (ej. <em>water</em> suena como "watah").</li>
+                            <li><strong>Crisp 'T':</strong> Pronuncian la 'T' de manera muy clara y marcada, sin convertirla en una 'D' suave como en EE.UU.</li>
                             <li><strong>Broad 'A':</strong> Vocales más abiertas y largas en palabras como <em>dance, bath, can't</em>.</li>
                         </ul>
                     </div>
@@ -160,7 +172,7 @@
                     <div class="transcript-text">
                         "I am reaching out to you because I need your <input type="text" class="gap-input" style="width: 80px;" data-ans="help">. We want to end gender inequality—and to do this we need everyone to be <input type="text" class="gap-input" style="width: 100px;" data-ans="involved">. 
                         <br><br>
-                        This is the first <input type="text" class="gap-input" style="width: 110px;" data-ans="campaign"> of its kind at the UN: we want to try and galvanize as many men and boys as <input type="text" class="gap-input" style="width: 100px;" data-ans="possible"> to be advocates for <input type="text" class="gap-input" style="width: 100px;" data-ans="change">."
+                        This is the first <input type="text" class="gap-input" style="width: 110px;" data-ans="campaign"> of its kind at the UN: we want to try and galvanize as many men and boys as <input type="text" class="gap-input" style="width: 100px;" data-ans="possible"> to be advocates for gender <input type="text" class="gap-input" style="width: 100px;" data-ans="equality">."
                     </div>
                     <button class="btn-check-lyrics" onclick="checkGaps('trans-british')">
                         <span class="material-icons-round">spellcheck</span> Check Answers
@@ -174,8 +186,11 @@
                 <div class="media-col">
                     <div class="video-container" style="border-top-color: #8b5cf6;">
                         <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/B-1P0iA8o4Q?rel=0&start=104" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/B-1P0iA8o4Q?rel=0&start=104" allowfullscreen></iframe>
                         </div>
+                        <a href="https://youtu.be/B-1P0iA8o4Q?t=104" target="_blank" class="fallback-link">
+                            <span class="material-icons-round">open_in_new</span> ¿Video bloqueado? Abrir en YouTube
+                        </a>
                     </div>
                     <div class="features-box" style="border-top-color: #6d28d9;">
                         <h3 style="color: #6d28d9;"><span class="material-icons-round">hearing</span> Indian English Features</h3>
@@ -208,14 +223,17 @@
                 <div class="media-col">
                     <div class="video-container" style="border-top-color: #ef4444;">
                         <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/qC5X2241G7o?rel=0&start=1900" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/qC5X2241G7o?rel=0&start=1900" allowfullscreen></iframe>
                         </div>
+                        <a href="https://youtu.be/qC5X2241G7o?t=1900" target="_blank" class="fallback-link">
+                            <span class="material-icons-round">open_in_new</span> ¿Video bloqueado? Abrir en YouTube
+                        </a>
                     </div>
                     <div class="features-box" style="border-top-color: #b91c1c;">
                         <h3 style="color: #b91c1c;"><span class="material-icons-round">hearing</span> Chinese English Features</h3>
                         <ul class="features-list">
-                            <li><strong>Tone Influence:</strong> El mandarín es tonal, por lo que su inglés puede sonar con subidas y bajadas de entonación muy marcadas en palabras individuales.</li>
-                            <li><strong>Consonant Clusters:</strong> Dificultad para pronunciar varias consonantes juntas (ej. <em>strict</em> puede sonar con vocales extra: "su-tric-te").</li>
+                            <li><strong>Tone Influence:</strong> El mandarín es tonal, por lo que su inglés suena con subidas y bajadas de entonación muy marcadas en palabras individuales.</li>
+                            <li><strong>Consonant Clusters:</strong> Dificultad para pronunciar varias consonantes juntas (añaden vocales extra).</li>
                             <li><strong>L vs R:</strong> Dificultad ocasional para diferenciar claramente los sonidos de la 'L' y la 'R'.</li>
                         </ul>
                     </div>
@@ -240,14 +258,17 @@
                 <div class="media-col">
                     <div class="video-container" style="border-top-color: #f59e0b;">
                         <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/gPGBh9zYjW0?rel=0&start=27" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/gPGBh9zYjW0?rel=0&start=27" allowfullscreen></iframe>
                         </div>
+                        <a href="https://youtu.be/gPGBh9zYjW0?t=27" target="_blank" class="fallback-link">
+                            <span class="material-icons-round">open_in_new</span> ¿Video bloqueado? Abrir en YouTube
+                        </a>
                     </div>
                     <div class="features-box" style="border-top-color: #d97706;">
                         <h3 style="color: #d97706;"><span class="material-icons-round">hearing</span> Australian Features</h3>
                         <ul class="features-list">
-                            <li><strong>Broad Vowels (The Aussie Twang):</strong> Las vocales se alargan y cambian. La 'A' en <em>mate</em> o <em>day</em> suena más similar a "m-eye-t" o "d-eye".</li>
-                            <li><strong>HRT (High Rising Terminal):</strong> A menudo terminan oraciones afirmativas con una entonación ascendente (hacia arriba), como si estuvieran haciendo una pregunta.</li>
+                            <li><strong>Broad Vowels (The Aussie Twang):</strong> Las vocales se alargan. La 'A' en <em>mate</em> suena similar a "m-eye-t".</li>
+                            <li><strong>HRT (High Rising Terminal):</strong> A menudo terminan oraciones afirmativas con una entonación ascendente, como si fuera una pregunta.</li>
                             <li><strong>Abbreviations:</strong> Acortan palabras brutalmente (ej. <em>afternoon</em> -> "arvo", <em>breakfast</em> -> "brekkie").</li>
                         </ul>
                     </div>
@@ -274,15 +295,18 @@
                 <div class="media-col">
                     <div class="video-container" style="border-top-color: #10b981;">
                         <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/zT2R775Vw9g?rel=0&start=32" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/zT2R775Vw9g?rel=0&start=32" allowfullscreen></iframe>
                         </div>
+                        <a href="https://youtu.be/zT2R775Vw9g?t=32" target="_blank" class="fallback-link">
+                            <span class="material-icons-round">open_in_new</span> ¿Video bloqueado? Abrir en YouTube
+                        </a>
                     </div>
                     <div class="features-box" style="border-top-color: #059669;">
                         <h3 style="color: #059669;"><span class="material-icons-round">hearing</span> Latino English Features</h3>
                         <ul class="features-list">
-                            <li><strong>Pure Vowels:</strong> El español tiene 5 vocales puras, mientras que el inglés tiene más de 14. Los latinos tienden a pronunciar las vocales inglesas más "duras" y marcadas.</li>
-                            <li><strong>Trilled 'R':</strong> La 'R' a menudo se pronuncia apoyando la lengua en los dientes (como en español), en lugar de enrollarla suavemente hacia atrás.</li>
-                            <li><strong>'S' + Consonant:</strong> Añaden una "E" imaginaria antes de palabras que empiezan con S (ej. <em>Spain</em> suena como "E-spain", <em>Script</em> como "E-script").</li>
+                            <li><strong>Pure Vowels:</strong> Los latinos tienden a pronunciar las vocales inglesas más "duras" y marcadas como en el español.</li>
+                            <li><strong>Trilled 'R':</strong> La 'R' a menudo se pronuncia apoyando la lengua en los dientes (fuerte), en lugar de enrollarla suavemente hacia atrás.</li>
+                            <li><strong>'S' + Consonant:</strong> Añaden una "E" imaginaria antes de palabras que empiezan con S (ej. <em>Spain</em> suena "E-spain", <em>Script</em> suena "E-script").</li>
                         </ul>
                     </div>
                 </div>
@@ -306,31 +330,26 @@
     </div>
 
     <script>
-        // Tab Navigation
         function switchTab(tabId) {
-            // Remove active classes
             document.querySelectorAll('.accent-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            // Add active to selected
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
 
-            // Pause iframes when switching tabs to prevent audio overlap
+            // Detener videos al cambiar de pestaña
             document.querySelectorAll('iframe').forEach(iframe => {
                 let src = iframe.src;
                 iframe.src = src; 
             });
         }
 
-        // Gap Checker Logic
         function checkGaps(containerId) {
             const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
             let allCorrect = true;
 
             inputs.forEach(input => {
                 const correctAnswer = input.getAttribute('data-ans').toLowerCase();
-                // Clean punctuation in case student types a space or period by accident
                 const studentAnswer = input.value.trim().toLowerCase().replace(/[.,!?]/g, "");
 
                 input.classList.remove('correct', 'wrong');
