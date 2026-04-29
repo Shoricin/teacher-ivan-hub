@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Accents Listening | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #aaa; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px; margin: 30px 0 20px; padding: 0 10px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 20px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1200px; margin: 0 auto 50px; width: 95%; }
+        .accent-section { display: none; animation: fadeIn 0.4s ease; }
+        .accent-section.active { display: block; }
+
+        /* LAYOUT GRID */
+        .analyzer-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+        }
+        @media (max-width: 900px) { .analyzer-grid { grid-template-columns: 1fr; } }
+
+        /* MEDIA & CHARACTERISTICS (LEFT) */
+        .media-col { display: flex; flex-direction: column; gap: 20px; }
+        
+        .video-container {
+            background: white; padding: 15px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        .features-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-dark);
+        }
+        .features-box h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--text-dark);}
+        .features-list { margin: 0; padding-left: 20px; color: #555; line-height: 1.8; font-size: 0.95rem;}
+        .features-list strong { color: var(--primary-dark); }
+
+        /* TRANSCRIPT & GAPS (RIGHT) */
+        .transcript-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal); display: flex; flex-direction: column;
+        }
+        .transcript-box h3 { margin-top: 0; color: var(--text-dark); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .speaker-badge { background: #f0f8f8; color: var(--primary-dark); font-size: 0.85rem; padding: 4px 12px; border-radius: 50px; font-weight: 600; display: flex; align-items: center; gap: 5px;}
+
+        .transcript-text { font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 2.4; color: #333; margin-bottom: 25px; flex-grow: 1;}
+        
+        /* GAPS AND INPUTS */
+        .gap-input {
+            padding: 2px 8px; border: 2px solid #ccc; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 1rem; background: white; color: var(--primary-dark);
+        }
+        .gap-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #065f46; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .btn-check-lyrics {
+            background: var(--text-dark); color: white; border: none; padding: 12px 25px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; width: 100%;
+        }
+        .btn-check-lyrics:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">language</span> Global Accents Listening</h1>
+        <div class="subtitle">Train your ear for real-world English communication</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('british')">🇬🇧 British RP</button>
+        <button class="tab-btn" onclick="switchTab('indian')">🇮🇳 Indian English</button>
+        <button class="tab-btn" onclick="switchTab('chinese')">🇨🇳 Chinese English</button>
+        <button class="tab-btn" onclick="switchTab('australian')">🇦🇺 Australian</button>
+        <button class="tab-btn" onclick="switchTab('latino')">🇨🇴 Latino English</button>
+    </div>
+
+    <div class="container">
+
+        <div id="british" class="accent-section active">
+            <div class="analyzer-grid">
+                <div class="media-col">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/p-iFl4qhBsE?rel=0&start=30" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="features-box">
+                        <h3><span class="material-icons-round">hearing</span> British (RP) Features</h3>
+                        <ul class="features-list">
+                            <li><strong>Non-rhotic 'R':</strong> La 'r' al final de las palabras casi no suena (ej. <em>water</em> suena como "watah").</li>
+                            <li><strong>Crisp 'T':</strong> Pronuncian la 'T' de manera muy clara, sin convertirla en 'D' como hacen los estadounidenses (ej. <em>better</em>).</li>
+                            <li><strong>Broad 'A':</strong> Vocales más abiertas en palabras como <em>dance, bath, can't</em>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="transcript-box" id="trans-british">
+                    <h3>Listening Test <span class="speaker-badge"><span class="material-icons-round" style="font-size:1rem;">mic</span> Emma Watson</span></h3>
+                    <div class="transcript-text">
+                        "I am reaching out to you because I need your <input type="text" class="gap-input" style="width: 70px;" data-ans="help">. We want to end gender inequality, and to do this, we need everyone to be <input type="text" class="gap-input" style="width: 100px;" data-ans="involved">. 
+                        <br><br>
+                        This is the first campaign of its <input type="text" class="gap-input" style="width: 70px;" data-ans="kind"> at the UN. We want to try and galvanize as many men and boys as <input type="text" class="gap-input" style="width: 100px;" data-ans="possible"> to be advocates for gender <input type="text" class="gap-input" style="width: 90px;" data-ans="equality">. 
+                        <br><br>
+                        And we don't just want to talk about it, we want to try and make sure it is <input type="text" class="gap-input" style="width: 100px;" data-ans="tangible">."
+                    </div>
+                    <button class="btn-check-lyrics" onclick="checkGaps('trans-british')">
+                        <span class="material-icons-round">spellcheck</span> Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="indian" class="accent-section">
+            <div class="analyzer-grid">
+                <div class="media-col">
+                    <div class="video-container" style="border-top-color: #8b5cf6;">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/yEgWeqauZBA?rel=0&start=45" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="features-box" style="border-top-color: #6d28d9;">
+                        <h3 style="color: #6d28d9;"><span class="material-icons-round">hearing</span> Indian English Features</h3>
+                        <ul class="features-list">
+                            <li><strong>Syllable-timed:</strong> A diferencia del inglés americano que enfatiza ciertas palabras (stress-timed), el inglés hindú tiende a dar el mismo peso a todas las sílabas.</li>
+                            <li><strong>Retroflex Consonants:</strong> Las letras 'T' y 'D' se pronuncian enrollando la lengua hacia atrás en el paladar.</li>
+                            <li><strong>W and V:</strong> A menudo intercambian o pronuncian de manera muy similar la 'W' y la 'V'.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="transcript-box" id="trans-indian" style="border-top-color: #8b5cf6;">
+                    <h3>Listening Test <span class="speaker-badge"><span class="material-icons-round" style="font-size:1rem;">mic</span> Sundar Pichai</span></h3>
+                    <div class="transcript-text">
+                        "I grew up in India, and my <input type="text" class="gap-input" style="width: 100px;" data-ans="passion"> for technology was born out of seeing how it could make a <input type="text" class="gap-input" style="width: 100px;" data-ans="difference"> in people's lives. 
+                        <br><br>
+                        When I was growing up, we didn't have much access to <input type="text" class="gap-input" style="width: 120px;" data-ans="computers">. We had to wait a long time to get a <input type="text" class="gap-input" style="width: 110px;" data-ans="telephone">. 
+                        <br><br>
+                        But when we finally got one, I remember the <input type="text" class="gap-input" style="width: 80px;" data-ans="joy"> it brought to our entire <input type="text" class="gap-input" style="width: 90px;" data-ans="family">. It connected us to the outside world in ways we couldn't imagine."
+                    </div>
+                    <button class="btn-check-lyrics" onclick="checkGaps('trans-indian')">
+                        <span class="material-icons-round">spellcheck</span> Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="chinese" class="accent-section">
+            <div class="analyzer-grid">
+                <div class="media-col">
+                    <div class="video-container" style="border-top-color: #ef4444;">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/vD2vLd1R3wI?rel=0&start=60" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="features-box" style="border-top-color: #b91c1c;">
+                        <h3 style="color: #b91c1c;"><span class="material-icons-round">hearing</span> Chinese English Features</h3>
+                        <ul class="features-list">
+                            <li><strong>Tone Influence:</strong> El mandarín es tonal, por lo que su inglés puede sonar con subidas y bajadas de entonación muy marcadas en palabras individuales.</li>
+                            <li><strong>Consonant Clusters:</strong> Dificultad para pronunciar varias consonantes juntas (ej. <em>strict</em> puede sonar como "su-tric-te").</li>
+                            <li><strong>L vs R:</strong> Dificultad ocasional para diferenciar los sonidos de la 'L' y la 'R'.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="transcript-box" id="trans-chinese" style="border-top-color: #ef4444;">
+                    <h3>Listening Test <span class="speaker-badge"><span class="material-icons-round" style="font-size:1rem;">mic</span> Jack Ma</span></h3>
+                    <div class="transcript-text">
+                        "If you are 20 to 30 years old, you should follow a good <input type="text" class="gap-input" style="width: 70px;" data-ans="boss">. Join a good <input type="text" class="gap-input" style="width: 100px;" data-ans="company"> to learn how to do things properly.
+                        <br><br>
+                        When you are 30 to 40 years old, if you want to do something <input type="text" class="gap-input" style="width: 90px;" data-ans="yourself">, just do it. You still can afford to <input type="text" class="gap-input" style="width: 70px;" data-ans="lose">, to fail.
+                        <br><br>
+                        But when you are 40 to 50 years old, my <input type="text" class="gap-input" style="width: 90px;" data-ans="advice"> is that you should do things that you are <input type="text" class="gap-input" style="width: 70px;" data-ans="good"> at."
+                    </div>
+                    <button class="btn-check-lyrics" onclick="checkGaps('trans-chinese')">
+                        <span class="material-icons-round">spellcheck</span> Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="australian" class="accent-section">
+            <div class="analyzer-grid">
+                <div class="media-col">
+                    <div class="video-container" style="border-top-color: #f59e0b;">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/8jHWeM1u19Y?rel=0&start=25" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="features-box" style="border-top-color: #d97706;">
+                        <h3 style="color: #d97706;"><span class="material-icons-round">hearing</span> Australian Features</h3>
+                        <ul class="features-list">
+                            <li><strong>Broad Vowels (The Aussie Twang):</strong> Las vocales se alargan y cambian. La 'A' en <em>mate</em> o <em>day</em> suena más como "m-eye-t" o "d-eye".</li>
+                            <li><strong>HRT (High Rising Terminal):</strong> A menudo terminan oraciones afirmativas con una entonación ascendente, como si estuvieran haciendo una pregunta.</li>
+                            <li><strong>Abbreviations:</strong> Acortan palabras y añaden '-o' o '-ie' (ej. <em>afternoon</em> -> "arvo", <em>breakfast</em> -> "brekkie").</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="transcript-box" id="trans-australian" style="border-top-color: #f59e0b;">
+                    <h3>Listening Test <span class="speaker-badge"><span class="material-icons-round" style="font-size:1rem;">mic</span> Chris Hemsworth</span></h3>
+                    <div class="transcript-text">
+                        "Growing up in Australia, we spent a lot of time <input type="text" class="gap-input" style="width: 90px;" data-ans="outside">. We were always in the ocean or running around in the <input type="text" class="gap-input" style="width: 70px;" data-ans="bush">.
+                        <br><br>
+                        It was a pretty <input type="text" class="gap-input" style="width: 80px;" data-ans="wild"> childhood to be honest. My brothers and I were constantly competing and getting into <input type="text" class="gap-input" style="width: 90px;" data-ans="trouble">.
+                        <br><br>
+                        But I think that <input type="text" class="gap-input" style="width: 120px;" data-ans="environment"> really shaped who we are. We learned to be <input type="text" class="gap-input" style="width: 110px;" data-ans="resilient"> and not to take ourselves too seriously."
+                    </div>
+                    <button class="btn-check-lyrics" onclick="checkGaps('trans-australian')">
+                        <span class="material-icons-round">spellcheck</span> Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="latino" class="accent-section">
+            <div class="analyzer-grid">
+                <div class="media-col">
+                    <div class="video-container" style="border-top-color: #10b981;">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/n4fV20s7s7g?rel=0&start=40" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="features-box" style="border-top-color: #059669;">
+                        <h3 style="color: #059669;"><span class="material-icons-round">hearing</span> Latino English Features</h3>
+                        <ul class="features-list">
+                            <li><strong>Pure Vowels:</strong> El español tiene 5 vocales puras, mientras que el inglés tiene más de 14. Los latinos tienden a pronunciar las vocales inglesas como si fueran españolas.</li>
+                            <li><strong>Trilled 'R':</strong> La 'R' a menudo se pronuncia rodada, apoyando la lengua en los dientes, en lugar de enrollarla hacia atrás.</li>
+                            <li><strong>'S' + Consonant:</strong> Dificultad para iniciar palabras con S seguida de consonante (ej. <em>Spain</em> suena como "E-spain").</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="transcript-box" id="trans-latino" style="border-top-color: #10b981;">
+                    <h3>Listening Test <span class="speaker-badge"><span class="material-icons-round" style="font-size:1rem;">mic</span> Sofía Vergara</span></h3>
+                    <div class="transcript-text">
+                        "When I first moved to the United States, my <input type="text" class="gap-input" style="width: 80px;" data-ans="accent"> was very strong. Sometimes, people couldn't <input type="text" class="gap-input" style="width: 120px;" data-ans="understand"> what I was trying to say.
+                        <br><br>
+                        I had to <input type="text" class="gap-input" style="width: 100px;" data-ans="translate"> everything in my head before I spoke. It was very exhausting, to be <input type="text" class="gap-input" style="width: 80px;" data-ans="honest">.
+                        <br><br>
+                        But I realized that my accent is part of my <input type="text" class="gap-input" style="width: 110px;" data-ans="personality">. It's where I come from, and I shouldn't be <input type="text" class="gap-input" style="width: 100px;" data-ans="ashamed"> of it."
+                    </div>
+                    <button class="btn-check-lyrics" onclick="checkGaps('trans-latino')">
+                        <span class="material-icons-round">spellcheck</span> Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.accent-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Pause iframes when switching tabs
+            document.querySelectorAll('iframe').forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; 
+            });
+        }
+
+        // Gap Checker Logic
+        function checkGaps(containerId) {
+            const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans').toLowerCase();
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            if(allCorrect) {
+                alert("¡Excelente oído! Has completado todas las palabras correctamente a pesar del acento.");
+            }
+        }
+    </script>
+</body>
+</html>
