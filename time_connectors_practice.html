@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Connectors & Narrative Tenses | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #aaa; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* TAB 1: CONNECTORS LIST */
+        .grid-connectors {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+        }
+        .connector-card {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--primary-teal); transition: 0.3s;
+        }
+        .connector-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(93, 203, 195, 0.2); }
+        .connector-card h3 { margin-top: 0; color: var(--primary-dark); font-size: 1.4rem; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .connector-desc { font-size: 0.95rem; color: #555; margin-bottom: 15px; }
+        .connector-rule { background: #f0f8f8; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 10px;}
+        .connector-example { font-family: 'Merriweather', serif; font-size: 0.95rem; color: #444; font-style: italic; border-left: 3px solid var(--accent-coral); padding-left: 10px;}
+
+        /* TAB 2: WRITING PROMPTS */
+        .intro-box {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px; text-align: center;
+        }
+        .intro-box p { color: #555; font-size: 1.05rem; margin: 0; line-height: 1.6;}
+
+        .prompt-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-left: 6px solid var(--primary-dark);
+        }
+        .prompt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;}
+        .target-connector { background: var(--text-dark); color: white; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-family: monospace; font-size: 1.1rem; letter-spacing: 1px;}
+        .scenario-box { background: #fff9e6; border: 1px dashed var(--accent-yellow); padding: 15px; border-radius: 8px; margin-bottom: 20px;}
+        .scenario-box h4 { margin: 0 0 5px 0; color: #b9770e; display: flex; align-items: center; gap: 5px;}
+        .scenario-text { margin: 0; color: #555; font-size: 1rem; }
+
+        .writing-area {
+            width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.1rem; resize: vertical; box-sizing: border-box; transition: 0.3s;
+        }
+        .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+
+        .btn-check {
+            background: var(--primary-teal); color: white; border: none; padding: 12px 25px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem;
+        }
+        .btn-check:hover { background: var(--primary-dark); transform: translateY(-2px);}
+
+        .feedback-area {
+            margin-top: 20px; display: none; animation: fadeIn 0.3s ease;
+        }
+        .status-msg { font-weight: bold; font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;}
+        .model-answer { background: #fdfdfd; border-left: 4px solid var(--accent-coral); padding: 15px; border-radius: 0 8px 8px 0; font-family: 'Merriweather', serif; color: #333; font-style: italic;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">hourglass_bottom</span> Narrative Time Connectors</h1>
+        <div class="subtitle">Mastering When, While, As soon as, and more...</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('theory-tab')"><span class="material-icons-round">menu_book</span> 1. The 10 Connectors</button>
+        <button class="tab-btn" onclick="switchTab('practice-tab')"><span class="material-icons-round">edit_note</span> 2. Sentence Prompts</button>
+    </div>
+
+    <div class="container">
+
+        <div id="theory-tab" class="view-section active">
+            
+            <div class="grid-connectors">
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">flash_on</span> 1. When</h3>
+                    <p class="connector-desc">Para una acción corta que interrumpe a otra, o para dos acciones que suceden casi al mismo tiempo.</p>
+                    <div class="connector-rule">Rule: When + Past Simple</div>
+                    <div class="connector-example">"I was sleeping <strong>when</strong> the phone rang."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">sync</span> 2. While</h3>
+                    <p class="connector-desc">Para indicar que una acción larga estaba en progreso (como "mientras tanto").</p>
+                    <div class="connector-rule">Rule: While + Past Continuous</div>
+                    <div class="connector-example">"<strong>While</strong> I was cooking, my sister was watching TV."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">timer</span> 3. As soon as</h3>
+                    <p class="connector-desc">Significa "tan pronto como". Muestra que una acción sucedió inmediatamente después de otra.</p>
+                    <div class="connector-rule">Rule: As soon as + Past Simple</div>
+                    <div class="connector-example">"<strong>As soon as</strong> she arrived, we started eating."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">history</span> 4. By the time</h3>
+                    <p class="connector-desc">Significa "para cuando". Indica que una acción ya había finalizado cuando otra ocurrió.</p>
+                    <div class="connector-rule">Rule: By the time + Past Simple, Past Perfect</div>
+                    <div class="connector-example">"<strong>By the time</strong> the police arrived, the thief had escaped."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">skip_previous</span> 5. Before</h3>
+                    <p class="connector-desc">Indica que un evento sucedió antes que otro.</p>
+                    <div class="connector-rule">Rule: Past Perfect + Before + Past Simple</div>
+                    <div class="connector-example">"She had locked the door <strong>before</strong> she went to bed."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">skip_next</span> 6. After</h3>
+                    <p class="connector-desc">Indica que un evento sucedió después de que otro ya había concluido.</p>
+                    <div class="connector-rule">Rule: After + Past Perfect, Past Simple</div>
+                    <div class="connector-example">"<strong>After</strong> he had eaten dinner, he washed the dishes."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">hourglass_empty</span> 7. Until</h3>
+                    <p class="connector-desc">Significa "hasta que". Muestra cuánto tiempo duró una situación.</p>
+                    <div class="connector-rule">Rule: Action + Until + Action</div>
+                    <div class="connector-example">"We waited in the rain <strong>until</strong> the bus finally arrived."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">compare_arrows</span> 8. Meanwhile</h3>
+                    <p class="connector-desc">Significa "mientras tanto". Conecta dos eventos paralelos, usualmente en oraciones separadas.</p>
+                    <div class="connector-rule">Rule: Sentence 1. Meanwhile, Sentence 2.</div>
+                    <div class="connector-example">"The detective interrogated the suspect; <strong>meanwhile</strong>, the police searched the house."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">warning_amber</span> 9. Suddenly</h3>
+                    <p class="connector-desc">Significa "de repente". Añade dramatismo y sorpresa a la historia.</p>
+                    <div class="connector-rule">Rule: ...when suddenly, Past Simple</div>
+                    <div class="connector-example">"I was walking home <strong>suddenly</strong> a strange man appeared."</div>
+                </div>
+
+                <div class="connector-card">
+                    <h3><span class="material-icons-round">flag</span> 10. Eventually</h3>
+                    <p class="connector-desc">Significa "finalmente" o "a la larga", después de mucha espera o dificultad.</p>
+                    <div class="connector-rule">Rule: Action (long time), eventually + Past Simple</div>
+                    <div class="connector-example">"They searched for hours and <strong>eventually</strong> found the keys."</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="practice-tab" class="view-section">
+            
+            <div class="intro-box">
+                <p><strong>Instrucciones:</strong> Lee el escenario propuesto (Prompt) y crea <strong>una sola oración</strong> combinando las ideas y utilizando el <strong>Conector de Tiempo Obligatorio</strong>. Usa los tiempos narrativos correctos.</p>
+            </div>
+
+            <div id="prompts-container">
+                </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- PROMPTS DATA ---
+        const prompts = [
+            {
+                connector: "When",
+                scenario: "Idea 1: You were taking a shower.<br>Idea 2: The lights went out (cortaron la luz).",
+                model: "I was taking a shower <strong>when</strong> the lights went out."
+            },
+            {
+                connector: "While",
+                scenario: "Idea 1: You were studying for a hard exam.<br>Idea 2: Your neighbors were having a loud party.",
+                model: "<strong>While</strong> I was studying for a hard exam, my neighbors were having a loud party."
+            },
+            {
+                connector: "As soon as",
+                scenario: "Idea 1: You saw a massive spider on the wall.<br>Idea 2: You screamed loudly.",
+                model: "<strong>As soon as</strong> I saw the massive spider on the wall, I screamed loudly."
+            },
+            {
+                connector: "By the time",
+                scenario: "Idea 1: The firemen arrived at the forest.<br>Idea 2: The cabin burned down entirely (ya se había quemado).",
+                model: "<strong>By the time</strong> the firemen arrived at the forest, the cabin had burned down entirely."
+            },
+            {
+                connector: "Before",
+                scenario: "Idea 1: You locked all the doors in the house.<br>Idea 2: You went to bed.",
+                model: "I had locked all the doors in the house <strong>before</strong> I went to bed."
+            },
+            {
+                connector: "After",
+                scenario: "Idea 1: You finished your English homework.<br>Idea 2: You turned on the TV to watch Netflix.",
+                model: "<strong>After</strong> I had finished my English homework, I turned on the TV to watch Netflix."
+            },
+            {
+                connector: "Until",
+                scenario: "Idea 1: You waited in the freezing rain.<br>Idea 2: The bus finally arrived.",
+                model: "We waited in the freezing rain <strong>until</strong> the bus finally arrived."
+            },
+            {
+                connector: "Meanwhile",
+                scenario: "Idea 1: The detective interrogated the suspect in the room.<br>Idea 2: The police officers searched the suspect's car.",
+                model: "The detective interrogated the suspect in the room; <strong>meanwhile</strong>, the police searched his car."
+            },
+            {
+                connector: "Suddenly",
+                scenario: "Idea 1: You were walking alone in the dark.<br>Idea 2: A strange dog appeared from the shadows.",
+                model: "I was walking alone in the dark when <strong>suddenly</strong>, a strange dog appeared from the shadows."
+            },
+            {
+                connector: "Eventually",
+                scenario: "Idea 1: The explorers were lost in the desert for three days.<br>Idea 2: They found a beautiful oasis.",
+                model: "The explorers had been lost in the desert for three days, but <strong>eventually</strong>, they found an oasis."
+            }
+        ];
+
+        // --- RENDER PROMPTS ---
+        const container = document.getElementById('prompts-container');
+        let html = '';
+
+        prompts.forEach((p, index) => {
+            html += `
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <h3 style="margin: 0; color: var(--primary-dark);">Practice ${index + 1}</h3>
+                    <div class="target-connector">${p.connector}</div>
+                </div>
+                
+                <div class="scenario-box">
+                    <h4><span class="material-icons-round">movie_creation</span> Scenario:</h4>
+                    <p class="scenario-text">${p.scenario}</p>
+                </div>
+
+                <textarea class="writing-area" id="input-${index}" rows="2" placeholder="Write your sentence here..."></textarea>
+                
+                <button class="btn-check" onclick="checkSentence(${index}, '${p.connector.toLowerCase()}')">
+                    <span class="material-icons-round">spellcheck</span> Check Sentence
+                </button>
+
+                <div class="feedback-area" id="fb-${index}">
+                    <div class="status-msg" id="status-${index}"></div>
+                    <div class="model-answer">
+                        <strong>Teacher's Model Answer:</strong><br>
+                        ${p.model}
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        container.innerHTML = html;
+
+        // --- CHECK LOGIC ---
+        function checkSentence(index, connectorKey) {
+            const inputEl = document.getElementById(`input-${index}`);
+            const text = inputEl.value.trim().toLowerCase();
+            const feedbackArea = document.getElementById(`fb-${index}`);
+            const statusMsg = document.getElementById(`status-${index}`);
+
+            if (text === "") {
+                alert("Por favor, escribe una oración antes de verificar.");
+                return;
+            }
+
+            feedbackArea.style.display = "block";
+
+            // Verificar si incluyó el conector
+            if (text.includes(connectorKey)) {
+                statusMsg.style.color = "#10b981";
+                statusMsg.innerHTML = `<span class="material-icons-round">check_circle</span> ¡Bien hecho! Usaste el conector "${connectorKey}". Compara tu gramática con el modelo:`;
+                inputEl.style.borderColor = "#10b981";
+            } else {
+                statusMsg.style.color = "#ef4444";
+                statusMsg.innerHTML = `<span class="material-icons-round">error</span> Faltó el conector. Debes incluir "${connectorKey}" en tu oración. Mira el modelo:`;
+                inputEl.style.borderColor = "#ef4444";
+            }
+        }
+    </script>
+</body>
+</html>
