@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Task 1 Ultimate Guide | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #0f766e; /* Deep Teal */
+            --primary-light: #5dcbc3;
+            --accent-coral: #f43f5e; /* Rose/Coral */
+            --accent-yellow: #f5b041;
+            --bg-light: #f8fafc;
+            --sidebar-bg: #1e293b;
+            --text-dark: #334155;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 { margin: 0; font-size: 1.5rem; color: var(--primary-light); }
+        .sidebar-header p { margin: 5px 0 0 0; font-size: 0.85rem; color: #cbd5e1; }
+
+        .nav-btn {
+            background: transparent; border: none; color: #cbd5e1;
+            padding: 15px 25px; text-align: left; font-family: 'Poppins', sans-serif;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 12px;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-btn.active {
+            background: rgba(15, 118, 110, 0.3);
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background: var(--bg-light);
+            scroll-behavior: smooth;
+        }
+
+        .guide-section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        .guide-section.active { display: block; }
+
+        /* TYPOGRAPHY & CARDS */
+        h1 { font-size: 2.5rem; color: var(--primary-teal); margin-top: 0; border-bottom: 3px solid var(--accent-yellow); padding-bottom: 15px; display: inline-block;}
+        h2 { font-size: 1.8rem; color: var(--sidebar-bg); margin-top: 30px; display: flex; align-items: center; gap: 10px;}
+        h3 { font-size: 1.3rem; color: var(--primary-teal); }
+        p, li { font-family: 'Merriweather', serif; font-size: 1.05rem; line-height: 1.8; color: #475569; }
+
+        .info-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-top: 5px solid var(--primary-teal);
+        }
+        .info-card.coral { border-top-color: var(--accent-coral); }
+        .info-card.yellow { border-top-color: var(--accent-yellow); }
+
+        .band-9-box {
+            background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin: 20px 0;
+            border-left: 5px solid #22c55e;
+        }
+        .band-9-box h4 { margin: 0 0 10px 0; color: #166534; display: flex; align-items: center; gap: 5px;}
+        
+        .alert-box {
+            background: #fef2f2; border: 1px solid #ef4444; padding: 20px; border-radius: 8px; margin: 20px 0;
+            border-left: 5px solid #ef4444;
+        }
+        .alert-box h4 { margin: 0 0 10px 0; color: #991b1b; display: flex; align-items: center; gap: 5px;}
+
+        /* VOCABULARY TABLES */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: var(--shadow); border-radius: 8px; overflow: hidden;}
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: var(--sidebar-bg); color: white; font-family: 'Poppins', sans-serif;}
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #f8fafc; }
+
+        .highlight { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Teacher Ivan</h2>
+            <p>IELTS Task 1 Ultimate Guide</p>
+        </div>
+        <button class="nav-btn active" onclick="switchSection('intro')"><span class="material-icons-round">flag</span> 1. The Core Rules</button>
+        <button class="nav-btn" onclick="switchSection('structure')"><span class="material-icons-round">view_quilt</span> 2. The 4-Paragraph Structure</button>
+        <button class="nav-btn" onclick="switchSection('data')"><span class="material-icons-round">bar_chart</span> 3. Data (Graphs & Tables)</button>
+        <button class="nav-btn" onclick="switchSection('maps')"><span class="material-icons-round">map</span> 4. Maps (Transformations)</button>
+        <button class="nav-btn" onclick="switchSection('processes')"><span class="material-icons-round">precision_manufacturing</span> 5. Processes</button>
+        <button class="nav-btn" onclick="switchSection('vocab')"><span class="material-icons-round">menu_book</span> 6. Vocabulary Bank</button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- 1. INTRO & RULES -->
+        <section id="intro" class="guide-section active">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">flag</span> The Core Rules of Task 1</h1>
+            
+            <div class="info-card">
+                <h3>Welcome to the Ultimate Guide</h3>
+                <p>El IELTS Academic Writing Task 1 requiere que describas información visual (gráficos, tablas, mapas o procesos) en tus propias palabras. Para alcanzar un Band 7, 8 o 9, debes seguir reglas estrictas de objetividad y formato.</p>
+                
+                <div class="alert-box">
+                    <h4><span class="material-icons-round">warning</span> Golden Rules (Nunca las rompas):</h4>
+                    <ol>
+                        <li><strong>No Opinions:</strong> Jamás des tu opinión. Nunca intentes explicar <em>por qué</em> los datos subieron o bajaron (ej. "Las ventas cayeron <em>debido a la crisis económica</em>"). Limítate a reportar lo que ves.</li>
+                        <li><strong>Word Count:</strong> Mínimo absoluto de <strong>150 palabras</strong>. Si escribes 149, perderás puntos automáticamente. (Ideal: 170-190 palabras).</li>
+                        <li><strong>Time Management:</strong> Dedica exactamente <strong>20 minutos</strong> a esta sección. Task 2 vale el doble de puntos, no le robes tiempo.</li>
+                        <li><strong>No First Person:</strong> No uses "I", "We", "In my opinion". Mantén un tono académico e impersonal.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. THE STRUCTURE -->
+        <section id="structure" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">view_quilt</span> The Band 9 Structure</h1>
+            
+            <div class="info-card coral">
+                <p>Sin importar si te toca un gráfico de barras, un mapa o un proceso, <strong>siempre debes usar una estructura de 4 párrafos</strong>. Los examinadores escanean tu ensayo buscando esta estructura exacta.</p>
+
+                <h3>Paragraph 1: The Introduction (1 Sentence)</h3>
+                <p>Parafrasea el enunciado (prompt) del examen usando sinónimos. Nunca copies las mismas palabras.<br>
+                <em>Prompt: The graph shows the consumption of fast food in the UK from 1990 to 2010.</em><br>
+                <em>Tú: The provided line graph <span class="highlight">illustrates the amount of</span> fast food consumed by <span class="highlight">British citizens between 1990 and 2010</span>.</em></p>
+
+                <h3>Paragraph 2: The Overview (2-3 Sentences)</h3>
+                <div class="band-9-box">
+                    <h4><span class="material-icons-round">star</span> El párrafo más importante de todo el ensayo</h4>
+                    <p>Para conseguir un <strong>Band 7+ en Task Achievement</strong>, debes tener un Overview claro. Identifica 2 o 3 tendencias generales o características clave. <strong>¡NUNCA incluyas números ni porcentajes exactos aquí!</strong></p>
+                </div>
+                <p><em>Ejemplo: Overall, it is clear that fish and chips consumption declined significantly over the period, whereas pizza and hamburger consumption experienced an upward trend.</em></p>
+
+                <h3>Paragraph 3 & 4: Body Paragraphs (Details)</h3>
+                <p>Aquí es donde agrupas los datos lógicamente e incluyes los números exactos. Selecciona las características principales, haz comparaciones y no describas cada línea por separado de forma robótica.</p>
+                <ul>
+                    <li><strong>Body 1:</strong> Agrupa la tendencia A (ej. Las comidas que subieron).</li>
+                    <li><strong>Body 2:</strong> Agrupa la tendencia B (ej. Las comidas que bajaron o fluctuaron).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. DATA (GRAPHS) -->
+        <section id="data" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">bar_chart</span> Data (Graphs, Charts & Tables)</h1>
+            
+            <div class="info-card">
+                <h3>Handling Numbers and Trends</h3>
+                <p>El error más común es hacer una lista de compras ("En 1990 fue 10%, en 1995 fue 15%, en 2000 fue 20%"). El IELTS evalúa tu capacidad para <strong>comparar y contrastar</strong>.</p>
+                
+                <div class="band-9-box">
+                    <h4><span class="material-icons-round">lightbulb</span> Band 9 Techniques:</h4>
+                    <ul>
+                        <li><strong>Agrupación:</strong> Si dos líneas del gráfico tienen un comportamiento similar (ambas suben), descríbelas juntas en la misma oración.</li>
+                        <li><strong>Uso de Respectively:</strong> "Pizza and hamburgers reached 40% and 50% <span class="highlight">respectively</span>." (Respeta el orden de la lista).</li>
+                        <li><strong>Fracciones:</strong> En lugar de repetir porcentajes, varía tu lenguaje: "25%" -> <em>A quarter</em>. "33%" -> <em>A third</em>. "50%" -> <em>Half</em>. "75%" -> <em>Three-quarters</em>.</li>
+                    </ul>
+                </div>
+
+                <h3>Prepositions of Data (Crucial Grammar)</h3>
+                <table>
+                    <tr>
+                        <th>Preposition</th>
+                        <th>Usage</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>To</strong></td>
+                        <td>El punto final al que llega una cifra.</td>
+                        <td>Sales rose <strong>to</strong> $50,000.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>By</strong></td>
+                        <td>La cantidad exacta que cambió (la diferencia).</td>
+                        <td>Sales rose <strong>by</strong> $10,000 (estaban en 40k y llegaron a 50k).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>At</strong></td>
+                        <td>Mantenerse estático en un punto o empezar en un punto.</td>
+                        <td>Sales started <strong>at</strong> $20,000 and peaked <strong>at</strong> $80,000.</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. MAPS -->
+        <section id="maps" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">map</span> Maps & Transformations</h1>
+            
+            <div class="info-card yellow">
+                <p>Los mapas suelen mostrar un área en el pasado y la misma área en el presente o futuro. Tu objetivo es describir las <strong>transformaciones arquitectónicas y urbanas</strong>.</p>
+
+                <div class="alert-box">
+                    <h4><span class="material-icons-round">gavel</span> La regla de oro para mapas: Voz Pasiva (Past Passive)</h4>
+                    <p>Los edificios no se construyen solos. No puedes decir "A new hospital constructed". Debes decir: "A new hospital <span class="highlight">was constructed</span>".</p>
+                </div>
+
+                <h3>Verbs for Changes (Passive Voice)</h3>
+                <ul>
+                    <li><strong>Para añadir:</strong> was built, was constructed, was introduced, were planted (árboles).</li>
+                    <li><strong>Para quitar:</strong> was demolished, was knocked down, was removed, was cut down (árboles).</li>
+                    <li><strong>Para cambiar:</strong> was transformed into, was converted into, was replaced by, was expanded.</li>
+                </ul>
+
+                <h3>Spatial Prepositions (Location)</h3>
+                <p>Nunca uses "up, down, left, right". Usa la Rosa de los Vientos:</p>
+                <ul>
+                    <li><em>"To the north of the river..."</em> (Al norte de)</li>
+                    <li><em>"In the south-west corner of the town..."</em> (En la esquina suroeste)</li>
+                    <li><em>"Adjacent to the school..."</em> (Adyacente/Pegado a)</li>
+                    <li><em>"Opposite the train station..."</em> (En frente de)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. PROCESSES -->
+        <section id="processes" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">precision_manufacturing</span> Processes & Cycles</h1>
+            
+            <div class="info-card">
+                <p>Los diagramas de procesos muestran cómo se fabrica algo (ej. papel, chocolate) o un ciclo natural (el ciclo del agua). Aquí no hay números ni tendencias.</p>
+
+                <div class="band-9-box">
+                    <h4><span class="material-icons-round">check_circle</span> La regla de oro para procesos: Sequencing & Present Passive</h4>
+                    <p>Lo importante es el producto, no quién lo hace. Usa <span class="highlight">is/are + Past Participle</span>. "The tea leaves <span class="highlight">are picked</span> by hand and then they <span class="highlight">are dried</span> in the sun."</p>
+                </div>
+
+                <h3>Sequencing Connectors (The Flow)</h3>
+                <p>Para unir las etapas del proceso, debes usar conectores lógicos de tiempo. Varía tus palabras, no uses "and then" todo el tiempo.</p>
+                <table>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Connectors</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Beginning</strong></td>
+                        <td>First, To begin with, The first step involves...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Middle</strong></td>
+                        <td>Following this, Subsequently, Next, After that, Once [X] is done...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Simultaneous</strong></td>
+                        <td>At the same time, Meanwhile, Simultaneously...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>End</strong></td>
+                        <td>Finally, In the final stage, Ultimately...</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 6. VOCABULARY BANK -->
+        <section id="vocab" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">menu_book</span> Ultimate Vocabulary Bank</h1>
+            
+            <div class="info-card">
+                <p>Memoriza estas combinaciones para obtener una alta puntuación en <strong>Lexical Resource</strong> al describir gráficos de líneas, barras y tablas.</p>
+
+                <h3>1. Verbs and Nouns for Trends</h3>
+                <table>
+                    <tr>
+                        <th>Trend</th>
+                        <th>Verbs</th>
+                        <th>Nouns</th>
+                    </tr>
+                    <tr>
+                        <td style="color: #16a34a; font-weight: bold;">UP (↑)</td>
+                        <td>rose, increased, climbed, surged, skyrocketed</td>
+                        <td>a rise, an increase, a growth, an upward trend</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #dc2626; font-weight: bold;">DOWN (↓)</td>
+                        <td>fell, declined, decreased, dropped, plummeted</td>
+                        <td>a fall, a decline, a decrease, a downward trend</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #d97706; font-weight: bold;">STABLE (→)</td>
+                        <td>remained stable, leveled off, plateaued</td>
+                        <td>a period of stability</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #7c3aed; font-weight: bold;">VARIABLE (↕)</td>
+                        <td>fluctuated, varied</td>
+                        <td>a fluctuation</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">LIMITS (∧/∨)</td>
+                        <td>peaked at, hit a low of</td>
+                        <td>a peak, a low point</td>
+                    </tr>
+                </table>
+
+                <h3 style="margin-top: 30px;">2. Adverbs & Adjectives (How did it change?)</h3>
+                <p>Debes combinar el Verbo + Adverbio (ej. <em>rose dramatically</em>) o el Adjetivo + Sustantivo (ej. <em>a dramatic rise</em>).</p>
+                <table>
+                    <tr>
+                        <th>Speed/Size</th>
+                        <th>Adjectives</th>
+                        <th>Adverbs</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Big / Fast</strong></td>
+                        <td>dramatic, significant, sharp, steep, rapid</td>
+                        <td>dramatically, significantly, sharply, steeply, rapidly</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Moderate / Slow</strong></td>
+                        <td>moderate, steady, gradual</td>
+                        <td>moderately, steadily, gradually</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Small</strong></td>
+                        <td>slight, marginal</td>
+                        <td>slightly, marginally</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Sidebar Navigation Script
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.guide-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update Sidebar active state
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Scroll top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
