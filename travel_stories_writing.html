@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Stories Writing | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-yellow);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-yellow); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--accent-yellow); }
+        .tab-btn.active {
+            background: var(--accent-yellow); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(245, 176, 65, 0.4); border-color: var(--accent-yellow);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1100px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- TAB 1: THEORY --- */
+        .grid-theory {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+        }
+        @media (max-width: 800px) { .grid-theory { grid-template-columns: 1fr; } }
+
+        .theory-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        .theory-card h2 { margin-top: 0; color: var(--text-dark); display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+
+        /* Prepositions Table */
+        .prep-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .prep-table th, .prep-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .prep-table th { font-family: 'Poppins', sans-serif; color: var(--text-dark); }
+        .hl-prep { font-weight: bold; padding: 3px 8px; border-radius: 6px; }
+        .bg-by { background: #e0f2fe; color: #0284c7; }
+        .bg-in { background: #fef08a; color: #b45309; }
+        .bg-on { background: #dcfce7; color: #15803d; }
+
+        /* Phrasal Verbs List */
+        .pv-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px;}
+        .pv-item { background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-coral);}
+        .pv-title { font-weight: bold; color: var(--accent-coral); font-size: 1.1rem; display: block; margin-bottom: 5px;}
+        .pv-def { color: #555; font-size: 0.95rem; margin-bottom: 5px; display: block;}
+        .pv-ex { color: #888; font-style: italic; font-family: 'Merriweather', serif; font-size: 0.9rem;}
+
+        /* --- TAB 2: WRITING --- */
+        .writing-card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-dark);
+        }
+
+        .prompt-box {
+            background: #f0f8f8; padding: 20px; border-radius: 12px; border: 1px solid var(--primary-teal); margin-bottom: 25px;
+        }
+        .prompt-box h3 { margin-top: 0; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;}
+        .prompt-box p { color: #444; line-height: 1.6; margin-bottom: 0;}
+
+        .input-group { margin-bottom: 20px; }
+        .name-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; box-sizing: border-box; outline: none; transition: 0.3s;}
+        .name-input:focus { border-color: var(--accent-yellow); }
+
+        .writing-area {
+            width: 100%; height: 350px; padding: 20px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.1rem; resize: vertical; box-sizing: border-box; transition: 0.3s; line-height: 1.8;
+        }
+        .writing-area:focus { border-color: var(--accent-yellow); outline: none; box-shadow: 0 0 0 3px rgba(245, 176, 65, 0.2); }
+
+        .word-counter { text-align: right; font-size: 0.95rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
+        .word-counter.valid { color: #10b981; }
+
+        .checklist {
+            background: #fafafa; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; margin-top: 20px;
+        }
+        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px;}
+        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #444; margin-bottom: 8px;}
+        .checklist-item input[type="checkbox"] { accent-color: var(--accent-yellow); transform: scale(1.3); cursor: pointer;}
+
+        .btn-submit {
+            background: var(--text-dark); color: white; border: none; padding: 18px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-submit:hover { background: #444; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.2);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">flight_takeoff</span> Memorable Journeys</h1>
+        <div class="subtitle">Tell travel stories using Phrasal Verbs & Prepositions</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('theory-tab')"><span class="material-icons-round">luggage</span> 1. Travel Kit (Theory)</button>
+        <button class="tab-btn" onclick="switchTab('writing-tab')"><span class="material-icons-round">edit_note</span> 2. Writing Workspace</button>
+    </div>
+
+    <div class="container">
+
+        <!-- ================= TAB 1: THEORY ================= -->
+        <div id="theory-tab" class="view-section active">
+            <div class="grid-theory">
+                
+                <!-- PREPOSITIONS CARD -->
+                <div class="theory-card">
+                    <h2><span class="material-icons-round" style="color: var(--primary-teal);">directions_transit</span> Transport Prepositions</h2>
+                    <p style="color: #666; font-size: 0.95rem;">Las preposiciones de transporte en inglés siguen reglas estrictas. ¡No todo es "in"!</p>
+                    
+                    <table class="prep-table">
+                        <tr>
+                            <th>Preposition</th>
+                            <th>Rule</th>
+                            <th>Examples</th>
+                        </tr>
+                        <tr>
+                            <td><span class="hl-prep bg-by">BY</span></td>
+                            <td>Medios de transporte <strong>en general</strong> (sin artículos como "a" o "the").</td>
+                            <td><em>by car, by bus, by train, by plane, by boat.</em></td>
+                        </tr>
+                        <tr>
+                            <td><span class="hl-prep bg-in">IN</span></td>
+                            <td>Vehículos privados pequeños donde <strong>debes sentarte</strong> y no puedes caminar dentro.</td>
+                            <td><em>in a car, in a taxi, in a helicopter.</em></td>
+                        </tr>
+                        <tr>
+                            <td><span class="hl-prep bg-on">ON</span></td>
+                            <td>Transporte público grande donde <strong>puedes caminar</strong> dentro, O vehículos que montas (superficie).</td>
+                            <td><em>on a bus, on a train, on a plane, on a bike, on foot.</em></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- PHRASAL VERBS CARD -->
+                <div class="theory-card" style="border-top-color: var(--accent-coral);">
+                    <h2><span class="material-icons-round" style="color: var(--accent-coral);">chat_bubble</span> Travel Phrasal Verbs</h2>
+                    
+                    <ul class="pv-list">
+                        <li class="pv-item">
+                            <span class="pv-title">Set off / Set out</span>
+                            <span class="pv-def">Empezar un viaje (Start a journey).</span>
+                            <span class="pv-ex">"We <strong>set off</strong> early in the morning to avoid the traffic."</span>
+                        </li>
+                        <li class="pv-item">
+                            <span class="pv-title">Check in / Check out</span>
+                            <span class="pv-def">Registrarse al llegar / Pagar y salir del hotel.</span>
+                            <span class="pv-ex">"We <strong>checked in</strong> at the hotel and went straight to the pool."</span>
+                        </li>
+                        <li class="pv-item">
+                            <span class="pv-title">Take off / Land (Touch down)</span>
+                            <span class="pv-def">Despegar / Aterrizar.</span>
+                            <span class="pv-ex">"The plane <strong>took off</strong> an hour late because of the storm."</span>
+                        </li>
+                        <li class="pv-item">
+                            <span class="pv-title">Get on / Get off</span>
+                            <span class="pv-def">Subir / Bajar de un transporte público grande (bus, tren, avión).</span>
+                            <span class="pv-ex">"We <strong>got on</strong> the wrong train by mistake!"</span>
+                        </li>
+                        <li class="pv-item">
+                            <span class="pv-title">Look around</span>
+                            <span class="pv-def">Explorar un lugar caminando.</span>
+                            <span class="pv-ex">"We spent the afternoon <strong>looking around</strong> the old city."</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: WRITING WORKSPACE ================= -->
+        <div id="writing-tab" class="view-section">
+            <div class="writing-card">
+                
+                <div class="prompt-box">
+                    <h3><span class="material-icons-round">landscape</span> Writing Prompt: A Memorable Trip</h3>
+                    <p>Escribe sobre un viaje memorable que hayas hecho. Describe cómo empezó el viaje (el aeropuerto, la carretera), a dónde fuiste, cómo te moviste por el lugar y qué ocurrió allí. ¡Haz que la historia sea interesante!</p>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="student-name" class="name-input" placeholder="Enter your full name (e.g. Valeria Perez)" required>
+                </div>
+
+                <textarea class="writing-area" id="story-essay" placeholder="Two years ago, my family and I decided to visit... (Start your story here)" onkeyup="countWords()"></textarea>
+                <div class="word-counter" id="word-count">Words: 0 / 150</div>
+
+                <div class="checklist">
+                    <h4>✅ Story Checklist:</h4>
+                    <label class="checklist-item"><input type="checkbox" id="chk-words"> Escribí al menos 150 palabras.</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-pv"> Usé al menos <strong>3 Phrasal Verbs</strong> de viaje (ej. set off, took off, looked around).</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-prep"> Revisé mis <strong>Preposiciones de Transporte</strong> (by vs. in vs. on).</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-tense"> Escribí mi historia utilizando los Tiempos Narrativos (Pasado Simple y Continuo).</label>
+                </div>
+
+                <button class="btn-submit" onclick="generatePDF()">
+                    <span class="material-icons-round">send</span> Submit & Export PDF
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- WORD COUNTER ---
+        function countWords() {
+            const text = document.getElementById('story-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById('word-count');
+            
+            display.innerText = `Words: ${words} / 150`;
+            
+            if (words >= 150) {
+                display.classList.add('valid');
+                document.getElementById('chk-words').checked = true;
+            } else {
+                display.classList.remove('valid');
+                document.getElementById('chk-words').checked = false;
+            }
+        }
+
+        // --- PDF GENERATOR ---
+        function generatePDF() {
+            const studentName = document.getElementById('student-name').value.trim();
+            
+            if (!studentName) {
+                alert("Por favor, ingresa tu nombre antes de enviar la historia.");
+                return;
+            }
+
+            let allChecked = true;
+            ['chk-words', 'chk-pv', 'chk-prep', 'chk-tense'].forEach(id => { 
+                if (!document.getElementById(id).checked) allChecked = false; 
+            });
+
+            if (!allChecked) {
+                alert(`Hey ${studentName}, asegúrate de revisar tu texto y marcar todas las casillas de la Checklist antes de exportar.`);
+                return;
+            }
+
+            const text = document.getElementById('story-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            
+            if (words < 150) {
+                alert(`Tu historia solo tiene ${words} palabras. El mínimo para practicar correctamente es 150.`);
+                return;
+            }
+
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Document Styling
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(245, 176, 65); // Accent Yellow
+            doc.text("A Memorable Journey", 105, 25, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Author: ${studentName}`, 105, 33, null, null, "center");
+            doc.text(`Word Count: ${words} words`, 105, 40, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 47, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200);
+            doc.setLineWidth(1);
+            doc.line(20, 52, 190, 52); 
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            // Text splitting and rendering
+            const splitText = doc.splitTextToSize(text, 170);
+            doc.text(splitText, 20, 65, { lineHeightFactor: 1.6 });
+
+            // Footer
+            doc.setFont("helvetica", "bolditalic");
+            doc.setFontSize(10);
+            doc.setTextColor(93, 203, 195);
+            doc.text("Task submitted successfully via The HUB.", 105, 280, null, null, "center");
+
+            // Save File
+            const fileName = `${studentName.replace(/\s+/g, '_')}_Travel_Story.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
