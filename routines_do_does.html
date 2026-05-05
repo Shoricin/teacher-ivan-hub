@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Routines: Do & Does | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --chat-alex: #e2e8f0;
+            --chat-emma: #dcfce7;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-teal);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--accent-coral); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #777; margin-top: 5px; font-weight: 300; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- TAB 1: READING (CHAT) --- */
+        .chat-box {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow); margin-bottom: 30px;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+        
+        .chat-header {
+            text-align: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #eee;
+        }
+        .chat-header h2 { margin: 0; color: var(--primary-dark); font-size: 1.5rem; }
+        .chat-header p { margin: 5px 0 0 0; color: #666; font-size: 0.95rem; }
+
+        .message-container { display: flex; flex-direction: column; gap: 15px; }
+        
+        .msg-wrapper { display: flex; flex-direction: column; max-width: 75%; }
+        .msg-wrapper.left { align-self: flex-start; }
+        .msg-wrapper.right { align-self: flex-end; align-items: flex-end; }
+        
+        .msg-name { font-size: 0.85rem; color: #888; margin-bottom: 4px; margin-left: 10px; margin-right: 10px; font-weight: 600;}
+        
+        .msg-bubble {
+            padding: 15px 20px; border-radius: 20px; font-size: 1.05rem; line-height: 1.5; color: var(--text-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative;
+        }
+        .msg-wrapper.left .msg-bubble {
+            background-color: var(--chat-alex); border-bottom-left-radius: 5px;
+        }
+        .msg-wrapper.right .msg-bubble {
+            background-color: var(--chat-emma); border-bottom-right-radius: 5px;
+        }
+        
+        .highlight-grammar { font-weight: bold; color: #166534; }
+        .highlight-alex { font-weight: bold; color: #1e40af; }
+
+        .btn-continue {
+            background: var(--text-dark); color: white; border: none; padding: 15px 30px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-continue:hover { background: #444; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+
+        /* --- TAB 2: QUIZ --- */
+        .quiz-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+
+        .quiz-intro { text-align: center; margin-bottom: 30px; }
+        .quiz-intro h2 { margin: 0; color: var(--accent-coral); font-size: 1.8rem; }
+        .quiz-intro p { color: #666; margin-top: 5px; }
+
+        .question-card { background: #f8fafc; padding: 25px; border-radius: 12px; border-left: 5px solid var(--primary-teal); margin-bottom: 20px; transition: 0.3s;}
+        .question-text { font-weight: bold; font-size: 1.1rem; color: var(--primary-dark); margin: 0 0 15px 0;}
+        
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .option-label {
+            display: flex; align-items: center; gap: 12px; background: white; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 1rem;
+        }
+        .option-label:hover { border-color: var(--primary-teal); }
+        .option-label input[type="radio"] { transform: scale(1.2); accent-color: var(--primary-teal); }
+        
+        /* Correct / Incorrect states */
+        .option-label.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; font-weight: bold;}
+        .option-label.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .question-card.locked { pointer-events: none; opacity: 0.9; }
+
+        .score-display {
+            text-align: center; font-size: 1.5rem; font-weight: bold; color: var(--primary-dark); margin-top: 20px; display: none; padding: 20px; background: #f0f8f8; border-radius: 12px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round">forum</span> Daily Routines</h1>
+        <div class="subtitle">Ask questions and give short answers with Do and Does</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btn-tab-reading" onclick="switchTab('reading-tab')"><span class="material-icons-round">chat</span> 1. Conversation</button>
+        <button class="tab-btn" id="btn-tab-quiz" onclick="switchTab('quiz-tab')"><span class="material-icons-round">quiz</span> 2. Reading Quiz</button>
+    </div>
+
+    <div class="container">
+
+        <!-- ================= TAB 1: READING (CHAT) ================= -->
+        <div id="reading-tab" class="view-section active">
+            <div class="chat-box">
+                <div class="chat-header">
+                    <h2>Alex & Emma</h2>
+                    <p>Read the conversation carefully to answer the quiz later.</p>
+                </div>
+
+                <div class="message-container">
+                    
+                    <!-- Alex -->
+                    <div class="msg-wrapper left">
+                        <span class="msg-name">Alex</span>
+                        <div class="msg-bubble">
+                            Hi Emma! <span class="highlight-alex">Do you</span> wake up early on weekends? ☀️
+                        </div>
+                    </div>
+
+                    <!-- Emma -->
+                    <div class="msg-wrapper right">
+                        <span class="msg-name">Emma</span>
+                        <div class="msg-bubble">
+                            <span class="highlight-grammar">No, I don't.</span> I usually sleep until 10:00 AM on Saturdays. I love sleeping! What about you? <span class="highlight-alex">Do you</span> exercise in the morning?
+                        </div>
+                    </div>
+
+                    <!-- Alex -->
+                    <div class="msg-wrapper left">
+                        <span class="msg-name">Alex</span>
+                        <div class="msg-bubble">
+                            <span class="highlight-grammar">Yes, I do.</span> I go to the gym at 8:00 AM. <br><br>By the way, <span class="highlight-alex">does your brother</span> go to the gym too?
+                        </div>
+                    </div>
+
+                    <!-- Emma -->
+                    <div class="msg-wrapper right">
+                        <span class="msg-name">Emma</span>
+                        <div class="msg-bubble">
+                            <span class="highlight-grammar">No, he doesn't.</span> He hates the gym. He plays soccer in the park every afternoon. ⚽
+                        </div>
+                    </div>
+
+                    <!-- Alex -->
+                    <div class="msg-wrapper left">
+                        <span class="msg-name">Alex</span>
+                        <div class="msg-bubble">
+                            Oh, cool! <span class="highlight-alex">Does he</span> work on the weekends?
+                        </div>
+                    </div>
+
+                    <!-- Emma -->
+                    <div class="msg-wrapper right">
+                        <span class="msg-name">Emma</span>
+                        <div class="msg-bubble">
+                            <span class="highlight-grammar">Yes, he does.</span> He works at a coffee shop on Sunday mornings. ☕ <span class="highlight-alex">Do you</span> want to go there tomorrow?
+                        </div>
+                    </div>
+
+                    <!-- Alex -->
+                    <div class="msg-wrapper left">
+                        <span class="msg-name">Alex</span>
+                        <div class="msg-bubble">
+                            <span class="highlight-grammar">Yes, I do!</span> See you tomorrow!
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="btn-continue" onclick="switchTab('quiz-tab')">
+                    <span class="material-icons-round">arrow_forward</span> I have read the conversation. Go to Quiz!
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: QUIZ ================= -->
+        <div id="quiz-tab" class="view-section">
+            <div class="quiz-box">
+                <div class="quiz-intro">
+                    <h2>Reading Comprehension & Grammar</h2>
+                    <p>Select the correct answer based on the conversation and the grammar rules.</p>
+                </div>
+
+                <div id="quiz-container">
+                    <!-- Quiz Questions Injected by JS -->
+                </div>
+
+                <button class="btn-continue" id="btn-check-answers" onclick="checkAnswers()" style="background: var(--primary-teal);">
+                    <span class="material-icons-round">done_all</span> Check Answers
+                </button>
+
+                <div class="score-display" id="score-display"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- TAB NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'reading-tab') document.getElementById('btn-tab-reading').classList.add('active');
+            if(tabId === 'quiz-tab') document.getElementById('btn-tab-quiz').classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- QUIZ DATA ---
+        const quizData = [
+            {
+                question: "1. Does Emma wake up early on weekends?",
+                options: ["Yes, she does.", "No, she doesn't.", "Yes, I do."],
+                answer: 1 // index 1 is correct
+            },
+            {
+                question: "2. Do Alex and Emma exercise in the morning?",
+                options: ["Yes, they do.", "No, they don't. Only Alex exercises.", "No, they doesn't."],
+                answer: 1
+            },
+            {
+                question: "3. Does Emma's brother go to the gym?",
+                options: ["Yes, he do.", "No, he don't.", "No, he doesn't."],
+                answer: 2
+            },
+            {
+                question: "4. Grammar check: ____ you want to go to the coffee shop?",
+                options: ["Do", "Does", "Are"],
+                answer: 0
+            },
+            {
+                question: "5. Grammar check: ____ he work on the weekends?",
+                options: ["Do", "Does", "Is"],
+                answer: 1
+            }
+        ];
+
+        // --- RENDER QUIZ ---
+        const quizContainer = document.getElementById('quiz-container');
+        
+        quizData.forEach((q, index) => {
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label" id="label-q${index}-o${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            quizContainer.innerHTML += `
+                <div class="question-card" id="qcard-${index}">
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-grid">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        });
+
+        // --- CHECK ANSWERS ---
+        function checkAnswers() {
+            let score = 0;
+            let allAnswered = true;
+
+            // Check if all questions are answered
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (!selected) allAnswered = false;
+            });
+
+            if (!allAnswered) {
+                alert("Please answer all the questions before checking!");
+                return;
+            }
+
+            // Evaluate answers
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const selectedVal = parseInt(selected.value);
+                
+                // Lock the question card
+                document.getElementById(`qcard-${index}`).classList.add('locked');
+
+                // Check correct or wrong
+                if (selectedVal === q.answer) {
+                    score++;
+                    document.getElementById(`label-q${index}-o${selectedVal}`).classList.add('correct');
+                } else {
+                    document.getElementById(`label-q${index}-o${selectedVal}`).classList.add('wrong');
+                    // Highlight the correct one so the student learns
+                    document.getElementById(`label-q${index}-o${q.answer}`).classList.add('correct');
+                }
+            });
+
+            // Hide check button and show score
+            document.getElementById('btn-check-answers').style.display = 'none';
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.style.display = 'block';
+            
+            if (score === quizData.length) {
+                scoreDisplay.innerHTML = `🎉 Perfect! You scored ${score} out of ${quizData.length}!`;
+                scoreDisplay.style.color = '#166534';
+                scoreDisplay.style.backgroundColor = '#dcfce7';
+            } else if (score >= quizData.length / 2) {
+                scoreDisplay.innerHTML = `👍 Good job! You scored ${score} out of ${quizData.length}.`;
+                scoreDisplay.style.color = '#b45309';
+                scoreDisplay.style.backgroundColor = '#fef3c7';
+            } else {
+                scoreDisplay.innerHTML = `📚 Keep practicing! You scored ${score} out of ${quizData.length}.`;
+                scoreDisplay.style.color = '#991b1b';
+                scoreDisplay.style.backgroundColor = '#fee2e2';
+            }
+        }
+    </script>
+</body>
+</html>
