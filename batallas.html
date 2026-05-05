@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad Bicentenario - Colegio Fielding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --fielding-green: #2E5A27;
+            --fielding-gold: #D4AF37;
+            --fielding-grey: #4F4F4F;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--fielding-grey);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--fielding-green);
+        }
+
+        /* Encabezado Estilo Colegio */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--fielding-gold);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--fielding-green);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .logo-placeholder {
+            font-weight: 700;
+            color: var(--fielding-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Información del Estudiante */
+        .student-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--fielding-green);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Secciones de Trabajo */
+        h2 {
+            color: var(--fielding-green);
+            margin: 30px 0 15px;
+            border-left: 5px solid var(--fielding-gold);
+            padding-left: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            resize: none;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--fielding-green);
+        }
+
+        .counter {
+            text-align: right;
+            margin-top: 10px;
+            font-weight: 700;
+            color: var(--fielding-grey);
+        }
+
+        .counter.ready {
+            color: #27ae60;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            background: var(--fielding-green);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #1e3d1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background: var(--fielding-gold);
+        }
+
+        /* Quiz Secreto */
+        #quiz-section {
+            display: none;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 3px dashed var(--fielding-gold);
+        }
+
+        .timer-sticky {
+            position: sticky;
+            top: 20px;
+            background: var(--fielding-green);
+            color: white;
+            padding: 15px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            z-index: 100;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .question-card {
+            background: #fcfcfc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .options label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .options label:hover {
+            background: #f0f4ef;
+        }
+
+        .hidden { display: none; }
+
+        /* Estilos de Impresión */
+        @media print {
+            .no-print, .btn, .timer-sticky, .counter {
+                display: none !important;
+            }
+            body { background: white; }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-top: none;
+            }
+            textarea { border: none; height: auto; }
+            .question-card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="logo-placeholder">Colegio Fielding Bolivia</span>
+        <h1>Bicentenario de Junín y Ayacucho</h1>
+        <p>Asignatura: Historia | Prof. Iván Mancilla Copa</p>
+    </header>
+
+    <div class="student-box">
+        <div class="input-group">
+            <label>Nombre Completo:</label>
+            <input type="text" id="name" placeholder="Ej. Juan Pérez">
+        </div>
+        <div class="input-group">
+            <label>Curso:</label>
+            <input type="text" id="grade" placeholder="Ej. 4to de Secundaria">
+        </div>
+    </div>
+
+    <section id="summary-section">
+        <h2>Parte 1: Resumen Crítico</h2>
+        <p style="margin-bottom: 15px;">Escribe un análisis de al menos 200 palabras sobre el video observado.</p>
+        <textarea id="summary" placeholder="Escribe aquí tu resumen..."></textarea>
+        <div id="word-count" class="counter">Palabras: 0 / 200</div>
+        
+        <div style="text-align: center;">
+            <button id="unlock-btn" class="btn hidden" onclick="startQuiz()">
+                <i class="fa-solid fa-lock-open"></i> Desbloquear Evaluación Final
+            </button>
+        </div>
+    </section>
+
+    <section id="quiz-section">
+        <div class="timer-sticky no-print">
+            <i class="fa-solid fa-clock"></i> Tiempo Restante: <span id="timer">05:00</span>
+        </div>
+        
+        <h2>Parte 2: Quiz de Consolidación</h2>
+        <div id="quiz-container">
+            </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn btn-gold no-print" onclick="finishAndPrint()">
+                <i class="fa-solid fa-file-pdf"></i> Finalizar y Guardar PDF
+            </button>
+        </div>
+    </section>
+</div>
+
+<script>
+    const summaryArea = document.getElementById('summary');
+    const wordCountDisplay = document.getElementById('word-count');
+    const unlockBtn = document.getElementById('unlock-btn');
+    const quizSection = document.getElementById('quiz-section');
+    
+    // 1. Lógica del contador de palabras
+    summaryArea.addEventListener('input', () => {
+        const text = summaryArea.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        wordCountDisplay.innerText = `Palabras: ${words} / 200`;
+
+        if (words >= 200) {
+            wordCountDisplay.classList.add('ready');
+            unlockBtn.classList.remove('hidden');
+        } else {
+            wordCountDisplay.classList.remove('ready');
+            unlockBtn.classList.add('hidden');
+        }
+    });
+
+    // 2. Base de Datos de Preguntas
+    const questions = [
+        { q: "¿En qué año ocurrió el primer grito libertario en Tacna por Francisco de Zela?", options: ["1811", "1821", "1824"] },
+        { q: "¿Quién lideró la gran rebelión indígena de 1780?", options: ["Túpac Amaru II", "Manco Inca", "Francisco de Zela"] },
+        { q: "¿Qué fecha se proclamó la Independencia del Perú?", options: ["28 de julio de 1821", "6 de agosto de 1824", "9 de diciembre de 1824"] },
+        { q: "¿Dónde fue la histórica entrevista entre Bolívar y San Martín?", options: ["Guayaquil", "Lima", "Ayacucho"] },
+        { q: "¿Qué cargo recibió Simón Bolívar en el Perú?", options: ["Dictador", "Presidente", "Virrey"] },
+        { q: "¿Quiénes eran los 'Montoneros'?", options: ["Guerrilleros andinos", "Soldados españoles", "Músicos patriotas"] },
+        { q: "¿Qué rol cumplían las 'Rabonas'?", options: ["Logística y salud", "Espionaje", "Lucha en primera línea"] },
+        { q: "¿Qué característica tuvo la Batalla de Junín?", options: ["Fue solo de caballería", "Fue naval", "Fue un asedio"] },
+        { q: "¿Qué armas se usaron en Junín?", options: ["Sables y lanzas", "Cañones", "Bayonetas"] },
+        { q: "¿Qué oficial desobedeció una orden y dio la victoria en Junín?", options: ["José Andrés Rázuri", "Sucre", "La Mar"] },
+        { q: "¿A qué escuadrón pertenecía Rázuri?", options: ["Húsares del Perú", "Granaderos", "Dragones"] },
+        { q: "¿En qué pampa se libró la Batalla de Ayacucho?", options: ["Pampa de la Quinua", "Pampa de Junín", "Maipú"] },
+        { q: "¿Quién comandó al ejército patriota en Ayacucho?", options: ["Sucre", "Bolívar", "San Martín"] },
+        { q: "¿Qué virrey fue capturado en Ayacucho?", options: ["La Serna", "Abascal", "Pezuela"] },
+        { q: "¿Qué documento selló la independencia?", options: ["Capitulación de Ayacucho", "Acta de Lima", "Tratado de Madrid"] },
+        { q: "¿A qué altura se libró Junín?", options: ["Más de 4,000 m.s.n.m.", "2,000 m.s.n.m.", "500 m.s.n.m."] },
+        { q: "¿Qué países formaban el Ejército Unido?", options: ["Perú, Colombia, Argentina, Chile", "Solo Perú", "Perú y Brasil"] },
+        { q: "¿Cuánto tiempo duró la Batalla de Junín?", options: ["45 minutos", "Toda una noche", "3 días"] },
+        { q: "¿Qué cerro dominaba la vista en Ayacucho?", options: ["Condorcunca", "San Cristóbal", "Misti"] },
+        { q: "¿Qué celebramos con el Bicentenario?", options: ["200 años de libertad", "100 años", "50 años"] }
+    ];
+
+    // 3. Iniciar Quiz y Timer
+    function startQuiz() {
+        const name = document.getElementById('name').value;
+        if (!name) return alert("Por favor ingresa tu nombre antes de continuar.");
+        
+        quizSection.style.display = 'block';
+        document.getElementById('summary-section').style.display = 'none';
+        
+        renderQuiz();
+        startTimer();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.innerHTML = `
+                <p><strong>${i+1}. ${q.q}</strong></p>
+                <div class="options">
+                    ${q.options.map(opt => `<label><input type="radio" name="q${i}"> ${opt}</label>`).join('')}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    let timeLeft = 300;
+    function startTimer() {
+        const timerDisplay = document.getElementById('timer');
+        const interval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.innerText = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                alert("¡Tiempo terminado!");
+                finishAndPrint();
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    // 4. Finalizar e Imprimir
+    function finishAndPrint() {
+        document.getElementById('summary-section').style.display = 'block'; // Volver a mostrar resumen para el PDF
+        window.print();
+    }
+</script>
+
+</body>
+</html>
