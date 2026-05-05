@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2 Final Test | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #5dcbc3;
+            --primary-dark: #3aa39b;
+            --accent-coral: #ff9a8b;
+            --accent-yellow: #f5b041;
+            --text-dark: #2d2d2d;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-coral);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #a5b1c2; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #cbd5e1; margin-top: 5px; font-weight: 300; font-size: 1.1rem;}
+
+        /* TIMER STICKY */
+        .global-timer {
+            position: fixed; top: 20px; right: 20px; background: var(--white); color: var(--text-dark);
+            padding: 10px 25px; border-radius: 50px; font-size: 1.5rem; font-weight: bold; font-family: monospace;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; border: 3px solid var(--accent-coral); display: none;
+        }
+        .global-timer.warning { color: var(--white); background: var(--accent-coral); animation: pulse 1s infinite; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #777;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(93, 203, 195, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- TAB 1: REVIEW GUIDE --- */
+        .review-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;
+        }
+        .review-card {
+            background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--primary-teal);
+        }
+        .review-card h3 { margin-top: 0; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .review-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;}
+        .review-list li { font-size: 0.95rem; color: #444; line-height: 1.6; background: #f8fafc; padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-yellow);}
+        .review-list strong { color: var(--text-dark); }
+        .highlight-grammar { color: #8b5cf6; font-weight: bold; }
+
+        /* --- TAB 2: EXAM WORKSPACE --- */
+        .exam-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-coral);
+        }
+        .exam-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+        .exam-header h2 { margin: 0; color: var(--text-dark); display: flex; align-items: center; gap: 8px;}
+        
+        .name-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 20px; outline:none;}
+        .name-input:focus { border-color: var(--primary-teal); }
+
+        .scenario-selector { margin-bottom: 25px; }
+        .scenario-selector label { font-weight: bold; color: var(--text-dark); margin-bottom: 10px; display: block;}
+        .scenario-select { width: 100%; padding: 15px; border: 2px solid var(--primary-teal); border-radius: 10px; font-family: 'Poppins', sans-serif; font-size: 1rem; color: var(--primary-dark); background: #f0f8f8; outline: none; cursor: pointer; font-weight: bold;}
+        
+        .scenario-desc { background: #fffbeb; border: 1px dashed var(--accent-yellow); padding: 20px; border-radius: 10px; margin-bottom: 25px; color: #92400e; line-height: 1.6;}
+
+        .writing-area {
+            width: 100%; height: 400px; padding: 20px; border: 2px solid #ddd; border-radius: 12px;
+            font-family: 'Merriweather', serif; font-size: 1.1rem; resize: vertical; box-sizing: border-box; transition: 0.3s; line-height: 1.8;
+        }
+        .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(93,203,195,0.2); }
+        .writing-area.locked { background: #f1f5f9; border-color: #ef4444; color: #64748b; cursor: not-allowed; }
+
+        .word-counter { text-align: right; font-size: 1rem; font-weight: bold; margin-top: 8px; color: #ef4444; }
+        .word-counter.valid { color: #10b981; }
+
+        .checklist {
+            background: #fafafa; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; margin-top: 25px;
+        }
+        .checklist h4 { margin-top: 0; color: var(--text-dark); margin-bottom: 10px; font-size: 1.1rem;}
+        .checklist-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.95rem; color: #444; margin-bottom: 8px;}
+        .checklist-item input[type="checkbox"] { margin-top: 4px; accent-color: var(--primary-teal); transform: scale(1.3); cursor: pointer;}
+
+        .btn-submit {
+            background: var(--accent-coral); color: white; border: none; padding: 18px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(255, 154, 139, 0.3);
+        }
+        .btn-submit:hover { background: #e11d48; transform: translateY(-2px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round" style="font-size: 2.5rem;">military_tech</span> Unit 2 Final Test</h1>
+        <div class="subtitle">Prove your mastery: Narrative Tenses, Connectors & Travel Vocab</div>
+    </header>
+
+    <div class="global-timer" id="global-timer">30:00</div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('review-tab')"><span class="material-icons-round">lightbulb</span> 1. Survival Guide (Review)</button>
+        <button class="tab-btn" onclick="switchTab('exam-tab')"><span class="material-icons-round">edit_note</span> 2. The 30-Min Challenge</button>
+    </div>
+
+    <div class="container">
+
+        <!-- ================= TAB 1: REVIEW GUIDE ================= -->
+        <div id="review-tab" class="view-section active">
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p style="color: #555; font-size: 1.1rem;">Antes de iniciar el examen, dale un último repaso a estas estructuras. Una vez que pases a la segunda pestaña, <strong>el reloj no se detendrá</strong>.</p>
+            </div>
+
+            <div class="review-grid">
+                <!-- Narrative Tenses -->
+                <div class="review-card" style="border-top-color: #8b5cf6;">
+                    <h3 style="color: #6d28d9;"><span class="material-icons-round">history</span> Narrative Tenses</h3>
+                    <ul class="review-list">
+                        <li><strong>Past Simple:</strong> Acciones principales que hacen avanzar la historia. <br><em>"The engine <span class="highlight-grammar">stopped</span> suddenly."</em></li>
+                        <li><strong>Past Continuous:</strong> Describir el fondo o una acción interrumpida. <br><em>"We <span class="highlight-grammar">were sleeping</span> when the alarm rang."</em></li>
+                        <li><strong>Past Perfect:</strong> Algo que sucedió ANTES de otra acción en el pasado. <br><em>"I realized I <span class="highlight-grammar">had lost</span> my passport."</em></li>
+                        <li><strong>Past Perfect Continuous:</strong> Una acción larga que ocurrió antes de otra en el pasado. <br><em>"We <span class="highlight-grammar">had been walking</span> for hours before we found water."</em></li>
+                    </ul>
+                </div>
+
+                <!-- Connectors -->
+                <div class="review-card" style="border-top-color: var(--accent-yellow);">
+                    <h3 style="color: #b45309;"><span class="material-icons-round">link</span> Advanced Connectors</h3>
+                    <ul class="review-list">
+                        <li><strong>By the time:</strong> Para cuando. (Usa Past Perfect). <br><em>"By the time we arrived, the plane had left."</em></li>
+                        <li><strong>As soon as:</strong> Inmediatamente después. <br><em>"As soon as we landed, I called my mom."</em></li>
+                        <li><strong>Meanwhile:</strong> Mientras tanto. <br><em>"I packed the bags; meanwhile, he called a taxi."</em></li>
+                        <li><strong>Eventually:</strong> Finalmente, a la larga. <br><em>"After three delayed flights, we eventually arrived."</em></li>
+                    </ul>
+                </div>
+
+                <!-- Travel Vocab -->
+                <div class="review-card" style="border-top-color: var(--primary-teal);">
+                    <h3 style="color: var(--primary-dark);"><span class="material-icons-round">flight_takeoff</span> Travel Vocabulary</h3>
+                    <ul class="review-list">
+                        <li><strong>Prepositions:</strong> <br><em>IN</em> a car/taxi (privado). <br><em>ON</em> a bus/plane/train/ship (público). <br><em>BY</em> car/bus (general).</li>
+                        <li><strong>Phrasal Verbs:</strong> <br><em>Set off:</em> Iniciar viaje.<br><em>Take off:</em> Despegar.<br><em>Hold up:</em> Retrasar.<br><em>Get on/off:</em> Subir/Bajar de un transporte público.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: EXAM WORKSPACE ================= -->
+        <div id="exam-tab" class="view-section">
+            <div class="exam-box">
+                <div class="exam-header">
+                    <h2><span class="material-icons-round" style="color: var(--accent-coral);">timer</span> Writing Test: Imaginary Journeys</h2>
+                </div>
+                
+                <input type="text" class="name-input" id="student-name" placeholder="Escribe tu Nombre y Apellido..." required>
+
+                <div class="scenario-selector">
+                    <label>Choose your imaginary travel scenario:</label>
+                    <select class="scenario-select" id="prompt-select" onchange="updatePrompt()">
+                        <option value="mars">Scenario A: The Mars Colony Disaster</option>
+                        <option value="time">Scenario B: The Time-Travel Mishap</option>
+                        <option value="jungle">Scenario C: Lost in the Bermuda Triangle</option>
+                    </select>
+                </div>
+
+                <div class="scenario-desc" id="prompt-description">
+                    <strong>The Mars Colony Disaster:</strong> Escribe una historia sobre tus vacaciones hacia la nueva colonia humana en Marte. Todo iba bien hasta que la nave sufrió un desperfecto en pleno viaje espacial. ¿Qué estaban haciendo? ¿Qué había pasado antes de la alarma? ¿Cómo se salvaron?
+                </div>
+
+                <textarea class="writing-area" id="exam-essay" placeholder="Escribe tu historia aquí..." onkeyup="countWords()"></textarea>
+                <div class="word-counter" id="word-count">Words: 0 / 250</div>
+
+                <div class="checklist">
+                    <h4>✅ Final Test Rubric (Did you include...?)</h4>
+                    <label class="checklist-item"><input type="checkbox" id="chk-words"> I reached the <strong>250 words</strong> target.</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-tenses"> I used all Narrative Tenses (Simple, Continuous, Perfect, Perf. Continuous).</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-conn"> I used Advanced Connectors (Meanwhile, As soon as, By the time).</label>
+                    <label class="checklist-item"><input type="checkbox" id="chk-vocab"> I used correct Travel Prepositions (in, on, by) and Phrasal Verbs.</label>
+                </div>
+
+                <button class="btn-submit" id="btn-submit-exam" onclick="submitExam()">
+                    <span class="material-icons-round">picture_as_pdf</span> Finish & Export Exam
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Audio Alarma -->
+    <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3" preload="auto"></audio>
+
+    <script>
+        // --- PROMPT DESCRIPTIONS ---
+        const promptsInfo = {
+            mars: "<strong>The Mars Colony Disaster:</strong> Escribe una historia sobre tus vacaciones hacia la nueva colonia humana en Marte. Todo iba bien hasta que la nave (spaceship) sufrió un desperfecto en pleno viaje espacial. ¿Qué estaban haciendo? ¿Qué había pasado antes de la alarma? ¿Cómo se salvaron?",
+            time: "<strong>The Time-Travel Mishap:</strong> Compraste un viaje en el tiempo para visitar el París de los años 20, pero la máquina se averió y aterrizaste en la época de los dinosaurios. Relata tu llegada, los peligros que enfrentaste y cómo lograste escapar usando los tiempos narrativos.",
+            jungle: "<strong>Lost in the Bermuda Triangle:</strong> Ibas viajando en un crucero de lujo por el Caribe cuando una extraña tormenta los hizo naufragar en una isla desconocida. Relata el viaje, el accidente y tu supervivencia combinando vocabulario de viajes y conectores avanzados."
+        };
+
+        function updatePrompt() {
+            const selectVal = document.getElementById('prompt-select').value;
+            document.getElementById('prompt-description').innerHTML = promptsInfo[selectVal];
+        }
+
+        // --- TAB NAVIGATION & TIMER ---
+        let timerStarted = false;
+        let timerInterval = null;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'review-tab') document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            if(tabId === 'exam-tab') document.querySelectorAll('.tab-btn')[1].classList.add('active');
+
+            // Start timer ONLY when entering the Exam Tab for the first time
+            if (tabId === 'exam-tab' && !timerStarted) {
+                startGlobalTimer(1800); // 30 minutes in seconds (1800)
+            }
+        }
+
+        function startGlobalTimer(duration) {
+            timerStarted = true;
+            let timer = duration;
+            const display = document.getElementById('global-timer');
+            display.style.display = "block";
+
+            alert("⚠️ UNIT 2 FINAL TEST: El tiempo ha comenzado.\nTienes exactamente 30 minutos para escribir tu historia de 250 palabras. ¡Mucha suerte!");
+
+            timerInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (timer <= 300) { // 5 minutes warning
+                    display.classList.add('warning');
+                }
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    lockdownExam();
+                }
+            }, 1000);
+        }
+
+        // --- WORD COUNTER ---
+        function countWords() {
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById('word-count');
+            
+            display.innerText = `Words: ${words} / 250`;
+            
+            if (words >= 250) {
+                display.classList.add('valid');
+            } else {
+                display.classList.remove('valid');
+            }
+        }
+
+        // --- LOCKDOWN EXAM ---
+        function lockdownExam() {
+            document.getElementById('alarm-sound').play();
+            document.getElementById('global-timer').innerHTML = "00:00";
+            
+            // Disable Writing
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('prompt-select').disabled = true;
+            document.getElementById('student-name').readOnly = true;
+
+            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nTu examen ha sido bloqueado. Haz clic en Aceptar para generar el PDF de tu evaluación.");
+            
+            // Auto generate PDF
+            generatePDF();
+        }
+
+        // --- SUBMIT EXAM MANUAL ---
+        function submitExam() {
+            const name = document.getElementById('student-name').value.trim();
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+
+            if (!name) {
+                alert("Por favor, ingresa tu nombre y apellido antes de enviar.");
+                return;
+            }
+
+            if (words < 250) {
+                const proceed = confirm(`⚠️ Atención: Llevas ${words} palabras. El objetivo es 250. Perderás puntos por no alcanzar el límite.\n\n¿Estás seguro de que quieres entregar tu examen ahora?`);
+                if (!proceed) return;
+            }
+
+            // Stop timer and lock
+            clearInterval(timerInterval);
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('global-timer').style.display = "none";
+            document.getElementById('btn-submit-exam').style.display = "none";
+
+            alert("¡Examen completado exitosamente! Generando PDF...");
+            generatePDF();
+        }
+
+        // --- PDF GENERATOR ---
+        function generatePDF() {
+            const studentName = document.getElementById('student-name').value.trim() || "Student";
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const selectEl = document.getElementById('prompt-select');
+            const scenarioName = selectEl.options[selectEl.selectedIndex].text;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Cover / Title
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(255, 154, 139); // Coral
+            doc.text("Unit 2 Final Test", 105, 20, null, null, "center");
+
+            doc.setFontSize(14);
+            doc.setTextColor(40, 40, 40);
+            doc.text(`Scenario: ${scenarioName}`, 105, 30, null, null, "center");
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Student: ${studentName}`, 105, 40, null, null, "center");
+            doc.text(`Word Count: ${words} words`, 105, 46, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 52, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); 
+            doc.line(20, 58, 190, 58); 
+
+            // Body
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            let splitText = doc.splitTextToSize(text || "[No answer provided]", 170);
+            doc.text(splitText, 20, 70, { lineHeightFactor: 1.6 });
+
+            // Save File
+            const fileName = `${studentName.replace(/\s+/g, '_')}_Unit2_FinalTest.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
