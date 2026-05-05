@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcane Analysis - Colegio Fielding</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --fielding-green: #2E5A27;
+            --fielding-gold: #D4AF37;
+            --fielding-grey: #4F4F4F;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--fielding-grey);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--fielding-green);
+        }
+
+        /* Encabezado Estilo Colegio */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--fielding-gold);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--fielding-green);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .logo-placeholder {
+            font-weight: 700;
+            color: var(--fielding-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .grading-info {
+            background-color: #f0f4ef;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--fielding-green);
+        }
+
+        .grading-info strong {
+            color: var(--fielding-green);
+        }
+
+        /* Información del Estudiante */
+        .student-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--fielding-green);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Secciones de Trabajo */
+        h2 {
+            color: var(--fielding-green);
+            margin: 30px 0 15px;
+            border-left: 5px solid var(--fielding-gold);
+            padding-left: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            resize: none;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--fielding-green);
+        }
+
+        .counter {
+            text-align: right;
+            margin-top: 10px;
+            font-weight: 700;
+            color: var(--fielding-grey);
+        }
+
+        .counter.ready {
+            color: #27ae60;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            background: var(--fielding-green);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #1e3d1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background: var(--fielding-gold);
+        }
+
+        /* Quiz Secreto */
+        #quiz-section {
+            display: none;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 3px dashed var(--fielding-gold);
+        }
+
+        .timer-sticky {
+            position: sticky;
+            top: 20px;
+            background: var(--fielding-green);
+            color: white;
+            padding: 15px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            z-index: 100;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .question-card {
+            background: #fcfcfc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .options label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .options label:hover {
+            background: #f0f4ef;
+        }
+
+        .hidden { display: none; }
+
+        /* Estilos de Impresión */
+        @media print {
+            .no-print, .btn, .timer-sticky, .counter {
+                display: none !important;
+            }
+            body { background: white; }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-top: none;
+                padding: 0;
+            }
+            textarea { border: none; height: auto; padding: 0; }
+            .question-card { page-break-inside: avoid; border: none; border-bottom: 1px solid #ccc; }
+            .options label { border: none; padding: 5px 0; }
+            .grading-info { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="logo-placeholder">Colegio Fielding Bolivia</span>
+        <h1>Análisis de la Serie: Arcane (Episodios 1 y 2)</h1>
+        <p>Asignatura: Inglés | Prof. Iván Mancilla Copa</p>
+    </header>
+
+    <div class="grading-info no-print">
+        <strong>Ponderación del Registro Pedagógico:</strong><br>
+        • <strong>Saber (45 pts):</strong> Precisión en las respuestas del cuestionario de comprensión.<br>
+        • <strong>Hacer (40 pts):</strong> Calidad, redacción y análisis en el resumen escrito.<br>
+        • <strong>Ser (10 pts):</strong> Responsabilidad y manejo del tiempo límite.<br>
+        • <strong>Autoevaluación (5 pts):</strong> A completar presencialmente en el aula.
+    </div>
+
+    <div class="student-box">
+        <div class="input-group">
+            <label>Nombre Completo:</label>
+            <input type="text" id="name" placeholder="Ej. Tatiana Thompson">
+        </div>
+        <div class="input-group">
+            <label>Curso:</label>
+            <input type="text" id="grade" placeholder="Ej. 3ro de Secundaria">
+        </div>
+    </div>
+
+    <section id="summary-section">
+        <h2>Parte 1: Resumen Analítico / Summary</h2>
+        <p style="margin-bottom: 15px;">Escribe un análisis crítico de al menos <strong>200 palabras</strong> sobre los dos primeros episodios. Enfócate en las diferencias sociales y económicas entre Piltover y Zaun, la relación entre Vi y Powder, y las motivaciones del investigador Jayce Talis.</p>
+        <textarea id="summary" placeholder="Comienza a escribir tu resumen aquí (Puedes redactarlo en inglés o español según la indicación del profesor)..."></textarea>
+        <div id="word-count" class="counter">Palabras: 0 / 200</div>
+        
+        <div style="text-align: center;">
+            <button id="unlock-btn" class="btn hidden" onclick="startQuiz()">
+                <i class="fa-solid fa-lock-open"></i> Desbloquear Evaluación (Saber)
+            </button>
+        </div>
+    </section>
+
+    <section id="quiz-section">
+        <div class="timer-sticky no-print">
+            <i class="fa-solid fa-clock"></i> Tiempo Restante: <span id="timer">05:00</span>
+        </div>
+        
+        <h2>Parte 2: Cuestionario de Comprensión</h2>
+        <div class="no-print" style="margin-bottom: 20px; color: var(--fielding-green);">
+            <em>Advertencia: Tienes 5 minutos para completar estas 20 preguntas. Al finalizar, el formulario se bloqueará automáticamente.</em>
+        </div>
+        <div id="quiz-container">
+            <!-- Preguntas generadas por JS -->
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn btn-gold no-print" onclick="finishAndPrint()">
+                <i class="fa-solid fa-file-pdf"></i> Finalizar y Guardar PDF
+            </button>
+        </div>
+    </section>
+</div>
+
+<script>
+    const summaryArea = document.getElementById('summary');
+    const wordCountDisplay = document.getElementById('word-count');
+    const unlockBtn = document.getElementById('unlock-btn');
+    const quizSection = document.getElementById('quiz-section');
+    
+    // 1. Lógica del contador de palabras
+    summaryArea.addEventListener('input', () => {
+        const text = summaryArea.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        wordCountDisplay.innerText = `Palabras: ${words} / 200`;
+
+        if (words >= 200) {
+            wordCountDisplay.classList.add('ready');
+            unlockBtn.classList.remove('hidden');
+        } else {
+            wordCountDisplay.classList.remove('ready');
+            unlockBtn.classList.add('hidden');
+        }
+    });
+
+    // 2. Base de Datos de Preguntas (Arcane Ep 1 y 2)
+    const questions = [
+        { q: "¿Cómo se llaman las dos ciudades principales donde se desarrolla la trama?", options: ["Demacia y Noxus", "Piltover y Zaun", "Ionia y Shurima"] },
+        { q: "¿Quién es la figura paterna que adopta a Vi y Powder tras la muerte de sus padres?", options: ["Silco", "Heimerdinger", "Vander"] },
+        { q: "¿Qué apodo despectivo usan los habitantes de Piltover para referirse a la gente de la ciudad subterránea?", options: ["Trenchers (Ratas de trinchera)", "Pilties", "Zaunitas"] },
+        { q: "¿Qué objeto altamente inestable roban Vi, Powder, Mylo y Claggor del laboratorio, causando una gran explosión?", options: ["Un arma de fuego", "Cristales mágicos (Hextech)", "Pociones curativas"] },
+        { q: "¿Qué investigador de Piltover es el dueño del apartamento y laboratorio que los jóvenes asaltan?", options: ["Viktor", "Jayce Talis", "Profesor Heimerdinger"] },
+        { q: "¿Qué bar dirige Vander, el cual también sirve como refugio y centro de la comunidad?", options: ["The Last Drop (La Última Gota)", "The Zaun Tavern", "El Poro Sonriente"] },
+        { q: "¿Qué líder criminal del inframundo experimenta con una peligrosa droga mutagénica?", options: ["Silco", "Deckard", "Ekko"] },
+        { q: "¿Cómo se llama el líquido morado brillante que transforma a humanos y animales en bestias descontroladas?", options: ["Veneno de Noxus", "Shimmer (Centelleo)", "Elixir de Hierro"] },
+        { q: "¿Qué busca crear Jayce con sus experimentos ilegales que fueron descubiertos?", options: ["Un arma de destrucción masiva", "Controlar la magia a través de la ciencia (Hextech)", "Una cura para las enfermedades de Zaun"] },
+        { q: "¿Quién rescató a Jayce y a su madre de morir congelados en la nieve usando magia cuando él era niño?", options: ["Vander", "Un mago usando magia rúnica", "La consejera Medarda"] },
+        { q: "¿Qué castigo recibe Jayce por parte del Consejo de Piltover en el episodio 2?", options: ["Es condenado a prisión en Zaun", "Es expulsado de la academia y se ordena destruir su investigación", "Es ejecutado públicamente"] },
+        { q: "¿Quién es el asistente del Profesor Heimerdinger que decide romper las reglas y ayudar a Jayce?", options: ["Viktor", "Ekko", "Mylo"] },
+        { q: "¿Qué consejera de Piltover patrocina a Jayce y es miembro de la familia más rica de la ciudad?", options: ["Mel Medarda", "Caitlyn Kiramman", "Grayson"] },
+        { q: "¿Dónde esconde Powder los cristales robados después de escapar de los Enforcers (Defensores)?", options: ["En su habitación debajo de la cama", "Los entierra en el bar de Vander", "En uno de sus juguetes/peluches"] },
+        { q: "¿Qué artefactos intenta construir Powder constantemente, aunque suelen fallar en momentos críticos?", options: ["Granadas y dispositivos caseros", "Drones voladores", "Espadas láser"] },
+        { q: "¿A quién acude Grayson (la sheriff de Piltover) para hacer un trato y mantener la paz tras el robo?", options: ["Silco", "Vander", "Vi"] },
+        { q: "¿Cómo prueba Silco la efectividad de su nueva droga en el primer episodio?", options: ["Se la inyecta a sí mismo", "Se la da a un joven pandillero llamado Deckard", "La vende en Piltover"] },
+        { q: "¿Cuál es la principal advertencia que Vander le da a Vi sobre liderar a su grupo?", options: ["Que la violencia solo engendra más violencia y ella es responsable de sus vidas", "Que debe atacar Piltover lo antes posible", "Que no debe confiar en Powder"] },
+        { q: "¿Quién delata accidentalmente la ubicación del grupo de Vi tras ser interrogado (o espiado)?", options: ["Mylo", "Ekko", "Claggor"] },
+        { q: "¿Qué objeto le da Vander a Grayson para comunicarse con ella en caso de emergencia?", options: ["Un cristal Hextech", "Un tubo neumático con un mensaje", "Un intercomunicador de radio"] }
+    ];
+
+    // 3. Iniciar Quiz y Timer
+    function startQuiz() {
+        const name = document.getElementById('name').value;
+        const grade = document.getElementById('grade').value;
+        
+        if (!name || !grade) {
+            return alert("Por favor ingresa tu Nombre y Curso antes de continuar.");
+        }
+        
+        quizSection.style.display = 'block';
+        document.getElementById('unlock-btn').style.display = 'none';
+        summaryArea.readOnly = true; 
+        
+        renderQuiz();
+        startTimer();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.innerHTML = `
+                <p><strong>${i+1}. ${q.q}</strong></p>
+                <div class="options">
+                    ${q.options.map((opt, optIndex) => `
+                        <label>
+                            <input type="radio" name="q${i}" value="${optIndex}"> 
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    let timeLeft = 300; // 5 minutos
+    let timerInterval;
+
+    function startTimer() {
+        const timerDisplay = document.getElementById('timer');
+        timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.innerText = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                lockQuiz();
+                alert("¡Tiempo terminado! Ya no puedes modificar tus respuestas. Por favor guarda tu documento PDF.");
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    function lockQuiz() {
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => radio.disabled = true);
+    }
+
+    // 4. Finalizar e Imprimir
+    function finishAndPrint() {
+        if(confirm("¿Estás seguro de finalizar la evaluación? Asegúrate de haber respondido todas las preguntas.")){
+            clearInterval(timerInterval);
+            lockQuiz();
+            window.print();
+        }
+    }
+</script>
+
+</body>
+</html>
