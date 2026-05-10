@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Task 1 Mock Exam: Process | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-teal: #0f766e;
+            --primary-light: #5dcbc3;
+            --accent-purple: #8b5cf6; /* Cambio de color para diferenciar del anterior */
+            --accent-yellow: #f5b041;
+            --bg-light: #f8fafc;
+            --text-dark: #334155;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--text-dark);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-purple);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #cbd5e1; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-light); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #94a3b8; margin-top: 5px; font-weight: 300; font-size: 1.1rem;}
+
+        /* TIMER STICKY */
+        .global-timer {
+            position: fixed; top: 20px; right: 20px; background: var(--white); color: var(--text-dark);
+            padding: 10px 25px; border-radius: 50px; font-size: 1.5rem; font-weight: bold; font-family: monospace;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; border: 3px solid var(--accent-purple); display: none;
+        }
+        .global-timer.warning { color: var(--white); background: var(--accent-purple); animation: pulse 1s infinite; }
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 30px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #64748b;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-teal); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(15, 118, 110, 0.4); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 1000px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- TAB 1: EXAM RULES --- */
+        .rules-card {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-yellow);
+        }
+        .rules-card h2 { margin-top: 0; color: var(--primary-teal); border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        
+        .rule-item {
+            background: #f8fafc; border-left: 4px solid var(--primary-teal); padding: 15px 20px; border-radius: 0 8px 8px 0; margin-bottom: 15px;
+        }
+        .rule-item.danger { border-left-color: var(--accent-purple); background: #f3e8ff; }
+        .rule-item h3 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--text-dark); display: flex; align-items: center; gap: 8px;}
+        .rule-item p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.6;}
+
+        .btn-start {
+            background: var(--accent-purple); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+        .btn-start:hover { background: #7c3aed; transform: translateY(-2px); }
+
+        /* --- TAB 2: EXAM WORKSPACE --- */
+        .exam-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 6px solid var(--primary-teal);
+        }
+        
+        .exam-prompt {
+            background: #f1f5f9; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;
+        }
+        .exam-prompt p { margin: 0; font-weight: bold; font-size: 1.05rem; color: #1e293b; line-height: 1.6;}
+        
+        .chart-container {
+            width: 100%; margin: 0 auto 30px; text-align: center;
+        }
+        .chart-container img {
+            max-width: 100%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #e2e8f0;
+        }
+
+        .name-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1.05rem; box-sizing: border-box; margin-bottom: 20px; outline:none;}
+        .name-input:focus { border-color: var(--primary-teal); }
+
+        .writing-area {
+            width: 100%; height: 400px; padding: 20px; border: 2px solid #cbd5e1; border-radius: 8px;
+            font-family: 'Merriweather', serif; font-size: 1.1rem; resize: vertical; box-sizing: border-box; transition: 0.3s; line-height: 1.8;
+        }
+        .writing-area:focus { border-color: var(--primary-teal); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2); }
+        .writing-area.locked { background: #f1f5f9; border-color: #ef4444; color: #64748b; cursor: not-allowed; }
+
+        .word-counter { text-align: right; font-size: 1rem; font-weight: bold; margin-top: 8px; color: #ef4444; transition: 0.3s;}
+        .word-counter.valid { color: #10b981; }
+
+        .btn-submit {
+            background: var(--primary-teal); color: white; border: none; padding: 18px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-submit:hover { background: #0f766e; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(15, 118, 110, 0.3);}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round" style="font-size: 2.5rem;">precision_manufacturing</span> Official IELTS Task 1</h1>
+        <div class="subtitle">Mock Exam Simulator: Process Diagram • 20 Minutes</div>
+    </header>
+
+    <div class="global-timer" id="global-timer">20:00</div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btn-tab-rules" onclick="switchTab('rules-tab')"><span class="material-icons-round">gavel</span> 1. The Rules</button>
+        <button class="tab-btn" id="btn-tab-exam" onclick="startExamWarning()"><span class="material-icons-round">edit_note</span> 2. Start Exam</button>
+    </div>
+
+    <div class="container">
+
+        <div id="rules-tab" class="view-section active">
+            <div class="rules-card">
+                <h2><span class="material-icons-round">rule</span> Process Diagram Rules</h2>
+                <p style="margin-bottom: 25px; color: #475569;">Al hacer clic en "Start Exam", el temporizador de 20 minutos comenzará a correr. Los procesos tienen reglas específicas que difieren de los gráficos de barras o líneas:</p>
+
+                <div class="rule-item">
+                    <h3><span class="material-icons-round" style="color: var(--primary-teal);">view_quilt</span> Structure</h3>
+                    <p>Mantén la estructura de 4 párrafos: 1. Introduction | 2. Overview (Cuántas etapas hay y dónde empieza/termina) | 3. Body A (Primera mitad del proceso) | 4. Body B (Segunda mitad).</p>
+                </div>
+
+                <div class="rule-item danger">
+                    <h3><span class="material-icons-round" style="color: var(--accent-purple);">loop</span> Sequencing Connectors</h3>
+                    <p>Debes unir las etapas lógicamente. Usa conectores variados como <em>First, Subsequently, Following this, At the same time, Finally</em>.</p>
+                </div>
+
+                <div class="rule-item danger">
+                    <h3><span class="material-icons-round" style="color: var(--accent-purple);">build</span> Passive Voice is Mandatory</h3>
+                    <p>No digas "The machine washes the bottles". El enfoque debe estar en el objeto, no en quién lo hace. Usa la Voz Pasiva: <strong>"The bottles are washed"</strong>.</p>
+                </div>
+
+                <button class="btn-start" onclick="startExamWarning()">
+                    <span class="material-icons-round">timer</span> Understand. Start Exam Now
+                </button>
+            </div>
+        </div>
+
+        <div id="exam-tab" class="view-section">
+            <div class="exam-box">
+                
+                <div class="exam-prompt">
+                    <p>You should spend about 20 minutes on this task.</p>
+                    <p style="margin-top: 15px; color: var(--primary-teal);"><strong>The diagram below shows the process of making recycled paper.</strong></p>
+                    <p style="margin-top: 15px;">Summarise the information by selecting and reporting the main features.</p>
+                    <p style="margin-top: 15px; font-weight: normal;">Write at least 150 words.</p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="https://i.imgur.com/a9uKg8Y.jpg" alt="Paper Recycling Process Diagram">
+                </div>
+
+                <input type="text" class="name-input" id="student-name" placeholder="Candidate Name (e.g. Franco Diaz)" required>
+
+                <textarea class="writing-area" id="exam-essay" placeholder="The provided diagram illustrates the step-by-step process of producing recycled paper..." onkeyup="countWords()"></textarea>
+                <div class="word-counter" id="word-count">Words: 0 / 150</div>
+
+                <button class="btn-submit" id="btn-submit-exam" onclick="submitExam()">
+                    <span class="material-icons-round">send</span> Submit Exam & Export PDF
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3" preload="auto"></audio>
+
+    <script>
+        let timerStarted = false;
+        let timerInterval = null;
+
+        function startExamWarning() {
+            if (!timerStarted) {
+                const proceed = confirm("⚠️ ATENCIÓN: Estás a punto de iniciar el examen oficial. El reloj de 20 minutos comenzará y NO se puede pausar.\n\n¿Estás listo para comenzar?");
+                if (proceed) {
+                    switchTab('exam-tab');
+                    startGlobalTimer(1200); // 20 minutes (1200 seconds)
+                }
+            } else {
+                switchTab('exam-tab');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'rules-tab') document.getElementById('btn-tab-rules').classList.add('active');
+            if(tabId === 'exam-tab') document.getElementById('btn-tab-exam').classList.add('active');
+        }
+
+        function startGlobalTimer(duration) {
+            timerStarted = true;
+            let timer = duration;
+            const display = document.getElementById('global-timer');
+            display.style.display = "block";
+
+            timerInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (timer <= 300) { // 5 minutes warning
+                    display.classList.add('warning');
+                }
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    lockdownExam();
+                }
+            }, 1000);
+        }
+
+        function countWords() {
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById('word-count');
+            
+            display.innerText = `Words: ${words} / 150`;
+            
+            if (words >= 150) {
+                display.classList.add('valid');
+            } else {
+                display.classList.remove('valid');
+            }
+        }
+
+        function lockdownExam() {
+            document.getElementById('alarm-sound').play();
+            document.getElementById('global-timer').innerHTML = "00:00";
+            
+            // Disable Writing
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('student-name').readOnly = true;
+            document.getElementById('btn-submit-exam').style.display = 'none';
+
+            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nSe acabaron tus 20 minutos. Tu examen ha sido bloqueado y se generará el archivo PDF de forma automática.");
+            
+            generatePDF();
+        }
+
+        function submitExam() {
+            const name = document.getElementById('student-name').value.trim();
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+
+            if (!name) {
+                alert("Candidate Name es obligatorio para exportar tu examen.");
+                return;
+            }
+
+            if (words < 150) {
+                const proceed = confirm(`CUIDADO: Tu ensayo tiene ${words} palabras. El IELTS penaliza estrictamente por no alcanzar el mínimo de 150 palabras.\n\n¿Estás completamente seguro de entregar ahora?`);
+                if (!proceed) return;
+            }
+
+            clearInterval(timerInterval);
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('global-timer').style.display = "none";
+            document.getElementById('btn-submit-exam').style.display = "none";
+
+            alert("¡Examen entregado exitosamente! Descargando evaluación...");
+            generatePDF();
+        }
+
+        function generatePDF() {
+            const studentName = document.getElementById('student-name').value.trim() || "Unknown_Candidate";
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Document Header
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(15, 118, 110); // Teal
+            doc.text("IELTS Task 1: Process Mock Exam", 105, 25, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Candidate: ${studentName}`, 105, 35, null, null, "center");
+            doc.text(`Word Count: ${words} words`, 105, 42, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 49, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); 
+            doc.line(20, 55, 190, 55); 
+
+            // Text Rendering
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            let splitText = doc.splitTextToSize(text || "[No essay content provided]", 170);
+            doc.text(splitText, 20, 65, { lineHeightFactor: 1.6 });
+
+            // Footer
+            doc.setFont("helvetica", "bolditalic");
+            doc.setFontSize(10);
+            doc.setTextColor(139, 92, 246); // Purple
+            doc.text("Task submitted via Teacher Ivan's Simulator.", 105, 280, null, null, "center");
+
+            const fileName = `${studentName.replace(/\s+/g, '_')}_IELTS_Process_Mock.pdf`;
+            doc.save(fileName);
+        }
+    </script>
+</body>
+</html>
