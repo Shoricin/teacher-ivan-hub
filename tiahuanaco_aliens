@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Puma Punku - Colegio Fielding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --fielding-green: #2E5A27;
+            --fielding-gold: #D4AF37;
+            --fielding-grey: #4F4F4F;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--fielding-grey);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--fielding-green);
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--fielding-gold);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--fielding-green);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .logo-placeholder {
+            font-weight: 700;
+            color: var(--fielding-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        /* Información del Estudiante */
+        .student-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--fielding-green);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--fielding-green);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h2 {
+            color: var(--fielding-green);
+            margin: 20px 0 15px;
+            border-left: 5px solid var(--fielding-gold);
+            padding-left: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        /* Quiz */
+        .question-card {
+            background: #fcfcfc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .question-card p {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #f0f4ef;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            background: var(--fielding-green);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn:hover {
+            background: #1e3d1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background: var(--fielding-gold);
+            color: #000;
+        }
+        
+        .btn-gold:hover {
+            background: #b5952f;
+        }
+
+        /* ESTILOS DE IMPRESIÓN SÚPER COMPACTOS */
+        @media print {
+            @page {
+                margin: 1.5cm;
+            }
+            body { 
+                background: white; 
+                font-size: 10pt; /* Letra más pequeña para ahorrar espacio */
+                color: #000;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-top: none;
+                padding: 0;
+            }
+            .no-print, .btn {
+                display: none !important;
+            }
+            header {
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            header h1 { font-size: 1.4rem; }
+            
+            .student-box {
+                padding: 10px;
+                margin-bottom: 15px;
+                gap: 10px;
+                background: none;
+                border: 1px solid #ccc;
+                border-left: 4px solid var(--fielding-green);
+            }
+            
+            h2 { margin: 10px 0; font-size: 1.2rem; }
+
+            /* Compactar las preguntas */
+            .question-card { 
+                page-break-inside: avoid; 
+                border: none; 
+                padding: 0 0 10px 0; 
+                margin-bottom: 10px;
+                border-bottom: 1px dashed #ccc;
+                background: none;
+            }
+            
+            .question-card p {
+                margin-bottom: 5px;
+                font-size: 10pt;
+            }
+
+            /* Opciones en línea si son cortas para ahorrar saltos de línea */
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .options label { 
+                border: none; 
+                padding: 0; 
+                margin: 0;
+                margin-right: 15px;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="logo-placeholder">Colegio Fielding Bolivia</span>
+        <h1>Cuestionario: Misterios de Puma Punku</h1>
+        <p>Documental: In Search of Aliens (Ep. 7) | Prof. Iván Mancilla Copa</p>
+    </header>
+
+    <div class="student-box">
+        <div class="input-group">
+            <label>Nombre Completo:</label>
+            <input type="text" placeholder="Escribe tu nombre completo aquí">
+        </div>
+        <div class="input-group">
+            <label>Curso:</label>
+            <input type="text" placeholder="Ej. 4to de Secundaria">
+        </div>
+    </div>
+
+    <section id="quiz-section">
+        <h2>Evaluación de Comprensión Audiovisual</h2>
+        
+        <div id="quiz-container">
+            </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-gold no-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Imprimir Cuestionario
+            </button>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Base de Datos de Preguntas sobre el documental de Puma Punku
+    const questions = [
+        { 
+            q: "¿En qué país y tipo de geografía se encuentran las ruinas de Puma Punku?", 
+            options: ["En el desierto del Altiplano, Bolivia", "En la selva amazónica, Perú", "En el desierto del Sahara, Egipto"] 
+        },
+        { 
+            q: "¿De qué material extremadamente duro están hechos los famosos 'bloques en H'?", 
+            options: ["Granito", "Caliza blanda", "Andesita"] 
+        },
+        { 
+            q: "¿Por qué el experto descarta la teoría convencional de que usaron rodillos de madera para mover las piedras?", 
+            options: ["Porque la madera era considerada sagrada", "Porque a más de 12,000 pies de altura no crecen árboles", "Porque los bloques quemarían la madera por fricción"] 
+        },
+        { 
+            q: "¿Qué sucede cuando el presentador coloca una brújula sobre una de las piedras en el sitio?", 
+            options: ["La brújula se rompe por la presión", "El cristal de la brújula se empaña", "El norte magnético se altera completamente (anomalía magnética)"] 
+        },
+        { 
+            q: "¿Qué término utiliza el anciano aymara para referirse al dios Viracocha, el cual coincide con antiguos textos hebreos?", 
+            options: ["El Destructor", "El Vigilante (Watcher)", "El Caminante de Cielos"] 
+        },
+        { 
+            q: "Según el análisis microscópico de Chris Dunn, ¿a qué técnica moderna se asemejan los cortes de las piedras antiguas?", 
+            options: ["Corte con cincel de bronce", "Cortes con sierras de diamante y láser", "Erosión por agua a presión"] 
+        },
+        { 
+            q: "¿Qué característica arquitectónica comparte Puma Punku con otros sitios mundiales como Egipto y Camboya?", 
+            options: ["Cortes de 'piedra angular' (keystone) rellenados con metal fundido", "Uso exclusivo de ladrillos de barro", "Pirámides perfectamente lisas"] 
+        },
+        { 
+            q: "¿Qué increíble escritura antigua contiene el artefacto conocido como el bol 'Fuente Magna' hallado en Bolivia?", 
+            options: ["Jeroglíficos mayas", "Caracteres chinos antiguos", "Escritura cuneiforme sumeria"] 
+        },
+        { 
+            q: "Basado en alineaciones astronómicas, ¿qué antigüedad proponen investigadores como Arthur Posnansky para el sitio?", 
+            options: ["Entre 17,000 y 24,000 años", "Apenas 500 años (época Inca)", "Unos 2,000 años"] 
+        },
+        { 
+            q: "Según el ingeniero estructural, ¿qué desastre natural es la causa más lógica de la destrucción total de Puma Punku?", 
+            options: ["Una lluvia de meteoritos", "Un diluvio masivo que causó licuefacción del suelo", "Una erupción volcánica"] 
+        }
+    ];
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            
+            // Layout compacto para opciones
+            let optionsHTML = q.options.map((opt, optIndex) => `
+                <label>
+                    <input type="radio" name="q${i}" value="${optIndex}"> 
+                    ${opt}
+                </label>
+            `).join('');
+
+            div.innerHTML = `
+                <p>${i+1}. ${q.q}</p>
+                <div class="options">
+                    ${optionsHTML}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // Renderizar al cargar la página
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
