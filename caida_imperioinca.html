@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario: Imperio Inca - Colegio Fielding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --fielding-green: #2E5A27;
+            --fielding-gold: #D4AF37;
+            --fielding-grey: #4F4F4F;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--fielding-grey);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--fielding-green);
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--fielding-gold);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--fielding-green);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .logo-placeholder {
+            font-weight: 700;
+            color: var(--fielding-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        /* Información del Estudiante */
+        .student-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--fielding-green);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--fielding-green);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h2 {
+            color: var(--fielding-green);
+            margin: 20px 0 15px;
+            border-left: 5px solid var(--fielding-gold);
+            padding-left: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        /* Quiz */
+        .question-card {
+            background: #fcfcfc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .question-card p {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #f0f4ef;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            background: var(--fielding-green);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn:hover {
+            background: #1e3d1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-gold {
+            background: var(--fielding-gold);
+            color: #000;
+        }
+        
+        .btn-gold:hover {
+            background: #b5952f;
+        }
+
+        /* ESTILOS DE IMPRESIÓN SÚPER COMPACTOS */
+        @media print {
+            @page {
+                margin: 1.5cm;
+            }
+            body { 
+                background: white; 
+                font-size: 10pt; /* Letra más pequeña para ahorrar espacio */
+                color: #000;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-top: none;
+                padding: 0;
+            }
+            .no-print, .btn {
+                display: none !important;
+            }
+            header {
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            header h1 { font-size: 1.4rem; }
+            
+            .student-box {
+                padding: 10px;
+                margin-bottom: 15px;
+                gap: 10px;
+                background: none;
+                border: 1px solid #ccc;
+                border-left: 4px solid var(--fielding-green);
+            }
+            
+            h2 { margin: 10px 0; font-size: 1.2rem; }
+
+            /* Compactar las preguntas */
+            .question-card { 
+                page-break-inside: avoid; 
+                border: none; 
+                padding: 0 0 10px 0; 
+                margin-bottom: 10px;
+                border-bottom: 1px dashed #ccc;
+                background: none;
+            }
+            
+            .question-card p {
+                margin-bottom: 5px;
+                font-size: 10pt;
+            }
+
+            /* Opciones en línea si son cortas para ahorrar saltos de línea */
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .options label { 
+                border: none; 
+                padding: 0; 
+                margin: 0;
+                margin-right: 15px;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="logo-placeholder">Colegio Fielding Bolivia</span>
+        <h1>Cuestionario: La Caída del Imperio Inca</h1>
+        <p>Asignatura: Historia | Prof. Iván Mancilla Copa</p>
+    </header>
+
+    <div class="student-box">
+        <div class="input-group">
+            <label>Nombre Completo:</label>
+            <input type="text" placeholder="Escribe tu nombre completo aquí">
+        </div>
+        <div class="input-group">
+            <label>Curso:</label>
+            <input type="text" placeholder="Ej. 3
