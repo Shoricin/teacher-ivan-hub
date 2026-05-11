@@ -249,4 +249,96 @@
         </div>
         <div class="input-group">
             <label>Curso:</label>
-            <input type="text" placeholder="Ej. 3
+            <input type="text" placeholder="Ej. 3ro de Secundaria">
+        </div>
+    </div>
+
+    <section id="quiz-section">
+        <h2>Evaluación de Comprensión Audiovisual</h2>
+        
+        <div id="quiz-container">
+            </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-gold no-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Imprimir Cuestionario
+            </button>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Base de Datos de Preguntas sobre el documental de La Caída del Imperio Inca
+    const questions = [
+        { 
+            q: "¿Qué evento desencadenó principalmente la guerra civil que dividió al Tahuantinsuyo antes de la llegada de los españoles?", 
+            options: ["Una rebelión masiva en la costa", "El fallecimiento ocultado del Sapa Inca Huayna Cápac", "La invasión de un ejército desde el sur de Chile"] 
+        },
+        { 
+            q: "¿Con qué pueblo originario, fuertemente resentido por la dominación de Cusco, se enfrentó Atahualpa en el norte llegando a ser capturado por ellos?", 
+            options: ["Los Mapuches", "Los Guaraníes", "Los Cañaris"] 
+        },
+        { 
+            q: "Según el mito transmitido por el propio Atahualpa, ¿en qué animal sagrado se transformó gracias al Dios Sol para escapar de su primera prisión?", 
+            options: ["En un cóndor de los Andes", "En Amaru (la serpiente sagrada)", "En un puma invencible"] 
+        },
+        { 
+            q: "En el encuentro de Cajamarca (1532), ¿qué factores causaron el mayor pánico y la caída del ejército incaico ante Pizarro?", 
+            options: ["El uso sorpresivo de caballos y el estruendo de los arcabuces (armas de fuego)", "Un eclipse solar que oscureció la plaza", "Una traición interna de los generales quiteños"] 
+        },
+        { 
+            q: "¿A qué joven Inca coronó inicialmente Francisco Pizarro para intentar gobernar a través de él, antes de que este iniciara una gran rebelión?", 
+            options: ["A Huáscar", "A Manco Inca", "A Túpac Amaru"] 
+        },
+        { 
+            q: "Durante el asedio a Lima comandado por el general Kisu Yupanqui, ¿qué fue decisivo para salvar a las tropas españolas de ser aniquiladas?", 
+            options: ["La llegada de un galeón con refuerzos desde España", "El envío de miles de guerreros aliados Huancas solicitados por Inés Huaylas (pareja de Pizarro)", "Una plaga repentina que afectó al ejército inca"] 
+        },
+        { 
+            q: "¿Cuál fue el último refugio geográfico de la resistencia incaica, donde lograron sostener una capital secreta durante décadas?", 
+            options: ["Vilcabamba, en la espesura de la selva", "La fortaleza ceremonial de Machu Picchu", "La península de Copacabana en el Lago Titicaca"] 
+        },
+        { 
+            q: "¿Qué virrey del Perú ordenó la captura y posterior ejecución pública de Túpac Amaru I en 1572, cerrando el ciclo de resistencia armada?", 
+            options: ["Francisco de Toledo", "Manuel de Amat y Junyent", "Blasco Núñez Vela"] 
+        },
+        { 
+            q: "Tras consolidarse la conquista, ¿qué sucedió con gran parte de la antigua nobleza incaica (panacas reales y ñustas)?", 
+            options: ["Fueron desterrados a Centroamérica como prisioneros", "Se aislaron completamente rechazando cualquier contacto", "Se integraron al orden virreinal, casándose con españoles y obteniendo títulos nobiliarios e hidalguías"] 
+        },
+        { 
+            q: "¿Cómo se conoce al estilo artístico mestizo surgido de la síntesis entre el arte religioso europeo y la visión y estética andina?", 
+            options: ["Barroco Mestizo o Escuela Cuzqueña", "Renacimiento Quiteño", "Gótico del Altiplano"] 
+        }
+    ];
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            
+            // Layout compacto para opciones
+            let optionsHTML = q.options.map((opt, optIndex) => `
+                <label>
+                    <input type="radio" name="q${i}" value="${optIndex}"> 
+                    ${opt}
+                </label>
+            `).join('');
+
+            div.innerHTML = `
+                <p>${i+1}. ${q.q}</p>
+                <div class="options">
+                    ${optionsHTML}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // Renderizar al cargar la página
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
