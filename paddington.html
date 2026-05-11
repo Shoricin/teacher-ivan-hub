@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paddington Movie Quiz - Colegio Fielding</title>
+    <title>Paddington Episodes Quiz - Colegio Fielding</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -265,7 +265,7 @@
 <div class="container">
     <header>
         <span class="logo-placeholder">Colegio Fielding Bolivia</span>
-        <h1>Listening & Comprehension: Paddington</h1>
+        <h1>Listening Practice: Paddington Full Episodes</h1>
         <p>Subject: English Language | Teacher: Iván Mancilla Copa</p>
     </header>
 
@@ -276,12 +276,12 @@
         </div>
         <div class="input-group">
             <label>Grade:</label>
-            <input type="text" placeholder="e.g. 2nd of Secondary">
+            <input type="text" placeholder="e.g. 3rd of Secondary">
         </div>
     </div>
 
     <div class="no-print" style="margin-bottom: 20px; text-align: center; color: var(--fielding-green); font-weight: bold;">
-        <i class="fa-solid fa-circle-info"></i> Watch the clips below and answer the questions. Click "Print Quiz" when ready to generate the paper worksheet.
+        <i class="fa-solid fa-circle-info"></i> Watch the full episodes below and answer the questions. Click "Print Quiz" when ready to generate the paper worksheet.
     </div>
 
     <div id="quiz-container">
@@ -295,93 +295,92 @@
 </div>
 
 <script>
-    // Database of Scenes, Video IDs and Questions
-    const scenesData = [
+    // Database of Official Full Episodes, Video IDs and Questions
+    const episodesData = [
         {
-            title: "Scene 1: Meeting the Browns",
-            videoId: "6x3mKoGkplw", // Official Lionsgate Clip
+            title: "Episode 1: Paddington's Pirate Treasure Hunt",
+            videoId: "4DvDvbBiUIc",
             questions: [
-                { q: "Where does the Brown family meet the bear?", options: ["At a train station", "At an airport", "In a park"] },
-                { q: "What color is the hat Paddington is wearing?", options: ["Red", "Blue", "Yellow"] },
-                { q: "What does the tag around his neck say?", options: ["Please look after this bear. Thank you.", "Lost bear from Peru.", "Return to the jungle."] },
-                { q: "Who is the first person to speak to Paddington?", options: ["Mrs. Brown", "Mr. Brown", "Jonathan"] },
-                { q: "What does Mr. Brown want to do when he sees the bear?", options: ["Ignore him and leave", "Take him home", "Call the police"] }
+                { q: "What is Paddington pretending to be in this episode?", options: ["A police officer", "A pirate searching for treasure", "A chef cooking a meal"] },
+                { q: "What object helps him find the hidden treasure?", options: ["A compass", "A secret map", "A magnifying glass"] },
+                { q: "Where does the treasure hunt take place?", options: ["In the house and the garden", "At the supermarket", "In a dark cave"] },
+                { q: "Who helps Paddington read the clues?", options: ["Mrs. Brown", "Mr. Gruber", "Jonathan and Judy"] },
+                { q: "What do they usually find at the end of Paddington's adventures?", options: ["Gold coins", "Marmalade sandwiches", "A lot of toys"] }
             ]
         },
         {
-            title: "Scene 2: The Escalator Rule",
-            videoId: "poFS2rprfPU", 
+            title: "Episode 2: Paddington and the Balloons",
+            videoId: "76UUb2TvRJ0", 
             questions: [
-                { q: "Where is Paddington trying to go?", options: ["Up the escalator in the Underground", "Into a supermarket", "Up a tree"] },
-                { q: "What does the warning sign say?", options: ["Dogs must be carried", "No bears allowed", "Hold the handrail"] },
-                { q: "What does Paddington do when he reads the sign?", options: ["He carries a small dog", "He walks away", "He cries"] },
-                { q: "How does the dog's owner react?", options: ["He is confused and surprised", "She is very angry", "He laughs"] },
-                { q: "Does Paddington safely reach the top?", options: ["Yes, with the dog in his arms", "No, he falls down", "He gets stuck"] }
+                { q: "What does Paddington buy at the beginning?", options: ["A bunch of helium balloons", "A big cake", "A red umbrella"] },
+                { q: "What happens when he holds too many balloons?", options: ["They pop loudly", "He floats up into the sky", "He gives them to his friends"] },
+                { q: "Who tries to catch Paddington while he is in the air?", options: ["Mr. Brown", "A police officer", "Mr. Curry"] },
+                { q: "How does Paddington manage to come back down?", options: ["He pops the balloons one by one", "A bird helps him", "He falls into a swimming pool"] },
+                { q: "How does he feel after the adventure?", options: ["Very angry", "Happy but dizzy", "Sad because he lost his hat"] }
             ]
         },
         {
-            title: "Scene 3: The Bathroom Disaster",
-            videoId: "ksV1esB9J1g", 
+            title: "Episode 3: The Cursed Halloween Show",
+            videoId: "-9znxh3U_bw", 
             questions: [
-                { q: "Which room is Paddington exploring?", options: ["The bathroom", "The kitchen", "The bedroom"] },
-                { q: "What object does he accidentally put in his ears?", options: ["A toothbrush", "A comb", "A towel"] },
-                { q: "Why does the room fill with water?", options: ["He blocks the toilet and leaves the water running", "It's raining inside", "A pipe explodes"] },
-                { q: "How does Paddington get out of the flooded room?", options: ["He rides the bathtub down the stairs", "He climbs out the window", "He swims through the door"] },
-                { q: "Who gets wet when the water crashes downstairs?", options: ["Mr. Brown", "Mrs. Bird", "Judy"] }
+                { q: "Which holiday are the characters celebrating?", options: ["Christmas", "Halloween", "Easter"] },
+                { q: "What happens during the magic show?", options: ["A trick goes terribly wrong", "The rabbit runs away", "Everybody falls asleep"] },
+                { q: "Who gets scared the most by the spooky events?", options: ["Paddington", "Mrs. Bird", "Mr. Curry"] },
+                { q: "What is the 'curse' actually caused by?", options: ["Real ghosts", "A series of funny accidents", "A broken machine"] },
+                { q: "What is Paddington's favorite treat to give out?", options: ["Chocolate bars", "Marmalade sandwiches", "Candies"] }
             ]
         },
         {
-            title: "Scene 4: Mr. Gruber's Antique Shop",
-            videoId: "QlEcBIDV7iQ", 
+            title: "Episode 4: Locked Out on Christmas Day",
+            videoId: "KlQLlUGvVz8", 
             questions: [
-                { q: "What kind of shop does Mr. Gruber have?", options: ["An antique and curiosity shop", "A bakery", "A toy store"] },
-                { q: "What special book does Mr. Gruber show Paddington?", options: ["A pop-up book of London", "A cookbook", "A comic book"] },
-                { q: "What happens outside the shop?", options: ["A thief steals a wallet", "A parade goes by", "It starts snowing"] },
-                { q: "What does the thief drop that Paddington picks up?", options: ["A wallet", "A piece of paper", "A hat"] },
-                { q: "What animal does Paddington use to chase the thief?", options: ["A large dog", "A horse", "A cat"] }
+                { q: "What day of the year is it?", options: ["Christmas Day", "Paddington's Birthday", "New Year's Eve"] },
+                { q: "What problem does Paddington face in this episode?", options: ["He loses his suitcase", "He gets locked out of the house", "He burns the turkey"] },
+                { q: "Why can't he just open the front door?", options: ["He forgot the keys inside", "The door is frozen", "He doesn't know how to use a key"] },
+                { q: "How does he try to get back inside the house?", options: ["He breaks a window", "He tries to climb down the chimney", "He digs a tunnel"] },
+                { q: "Who eventually helps him solve the problem?", options: ["Santa Claus", "His neighbor", "The Brown family opens the door"] }
             ]
         },
         {
-            title: "Scene 5: The Marmalade Sandwich",
-            videoId: "vybtMmZzVGE", 
+            title: "Episode 5: Paddington Plays Football",
+            videoId: "k3qYjyfPS-s", 
             questions: [
-                { q: "Where does Paddington always keep an emergency sandwich?", options: ["Under his red hat", "In his suitcase", "In his pocket"] },
-                { q: "What flavor is the sandwich?", options: ["Marmalade", "Peanut butter", "Cheese"] },
-                { q: "Why does he keep the sandwich there?", options: ["For emergencies", "Because he is a chef", "To feed the pigeons"] },
-                { q: "Who gave him his love for this food?", options: ["Aunt Lucy and Uncle Pastuzo", "The Brown Family", "Mr. Gruber"] },
-                { q: "Where is Paddington originally from?", options: ["Darkest Peru", "Deepest Africa", "London"] }
+                { q: "What sport is Paddington playing with his friends?", options: ["Basketball", "Football (Soccer)", "Tennis"] },
+                { q: "Where does the football match take place?", options: ["In the park", "Inside the house", "At a big stadium"] },
+                { q: "What happens to the ball during the game?", options: ["It gets flat", "It gets stuck or goes over the fence", "It disappears magically"] },
+                { q: "Does Paddington know all the rules of the game?", options: ["Yes, he is a professional player", "No, he makes funny mistakes", "He doesn't want to play"] },
+                { q: "What is the most important thing for Paddington at the end?", options: ["Winning the trophy", "Having fun with his friends", "Scoring 10 goals"] }
             ]
         }
     ];
 
-    function renderScenesAndQuizzes() {
+    function renderEpisodesAndQuizzes() {
         const container = document.getElementById('quiz-container');
         
-        scenesData.forEach((scene, sceneIndex) => {
-            // Create Section for the Scene
-            const sceneDiv = document.createElement('div');
-            sceneDiv.className = 'scene-container';
+        episodesData.forEach((episode, index) => {
+            // Create Section for the Episode
+            const episodeDiv = document.createElement('div');
+            episodeDiv.className = 'scene-container';
             
             // Add Title
             const title = document.createElement('h2');
-            title.innerText = scene.title;
-            sceneDiv.appendChild(title);
+            title.innerText = episode.title;
+            episodeDiv.appendChild(title);
             
-            // Add YouTube Embed (Will be hidden on print via CSS)
+            // Add YouTube Embed
             const videoWrapper = document.createElement('div');
             videoWrapper.className = 'video-wrapper';
-            videoWrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${scene.videoId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            sceneDiv.appendChild(videoWrapper);
+            videoWrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${episode.videoId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            episodeDiv.appendChild(videoWrapper);
 
             // Add Questions
-            scene.questions.forEach((q, qIndex) => {
+            episode.questions.forEach((q, qIndex) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question-card';
                 
-                // Shuffle options visually (Optional, skipped for simplicity)
                 let optionsHTML = q.options.map((opt, optIndex) => `
                     <label>
-                        <input type="radio" name="s${sceneIndex}_q${qIndex}" value="${optIndex}"> 
+                        <input type="radio" name="e${index}_q${qIndex}" value="${optIndex}"> 
                         ${opt}
                     </label>
                 `).join('');
@@ -392,15 +391,15 @@
                         ${optionsHTML}
                     </div>
                 `;
-                sceneDiv.appendChild(qDiv);
+                episodeDiv.appendChild(qDiv);
             });
 
-            container.appendChild(sceneDiv);
+            container.appendChild(episodeDiv);
         });
     }
 
     // Render on load
-    document.addEventListener('DOMContentLoaded', renderScenesAndQuizzes);
+    document.addEventListener('DOMContentLoaded', renderEpisodesAndQuizzes);
 </script>
 
 </body>
