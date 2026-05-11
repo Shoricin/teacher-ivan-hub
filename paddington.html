@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddington Movie Quiz - Colegio Fielding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --fielding-green: #2E5A27;
+            --fielding-gold: #D4AF37;
+            --fielding-grey: #4F4F4F;
+            --light-bg: #F4F7F2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--fielding-grey);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--fielding-green);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--fielding-gold);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--fielding-green);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .logo-placeholder {
+            font-weight: 700;
+            color: var(--fielding-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        /* Student Info Box */
+        .student-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--fielding-green);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--fielding-green);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h2 {
+            color: var(--fielding-green);
+            margin: 30px 0 15px;
+            border-left: 5px solid var(--fielding-gold);
+            padding-left: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        /* Scenes and Videos */
+        .scene-container {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #eee;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Quiz */
+        .question-card {
+            background: #fcfcfc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .question-card p {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #f0f4ef;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: var(--fielding-green);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-gold {
+            background: var(--fielding-gold);
+            color: #000;
+        }
+        
+        .btn-gold:hover {
+            background: #b5952f;
+        }
+
+        /* PRINT STYLES - HIDING VIDEOS */
+        @media print {
+            @page {
+                margin: 1.5cm;
+            }
+            body { 
+                background: white; 
+                font-size: 10pt;
+                color: #000;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-top: none;
+                padding: 0;
+            }
+            /* Hide the videos and buttons when printing */
+            .no-print, .btn, .video-wrapper {
+                display: none !important;
+            }
+            
+            .scene-container {
+                border-bottom: none;
+                margin-bottom: 20px;
+                padding-bottom: 0;
+            }
+
+            header {
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            header h1 { font-size: 1.4rem; }
+            
+            .student-box {
+                padding: 10px;
+                margin-bottom: 15px;
+                gap: 10px;
+                background: none;
+                border: 1px solid #ccc;
+                border-left: 4px solid var(--fielding-green);
+            }
+            
+            h2 { margin: 15px 0 10px; font-size: 1.2rem; }
+
+            .question-card { 
+                page-break-inside: avoid; 
+                border: none; 
+                padding: 0 0 10px 0; 
+                margin-bottom: 10px;
+                border-bottom: 1px dashed #ccc;
+                background: none;
+            }
+            
+            .question-card p {
+                margin-bottom: 5px;
+                font-size: 10pt;
+            }
+
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .options label { 
+                border: none; 
+                padding: 0; 
+                margin: 0;
+                margin-right: 15px;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="logo-placeholder">Colegio Fielding Bolivia</span>
+        <h1>Listening & Comprehension: Paddington</h1>
+        <p>Subject: English Language | Teacher: Iván Mancilla Copa</p>
+    </header>
+
+    <div class="student-box">
+        <div class="input-group">
+            <label>Full Name:</label>
+            <input type="text" placeholder="Write your full name here">
+        </div>
+        <div class="input-group">
+            <label>Grade:</label>
+            <input type="text" placeholder="e.g. 2nd of Secondary">
+        </div>
+    </div>
+
+    <div class="no-print" style="margin-bottom: 20px; text-align: center; color: var(--fielding-green); font-weight: bold;">
+        <i class="fa-solid fa-circle-info"></i> Watch the clips below and answer the questions. Click "Print Quiz" when ready to generate the paper worksheet.
+    </div>
+
+    <div id="quiz-container">
+        </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button class="btn btn-gold no-print" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Print Quiz Worksheet
+        </button>
+    </div>
+</div>
+
+<script>
+    // Database of Scenes, Video IDs and Questions
+    const scenesData = [
+        {
+            title: "Scene 1: Meeting the Browns",
+            videoId: "6x3mKoGkplw", // Official Lionsgate Clip
+            questions: [
+                { q: "Where does the Brown family meet the bear?", options: ["At a train station", "At an airport", "In a park"] },
+                { q: "What color is the hat Paddington is wearing?", options: ["Red", "Blue", "Yellow"] },
+                { q: "What does the tag around his neck say?", options: ["Please look after this bear. Thank you.", "Lost bear from Peru.", "Return to the jungle."] },
+                { q: "Who is the first person to speak to Paddington?", options: ["Mrs. Brown", "Mr. Brown", "Jonathan"] },
+                { q: "What does Mr. Brown want to do when he sees the bear?", options: ["Ignore him and leave", "Take him home", "Call the police"] }
+            ]
+        },
+        {
+            title: "Scene 2: The Escalator Rule",
+            videoId: "poFS2rprfPU", 
+            questions: [
+                { q: "Where is Paddington trying to go?", options: ["Up the escalator in the Underground", "Into a supermarket", "Up a tree"] },
+                { q: "What does the warning sign say?", options: ["Dogs must be carried", "No bears allowed", "Hold the handrail"] },
+                { q: "What does Paddington do when he reads the sign?", options: ["He carries a small dog", "He walks away", "He cries"] },
+                { q: "How does the dog's owner react?", options: ["He is confused and surprised", "She is very angry", "He laughs"] },
+                { q: "Does Paddington safely reach the top?", options: ["Yes, with the dog in his arms", "No, he falls down", "He gets stuck"] }
+            ]
+        },
+        {
+            title: "Scene 3: The Bathroom Disaster",
+            videoId: "ksV1esB9J1g", 
+            questions: [
+                { q: "Which room is Paddington exploring?", options: ["The bathroom", "The kitchen", "The bedroom"] },
+                { q: "What object does he accidentally put in his ears?", options: ["A toothbrush", "A comb", "A towel"] },
+                { q: "Why does the room fill with water?", options: ["He blocks the toilet and leaves the water running", "It's raining inside", "A pipe explodes"] },
+                { q: "How does Paddington get out of the flooded room?", options: ["He rides the bathtub down the stairs", "He climbs out the window", "He swims through the door"] },
+                { q: "Who gets wet when the water crashes downstairs?", options: ["Mr. Brown", "Mrs. Bird", "Judy"] }
+            ]
+        },
+        {
+            title: "Scene 4: Mr. Gruber's Antique Shop",
+            videoId: "QlEcBIDV7iQ", 
+            questions: [
+                { q: "What kind of shop does Mr. Gruber have?", options: ["An antique and curiosity shop", "A bakery", "A toy store"] },
+                { q: "What special book does Mr. Gruber show Paddington?", options: ["A pop-up book of London", "A cookbook", "A comic book"] },
+                { q: "What happens outside the shop?", options: ["A thief steals a wallet", "A parade goes by", "It starts snowing"] },
+                { q: "What does the thief drop that Paddington picks up?", options: ["A wallet", "A piece of paper", "A hat"] },
+                { q: "What animal does Paddington use to chase the thief?", options: ["A large dog", "A horse", "A cat"] }
+            ]
+        },
+        {
+            title: "Scene 5: The Marmalade Sandwich",
+            videoId: "vybtMmZzVGE", 
+            questions: [
+                { q: "Where does Paddington always keep an emergency sandwich?", options: ["Under his red hat", "In his suitcase", "In his pocket"] },
+                { q: "What flavor is the sandwich?", options: ["Marmalade", "Peanut butter", "Cheese"] },
+                { q: "Why does he keep the sandwich there?", options: ["For emergencies", "Because he is a chef", "To feed the pigeons"] },
+                { q: "Who gave him his love for this food?", options: ["Aunt Lucy and Uncle Pastuzo", "The Brown Family", "Mr. Gruber"] },
+                { q: "Where is Paddington originally from?", options: ["Darkest Peru", "Deepest Africa", "London"] }
+            ]
+        }
+    ];
+
+    function renderScenesAndQuizzes() {
+        const container = document.getElementById('quiz-container');
+        
+        scenesData.forEach((scene, sceneIndex) => {
+            // Create Section for the Scene
+            const sceneDiv = document.createElement('div');
+            sceneDiv.className = 'scene-container';
+            
+            // Add Title
+            const title = document.createElement('h2');
+            title.innerText = scene.title;
+            sceneDiv.appendChild(title);
+            
+            // Add YouTube Embed (Will be hidden on print via CSS)
+            const videoWrapper = document.createElement('div');
+            videoWrapper.className = 'video-wrapper';
+            videoWrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${scene.videoId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            sceneDiv.appendChild(videoWrapper);
+
+            // Add Questions
+            scene.questions.forEach((q, qIndex) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question-card';
+                
+                // Shuffle options visually (Optional, skipped for simplicity)
+                let optionsHTML = q.options.map((opt, optIndex) => `
+                    <label>
+                        <input type="radio" name="s${sceneIndex}_q${qIndex}" value="${optIndex}"> 
+                        ${opt}
+                    </label>
+                `).join('');
+
+                qDiv.innerHTML = `
+                    <p>${qIndex + 1}. ${q.q}</p>
+                    <div class="options">
+                        ${optionsHTML}
+                    </div>
+                `;
+                sceneDiv.appendChild(qDiv);
+            });
+
+            container.appendChild(sceneDiv);
+        });
+    }
+
+    // Render on load
+    document.addEventListener('DOMContentLoaded', renderScenesAndQuizzes);
+</script>
+
+</body>
+</html>
