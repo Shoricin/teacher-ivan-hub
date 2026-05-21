@@ -238,4 +238,196 @@
                         </div>
                         <div class="legend-container">
                             <div class="legend-item"><div class="legend-color" style="background: #ef4444;"></div> Coal (~30%)</div>
-                            <div class="legend-item"><div class
+                            <div class="legend-item"><div class="legend-color" style="background: #3b82f6;"></div> Gas (~30%)</div>
+                            <div class="legend-item"><div class="legend-color" style="background: #10b981;"></div> Petro (↓)</div>
+                            <div class="legend-item"><div class="legend-color" style="background: #f5b041;"></div> Nuclear (↑)</div>
+                            <div class="legend-item"><div class="legend-color" style="background: #8b5cf6;"></div> Other (↑)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="text" class="name-input" id="student-name" placeholder="Candidate Name (e.g. Valeria Arandia)" required>
+
+                <textarea class="writing-area" id="exam-essay" placeholder="Write your report here..." onkeyup="countWords()"></textarea>
+                <div class="word-counter" id="word-count">Words: 0 / 150</div>
+
+                <button class="btn-submit" id="btn-submit-exam" onclick="submitExam()">
+                    <span class="material-icons-round">send</span> Submit Exam & Export PDF
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3" preload="auto"></audio>
+
+    <script>
+        let timerStarted = false;
+        let timerInterval = null;
+        let currentScenarioTitle = "";
+
+        const scenarioData = [
+            {
+                id: 'scenario-line',
+                title: 'Line Graph (Fast Food UK)',
+                prompt: 'The graph below shows the consumption of fast food in the UK from 1990 to 2010.'
+            },
+            {
+                id: 'scenario-process',
+                title: 'Process Diagram (Recycled Paper)',
+                prompt: 'The diagram below shows the process of making recycled paper.'
+            },
+            {
+                id: 'scenario-map',
+                title: 'Maps (Islip Town 2010 vs 2020)',
+                prompt: 'The maps below show the center of a small town called Islip as it was in 2010, and its current development in 2020.'
+            },
+            {
+                id: 'scenario-pie',
+                title: 'Pie Charts (Energy in France)',
+                prompt: 'The pie charts below show the comparison of different kinds of energy production in France in two years (1995 and 2005).'
+            }
+        ];
+
+        function startRandomExam() {
+            if (!timerStarted) {
+                const proceed = confirm("⚠️ ATENCIÓN: El sistema elegirá tu tarea al azar y el reloj de 20 minutos comenzará sin pausas.\n\n¿Estás listo para aceptar el reto?");
+                if (proceed) {
+                    // Randomizer Logic
+                    const randomIndex = Math.floor(Math.random() * scenarioData.length);
+                    const selected = scenarioData[randomIndex];
+                    
+                    // Hide all scenarios, show selected
+                    document.querySelectorAll('.scenario-content').forEach(el => el.style.display = 'none');
+                    document.getElementById(selected.id).style.display = 'block';
+                    
+                    // Update Prompt and Title
+                    document.getElementById('dynamic-prompt-text').innerText = selected.prompt;
+                    currentScenarioTitle = selected.title;
+
+                    switchTab('exam-tab');
+                    startGlobalTimer(1200); // 20 minutes
+                }
+            } else {
+                switchTab('exam-tab');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'rules-tab') document.getElementById('btn-tab-rules').classList.add('active');
+            if(tabId === 'exam-tab') document.getElementById('btn-tab-exam').classList.add('active');
+        }
+
+        function startGlobalTimer(duration) {
+            timerStarted = true;
+            let timer = duration;
+            const display = document.getElementById('global-timer');
+            display.style.display = "block";
+
+            timerInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (timer <= 300) display.classList.add('warning');
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    lockdownExam();
+                }
+            }, 1000);
+        }
+
+        function countWords() {
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            const display = document.getElementById('word-count');
+            
+            display.innerText = `Words: ${words} / 150`;
+            if (words >= 150) display.classList.add('valid');
+            else display.classList.remove('valid');
+        }
+
+        function lockdownExam() {
+            document.getElementById('alarm-sound').play();
+            document.getElementById('global-timer').innerHTML = "00:00";
+            
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('student-name').readOnly = true;
+            document.getElementById('btn-submit-exam').style.display = 'none';
+
+            alert("🚨 ¡TIEMPO AGOTADO! 🚨\nSe generará el archivo PDF automáticamente.");
+            generatePDF();
+        }
+
+        function submitExam() {
+            const name = document.getElementById('student-name').value.trim();
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+
+            if (!name) { alert("Candidate Name es obligatorio."); return; }
+
+            if (words < 150) {
+                const proceed = confirm(`Tu ensayo tiene ${words} palabras (Mínimo 150). Perderás puntos severamente.\n\n¿Seguro que quieres entregar?`);
+                if (!proceed) return;
+            }
+
+            clearInterval(timerInterval);
+            document.getElementById('exam-essay').readOnly = true;
+            document.getElementById('exam-essay').classList.add('locked');
+            document.getElementById('global-timer').style.display = "none";
+            document.getElementById('btn-submit-exam').style.display = "none";
+
+            alert("¡Examen entregado! Generando evaluación...");
+            generatePDF();
+        }
+
+        function generatePDF() {
+            const studentName = document.getElementById('student-name').value.trim() || "Unknown";
+            const text = document.getElementById('exam-essay').value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(15, 118, 110);
+            doc.text("IELTS Task 1: Official Mock Exam", 105, 20, null, null, "center");
+
+            doc.setFontSize(14);
+            doc.setTextColor(225, 29, 72); // Red accent
+            doc.text(`Task Assigned: ${currentScenarioTitle}`, 105, 30, null, null, "center");
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Candidate: ${studentName}`, 105, 40, null, null, "center");
+            doc.text(`Word Count: ${words} words`, 105, 46, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 52, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); 
+            doc.line(20, 58, 190, 58); 
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 40, 40);
+            
+            let splitText = doc.splitTextToSize(text || "[No answer]", 170);
+            doc.text(splitText, 20, 70, { lineHeightFactor: 1.6 });
+
+            doc.save(`${studentName.replace(/\s+/g, '_')}_IELTS_RandomMock.pdf`);
+        }
+    </script>
+</body>
+</html>
