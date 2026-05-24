@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Task 2 Ultimate Guide | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #0f766e; 
+            --primary-light: #5dcbc3;
+            --accent-purple: #8b5cf6; 
+            --accent-coral: #f43f5e; 
+            --accent-yellow: #f5b041;
+            --bg-light: #f8fafc;
+            --sidebar-bg: #1e293b;
+            --text-dark: #334155;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 { margin: 0; font-size: 1.5rem; color: var(--accent-purple); }
+        .sidebar-header p { margin: 5px 0 0 0; font-size: 0.85rem; color: #cbd5e1; }
+
+        .nav-btn {
+            background: transparent; border: none; color: #cbd5e1;
+            padding: 15px 25px; text-align: left; font-family: 'Poppins', sans-serif;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 12px;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-btn.active {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border-left-color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background: var(--bg-light);
+            scroll-behavior: smooth;
+        }
+
+        .guide-section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        .guide-section.active { display: block; }
+
+        /* TYPOGRAPHY & CARDS */
+        h1 { font-size: 2.5rem; color: var(--accent-purple); margin-top: 0; border-bottom: 3px solid var(--accent-yellow); padding-bottom: 15px; display: inline-block;}
+        h2 { font-size: 1.8rem; color: var(--sidebar-bg); margin-top: 30px; display: flex; align-items: center; gap: 10px;}
+        h3 { font-size: 1.3rem; color: var(--accent-purple); margin-top: 25px;}
+        p, li { font-family: 'Merriweather', serif; font-size: 1.05rem; line-height: 1.8; color: #475569; }
+
+        .info-card {
+            background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px; border-top: 5px solid var(--accent-purple);
+        }
+        .info-card.teal { border-top-color: var(--primary-teal); }
+        .info-card.yellow { border-top-color: var(--accent-yellow); }
+
+        .band-9-box {
+            background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin: 20px 0;
+            border-left: 5px solid #22c55e;
+        }
+        .band-9-box h4 { margin: 0 0 10px 0; color: #166534; display: flex; align-items: center; gap: 5px;}
+        
+        .alert-box {
+            background: #fef2f2; border: 1px solid #ef4444; padding: 20px; border-radius: 8px; margin: 20px 0;
+            border-left: 5px solid #ef4444;
+        }
+        .alert-box h4 { margin: 0 0 10px 0; color: #991b1b; display: flex; align-items: center; gap: 5px;}
+
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: var(--shadow); border-radius: 8px; overflow: hidden;}
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: var(--sidebar-bg); color: white; font-family: 'Poppins', sans-serif;}
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #f8fafc; }
+
+        .highlight { background: #f3e8ff; color: #6d28d9; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Teacher Ivan</h2>
+            <p>IELTS Task 2 Ultimate Guide</p>
+        </div>
+        <button class="nav-btn active" onclick="switchSection('intro')"><span class="material-icons-round">gavel</span> 1. The Core Rules</button>
+        <button class="nav-btn" onclick="switchSection('structure')"><span class="material-icons-round">view_quilt</span> 2. Essay Structure</button>
+        <button class="nav-btn" onclick="switchSection('types')"><span class="material-icons-round">category</span> 3. The 5 Essay Types</button>
+        <button class="nav-btn" onclick="switchSection('peel')"><span class="material-icons-round">zoom_in</span> 4. The Perfect Paragraph</button>
+        <button class="nav-btn" onclick="switchSection('connectors')"><span class="material-icons-round">link</span> 5. Advanced Connectors</button>
+    </nav>
+
+    <main class="main-content">
+
+        <section id="intro" class="guide-section active">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">gavel</span> Task 2: The Core Rules</h1>
+            
+            <div class="info-card">
+                <h3>Welcome to the Main Event</h3>
+                <p>La Writing Task 2 vale <strong>el doble de puntos</strong> que la Task 1. Aquí debes escribir un ensayo discursivo en el que respondas a una pregunta específica, des tu opinión (si se te pide) y la respaldes con ejemplos y argumentos lógicos.</p>
+                
+                <div class="alert-box">
+                    <h4><span class="material-icons-round">warning</span> Golden Rules (Nunca las rompas):</h4>
+                    <ol>
+                        <li><strong>Word Count:</strong> Mínimo absoluto de <strong>250 palabras</strong>. Si escribes menos, serás fuertemente penalizado. El rango ideal es entre 270 y 300 palabras.</li>
+                        <li><strong>Time Management:</strong> Tienes exactamente <strong>40 minutos</strong>. Dedica 5 minutos a planear, 30 a escribir y 5 a revisar.</li>
+                        <li><strong>Answer the Prompt:</strong> Responde exactamente a lo que se te pregunta. Si la pregunta tiene dos partes (ej. causas Y soluciones), debes abordar ambas equitativamente.</li>
+                        <li><strong>Tone:</strong> Usa un tono formal y académico. Evita contracciones (don't -> do not), slang o lenguaje emocional extremo.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="structure" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">view_quilt</span> The 4-Paragraph Formula</h1>
+            
+            <div class="info-card teal">
+                <p>La estructura lo es todo. Un ensayo sin una estructura clara perderá puntos masivos en <em>Coherence and Cohesion</em>. Siempre apunta a escribir 4 (o máximo 5) párrafos.</p>
+
+                <h3>1. Introduction (2-3 Sentences)</h3>
+                <ul>
+                    <li><strong>Paraphrase the Prompt:</strong> Reescribe el enunciado usando sinónimos y estructuras diferentes.</li>
+                    <li><strong>Thesis Statement / Outline:</strong> Da una respuesta clara a la pregunta y dile al examinador de qué tratará el ensayo. <em>(Ej. "This essay will argue that...")</em></li>
+                </ul>
+
+                <h3>2. Body Paragraph 1</h3>
+                <p>Tu primer argumento principal. Presenta una idea clara, explícala con detalle y da un ejemplo específico que la respalde.</p>
+
+                <h3>3. Body Paragraph 2</h3>
+                <p>Tu segundo argumento principal (o la visión opuesta, dependiendo del tipo de ensayo). Sigue la misma estructura de idea, explicación y ejemplo.</p>
+
+                <h3>4. Conclusion (1-2 Sentences)</h3>
+                <div class="band-9-box">
+                    <h4><span class="material-icons-round">star</span> ¡Nunca olvides la conclusión!</h4>
+                    <p>Resume tus puntos principales y reafirma tu posición. <strong>No agregues ideas o argumentos nuevos en la conclusión.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="types" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">category</span> The 5 Essay Types</h1>
+            
+            <div class="info-card">
+                <p>Antes de escribir una sola palabra, debes identificar qué tipo de ensayo te están pidiendo.</p>
+                
+                <table>
+                    <tr>
+                        <th>Essay Type</th>
+                        <th>Typical Question</th>
+                        <th>How to Structure</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Opinion</strong></td>
+                        <td><em>To what extent do you agree or disagree?</em></td>
+                        <td>Body 1: Primer argumento apoyando tu lado. <br>Body 2: Segundo argumento apoyando tu lado.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Discussion</strong></td>
+                        <td><em>Discuss both views and give your opinion.</em></td>
+                        <td>Body 1: Analiza la visión A. <br>Body 2: Analiza la visión B. <br>*(Da tu opinión en la intro o conclusión).*</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem / Solution</strong></td>
+                        <td><em>What are the causes? How can it be solved?</em></td>
+                        <td>Body 1: Causas del problema. <br>Body 2: Soluciones al problema.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adv. / Disadv.</strong></td>
+                        <td><em>Do the advantages outweigh the disadvantages?</em></td>
+                        <td>Body 1: Discutir las ventajas. <br>Body 2: Discutir las desventajas (y explicar cuál pesa más).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Double Question</strong></td>
+                        <td><em>Why is this happening? Is it a positive trend?</em></td>
+                        <td>Body 1: Responde la primera pregunta. <br>Body 2: Responde la segunda pregunta.</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="peel" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">zoom_in</span> The Perfect Paragraph (PEEL)</h1>
+            
+            <div class="info-card yellow">
+                <p>Para conseguir un Band 7+, tus párrafos de desarrollo no pueden ser una simple lista de ideas sueltas. Deben estar profundamente desarrollados. Utiliza el método <strong>PEEL</strong>:</p>
+
+                <div class="band-9-box">
+                    <h4>P - Point (Topic Sentence)</h4>
+                    <p>Introduce la idea principal del párrafo en la primera oración. <br><span class="highlight">"The primary reason why public transport should be free is environmental conservation."</span></p>
+                    
+                    <h4>E - Explain</h4>
+                    <p>Explica tu punto. ¿Por qué es cierto? ¿Cómo funciona? <br><span class="highlight">"If commuting costs are eliminated, more people will leave their cars at home, which directly reduces greenhouse gas emissions and traffic congestion in cities."</span></p>
+                    
+                    <h4>E - Example</h4>
+                    <p>Da un ejemplo específico del mundo real (puede ser inventado pero plausible). <br><span class="highlight">"For instance, when Luxembourg introduced free public transit in 2020, their urban carbon footprint dropped by 20% within the first year."</span></p>
+                    
+                    <h4>L - Link</h4>
+                    <p>Una oración final que vincule el punto de vuelta a la pregunta del ensayo. <br><span class="highlight">"Therefore, subsidizing public transport is a highly effective measure to tackle urban pollution."</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="connectors" class="guide-section">
+            <h1><span class="material-icons-round" style="font-size: 2.5rem; vertical-align: middle;">link</span> Advanced Connectors</h1>
+            
+            <div class="info-card">
+                <p>Evita usar <em>"And", "But", "So", "Because"</em> al principio de las oraciones. Eleva tu registro léxico con estos conectores:</p>
+
+                <table>
+                    <tr>
+                        <th>Purpose</th>
+                        <th>Band 6 (Basic)</th>
+                        <th>Band 8+ (Advanced)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Addition (Añadir info)</strong></td>
+                        <td>Also, and</td>
+                        <td>Furthermore, Moreover, In addition</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contrast (Contraste)</strong></td>
+                        <td>But, however</td>
+                        <td>Nevertheless, Conversely, On the other hand, Despite this</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Result (Resultado)</strong></td>
+                        <td>So, because of this</td>
+                        <td>Consequently, Therefore, As a result, Thus</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Example (Ejemplo)</strong></td>
+                        <td>For example, like</td>
+                        <td>For instance, To illustrate, A prime example of this is...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conclusion (Concluir)</strong></td>
+                        <td>In conclusion, to sum up</td>
+                        <td>To conclude, Ultimately</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchSection(sectionId) {
+            document.querySelectorAll('.guide-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
