@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly IELTS Booster Worksheet | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            teal: '#0f766e',
+                            lightTeal: '#5dcbc3',
+                            slate: '#1e293b',
+                            coral: '#f43f5e',
+                            gold: '#f5b041',
+                            bg: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .timeline-btn.active {
+            background-color: #0f766e;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+        }
+        .correct-blink {
+            animation: successGlow 0.5s ease-out-forward;
+        }
+        @keyframes successGlow {
+            0% { background-color: #d1fae5; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 min-h-screen font-sans flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-brand-slate text-white py-8 px-6 text-center border-b-4 border-brand-teal relative shadow-md">
+        <a href="index.html" class="absolute left-6 top-8 text-slate-300 hover:text-brand-lightTeal font-semibold flex items-center gap-2 transition duration-200">
+            <span class="material-icons-round">arrow_back</span> Return to HUB
+        </a>
+        <h1 class="text-3xl font-bold flex items-center justify-center gap-3">
+            <span class="material-icons-round text-brand-lightTeal text-4xl">event_note</span> 
+            IELTS Weekly Booster Worksheet
+        </h1>
+        <p class="text-slate-300 mt-2 font-light">Customized Self-Taught 6-Day Study Plan Based on Your Writing Performance</p>
+    </header>
+
+    <!-- STUDENT SELECTOR & PROGRESS -->
+    <div class="max-w-5xl w-full mx-auto px-4 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div>
+            <label class="block text-sm font-semibold text-slate-500 mb-1">SELECT YOUR PROFILE:</label>
+            <div class="flex gap-3">
+                <button onclick="setStudent('valeria')" id="btn-valeria" class="px-6 py-2.5 rounded-full font-bold transition duration-300 bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center gap-2">
+                    <span class="material-icons-round">face_3</span> Valeria
+                </button>
+                <button onclick="setStudent('diana')" id="btn-diana" class="px-6 py-2.5 rounded-full font-bold transition duration-300 bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center gap-2">
+                    <span class="material-icons-round">face</span> Diana
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center md:text-right">
+            <div class="text-sm font-semibold text-slate-400">YOUR WEEKLY PROGRESS</div>
+            <div class="text-2xl font-bold text-brand-teal mt-1" id="progress-text">0 / 6 Days Completed</div>
+            <div class="w-48 bg-slate-200 h-2.5 rounded-full mt-2 overflow-hidden mx-auto md:mx-0">
+                <div class="bg-brand-teal h-full transition-all duration-500" id="progress-bar" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WEEKLY TIMELINE NAVIGATION -->
+    <div class="max-w-5xl w-full mx-auto px-4 mt-6">
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-2 bg-slate-200/60 p-2 rounded-2xl">
+            <button onclick="setDay(1)" id="day-1" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Mon</span>
+                <span>Day 1: Grammar</span>
+            </button>
+            <button onclick="setDay(2)" id="day-2" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Tue</span>
+                <span>Day 2: Vocab</span>
+            </button>
+            <button onclick="setDay(3)" id="day-3" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Wed</span>
+                <span>Day 3: Strategy</span>
+            </button>
+            <button onclick="setDay(4)" id="day-4" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Thu</span>
+                <span>Day 4: PEEL</span>
+            </button>
+            <button onclick="setDay(5)" id="day-5" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Fri</span>
+                <span>Day 5: Timing</span>
+            </button>
+            <button onclick="setDay(6)" id="day-6" class="timeline-btn py-3 px-2 text-center rounded-xl font-semibold text-sm transition-all duration-300 flex flex-col items-center gap-1 text-slate-600 bg-white shadow-sm">
+                <span class="text-xs uppercase text-slate-400">Sat</span>
+                <span>Day 6: Report</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN EXERCISE WORKSPACE -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 mt-8 mb-16">
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 min-h-[500px] flex flex-col">
+
+            <!-- Day Header & Objective -->
+            <div class="border-b border-slate-100 pb-6 mb-6">
+                <div class="flex items-center gap-3 text-brand-teal font-bold tracking-wider text-sm uppercase">
+                    <span class="material-icons-round" id="day-icon">today</span>
+                    <span id="day-title-sub">Monday • Grammar & Sentence Structure</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 mt-2" id="day-headline">Correcting Fragmented Sentences & Punctuation</h2>
+                <p class="text-slate-500 mt-2" id="day-objective"><strong>Learning Objective:</strong> Identify where accidental periods create fragments, and separate run-on sentences to boost Coherence & Cohesion.</p>
+            </div>
+
+            <!-- Dynamic Interactive Workspace -->
+            <div id="exercise-workspace" class="flex-grow">
+                <!-- Content gets dynamically loaded here -->
+            </div>
+
+            <!-- Custom Navigation / Action Button at the Bottom -->
+            <div class="border-t border-slate-100 pt-6 mt-8 flex justify-between items-center">
+                <button onclick="prevDay()" class="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition duration-200 flex items-center gap-2">
+                    <span class="material-icons-round">chevron_left</span> Previous Day
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="resetCurrentDay()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition duration-200">
+                        Reset Day
+                    </button>
+                    <button id="btn-next-action" onclick="nextDay()" class="px-6 py-2.5 bg-brand-teal text-white font-bold rounded-xl hover:bg-brand-teal/90 shadow-sm transition duration-200 flex items-center gap-2">
+                        Next Day <span class="material-icons-round">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Custom Modal for Alerts -->
+    <div id="custom-modal" class="fixed inset-0 bg-brand-slate/60 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100">
+            <div class="flex items-center gap-3 text-brand-coral mb-4">
+                <span class="material-icons-round text-3xl" id="modal-icon">info</span>
+                <h3 class="text-xl font-bold text-slate-800" id="modal-title">Attention</h3>
+            </div>
+            <p class="text-slate-600 leading-relaxed font-serif" id="modal-desc"></p>
+            <div class="mt-6 text-right">
+                <button onclick="closeModal()" class="px-6 py-2 bg-brand-slate text-white font-bold rounded-xl hover:bg-slate-700 transition">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Area containing the core logic -->
+    <script>
+        // Core State
+        let currentStudent = 'valeria';
+        let currentDay = 1;
+        
+        // Progress State Trackers
+        let completedDays = {
+            valeria: { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false },
+            diana: { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false }
+        };
+
+        // Student Data Mapping
+        const studentConfigs = {
+            valeria: {
+                btnId: 'btn-valeria',
+                inactiveBtnId: 'btn-diana',
+                originalTextExcerpt: {
+                    day1: `"While job satisfaction. Affects you emotions and daily mood..."`,
+                    day2: `"People often weigh earnings against personal commodities... change of job... stand annoying bosses."`,
+                    day3: `"The red line and the green line shows the trends of the pizza and hamburger..."`,
+                    day5: `"fish and chips declined significantly since 1995, only with250 gr per person... a two t"`
+                }
+            },
+            diana: {
+                btnId: 'btn-diana',
+                inactiveBtnId: 'btn-valeria',
+                originalTextExcerpt: {
+                    day1: `"What is more important a big salary or job satisfaction? It is a question that a lot of workers do themselves." AND "In contrast, with an hypothetical case..."`,
+                    day2: `"If part of responsables of assist... diary have cases of bribery..."`,
+                    day3: `"Furthermore is not necessary choose one of this two ideas we could have both..."`,
+                    day5: `"This is the principal problem of the traffic accide"`
+                }
+            }
+        };
+
+        // On Load Initializers
+        window.onload = () => {
+            // Restore from LocalStorage if available
+            const savedProgress = localStorage.getItem('teacher_ivan_ielts_worksheet');
+            if (savedProgress) {
+                completedDays = JSON.parse(savedProgress);
+            }
+            setStudent('valeria');
+        };
+
+        // Student Selector Logic
+        function setStudent(student) {
+            currentStudent = student;
+            
+            // UI Toggle States
+            document.getElementById(studentConfigs[student].btnId).classList.add('bg-brand-teal', 'text-white', 'shadow-md');
+            document.getElementById(studentConfigs[student].btnId).classList.remove('bg-slate-100', 'text-slate-600');
+            document.getElementById(studentConfigs[student].inactiveBtnId).classList.remove('bg-brand-teal', 'text-white', 'shadow-md');
+            document.getElementById(studentConfigs[student].inactiveBtnId).classList.add('bg-slate-100', 'text-slate-600');
+
+            updateProgressDisplay();
+            setDay(currentDay);
+        }
+
+        // Timeline Day Switcher
+        function setDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.timeline-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`day-${day}`).classList.add('active');
+
+            // Render custom content based on Student and Day
+            renderWorkspace();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevDay() {
+            if (currentDay > 1) setDay(currentDay - 1);
+        }
+
+        function nextDay() {
+            if (currentDay < 6) setDay(currentDay + 1);
+        }
+
+        function updateProgressDisplay() {
+            const studentCompleted = completedDays[currentStudent];
+            let completedCount = 0;
+            for (let d = 1; d <= 6; d++) {
+                const dayBtn = document.getElementById(`day-${d}`);
+                if (studentCompleted[d]) {
+                    completedCount++;
+                    // Add checkmark indicator visually if completed
+                    dayBtn.querySelector('span:last-child').innerHTML = `Day ${d} <span class="text-green-500 font-bold">✓</span>`;
+                } else {
+                    dayBtn.querySelector('span:last-child').innerHTML = `Day ${d}: ${getDayShortName(d)}`;
+                }
+            }
+            const percentage = Math.round((completedCount / 6) * 100);
+            document.getElementById('progress-text').innerText = `${completedCount} / 6 Days Completed`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        function getDayShortName(day) {
+            const names = ["Grammar", "Vocab", "Strategy", "PEEL", "Timing", "Report"];
+            return names[day - 1];
+        }
+
+        // Alert Modals Replacement for alert()
+        function showModal(title, desc, icon = "info") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Complete Day Flag
+        function markDayAsCompleted(day) {
+            completedDays[currentStudent][day] = true;
+            localStorage.setItem('teacher_ivan_ielts_worksheet', JSON.stringify(completedDays));
+            updateProgressDisplay();
+        }
+
+        function resetCurrentDay() {
+            completedDays[currentStudent][currentDay] = false;
+            localStorage.setItem('teacher_ivan_ielts_worksheet', JSON.stringify(completedDays));
+            updateProgressDisplay();
+            setDay(currentDay);
+        }
+
+        // ------------------------- RENDER ENGINES -------------------------
+        function renderWorkspace() {
+            const workspace = document.getElementById('exercise-workspace');
+            const headline = document.getElementById('day-headline');
+            const subTitle = document.getElementById('day-title-sub');
+            const icon = document.getElementById('day-icon');
+            const objective = document.getElementById('day-objective');
+
+            // Build dynamic workspace HTML depending on current day & student
+            switch(currentDay) {
+                case 1:
+                    icon.innerText = "spellcheck";
+                    subTitle.innerText = "Monday • Grammar & Sentence Structure";
+                    headline.innerText = "Sentence Reconstruction Challenge";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Recognize sentence boundaries, punctuation fallacies, and eliminate fragmented structures.";
+                    renderDay1(workspace);
+                    break;
+                case 2:
+                    icon.innerText = "menu_book";
+                    subTitle.innerText = "Tuesday • Vocabulary & Lexical Precision";
+                    headline.innerText = "Lexical Resource Enrichment";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Swap Spanglish direct translations and informal terminology with high-precision Band 8+ academic vocab.";
+                    renderDay2(workspace);
+                    break;
+                case 3:
+                    icon.innerText = "architecture";
+                    subTitle.innerText = "Wednesday • Strategy & Task Requirements";
+                    headline.innerText = "Task 1 & Task 2 Design Tactics";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Implement formal reporting strategies (avoiding color naming) and articulate an unwavering, consistent position in opinion writing.";
+                    renderDay3(workspace);
+                    break;
+                case 4:
+                    icon.innerText = "extension";
+                    subTitle.innerText = "Thursday • Argumentative Expansion (The PEEL Method)";
+                    headline.innerText = "The PEEL Paragraph Expansion Workshop";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Learn how to structure and unpack single arguments using the point-explain-example-link method to fulfill word limits confidently.";
+                    renderDay4(workspace);
+                    break;
+                case 5:
+                    icon.innerText = "timer";
+                    subTitle.innerText = "Friday • Speed Writing & Finishing Strong";
+                    headline.innerText = "Rapid-Fire High-Impact Conclusions";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Build executive timing strategies to craft summarizing statements even under last-minute pressure.";
+                    renderDay5(workspace);
+                    break;
+                case 6:
+                    icon.innerText = "workspace_premium";
+                    subTitle.innerText = "Saturday • Weekly Assessment & Action Plan";
+                    headline.innerText = "IELTS Performance Report & Action Steps";
+                    objective.innerHTML = "<strong>Learning Objective:</strong> Consolidate your newly acquired strategies, analyze your estimated progress, and generate your printable report card.";
+                    renderDay6(workspace);
+                    break;
+            }
+        }
+
+        // ==========================================
+        // DAY 1: GRAMMAR & SENTENCE STRUCTURE
+        // ==========================================
+        function renderDay1(container) {
+            let originalExcerpt = studentConfigs[currentStudent].originalTextExcerpt.day1;
+            let html = `
+                <div class="space-y-6 font-serif">
+                    <p class="text-slate-600 italic text-lg leading-relaxed">
+                        "Your original writing showed structural boundaries issues. Fragmented sentences or long run-on sentences decrease your score severely under <strong>Grammatical Range and Accuracy (GRA)</strong>."
+                    </p>
+
+                    <div class="bg-red-50 border-l-4 border-brand-coral p-5 rounded-r-xl">
+                        <span class="text-xs uppercase font-bold tracking-wider text-brand-coral font-sans">The Issue from Your Essay:</span>
+                        <p class="text-slate-700 font-semibold mt-1 text-lg">${originalExcerpt}</p>
+                    </div>
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Your Challenge: Correct the Fragment and Run-on!</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            <strong>Instructions:</strong> Combina la idea subordinada de abajo en una sola oración coherente sin cortar el sentido usando un punto accidental en medio de "satisfaction" y "affects".
+                        </p>
+                        
+                        <div class="p-4 bg-white rounded-xl border border-slate-200">
+                            <p class="text-slate-500 text-sm">Fragmento original:</p>
+                            <p class="text-red-700 italic mt-1 font-serif">"While job satisfaction. Affects you emotions and daily mood..."</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block font-semibold text-slate-700 text-sm">Write your corrected, unified sentence:</label>
+                            <input type="text" id="d1-input-1" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="While job satisfaction...">
+                        </div>
+
+                        <button onclick="checkDay1Valeria()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Verify Correction
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Your Challenge: Eliminate the Fragment and Fix the Pronoun!</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            <strong>Instructions:</strong> Your essay has an incomplete fragment: <em>"In contrast, with an hypothetical case..."</em>. Also, "do themselves questions" is incorrect; we say "ask themselves". Reconstruct the fragment into a full, correct sentence.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="p-4 bg-white rounded-xl border border-slate-200">
+                                <p class="text-slate-500 text-sm">Original error:</p>
+                                <p class="text-red-700 italic mt-1 font-serif">"...It is a question that a lot of workers do themselves."</p>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-semibold text-slate-700 text-sm">1. Correct the "do themselves" error (use active verb "ask"):</label>
+                                <input type="text" id="d1-input-diana-1" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="It is a question that many workers...">
+                            </div>
+
+                            <div class="p-4 bg-white rounded-xl border border-slate-200 mt-2">
+                                <p class="text-slate-500 text-sm">Original Fragment (No verb!):</p>
+                                <p class="text-red-700 italic mt-1 font-serif">"In contrast, with an hypothetical case where this family would not have this big salary."</p>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-semibold text-slate-700 text-sm">2. Complete the fragment by adding a consequence/verb:</label>
+                                <input type="text" id="d1-input-diana-2" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="In contrast, in a hypothetical case where this family does not have this big salary, they would...">
+                            </div>
+                        </div>
+
+                        <button onclick="checkDay1Diana()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Verify Corrections
+                        </button>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // DAY 1 VERIFICATION
+        function checkDay1Valeria() {
+            const ans = document.getElementById('d1-input-1').value.trim().toLowerCase();
+            if(ans === "") {
+                showModal("Input Required", "Please attempt the exercise before verifying.", "warning");
+                return;
+            }
+
+            const isCorrect = ans.includes("while job satisfaction affects") && (ans.includes("your emotions") || ans.includes("one's emotions"));
+            
+            if(isCorrect) {
+                showModal("Excellent Corrective Skills!", "¡Perfecto! Has unido la subordinada correctamente sin cortar la idea. 'While' inicia una oración dependiente, por lo que separar con un punto generaba un fragmento inaceptable para Band 6+. ¡Gran trabajo!", "check_circle");
+                markDayAsCompleted(1);
+            } else {
+                showModal("Not Quite Correct", "Inténtalo de nuevo. Asegúrate de eliminar el punto después de 'satisfaction', cambiar 'satisfaction affects' (con minúscula), y corregir 'you emotions' por 'your emotions'.", "error");
+            }
+        }
+
+        function checkDay1Diana() {
+            const ans1 = document.getElementById('d1-input-diana-1').value.trim().toLowerCase();
+            const ans2 = document.getElementById('d1-input-diana-2').value.trim().toLowerCase();
+
+            if (ans1 === "" || ans2 === "") {
+                showModal("Input Required", "Please complete both fields before checking.", "warning");
+                return;
+            }
+
+            const c1 = ans1.includes("ask themselves") || ans1.includes("ask themselves.");
+            const c2 = ans2.includes("in contrast, in a hypothetical case") && (ans2.includes("would struggle") || ans2.includes("would face") || ans2.includes("suffer") || ans2.includes("not be able to"));
+
+            if (c1 && c2) {
+                showModal("Superb Corrections!", "¡Increíble, Diana! Lograste corregir ambos errores graves de cohesión. 1. Cambiaste la traducción directa 'do themselves' por 'ask themselves'. 2. Completaste la oración fragmentada agregando una consecuencia real (el verbo principal que faltaba). ¡Band 7+ en Gramática hoy!", "check_circle");
+                markDayAsCompleted(1);
+            } else {
+                showModal("Almost There", "Asegúrate de: 1. Usar 'ask themselves' en el primer campo. 2. Cambiar 'an hypothetical' por 'a hypothetical' (la H tiene sonido de consonante en inglés) y completar el fragmento con un resultado lógico.", "error");
+            }
+        }
+
+        // ==========================================
+        // DAY 2: VOCABULARY & LEXICAL PRECISION
+        // ==========================================
+        function renderDay2(container) {
+            let originalExcerpt = studentConfigs[currentStudent].originalTextExcerpt.day2;
+            let html = `
+                <div class="space-y-6 font-serif">
+                    <p class="text-slate-600 italic text-lg leading-relaxed">
+                        "Earning a Band 7 or 8 in <strong>Lexical Resource</strong> requires exact collocations and avoiding words that belong to informal Spanish-to-English translations."
+                    </p>
+
+                    <div class="bg-amber-50 border-l-4 border-brand-gold p-5 rounded-r-xl font-sans">
+                        <span class="text-xs uppercase font-bold tracking-wider text-brand-gold">Informal / Incorrect Words Identified in Your Essay:</span>
+                        <p class="text-slate-700 font-semibold mt-1 text-base font-serif">${originalExcerpt}</p>
+                    </div>
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Vocabulary Alignment Challenge</h4>
+                        <p class="text-sm text-slate-500">
+                            <strong>Instructions:</strong> Arrastra mentalmente o selecciona la definición correcta para cada error e ingresa la palabra adecuada en el campo de texto de abajo.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">1. Instead of "commodities" (you meant luxuries or items of convenience):</span>
+                                <p class="text-xs text-slate-400 my-1">Commodities = materias primas (petróleo, carbón).</p>
+                                <input type="text" id="d2-input-1" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="Enter 'comforts' or 'conveniences'">
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">2. Instead of "change of job" (literal translation of 'cambiar de trabajo'):</span>
+                                <p class="text-xs text-slate-400 my-1">Academic collocation:</p>
+                                <input type="text" id="d2-input-2" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="Enter 'change careers' or 'change jobs'">
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">3. Instead of "annoying bosses" (extremely informal register):</span>
+                                <p class="text-xs text-slate-400 my-1">Formal synonym for difficult work supervisors:</p>
+                                <input type="text" id="d2-input-3" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="Enter 'difficult supervisors' or 'toxic managers'">
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">4. Instead of "steadyliness" (invented word):</span>
+                                <p class="text-xs text-slate-400 my-1">Correct noun form for being stable:</p>
+                                <input type="text" id="d2-input-4" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="Enter 'stability'">
+                            </div>
+                        </div>
+
+                        <button onclick="checkDay2Valeria()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Check Answers
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Lexical Precision and Grammar Challenge</h4>
+                        <p class="text-sm text-slate-500">
+                            <strong>Instructions:</strong> Diana, your essay on traffic control had multiple vocabulary interference errors from Spanish. Let's fix them with accurate words.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">1. Instead of "responsables" (Spanish typo):</span>
+                                <p class="text-xs text-slate-400 my-1">Correct spelling in English:</p>
+                                <input type="text" id="d2-input-diana-1" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="e.g., responsible officials">
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">2. Instead of "diary" (You meant 'diariamente'):</span>
+                                <p class="text-xs text-slate-400 my-1">Correct adverb or adjective format:</p>
+                                <input type="text" id="d2-input-diana-2" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="e.g., daily">
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <span class="font-bold text-slate-700 block">3. Instead of "lose" (You meant the cases 'get lost' or vanish):</span>
+                                <p class="text-xs text-slate-400 my-1">Correct third-person passive verb:</p>
+                                <input type="text" id="d2-input-diana-3" class="w-full mt-2 p-2.5 border rounded-lg focus:border-brand-teal focus:outline-none" placeholder="e.g., is lost / vanish">
+                            </div>
+                        </div>
+
+                        <button onclick="checkDay2Diana()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Check Answers
+                        </button>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // DAY 2 VERIFICATION
+        function checkDay2Valeria() {
+            const val1 = document.getElementById('d2-input-1').value.trim().toLowerCase();
+            const val2 = document.getElementById('d2-input-2').value.trim().toLowerCase();
+            const val3 = document.getElementById('d2-input-3').value.trim().toLowerCase();
+            const val4 = document.getElementById('d2-input-4').value.trim().toLowerCase();
+
+            if ([val1, val2, val3, val4].includes("")) {
+                showModal("Fields Empty", "Complete all four vocabulary boxes before proceeding.", "warning");
+                return;
+            }
+
+            const c1 = val1.includes("comfort") || val1.includes("convenience");
+            const c2 = val2.includes("change career") || val2.includes("change job") || val2.includes("career change");
+            const c3 = val3.includes("difficult supervisor") || val3.includes("toxic manager") || val3.includes("demanding boss") || val3.includes("bosses");
+            const c4 = val4 === "stability";
+
+            if (c1 && c2 && c3 && c4) {
+                showModal("Outstanding Lexical Growth!", "¡Excelente! Has reemplazado el Spanglish y las palabras informales por términos sumamente profesionales. 'Commodities' es el error que más confunde a hispanohablantes; haber aprendido la diferencia con 'comforts' te dará una gran ventaja.", "check_circle");
+                markDayAsCompleted(2);
+            } else {
+                showModal("Let's Correct It", "Alguno de tus términos no calza con el tono formal o correcto. Recuerda: 1. use 'comforts' / 2. use 'change careers' / 3. use 'demanding bosses' o 'difficult supervisors' / 4. use 'stability'.", "error");
+            }
+        }
+
+        function checkDay2Diana() {
+            const val1 = document.getElementById('d2-input-diana-1').value.trim().toLowerCase();
+            const val2 = document.getElementById('d2-input-diana-2').value.trim().toLowerCase();
+            const val3 = document.getElementById('d2-input-diana-3').value.trim().toLowerCase();
+
+            if ([val1, val2, val3].includes("")) {
+                showModal("Fields Empty", "Fill in all the blanks.", "warning");
+                return;
+            }
+
+            const c1 = val1.includes("responsible") || val1.includes("authorities") || val1.includes("officers");
+            const c2 = val2 === "daily" || val2.includes("on a daily basis");
+            const c3 = val3.includes("is lost") || val3.includes("vanishes") || val3.includes("dismissed");
+
+            if (c1 && c2 && c3) {
+                showModal("Lexical Precision Level Up!", "¡Muy bien, Diana! Corregiste tres calcos del español que reducen el puntaje drásticamente. 'Diary' es un diario personal, mientras que 'daily' es el adverbio diario. ¡Excelente distinción!", "check_circle");
+                markDayAsCompleted(2);
+            } else {
+                showModal("Try Again", "Verifica tus respuestas: 1. Recuerda la ortografía de 'responsible'. 2. Usa 'daily' para diario/diariamente. 3. Para decir que un proceso judicial 'se pierde', usa la forma pasiva 'is lost' o 'is dismissed'.", "error");
+            }
+        }
+
+        // ==========================================
+        // DAY 3: STRATEGY & DESIGN TACTICS
+        // ==========================================
+        function renderDay3(container) {
+            let originalExcerpt = studentConfigs[currentStudent].originalTextExcerpt.day3;
+            let html = `
+                <div class="space-y-6 font-serif">
+                    <p class="text-slate-600 italic text-lg leading-relaxed">
+                        "Your layout strategy determines how easily the examiner can read your key ideas. Each Task has strict design protocols."
+                    </p>
+
+                    <div class="bg-teal-50 border-l-4 border-brand-teal p-5 rounded-r-xl font-sans">
+                        <span class="text-xs uppercase font-bold tracking-wider text-brand-teal">The Strategic Fallacy Observed:</span>
+                        <p class="text-slate-700 font-semibold mt-1 text-base font-serif">${originalExcerpt}</p>
+                    </div>
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Task 1 Rule: NEVER Describe Colors or Design Elements</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed font-sans">
+                            <strong>Why?</strong> El examinador tiene una fotocopia en blanco y negro del gráfico. Decir <em>"The red line and green line..."</em> demuestra incapacidad para citar las variables reales de la leyenda del gráfico (hamburguesas, pizza).
+                        </p>
+
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 font-serif text-slate-700">
+                            <p class="text-red-700 italic">"The red line and the green line shows the trends of the pizza and hamburger, respectivelly..."</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block font-semibold text-slate-700 text-sm">Rewrite the sentence correctly, removing references to color and utilizing the variables:</label>
+                            <textarea id="d3-input-1" rows="3" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="The lines representing..."></textarea>
+                        </div>
+
+                        <button onclick="checkDay3Valeria()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Submit Rewrite
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Task 2 Rule: Present a Clear Stance (No Fence-Sitting)</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed font-sans">
+                            <strong>Why?</strong> En un "Opinion Essay", el criterio de <strong>Task Achievement</strong> requiere que tu posición sea clara *a lo largo de todo el ensayo*. Decir "no necesitamos elegir, podemos tener ambos" arruina tu puntaje por falta de un argumento unificado.
+                        </p>
+
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 font-serif text-slate-700">
+                            <p class="text-red-700 italic">"Furthermore is not necessary choose one of this two ideas we could have both because..."</p>
+                        </div>
+
+                        <p class="text-sm text-slate-600 font-semibold">Which of the following is the best way to write a robust Band 8 Opinion thesis?</p>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-start gap-3 p-3 bg-white border rounded-xl cursor-pointer hover:bg-slate-50">
+                                <input type="radio" name="d3-choice" value="a" class="mt-1 accent-brand-teal">
+                                <span><strong>Option A:</strong> "While both factors contribute to a worker's life, I completely agree that job satisfaction is of paramount importance because it guarantees long-term mental health." (Clear Stance)</span>
+                            </label>
+                            
+                            <label class="flex items-start gap-3 p-3 bg-white border rounded-xl cursor-pointer hover:bg-slate-50">
+                                <input type="radio" name="d3-choice" value="b" class="mt-1 accent-brand-teal">
+                                <span><strong>Option B:</strong> "I think we can find a balance because both a high salary and a good job are equally good in life and people should have both." (Fenced-Sitting / Weak)</span>
+                            </label>
+                        </div>
+
+                        <button onclick="checkDay3Diana()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Verify Strategy Choice
+                        </button>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // DAY 3 VERIFICATION
+        function checkDay3Valeria() {
+            const ans = document.getElementById('d3-input-1').value.trim().toLowerCase();
+            if (ans === "") {
+                showModal("Input Required", "Please rewrite the sentence before validating.", "warning");
+                return;
+            }
+
+            const mentionsColor = ans.includes("red") || ans.includes("green") || ans.includes("blue") || ans.includes("color");
+            const hasVariables = ans.includes("pizza") && ans.includes("hamburger");
+
+            if (!mentionsColor && hasVariables) {
+                showModal("Excellent Academic Writing!", "¡Extraordinario! Has reescrito el fragmento usando las categorías lógicas de la gráfica (pizza, hamburguesa) en vez de basarte en colores que no pertenecen al ensayo. Esto demuestra madurez analítica. ¡Band 8+ en Coherence!", "check_circle");
+                markDayAsCompleted(3);
+            } else {
+                showModal("Strategy Check Failed", "Recuerda: NO debes incluir nombres de colores en la respuesta. Enfócate exclusivamente en las palabras 'pizza' y 'hamburgers' o 'both fast food items'.", "error");
+            }
+        }
+
+        function checkDay3Diana() {
+            const selection = document.querySelector('input[name="d3-choice"]:checked');
+            if (!selection) {
+                showModal("Selection Required", "Please select one of the strategy options.", "warning");
+                return;
+            }
+
+            if (selection.value === "a") {
+                showModal("Strategically Correct!", "¡Exactamente! Para obtener puntajes altos en Opinion Essays (Agree/Disagree), debes tomar una posición clara desde el inicio. Sentarse a debatir ambas vistas sin decidirte reduce tu calificación en Task Achievement a Band 5. ¡Buenísima elección de estrategia!", "check_circle");
+                markDayAsCompleted(3);
+            } else {
+                showModal("Incorrect Strategy", "La Opción B representa una posición 'neutral' o ambigua que el examinador penalizará severamente. Selecciona la opción que muestra un lado claro.", "error");
+            }
+        }
+
+        // ==========================================
+        // DAY 4: ARGUMENTATIVE EXPANSION (PEEL METHOD)
+        // ==========================================
+        function renderDay4(container) {
+            let html = `
+                <div class="space-y-6 font-serif">
+                    <p class="text-slate-600 italic text-lg leading-relaxed">
+                        "If you struggle with word count, it is because your body paragraphs lack a structured development flow. The <strong>PEEL Method</strong> guarantees you cover your points extensively."
+                    </p>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 font-sans space-y-4">
+                        <h4 class="font-bold text-brand-teal text-lg">Interactive PEEL Re-construction</h4>
+                        <p class="text-sm text-slate-500">
+                            Alinea los componentes del método PEEL con sus oraciones correspondientes del ensayo de muestra para ver cómo se expande una idea de forma académica.
+                        </p>
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <!-- Valeria's PEEL Task -->
+                    <div class="space-y-3 font-sans">
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-brand-teal uppercase block">P - POINT (Idea Principal)</span>
+                            <p class="text-slate-700 italic font-serif">"The primary reason why a large salary is crucial is the financial security it brings."</p>
+                        </div>
+                        
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-brand-teal uppercase block">E - EXPLANATION (Explicación profunda)</span>
+                            <p class="text-slate-700 italic font-serif">"While job satisfaction is valuable, it cannot pay for essential needs or handle unexpected hardships. A steady high income acts as a buffer against inflation and sudden economic shifts."</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-700">Write an appropriate "EXAMPLE" (E) based on your medical scenario (Be formal, avoid 'someone of your family'):</label>
+                            <textarea id="d4-input-1" rows="3" class="w-full p-3 border-2 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="For instance, if an individual faces a sudden medical emergency, having..."></textarea>
+                        </div>
+                    </div>
+
+                    <button onclick="checkDay4Valeria()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition font-sans mt-4">
+                        Verify PEEL Fragment
+                    </button>
+                `;
+            } else {
+                html += `
+                    <!-- Diana's PEEL Task -->
+                    <div class="space-y-3 font-sans">
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-brand-teal uppercase block">P - POINT (Idea Principal)</span>
+                            <p class="text-slate-700 italic font-serif">"Another compelling argument is that high job satisfaction increases productivity."</p>
+                        </div>
+                        
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-brand-teal uppercase block">E - EXPLANATION (Explicación profunda)</span>
+                            <p class="text-slate-700 italic font-serif">"When employees feel satisfied and secure in their role, their overall motivation peaks, leading to better performance and decreased absenteeism."</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-700">Write an appropriate "EXAMPLE" (E) using correct academic linking words:</label>
+                            <textarea id="d4-input-diana-1" rows="3" class="w-full p-3 border-2 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="For example, studies have demonstrated that workers who enjoy their work environment..."></textarea>
+                        </div>
+                    </div>
+
+                    <button onclick="checkDay4Diana()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition font-sans mt-4">
+                        Verify PEEL Fragment
+                    </button>
+                `;
+            }
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        // DAY 4 VERIFICATION
+        function checkDay4Valeria() {
+            const ans = document.getElementById('d4-input-1').value.trim().toLowerCase();
+            if(ans === "") {
+                showModal("Input Required", "Write an example sentence.", "warning");
+                return;
+            }
+
+            const hasLinker = ans.includes("for instance") || ans.includes("for example") || ans.includes("to illustrate");
+            const isFormal = !ans.includes("someone of your family") && !ans.includes("with a medical problem") && !ans.includes("you are going to pay");
+
+            if (hasLinker && isFormal) {
+                showModal("Excellent PEEL Expansion!", "¡Maravilloso! Creaste un ejemplo formal y bien estructurado sin caer en lenguaje personal o informal. El método PEEL te ayudará a garantizar que cada idea esté completamente sustentada, superando las 250 palabras sin problema.", "check_circle");
+                markDayAsCompleted(4);
+            } else {
+                showModal("Review Register", "Revisa tu lenguaje. Evita expresiones como 'someone of your family' (usa 'a family member') y recuerda comenzar con un conector formal de ejemplo como 'For instance' o 'For example'.", "error");
+            }
+        }
+
+        function checkDay4Diana() {
+            const ans = document.getElementById('d4-input-diana-1').value.trim().toLowerCase();
+            if(ans === "") {
+                showModal("Input Required", "Please draft your example.", "warning");
+                return;
+            }
+
+            const hasLinker = ans.includes("for example") || ans.includes("for instance") || ans.includes("to illustrate");
+            const hasGrammar = !ans.includes("had been demonstrated") && (ans.includes("has been demonstrated") || ans.includes("studies show") || ans.includes("demonstrates"));
+
+            if (hasLinker && hasGrammar) {
+                showModal("Superb Academic Development!", "¡Brillante, Diana! Construiste un párrafo PEEL impecable. El uso de conectores formales de ejemplo y estructuras pasivas correctas ('it has been demonstrated') te dará un sólido Band 7+ en Lexical Resource y Gramática.", "check_circle");
+                markDayAsCompleted(4);
+            } else {
+                showModal("Lexical Check", "Recuerda comenzar tu ejemplo con 'For example' o 'For instance' y evitar la construcción incorrecta 'had been demonstrated' (usa 'it has been demonstrated' en su lugar).", "error");
+            }
+        }
+
+        // ==========================================
+        // DAY 5: SPEED WRITING & FINISHING STRONG
+        // ==========================================
+        function renderDay5(container) {
+            let originalExcerpt = studentConfigs[currentStudent].originalTextExcerpt.day5;
+            let html = `
+                <div class="space-y-6 font-serif">
+                    <p class="text-slate-600 italic text-lg leading-relaxed">
+                        "Your final sentence or paragraph creates the lasting impression on the examiner. Under strict time constraints, we must learn to finish our points with high impact."
+                    </p>
+
+                    <div class="bg-red-50 border-l-4 border-brand-coral p-5 rounded-r-xl font-sans">
+                        <span class="text-xs uppercase font-bold tracking-wider text-brand-coral">How Your Essay Abruptly Ended:</span>
+                        <p class="text-slate-700 font-semibold mt-1 text-base font-serif">${originalExcerpt}</p>
+                    </div>
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Fixing the Cut-off Sentence: "a two t"</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed font-sans">
+                            <strong>What happened?</strong> Se te acabó el tiempo e intentabas escribir *At the same time* ("a two t"). Vamos a reconstruir ese párrafo de cierre con una idea sólida y completa sobre Fish and Chips.
+                        </p>
+
+                        <div class="space-y-2">
+                            <label class="block font-semibold text-slate-700 text-sm">Write a complete concluding detail for Fish & Chips:</label>
+                            <textarea id="d5-input-1" rows="3" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="Conversely, fish and chips consumption dropped continuously, ending at..."></textarea>
+                        </div>
+
+                        <button onclick="checkDay5Valeria()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Verify Completion
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 font-sans space-y-4">
+                        <h4 class="font-bold text-slate-800 text-lg">Fixing the Cut-off Word: "traffic accide..."</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed font-sans">
+                            <strong>What happened?</strong> Tu ensayo se interrumpió a la mitad de la palabra 'accidents' debido a la falta de tiempo. Una conclusión sólida debe poder resumir todo en menos de 2 minutos.
+                        </p>
+
+                        <div class="space-y-2">
+                            <label class="block font-semibold text-slate-700 text-sm">Draft a swift, 1-sentence conclusion for your discussion essay:</label>
+                            <textarea id="d5-input-diana-1" rows="3" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-teal focus:outline-none font-serif text-lg" placeholder="In conclusion, while strict penalties are essential to modify bad driving behaviors, preventative educational measures..."></textarea>
+                        </div>
+
+                        <button onclick="checkDay5Diana()" class="w-full py-3 bg-brand-slate hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                            Verify Conclusion
+                        </button>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // DAY 5 VERIFICATION
+        function checkDay5Valeria() {
+            const ans = document.getElementById('d5-input-1').value.trim().toLowerCase();
+            if (ans === "") {
+                showModal("Input Required", "Rewrite the unfinished sentence.", "warning");
+                return;
+            }
+
+            const containsTrend = ans.includes("dropped") || ans.includes("declined") || ans.includes("decreased");
+            const hasData = ans.includes("220") || ans.includes("grams") || ans.includes("low");
+
+            if (containsTrend && hasData) {
+                showModal("Task 1 Completed Beautifully!", "¡Excelente! Has rescatado esa oración inconclusa y la convertiste en un cierre analítico formidable para tu Task 1. ¡Esto marcará una enorme diferencia en tu examen real!", "check_circle");
+                markDayAsCompleted(5);
+            } else {
+                showModal("Missing Specific Data", "Tu oración de cierre debe describir qué ocurrió con Fish and Chips (ej. declinó hasta llegar a 220 gramos aproximadamente). Asegúrate de incluir datos numéricos.", "error");
+            }
+        }
+
+        function checkDay5Diana() {
+            const ans = document.getElementById('d5-input-diana-1').value.trim().toLowerCase();
+            if (ans === "") {
+                showModal("Input Required", "Draft a complete conclusion.", "warning");
+                return;
+            }
+
+            const hasLinker = ans.includes("in conclusion") || ans.includes("to conclude");
+            const summarizesBoth = (ans.includes("punishment") || ans.includes("penalties") || ans.includes("strict")) && (ans.includes("prevention") || ans.includes("education") || ans.includes("zebra"));
+
+            if (hasLinker && summarizesBoth) {
+                showModal("Excellent High-Speed Conclusion!", "¡Fantástico! Lograste resumir ambos lados de la discusión (castigo vs. prevención) de manera concisa y elegante en una sola oración. Esta es la técnica para evitar que el reloj te gane en el IELTS real.", "check_circle");
+                markDayAsCompleted(5);
+            } else {
+                showModal("Incomplete Summary", "Tu conclusión debe iniciar con 'In conclusion' y resumir de forma equilibrada ambos aspectos (los castigos estrictos y las medidas preventivas).", "error");
+            }
+        }
+
+        // ==========================================
+        // DAY 6: ASSESSMENT & PROGRESS REPORT
+        // ==========================================
+        function renderDay6(container) {
+            markDayAsCompleted(6);
+
+            let html = `
+                <div class="space-y-6 font-sans">
+                    <div class="bg-teal-50 border border-brand-teal p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-teal">Congratulations, ${currentStudent.toUpperCase()}!</h3>
+                            <p class="text-slate-600 font-serif mt-1">Has completado todo el plan semanal de auto-corrección adaptado a tus essays.</p>
+                        </div>
+                        <button onclick="downloadReportPDF()" class="px-6 py-3 bg-brand-teal text-white hover:bg-brand-teal/90 rounded-xl font-bold flex items-center gap-2 transition shadow-md">
+                            <span class="material-icons-round">download</span> Download PDF Report
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Key Strategies Learned -->
+                        <div class="p-6 bg-slate-50 border rounded-2xl">
+                            <h4 class="font-bold text-slate-800 text-lg mb-3 flex items-center gap-2 text-brand-teal">
+                                <span class="material-icons-round">verified</span> Key Takeaways
+                            </h4>
+                            <ul class="space-y-3 font-serif text-slate-600 text-sm list-disc pl-5">
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    <li><strong>Grammar Check:</strong> Evitaste fragmentos y uniste cláusulas con "While" sin poner puntos innecesarios.</li>
+                    <li><strong>Lexical Precision:</strong> Aprendiste que "commodities" es materia prima y que debes usar "comforts" para comodidades.</li>
+                    <li><strong>Task 1 Design:</strong> Aprendiste a citar las variables reales de la gráfica sin describir colores de líneas.</li>
+                    <li><strong>Pacing:</strong> Reconstruiste oraciones cortadas por el tiempo para mantener la coherencia final.</li>
+                `;
+            } else {
+                html += `
+                    <li><strong>Grammar Check:</strong> Eliminaste oraciones cortadas e inconclusas dándole un sentido final con verbos de consecuencia.</li>
+                    <li><strong>Lexical Accuracy:</strong> Evitaste "responsables" e incorporaste "responsible officials", además de separar el uso de "diary" vs "daily".</li>
+                    <li><strong>IELTS Strategy:</strong> Aprendiste que en Opinion Essays debes tomar un lado claro desde el inicio sin buscar una solución neutra intermedia.</li>
+                    <li><strong>Synthesis under pressure:</strong> Construiste una conclusión unificada de una sola oración para evitar que se te acabe el tiempo.</li>
+                `;
+            }
+
+            html += `
+                            </ul>
+                        </div>
+
+                        <!-- Teacher Ivan's Note -->
+                        <div class="p-6 bg-slate-50 border rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2 text-brand-teal">
+                                    <span class="material-icons-round">rate_review</span> Teacher Ivan's Advice
+                                </h4>
+                                <p class="font-serif text-slate-600 text-sm leading-relaxed">
+            `;
+
+            if (currentStudent === 'valeria') {
+                html += `
+                    "Valeria, has demostrado una gran capacidad para corregir y refinar tus essays. Recuerda que la consistencia es clave. Si mantienes estas reglas de gramática y evitas el lenguaje de colores en tu Task 1, tu Band Score escalará velozmente en el examen real."
+                `;
+            } else {
+                html += `
+                    "Diana, tu enfoque analítico es muy bueno, pero debes priorizar el tiempo y la longitud. Nunca entregues un ensayo por debajo de las 250 palabras. El método PEEL que practicamos el jueves es tu mejor aliado para expandir de manera formal y segura tus ideas."
+                `;
+            }
+
+            html += `
+                                </p>
+                            </div>
+                            <div class="text-right mt-4 font-bold text-slate-500 font-sans text-xs">
+                                Signed: Teacher Ivan • IELTS Hub Coordinator
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // ==========================================
+        // PDF REPORT EXPORTER
+        // ==========================================
+        function downloadReportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(15, 118, 110); // Teal
+            doc.text("IELTS Weekly Booster Report", 105, 25, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Student Profile: ${currentStudent.toUpperCase()}`, 105, 33, null, null, "center");
+            doc.text(`Completed on: ${new Date().toLocaleDateString()}`, 105, 40, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 48, 190, 48);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.setTextColor(30, 41, 59);
+            doc.text("Acquired Core Strategies & Fixes This Week:", 20, 60);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            let y = 70;
+
+            let strategies = [];
+            if (currentStudent === 'valeria') {
+                strategies = [
+                    "- Corrected Fragmented sentence 'While job satisfaction. Affects...'",
+                    "- Avoided Spanglish 'commodities' and placed accurate term 'comforts'.",
+                    "- Eliminated color referring and successfully described the variables of pizza and hamburgers.",
+                    "- Successfully reconstructed and finished Task 1 concluding sentences."
+                ];
+            } else {
+                strategies = [
+                    "- Replaced fragment 'In contrast, with an hypothetical case' with a complete consequence sentence.",
+                    "- Swapped Spanglish calque 'do themselves' with English collocation 'ask themselves'.",
+                    "- Corrected misspelling of 'responsible' and adverbial usage of 'daily' over 'diary'.",
+                    "- Learned to formulate and maintain a consistent, clear position in Opinion Writing."
+                ];
+            }
+
+            strategies.forEach(strategy => {
+                doc.text(strategy, 20, y);
+                y += 10;
+            });
+
+            doc.setDrawColor(220, 220, 220);
+            doc.line(20, y, 190, y);
+            y += 15;
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Teacher Ivan's Final Comments:", 20, y);
+            y += 10;
+
+            doc.setFont("helvetica", "italic");
+            let advice = "";
+            if (currentStudent === 'valeria') {
+                advice = "Great work this week. Be highly disciplined with punctuation in Task 2 and never describe colors in Task 1. Maintain this trajectory and your targets will be achieved.";
+            } else {
+                advice = "Excellent analytic perspective. Always secure your word count above 250 words by using the PEEL method of expansion. Never leave an essay incomplete at the end.";
+            }
+
+            let splitAdvice = doc.splitTextToSize(advice, 170);
+            doc.text(splitAdvice, 20, y);
+
+            doc.save(`${currentStudent}_Weekly_IELTS_Booster_Report.pdf`);
+        }
+    </script>
+</body>
+</html>
