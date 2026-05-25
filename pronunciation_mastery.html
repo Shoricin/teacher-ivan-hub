@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation Mastery | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #0f766e;
+            --primary-light: #5dcbc3;
+            --accent-coral: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --accent-yellow: #f5b041;
+            --text-dark: #1e293b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-light);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #94a3b8; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--primary-teal); }
+        h1 { margin: 0; font-size: 2.2rem; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .subtitle { color: #64748b; margin-top: 5px; font-weight: 300; font-size: 1.1rem;}
+
+        /* TABS */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0 20px; padding: 0 20px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 25px; background: white; border: 2px solid transparent; border-radius: 50px;
+            cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; color: #64748b;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--primary-light); }
+        .tab-btn.active {
+            background: var(--primary-teal); color: white; transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(15, 118, 110, 0.3); border-color: var(--primary-teal);
+        }
+
+        /* CONTENT AREA */
+        .container { max-width: 900px; margin: 0 auto 50px; width: 95%; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* CARDS */
+        .worksheet-card {
+            background: white; padding: 35px; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;
+        }
+        .card-header h2 { margin: 0; color: var(--text-dark); font-size: 1.5rem;}
+        .icon-bg { background: #f0fdf4; color: var(--primary-teal); padding: 8px; border-radius: 50%; display: flex;}
+
+        /* VIDEO AREA */
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; margin-bottom: 20px; border: 2px solid #e2e8f0;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        .fallback-link {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #f8fafc; color: #475569; text-decoration: none;
+            padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; border: 1px solid #e2e8f0; transition: 0.2s;
+        }
+        .fallback-link:hover { background: var(--primary-light); color: white; }
+
+        /* EXERCISE STYLES */
+        .instruction { font-weight: 600; color: #475569; margin-bottom: 20px; font-size: 1.05rem;}
+        .theory-box { background: #f0fdf4; border-left: 4px solid var(--primary-teal); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 25px; color: #334155; font-size: 0.95rem; line-height: 1.6;}
+        
+        .exercise-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px; font-family: 'Merriweather', serif; font-size: 1.1rem; line-height: 1.8;}
+        
+        .gap-input {
+            padding: 4px 10px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif;
+            font-weight: bold; text-align: center; outline: none; transition: 0.3s; font-size: 1rem; color: var(--text-dark); background: white; margin: 0 5px;
+        }
+        .gap-input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(15,118,110,0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #166534; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        /* MULTIPLE CHOICE */
+        .mcq-card { background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0;}
+        .mcq-question { font-weight: bold; color: var(--text-dark); margin-top: 0; margin-bottom: 15px;}
+        .mcq-label { display: flex; align-items: center; gap: 10px; background: white; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: 0.2s;}
+        .mcq-label:hover { border-color: var(--primary-light); }
+        .mcq-label input[type="radio"] { accent-color: var(--primary-teal); transform: scale(1.2);}
+        
+        .mcq-label.correct { background: #dcfce7; border-color: #22c55e; color: #166534; font-weight: bold;}
+        .mcq-label.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .mcq-card.locked { pointer-events: none; opacity: 0.9; }
+
+        .btn-check {
+            background: var(--text-dark); color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Poppins', sans-serif; margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-check:hover { background: var(--primary-teal); transform: translateY(-2px); }
+
+        .score-display {
+            text-align: center; font-size: 1.3rem; font-weight: bold; margin-top: 20px; padding: 20px; border-radius: 12px; display: none;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">← Return to HUB</a>
+        <h1><span class="material-icons-round" style="font-size: 2.5rem;">record_voice_over</span> Pronunciation Mastery</h1>
+        <div class="subtitle">B1 Level: Sound more natural and understand native speakers</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btn-tab-1" onclick="switchTab('tab-1')"><span class="material-icons-round">graphic_eq</span> 1. The Schwa (/ə/)</button>
+        <button class="tab-btn" id="btn-tab-2" onclick="switchTab('tab-2')"><span class="material-icons-round">link</span> 2. Connected Speech</button>
+        <button class="tab-btn" id="btn-tab-3" onclick="switchTab('tab-3')"><span class="material-icons-round">volume_up</span> 3. Word Stress</button>
+    </div>
+
+    <div class="container">
+
+        <div id="tab-1" class="view-section active">
+            <div class="worksheet-card" style="border-top: 6px solid var(--primary-light);">
+                <div class="card-header">
+                    <div class="icon-bg"><span class="material-icons-round">mic</span></div>
+                    <h2>Part 1: The Magic "Schwa" Sound</h2>
+                </div>
+                
+                <div class="theory-box">
+                    <strong>¿Qué es el Schwa?</strong> Es el sonido más común en inglés. Suena como un "uh" muy corto, relajado y perezoso (/ə/). Aparece en las sílabas que <strong>no</strong> llevan el acento principal de la palabra (ej. la primera 'a' en "about" o la 'o' en "doctor").
+                </div>
+
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube-nocookie.com/embed/1kApH2_U8r8?rel=0" allowfullscreen></iframe>
+                </div>
+                <a href="https://youtu.be/1kApH2_U8r8" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+
+                <p class="instruction" style="margin-top: 25px;">Exercise: Listen and identify. Which syllable contains the Schwa (/ə/) sound in these words?</p>
+                
+                <div class="mcq-card" id="qcard-1-1">
+                    <p class="mcq-question">1. The word: <strong>DOCTOR</strong></p>
+                    <label class="mcq-label"><input type="radio" name="q1_1" value="wrong"> DOC- (The first syllable)</label>
+                    <label class="mcq-label"><input type="radio" name="q1_1" value="correct"> -TOR (The second syllable)</label>
+                </div>
+
+                <div class="mcq-card" id="qcard-1-2">
+                    <p class="mcq-question">2. The word: <strong>ABOUT</strong></p>
+                    <label class="mcq-label"><input type="radio" name="q1_2" value="correct"> A- (The first syllable)</label>
+                    <label class="mcq-label"><input type="radio" name="q1_2" value="wrong"> -BOUT (The second syllable)</label>
+                </div>
+
+                <div class="mcq-card" id="qcard-1-3">
+                    <p class="mcq-question">3. The word: <strong>COMPUTER</strong></p>
+                    <label class="mcq-label"><input type="radio" name="q1_3" value="wrong"> COM- (The first syllable)</label>
+                    <label class="mcq-label"><input type="radio" name="q1_3" value="wrong"> -PU- (The second syllable)</label>
+                    <label class="mcq-label"><input type="radio" name="q1_3" value="correct"> -TER (The third syllable)</label>
+                </div>
+
+                <button class="btn-check" onclick="checkMultipleChoice('q1', 3, 'btn-check-1', 'score-1')" id="btn-check-1">
+                    <span class="material-icons-round">task_alt</span> Check Answers
+                </button>
+                <div class="score-display" id="score-1"></div>
+            </div>
+        </div>
+
+        <div id="tab-2" class="view-section">
+            <div class="worksheet-card" style="border-top: 6px solid var(--accent-purple);">
+                <div class="card-header">
+                    <div class="icon-bg" style="background: #f3e8ff; color: var(--accent-purple);"><span class="material-icons-round">link</span></div>
+                    <h2>Part 2: Connected Speech</h2>
+                </div>
+                
+                <div class="theory-box" style="border-left-color: var(--accent-purple); background: #f8fafc;">
+                    <strong>Linking Consonant to Vowel:</strong> Cuando una palabra termina en sonido de consonante y la siguiente empieza con sonido de vocal, los nativos las unen como si fueran una sola palabra. (Ej. <em>"an apple"</em> suena como <em>"a-napple"</em>).
+                </div>
+
+                <div class="video-wrapper" style="border-color: #e2e8f0;">
+                    <iframe src="https://www.youtube-nocookie.com/embed/V5wKIEvXg7M?rel=0" allowfullscreen></iframe>
+                </div>
+                <a href="https://youtu.be/V5wKIEvXg7M" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+
+                <p class="instruction" style="margin-top: 25px;">Exercise: Listen and fill in the blanks with the missing words that are linked together.</p>
+                
+                <ul class="exercise-list">
+                    <li>1. Can I have a <input type="text" class="gap-input" style="width: 80px;" data-ans="cup"> <input type="text" class="gap-input" style="width: 50px;" data-ans="of"> tea? <br><span style="font-size: 0.9rem; color: #64748b;">(Sounds like: "cu-pof")</span></li>
+                    <li>2. He works <input type="text" class="gap-input" style="width: 60px;" data-ans="in"> <input type="text" class="gap-input" style="width: 50px;" data-ans="an"> office. <br><span style="font-size: 0.9rem; color: #64748b;">(Sounds like: "i-nan-office")</span></li>
+                    <li>3. Turn <input type="text" class="gap-input" style="width: 60px;" data-ans="it"> <input type="text" class="gap-input" style="width: 60px;" data-ans="on">, please! <br><span style="font-size: 0.9rem; color: #64748b;">(Sounds like: "tur-ni-ton")</span></li>
+                    <li>4. Look <input type="text" class="gap-input" style="width: 60px;" data-ans="at"> <input type="text" class="gap-input" style="width: 60px;" data-ans="us">! <br><span style="font-size: 0.9rem; color: #64748b;">(Sounds like: "loo-katus")</span></li>
+                </ul>
+
+                <button class="btn-check" onclick="checkGaps('tab-2', 'btn-check-2', 'score-2')" id="btn-check-2">
+                    <span class="material-icons-round">task_alt</span> Check Answers
+                </button>
+                <div class="score-display" id="score-2"></div>
+            </div>
+        </div>
+
+        <div id="tab-3" class="view-section">
+            <div class="worksheet-card" style="border-top: 6px solid var(--accent-coral);">
+                <div class="card-header">
+                    <div class="icon-bg" style="background: #fff1f2; color: var(--accent-coral);"><span class="material-icons-round">volume_up</span></div>
+                    <h2>Part 3: Word Stress Rules</h2>
+                </div>
+                
+                <div class="theory-box" style="border-left-color: var(--accent-coral); background: #fff1f2;">
+                    <strong>Word Stress:</strong> En inglés, a diferencia del español, no usamos tildes. Pero si acentúas la sílaba equivocada, los nativos no te entenderán. Además, algunas palabras cambian de Sustantivo a Verbo dependiendo de dónde pongas el acento (Ej. <strong>RE</strong>cord vs re<strong>CORD</strong>).
+                </div>
+
+                <div class="video-wrapper" style="border-color: #e2e8f0;">
+                    <iframe src="https://www.youtube-nocookie.com/embed/v0_Gk6-lQkk?rel=0" allowfullscreen></iframe>
+                </div>
+                <a href="https://youtu.be/v0_Gk6-lQkk" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+
+                <p class="instruction" style="margin-top: 25px;">Exercise: Select the correct stressed syllable based on the context of the sentence.</p>
+                
+                <div class="mcq-card" id="qcard-3-1">
+                    <p class="mcq-question">1. I need to buy a birthday ________ for my sister. (Noun)</p>
+                    <label class="mcq-label"><input type="radio" name="q3_1" value="correct"> <strong>PRE</strong>-sent</label>
+                    <label class="mcq-label"><input type="radio" name="q3_1" value="wrong"> pre-<strong>SENT</strong></label>
+                </div>
+
+                <div class="mcq-card" id="qcard-3-2">
+                    <p class="mcq-question">2. Please, ________ your screen during the Zoom meeting. (Verb)</p>
+                    <label class="mcq-label"><input type="radio" name="q3_2" value="wrong"> <strong>PRO</strong>-ject</label>
+                    <label class="mcq-label"><input type="radio" name="q3_2" value="correct"> pro-<strong>JECT</strong></label>
+                </div>
+
+                <div class="mcq-card" id="qcard-3-3">
+                    <p class="mcq-question">3. His bad behavior is a ________ of his environment. (Noun)</p>
+                    <label class="mcq-label"><input type="radio" name="q3_3" value="correct"> <strong>PRO</strong>-duct</label>
+                    <label class="mcq-label"><input type="radio" name="q3_3" value="wrong"> pro-<strong>DUCT</strong></label>
+                </div>
+
+                <button class="btn-check" onclick="checkMultipleChoice('q3', 3, 'btn-check-3', 'score-3')" id="btn-check-3">
+                    <span class="material-icons-round">task_alt</span> Check Answers
+                </button>
+                <div class="score-display" id="score-3"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Show target
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update buttons
+            if(tabId === 'tab-1') document.getElementById('btn-tab-1').classList.add('active');
+            if(tabId === 'tab-2') document.getElementById('btn-tab-2').classList.add('active');
+            if(tabId === 'tab-3') document.getElementById('btn-tab-3').classList.add('active');
+
+            // Pause videos when switching tabs
+            document.querySelectorAll('iframe').forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; 
+            });
+        }
+
+        // --- Logic for Gaps (Tab 2) ---
+        function checkGaps(containerId, btnId, scoreId) {
+            const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
+            let score = 0;
+            let total = inputs.length;
+            let allAnswered = true;
+
+            inputs.forEach(input => {
+                if (input.value.trim() === "") allAnswered = false;
+            });
+
+            if (!allAnswered) {
+                alert("Please fill in all the blanks before checking.");
+                return;
+            }
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans').toLowerCase();
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.add('wrong');
+                }
+            });
+
+            displayScore(score, total, btnId, scoreId);
+        }
+
+        // --- Logic for Multiple Choice (Tabs 1 and 3) ---
+        function checkMultipleChoice(qPrefix, totalQuestions, btnId, scoreId) {
+            let score = 0;
+            let allAnswered = true;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="${qPrefix}_${i}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Please answer all questions before checking.");
+                return;
+            }
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="${qPrefix}_${i}"]:checked`);
+                const label = selected.parentElement;
+                
+                // Lock card
+                document.getElementById(`qcard-${qPrefix.replace('q', '')}-${i}`).classList.add('locked');
+                
+                if (selected.value === "correct") {
+                    label.classList.add('correct');
+                    score++;
+                } else {
+                    label.classList.add('wrong');
+                    // Highlight correct answer
+                    const correctRadio = document.querySelector(`input[name="${qPrefix}_${i}"][value="correct"]`);
+                    if(correctRadio) correctRadio.parentElement.classList.add('correct');
+                }
+            }
+
+            displayScore(score, totalQuestions, btnId, scoreId);
+        }
+
+        function displayScore(score, total, btnId, scoreId) {
+            const scoreDisplay = document.getElementById(scoreId);
+            scoreDisplay.style.display = "block";
+            document.getElementById(btnId).style.display = "none";
+            
+            if (score === total) {
+                scoreDisplay.style.background = "#dcfce7";
+                scoreDisplay.style.color = "#166534";
+                scoreDisplay.innerHTML = `🎉 Perfect! ${score} / ${total} Correct. Great ears!`;
+            } else if (score >= total / 2) {
+                scoreDisplay.style.background = "#fef3c7";
+                scoreDisplay.style.color = "#b45309";
+                scoreDisplay.innerHTML = `👍 Good job! ${score} / ${total} Correct. Review your mistakes.`;
+            } else {
+                scoreDisplay.style.background = "#fee2e2";
+                scoreDisplay.style.color = "#991b1b";
+                scoreDisplay.innerHTML = `📚 Keep practicing! ${score} / ${total} Correct. Watch the video again.`;
+            }
+        }
+    </script>
+</body>
+</html>
