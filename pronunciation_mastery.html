@@ -156,9 +156,9 @@
                 </div>
 
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube-nocookie.com/embed/1kApH2_U8r8?rel=0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube-nocookie.com/embed/KwDJnXt3ZVQ?rel=0" allowfullscreen></iframe>
                 </div>
-                <a href="https://youtu.be/1kApH2_U8r8" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+                <a href="https://youtu.be/KwDJnXt3ZVQ" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
 
                 <p class="instruction" style="margin-top: 25px;">Exercise: Listen and identify. Which syllable contains the Schwa (/ə/) sound in these words?</p>
                 
@@ -200,9 +200,9 @@
                 </div>
 
                 <div class="video-wrapper" style="border-color: #e2e8f0;">
-                    <iframe src="https://www.youtube-nocookie.com/embed/V5wKIEvXg7M?rel=0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube-nocookie.com/embed/7tsljuK4f2E?rel=0" allowfullscreen></iframe>
                 </div>
-                <a href="https://youtu.be/V5wKIEvXg7M" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+                <a href="https://youtu.be/7tsljuK4f2E" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
 
                 <p class="instruction" style="margin-top: 25px;">Exercise: Listen and fill in the blanks with the missing words that are linked together.</p>
                 
@@ -232,9 +232,9 @@
                 </div>
 
                 <div class="video-wrapper" style="border-color: #e2e8f0;">
-                    <iframe src="https://www.youtube-nocookie.com/embed/v0_Gk6-lQkk?rel=0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube-nocookie.com/embed/KwtmVtFQljQ?rel=0" allowfullscreen></iframe>
                 </div>
-                <a href="https://youtu.be/v0_Gk6-lQkk" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
+                <a href="https://youtu.be/KwtmVtFQljQ" target="_blank" class="fallback-link">¿Video bloqueado? Ábrelo en YouTube aquí</a>
 
                 <p class="instruction" style="margin-top: 25px;">Exercise: Select the correct stressed syllable based on the context of the sentence.</p>
                 
@@ -267,26 +267,21 @@
 
     <script>
         function switchTab(tabId) {
-            // Hide all sections
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            // Show target
             document.getElementById(tabId).classList.add('active');
             
-            // Update buttons
             if(tabId === 'tab-1') document.getElementById('btn-tab-1').classList.add('active');
             if(tabId === 'tab-2') document.getElementById('btn-tab-2').classList.add('active');
             if(tabId === 'tab-3') document.getElementById('btn-tab-3').classList.add('active');
 
-            // Pause videos when switching tabs
             document.querySelectorAll('iframe').forEach(iframe => {
                 let src = iframe.src;
                 iframe.src = src; 
             });
         }
 
-        // --- Logic for Gaps (Tab 2) ---
         function checkGaps(containerId, btnId, scoreId) {
             const inputs = document.querySelectorAll(`#${containerId} .gap-input`);
             let score = 0;
@@ -319,7 +314,6 @@
             displayScore(score, total, btnId, scoreId);
         }
 
-        // --- Logic for Multiple Choice (Tabs 1 and 3) ---
         function checkMultipleChoice(qPrefix, totalQuestions, btnId, scoreId) {
             let score = 0;
             let allAnswered = true;
@@ -340,7 +334,6 @@
                 const selected = document.querySelector(`input[name="${qPrefix}_${i}"]:checked`);
                 const label = selected.parentElement;
                 
-                // Lock card
                 document.getElementById(`qcard-${qPrefix.replace('q', '')}-${i}`).classList.add('locked');
                 
                 if (selected.value === "correct") {
@@ -348,7 +341,6 @@
                     score++;
                 } else {
                     label.classList.add('wrong');
-                    // Highlight correct answer
                     const correctRadio = document.querySelector(`input[name="${qPrefix}_${i}"][value="correct"]`);
                     if(correctRadio) correctRadio.parentElement.classList.add('correct');
                 }
