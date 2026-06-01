@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Reading Mock Test | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .radio-label { display: flex; align-items: center; gap: 8px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
+        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.3); }
+        
+        .gap-input { width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e293b; outline: none; transition: 0.2s;}
+        .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+        
+        .day-tab { white-space: nowrap; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid transparent;}
+        .day-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .day-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        /* Mobile View Toggles */
+        .mobile-toggle { display: none; }
+        @media (max-width: 1023px) {
+            .mobile-toggle { display: flex; }
+            .desktop-split { display: none !important; }
+            .mobile-active-pane { display: flex !important; width: 100% !important; height: 100% !important; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 h-screen font-sans flex flex-col overflow-hidden">
+
+    <!-- HEADER & STUDENT INFO -->
+    <header class="bg-brand-slate text-white py-3 px-4 shadow-md z-20 shrink-0">
+        <div class="flex justify-between items-center mb-3">
+            <a href="index.html" class="text-slate-300 hover:text-white transition flex items-center gap-1 text-sm font-semibold">
+                <span class="material-icons-round text-xl">arrow_back</span> HUB
+            </a>
+            <div id="timer-display" class="bg-brand-teal text-white font-mono font-bold text-xl px-3 py-1 rounded-lg border border-brand-lightTeal shadow-sm">
+                20:00
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="material-icons-round text-brand-gold">account_circle</span>
+                <input type="text" id="student-name" placeholder="Candidate Name (e.g. Valeria)" class="px-3 py-1.5 rounded-lg text-slate-800 font-bold w-full md:w-64 text-sm outline-none">
+            </div>
+            <button onclick="startExam()" id="btn-start" class="w-full md:w-auto bg-brand-coral hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+                <span class="material-icons-round text-lg">play_arrow</span> Start 20 Min Timer
+            </button>
+        </div>
+    </header>
+
+    <!-- DAYS MENU (Horizontal Scroll) -->
+    <div class="bg-white border-b border-slate-200 py-3 px-4 shrink-0 z-10 shadow-sm flex overflow-x-auto scroll-pane gap-3 items-center">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mr-2">Schedule:</span>
+        <button class="day-tab active" onclick="loadDay('monday')" id="tab-monday">Monday</button>
+        <button class="day-tab" onclick="loadDay('tuesday')" id="tab-tuesday">Tuesday</button>
+        <button class="day-tab" onclick="loadDay('wednesday')" id="tab-wednesday">Wednesday</button>
+        <button class="day-tab" onclick="loadDay('thursday')" id="tab-thursday">Thursday</button>
+        <button class="day-tab" onclick="loadDay('friday')" id="tab-friday">Friday</button>
+        <button class="day-tab" onclick="loadDay('saturday')" id="tab-saturday">Saturday</button>
+        <button class="day-tab" onclick="loadDay('sunday')" id="tab-sunday">Sunday</button>
+    </div>
+
+    <!-- MOBILE VIEW TOGGLE (Only visible on phones/tablets) -->
+    <div class="mobile-toggle bg-slate-100 p-2 shrink-0 border-b border-slate-200 flex justify-center gap-2">
+        <button onclick="switchMobileView('passage')" id="btn-view-passage" class="flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition">
+            📖 Read Passage
+        </button>
+        <button onclick="switchMobileView('questions')" id="btn-view-questions" class="flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition">
+            📝 Answer Questions
+        </button>
+    </div>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-grow flex relative overflow-hidden">
+        
+        <!-- BLOCKER OVERLAY -->
+        <div id="exam-blocker" class="absolute inset-0 bg-slate-100/90 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center">
+            <span class="material-icons-round text-6xl text-brand-teal mb-4">lock_clock</span>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Test is Locked</h2>
+            <p class="text-slate-600 mb-6 max-w-sm text-sm">Ingresa tu nombre en la parte superior y presiona <strong>Start</strong> para iniciar el cronómetro de 20 minutos y desbloquear la lectura de hoy.</p>
+        </div>
+
+        <!-- LEFT PANE: READING PASSAGE -->
+        <div id="pane-passage" class="w-full lg:w-1/2 bg-white border-r border-slate-200 flex flex-col desktop-split mobile-active-pane">
+            <div class="bg-slate-50 p-3 border-b border-slate-200 shrink-0 flex justify-between items-center">
+                <h2 class="font-bold text-brand-slate text-sm">READING PASSAGE</h2>
+                <span class="text-xs text-brand-teal font-bold bg-teal-50 px-2 py-1 rounded" id="passage-day-label">Monday</span>
+            </div>
+            
+            <div class="p-5 md:p-8 overflow-y-auto scroll-pane font-serif text-base md:text-lg leading-relaxed text-slate-700 bg-white" id="passage-content">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- RIGHT PANE: QUESTIONS -->
+        <div id="pane-questions" class="w-full lg:w-1/2 bg-brand-bg flex flex-col desktop-split hidden">
+            <div class="bg-brand-slate p-3 border-b border-slate-700 shrink-0 flex justify-between items-center shadow-sm">
+                <h2 class="font-bold text-white text-sm">QUESTIONS 1 - 6</h2>
+                <button onclick="submitExam()" id="btn-submit" class="bg-brand-lightTeal hover:bg-teal-400 text-slate-900 font-bold py-1.5 px-4 rounded-lg text-xs transition shadow-sm hidden">
+                    Submit & Export PDF
+                </button>
+            </div>
+            
+            <div class="p-4 md:p-6 overflow-y-auto scroll-pane space-y-6 pb-24" id="questions-content">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let timerStarted = false;
+        let timerInterval = null;
+        let currentDayId = 'monday';
+        let isExamActive = false;
+
+        // --- DATABASE FOR DAILY TESTS ---
+        const dailyData = {
+            monday: {
+                title: "The Science of Sleep and Memory Consolidation",
+                passage: `
+                    <p class="mb-4">Sleep is a biological imperative that is often overlooked in today’s fast-paced society. For decades, scientists believed that sleep was merely a period of physical rest for the body. However, contemporary research indicates that sleep plays an extraordinarily active and crucial role in cognitive maintenance, particularly in the process of memory consolidation.</p>
+                    <p class="mb-4">Memory consolidation is the neurological process by which short-term memories, acquired during waking hours, are transformed into stable, long-term memories. This process predominantly occurs while we sleep. The human sleep cycle is divided into multiple stages, most notably Slow-Wave Sleep (SWS) and Rapid Eye Movement (REM) sleep. During Slow-Wave Sleep, which is the deepest phase of restorative rest, the brain reorganizes information and strengthens neural pathways associated with factual and spatial memories. Conversely, REM sleep is strongly associated with emotional regulation and procedural memory, such as learning how to ride a bicycle or play an instrument.</p>
+                    <p class="mb-4">A comprehensive study conducted by the Sleep Research Institute demonstrated that a deficit in sleep leads to a significant decrease in cognitive performance. Subjects who were deprived of sleep for 24 hours exhibited a 40% reduction in their ability to absorb new information compared to those who received a full eight hours of rest.</p>
+                    <p class="mb-4">Despite the undeniable benefits of a healthy sleep cycle, modern lifestyles frequently disrupt our natural circadian rhythms. Specialists strongly advise prioritizing sleep hygiene to mitigate these effects. One of the most critical recommendations is to limit exposure to blue light emitted by smartphones and computer screens before bedtime. Blue light directly inhibits the brain's production of melatonin, the hormone responsible for inducing sleepiness.</p>
+                `,
+                questionsHTML: `
+                    <!-- T/F/NG -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-bold text-brand-slate text-sm">Questions 1 - 3 (True/False/Not Given)</h3>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">1. In the past, scientists thought sleep was only for physical recovery.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">2. REM sleep is primarily responsible for factual and spatial memories.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">3. Adults require exactly eight hours of sleep every night for optimal health.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Summary -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-bold text-brand-slate text-sm">Questions 4 - 6 (Summary Completion - No more than TWO words)</h3>
+                        </div>
+                        <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
+                            <p>During restorative sleep, the brain strengthens neural <strong class="text-brand-teal">4.</strong> <input type="text" id="q4" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">. A lack of rest impacts learning, causing a drop in cognitive <strong class="text-brand-teal">5.</strong> <input type="text" id="q5" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">. Experts recommend avoiding screens at night because <strong class="text-brand-teal">6.</strong> <input type="text" id="q6" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2"> stops the production of melatonin.</p>
+                        </div>
+                    </div>
+                `,
+                answers: { q1: "true", q2: "false", q3: "not given", q4: "pathways", q5: "performance", q6: "blue light" },
+                questionsText: [
+                    "Q1: Scientists thought sleep was only physical.",
+                    "Q2: REM sleep consolidates factual memories.",
+                    "Q3: Adults require exactly 8 hours.",
+                    "Q4 (Gap): Strengthen neural...",
+                    "Q5 (Gap): Decrease in cognitive...",
+                    "Q6 (Gap): ...stops production of melatonin."
+                ]
+            },
+            tuesday: {
+                title: "The Evolution of Vertical Farming",
+                passage: `
+                    <p class="mb-4">As the global population surges towards an estimated 9.7 billion by 2050, traditional agriculture faces unprecedented challenges. Land degradation, water scarcity, and unpredictable weather patterns driven by climate change are forcing scientists and agriculturists to innovate. One of the most promising solutions to emerge in recent decades is vertical farming.</p>
+                    <p class="mb-4">Vertical farming involves growing crops in stacked layers, often incorporating controlled-environment agriculture (CEA) technology. This method optimizes plant growth by precisely controlling environmental factors such as light, temperature, humidity, and nutrient delivery. Unlike traditional farming, which relies heavily on vast expanses of arable land, vertical farms can be established in urban environments, utilizing repurposed warehouses or specifically designed skyscrapers.</p>
+                    <p class="mb-4">The primary advantage of vertical farming is its exceptional yield efficiency. Facilities can produce crop yields up to 100 times greater per square foot than traditional outdoor farms. Furthermore, these indoor farms operate independently of seasonal changes, allowing for year-round harvesting. Water conservation is another significant benefit; hydroponic and aeroponic systems used in vertical farms recycle water, reducing usage by up to 90% compared to conventional soil-based farming.</p>
+                    <p class="mb-4">However, the industry is not without its detractors. Critics often point to the exorbitant initial capital required to build these high-tech facilities. Additionally, powering the artificial LED lighting and climate control systems demands massive amounts of electricity. Unless this energy is sourced from renewables, the carbon footprint of a vertical farm can paradoxically exceed that of traditional agriculture.</p>
+                `,
+                questionsHTML: `
+                    <!-- T/F/NG -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-bold text-brand-slate text-sm">Questions 1 - 3 (True/False/Not Given)</h3>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">1. Vertical farms require massive expanses of rural land to operate efficiently.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">2. Vertical farming systems can reduce agricultural water usage by up to 90%.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif font-bold text-slate-800 text-sm mb-2">3. The majority of vertical farms currently use solar panels to power their LED lights.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="true"> True</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="false"> False</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Summary -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="font-bold text-brand-slate text-sm">Questions 4 - 6 (Summary Completion - No more than TWO words)</h3>
+                        </div>
+                        <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
+                            <p>Vertical farming is a response to issues like <strong class="text-brand-teal">4.</strong> <input type="text" id="q4" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2"> and land degradation. It offers immense benefits, such as allowing for <strong class="text-brand-teal">5.</strong> <input type="text" id="q5" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2"> regardless of the weather. However, a major drawback is the high amount of <strong class="text-brand-teal">6.</strong> <input type="text" id="q6" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2"> needed to build these advanced facilities.</p>
+                        </div>
+                    </div>
+                `,
+                answers: { q1: "false", q2: "true", q3: "not given", q4: "water scarcity", q5: "year-round harvesting", q6: "initial capital" },
+                questionsText: [
+                    "Q1: Farms require massive expanses of rural land.",
+                    "Q2: Farming systems reduce water usage by 90%.",
+                    "Q3: Majority of farms use solar panels.",
+                    "Q4 (Gap): issues like...",
+                    "Q5 (Gap): allowing for...",
+                    "Q6 (Gap): high amount of... needed to build"
+                ]
+            }
+        };
+
+        // Initialize App
+        window.onload = () => {
+            loadDay('monday'); // Default day
+        };
+
+        function loadDay(dayKey) {
+            // Prevent changing days if exam is running
+            if (isExamActive) {
+                alert("Termina tu examen actual antes de cambiar de día.");
+                return;
+            }
+
+            // Fallback for days without data
+            if (!dailyData[dayKey]) {
+                alert("El test para este día estará disponible pronto.");
+                return;
+            }
+
+            currentDayId = dayKey;
+            const data = dailyData[dayKey];
+
+            // Update UI Tabs
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${dayKey}`).classList.add('active');
+            document.getElementById('passage-day-label').innerText = dayKey.toUpperCase();
+
+            // Inject Content
+            document.getElementById('passage-content').innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-center mb-5 md:mb-6 text-brand-teal">${data.title}</h3>
+                ${data.passage}
+            `;
+            document.getElementById('questions-content').innerHTML = data.questionsHTML;
+
+            // Reset Timer and Blocker
+            document.getElementById('exam-blocker').style.display = 'flex';
+            document.getElementById('timer-display').textContent = "20:00";
+            document.getElementById('timer-display').classList.remove('warning');
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'flex';
+            
+            // Mobile view reset
+            switchMobileView('passage');
+        }
+
+        // --- Mobile View Switcher ---
+        function switchMobileView(view) {
+            const btnPassage = document.getElementById('btn-view-passage');
+            const btnQuestions = document.getElementById('btn-view-questions');
+            const panePassage = document.getElementById('pane-passage');
+            const paneQuestions = document.getElementById('pane-questions');
+
+            if (view === 'passage') {
+                btnPassage.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnQuestions.className = "flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                panePassage.classList.add('mobile-active-pane');
+                panePassage.classList.remove('hidden');
+                paneQuestions.classList.remove('mobile-active-pane');
+                paneQuestions.classList.add('hidden');
+            } else {
+                btnQuestions.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnPassage.className = "flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                paneQuestions.classList.add('mobile-active-pane');
+                paneQuestions.classList.remove('hidden');
+                panePassage.classList.remove('mobile-active-pane');
+                panePassage.classList.add('hidden');
+            }
+        }
+
+        // --- Timer & Execution Logic ---
+        function startExam() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                alert("Por favor, ingresa tu nombre (Ej. Valeria o Diana) para generar tu reporte.");
+                return;
+            }
+
+            document.getElementById('exam-blocker').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            isExamActive = true;
+            timerStarted = true;
+            startTimer(1200); // 20 minutes
+        }
+
+        function startTimer(duration) {
+            let timer = duration;
+            const display = document.getElementById('timer-display');
+
+            timerInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (timer <= 300) display.classList.add('warning');
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    autoSubmit();
+                }
+            }, 1000);
+        }
+
+        function autoSubmit() {
+            alert("⏰ ¡El tiempo ha terminado! Tu examen se calificará automáticamente.");
+            submitExam(true);
+        }
+
+        function submitExam(isAuto = false) {
+            if (!isAuto) {
+                const proceed = confirm("¿Estás seguro que deseas enviar tus respuestas y descargar el PDF?");
+                if (!proceed) return;
+            }
+
+            clearInterval(timerInterval);
+            isExamActive = false;
+            document.getElementById('btn-submit').style.display = 'none';
+            
+            const data = dailyData[currentDayId];
+            
+            const studentAnswers = {
+                q1: document.querySelector('input[name="q1"]:checked')?.value || "Not Answered",
+                q2: document.querySelector('input[name="q2"]:checked')?.value || "Not Answered",
+                q3: document.querySelector('input[name="q3"]:checked')?.value || "Not Answered",
+                q4: document.getElementById('q4').value.trim().toLowerCase(),
+                q5: document.getElementById('q5').value.trim().toLowerCase(),
+                q6: document.getElementById('q6').value.trim().toLowerCase()
+            };
+
+            let score = 0;
+            const results = {};
+
+            for (let key in data.answers) {
+                const sAns = studentAnswers[key];
+                const cAns = data.answers[key];
+                
+                if (sAns === cAns) {
+                    score++;
+                    results[key] = { status: "Correct" };
+                } else {
+                    results[key] = { status: "Incorrect" };
+                }
+            }
+
+            generatePDFReport(studentAnswers, results, score, data);
+        }
+
+        function generatePDFReport(studentAnswers, results, score, data) {
+            const studentName = document.getElementById('student-name').value.trim() || "Student";
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const teal = [15, 118, 110];
+            const slate = [30, 41, 59];
+            const coral = [244, 63, 94];
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(...teal);
+            doc.text(`IELTS Reading Report: ${currentDayId.toUpperCase()}`, 105, 20, null, null, "center");
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Candidate: ${studentName.toUpperCase()}`, 105, 30, null, null, "center");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 37, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 45, 190, 45);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor(...slate);
+            doc.text(`Final Score: ${score} / 6`, 105, 60, null, null, "center");
+
+            let band = "Band 5.0 (Keep Practicing)";
+            if(score === 6) band = "Band 9.0 (Perfect!)";
+            else if (score >= 4) band = "Band 7.0 (Good)";
+            
+            doc.setFontSize(12);
+            doc.setTextColor(...(score >= 4 ? teal : coral));
+            doc.text(`Estimated Performance: ${band}`, 105, 70, null, null, "center");
+
+            doc.setFontSize(14);
+            doc.setTextColor(...slate);
+            doc.text("Detailed Question Breakdown:", 20, 90);
+
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            let y = 100;
+
+            for (let i = 1; i <= 6; i++) {
+                let qKey = `q${i}`;
+                let sAns = studentAnswers[qKey] || "[Blank]";
+                let cAns = data.answers[qKey];
+                let isCorrect = results[qKey].status === "Correct";
+                
+                doc.setTextColor(50, 50, 50);
+                doc.setFont("helvetica", "bold");
+                doc.text(data.questionsText[i-1], 20, y);
+                
+                y += 7;
+                doc.setFont("helvetica", "normal");
+                doc.text(`Your Answer: ${sAns.toUpperCase()}`, 25, y);
+                
+                if (!isCorrect) {
+                    doc.setTextColor(...coral);
+                    doc.text(`Correct Answer: ${cAns.toUpperCase()} ❌`, 110, y);
+                } else {
+                    doc.setTextColor(34, 197, 94);
+                    doc.text(`Correct ✅`, 110, y);
+                }
+                y += 12;
+            }
+
+            doc.setDrawColor(220, 220, 220);
+            doc.line(20, y, 190, y);
+            y += 15;
+            
+            doc.setFont("helvetica", "bolditalic");
+            doc.setTextColor(100, 100, 100);
+            let feedback = score >= 5 
+                ? "Excellent reading speed and accuracy! Your Skimming & Scanning skills are solid." 
+                : "Remember: 'Not Given' means the exact info is missing. Watch out for exact synonyms in the text!";
+            
+            let splitFeedback = doc.splitTextToSize(`Teacher Ivan's Note: ${feedback}`, 170);
+            doc.text(splitFeedback, 20, y);
+
+            doc.save(`${studentName.replace(/\s+/g, '_')}_Reading_${currentDayId.toUpperCase()}.pdf`);
+            document.querySelectorAll('input').forEach(i => i.disabled = true);
+        }
+    </script>
+</body>
+</html>
