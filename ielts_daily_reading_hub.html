@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Reading Mock Test | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .radio-label { display: flex; align-items: center; gap: 8px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
+        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.3); }
+        
+        .gap-input { width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e293b; outline: none; transition: 0.2s;}
+        .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+        
+        .day-tab { white-space: nowrap; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid transparent;}
+        .day-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .day-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        .mobile-toggle { display: none; }
+        @media (max-width: 1023px) {
+            .mobile-toggle { display: flex; }
+            .desktop-split { display: none !important; }
+            .mobile-active-pane { display: flex !important; width: 100% !important; height: 100% !important; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 h-screen font-sans flex flex-col overflow-hidden">
+
+    <!-- HEADER & STUDENT INFO -->
+    <header class="bg-brand-slate text-white py-3 px-4 shadow-md z-20 shrink-0">
+        <div class="flex justify-between items-center mb-3">
+            <a href="index.html" class="text-slate-300 hover:text-white transition flex items-center gap-1 text-sm font-semibold">
+                <span class="material-icons-round text-xl">arrow_back</span> HUB
+            </a>
+            <div id="timer-display" class="bg-brand-teal text-white font-mono font-bold text-xl px-3 py-1 rounded-lg border border-brand-lightTeal shadow-sm">
+                20:00
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="material-icons-round text-brand-gold">account_circle</span>
+                <input type="text" id="student-name" placeholder="Candidate Name" class="px-3 py-1.5 rounded-lg text-slate-800 font-bold w-full md:w-64 text-sm outline-none">
+            </div>
+            <button onclick="startExam()" id="btn-start" class="w-full md:w-auto bg-brand-coral hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+                <span class="material-icons-round text-lg">play_arrow</span> Start Timer
+            </button>
+        </div>
+    </header>
+
+    <!-- DAYS MENU -->
+    <div class="bg-white border-b border-slate-200 py-3 px-4 shrink-0 z-10 shadow-sm flex overflow-x-auto scroll-pane gap-3 items-center">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mr-2">Schedule:</span>
+        <button class="day-tab active" onclick="loadDay('monday')" id="tab-monday">Mon</button>
+        <button class="day-tab" onclick="loadDay('tuesday')" id="tab-tuesday">Tue</button>
+        <button class="day-tab" onclick="loadDay('wednesday')" id="tab-wednesday">Wed</button>
+        <button class="day-tab" onclick="loadDay('thursday')" id="tab-thursday">Thu</button>
+        <button class="day-tab" onclick="loadDay('friday')" id="tab-friday">Fri</button>
+        <button class="day-tab" onclick="loadDay('saturday')" id="tab-saturday">Sat</button>
+    </div>
+
+    <!-- MOBILE VIEW TOGGLE -->
+    <div class="mobile-toggle bg-slate-100 p-2 shrink-0 border-b border-slate-200 flex justify-center gap-2">
+        <button onclick="switchMobileView('passage')" id="btn-view-passage" class="flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition">
+            📖 Read Passage
+        </button>
+        <button onclick="switchMobileView('questions')" id="btn-view-questions" class="flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition">
+            📝 Answer Questions
+        </button>
+    </div>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-grow flex relative overflow-hidden">
+        
+        <!-- BLOCKER OVERLAY -->
+        <div id="exam-blocker" class="absolute inset-0 bg-slate-100/90 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center">
+            <span class="material-icons-round text-6xl text-brand-teal mb-4">lock_clock</span>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Test is Locked</h2>
+            <p class="text-slate-600 mb-6 max-w-sm text-sm">Ingresa tu nombre y presiona <strong>Start</strong> para desbloquear la lectura y las preguntas.</p>
+        </div>
+
+        <!-- LEFT PANE: EXTERNAL IFRAME -->
+        <div id="pane-passage" class="w-full lg:w-1/2 bg-white border-r border-slate-200 flex flex-col desktop-split mobile-active-pane">
+            <div class="bg-slate-50 p-3 border-b border-slate-200 shrink-0 flex justify-between items-center">
+                <h2 class="font-bold text-brand-slate text-sm" id="passage-title">Loading...</h2>
+                <span class="text-xs text-brand-teal font-bold bg-teal-50 px-2 py-1 rounded" id="passage-day-label">Monday</span>
+            </div>
+            
+            <!-- EXTERNAL TEXT INJECTED HERE -->
+            <iframe id="external-text-frame" class="w-full h-full border-none" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b;'>Bloqueado. Inicia el test.</div>"></iframe>
+        </div>
+
+        <!-- RIGHT PANE: DYNAMIC QUESTIONS -->
+        <div id="pane-questions" class="w-full lg:w-1/2 bg-brand-bg flex flex-col desktop-split hidden">
+            <div class="bg-brand-slate p-3 border-b border-slate-700 shrink-0 flex justify-between items-center shadow-sm">
+                <h2 class="font-bold text-white text-sm">QUESTIONS 1 - 6</h2>
+                <button onclick="submitExam()" id="btn-submit" class="bg-brand-lightTeal hover:bg-teal-400 text-slate-900 font-bold py-1.5 px-4 rounded-lg text-xs transition shadow-sm hidden">
+                    Submit & Export PDF
+                </button>
+            </div>
+            
+            <div class="p-4 md:p-6 overflow-y-auto scroll-pane pb-24" id="questions-content">
+                <!-- Injected via JS Generador -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let timerStarted = false;
+        let timerInterval = null;
+        let currentDayId = 'monday';
+        let isExamActive = false;
+
+        // --- DYNAMIC DATABASE (Clean and Scalable) ---
+        const dailyData = {
+            monday: {
+                title: "The Science of Sleep and Memory",
+                fileUrl: "textos/monday.html", // Carga de archivo externo
+                tfng: [
+                    "1. In the past, scientists thought sleep was only for physical recovery.",
+                    "2. REM sleep is primarily responsible for factual and spatial memories.",
+                    "3. Adults require exactly eight hours of sleep every night for optimal health."
+                ],
+                summaryText: "During restorative sleep, the brain strengthens neural <strong class='text-brand-teal'>4.</strong> [Q4]. A lack of rest impacts learning, causing a drop in cognitive <strong class='text-brand-teal'>5.</strong> [Q5]. Experts recommend avoiding screens at night because <strong class='text-brand-teal'>6.</strong> [Q6] stops the production of melatonin.",
+                answers: { q1: "true", q2: "false", q3: "not given", q4: "pathways", q5: "performance", q6: "blue light" }
+            },
+            tuesday: {
+                title: "The Evolution of Vertical Farming",
+                fileUrl: "textos/tuesday.html",
+                tfng: [
+                    "1. Vertical farms require massive expanses of rural land.",
+                    "2. Farming systems reduce water usage by up to 90%.",
+                    "3. The majority of farms use solar panels."
+                ],
+                summaryText: "Vertical farming is a response to issues like <strong class='text-brand-teal'>4.</strong> [Q4] and land degradation. It offers immense benefits, such as allowing for <strong class='text-brand-teal'>5.</strong> [Q5] regardless of the weather. However, a major drawback is the high amount of <strong class='text-brand-teal'>6.</strong> [Q6] needed to build these facilities.",
+                answers: { q1: "false", q2: "true", q3: "not given", q4: "water scarcity", q5: "year-round harvesting", q6: "initial capital" }
+            },
+            wednesday: {
+                title: "The Future of Renewable Energy",
+                fileUrl: "textos/wednesday.html",
+                tfng: [
+                    "1. Fossil fuels will be completely depleted by the year 2050.",
+                    "2. Wind power is currently the cheapest source of renewable energy.",
+                    "3. Solar panels generate electricity even on cloudy days."
+                ],
+                summaryText: "Transitioning to renewables is essential to combat <strong class='text-brand-teal'>4.</strong> [Q4]. While solar and wind are popular, their main issue is <strong class='text-brand-teal'>5.</strong> [Q5], meaning they don't produce power constantly. To fix this, better <strong class='text-brand-teal'>6.</strong> [Q6] are being developed.",
+                answers: { q1: "not given", q2: "not given", q3: "true", q4: "climate change", q5: "intermittency", q6: "battery systems" }
+            },
+            thursday: {
+                title: "Artificial Intelligence in Medicine",
+                fileUrl: "textos/thursday.html",
+                tfng: [
+                    "1. AI algorithms can currently perform surgeries without human supervision.",
+                    "2. Machine learning models are faster at analyzing X-rays than human doctors.",
+                    "3. Patients generally prefer AI doctors over human doctors."
+                ],
+                summaryText: "AI is revolutionizing healthcare, particularly in the field of <strong class='text-brand-teal'>4.</strong> [Q4]. By scanning vast amounts of data, AI can predict disease <strong class='text-brand-teal'>5.</strong> [Q5] before symptoms appear. However, experts warn about the <strong class='text-brand-teal'>6.</strong> [Q6] of relying entirely on machines.",
+                answers: { q1: "false", q2: "true", q3: "not given", q4: "diagnostics", q5: "outbreaks", q6: "ethical risks" }
+            },
+            friday: {
+                title: "The History of Chocolate",
+                fileUrl: "textos/friday.html",
+                tfng: [
+                    "1. The Mayans consumed chocolate as a hot, sweet beverage.",
+                    "2. Cacao beans were once used as a form of currency.",
+                    "3. Milk chocolate was invented in Switzerland."
+                ],
+                summaryText: "Originally, chocolate was consumed as a bitter drink during <strong class='text-brand-teal'>4.</strong> [Q4]. When it reached Europe, aristocrats added sugar to hide the <strong class='text-brand-teal'>5.</strong> [Q5]. Later, the industrial revolution allowed the mass production of <strong class='text-brand-teal'>6.</strong> [Q6].",
+                answers: { q1: "false", q2: "true", q3: "not given", q4: "religious ceremonies", q5: "bitter taste", q6: "solid chocolate" }
+            },
+            saturday: {
+                title: "Ocean Exploration: The Final Frontier",
+                fileUrl: "textos/saturday.html",
+                tfng: [
+                    "1. We have explored more of the ocean floor than the surface of Mars.",
+                    "2. Deep-sea pressure is the primary obstacle for human exploration.",
+                    "3. Bioluminescence is used by predators to attract prey."
+                ],
+                summaryText: "The deep ocean remains largely mysterious due to extreme <strong class='text-brand-teal'>4.</strong> [Q4]. To survive in complete darkness, many creatures developed <strong class='text-brand-teal'>5.</strong> [Q5] to hunt or communicate. Modern expeditions rely heavily on autonomous <strong class='text-brand-teal'>6.</strong> [Q6] to map these areas.",
+                answers: { q1: "false", q2: "true", q3: "true", q4: "water pressure", q5: "bioluminescence", q6: "robotic submarines" }
+            }
+        };
+
+        window.onload = () => { loadDay('monday'); };
+
+        function loadDay(dayKey) {
+            if (isExamActive) {
+                alert("Termina tu examen actual antes de cambiar de día.");
+                return;
+            }
+
+            currentDayId = dayKey;
+            const data = dailyData[dayKey];
+
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${dayKey}`).classList.add('active');
+            document.getElementById('passage-day-label').innerText = dayKey.toUpperCase();
+            document.getElementById('passage-title').innerText = data.title;
+
+            // Generate HTML for Questions dynamically
+            document.getElementById('questions-content').innerHTML = buildQuestionsHTML(data);
+
+            // Reset iframe visually (Will load real file when Start is clicked)
+            document.getElementById('external-text-frame').srcdoc = "<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Bloqueado. Presiona Start.</div>";
+
+            document.getElementById('exam-blocker').style.display = 'flex';
+            document.getElementById('timer-display').textContent = "20:00";
+            document.getElementById('timer-display').classList.remove('warning');
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'flex';
+            
+            switchMobileView('passage');
+        }
+
+        // HTML Generator Engine for Questions
+        function buildQuestionsHTML(data) {
+            let tfngHTML = data.tfng.map((q, index) => {
+                let qNum = index + 1;
+                return `
+                    <div class="mb-5">
+                        <p class="font-serif font-bold text-slate-800 text-sm mb-2">${q}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="true"> True</label>
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="false"> False</label>
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="not given"> Not Given</label>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            let summaryStr = data.summaryText;
+            [4, 5, 6].forEach(num => {
+                summaryStr = summaryStr.replace(`[Q${num}]`, `<input type="text" id="q${num}" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">`);
+            });
+
+            return `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                    <div class="mb-4 pb-3 border-b border-slate-100">
+                        <h3 class="font-bold text-brand-slate text-sm">Questions 1 - 3 (True/False/Not Given)</h3>
+                    </div>
+                    ${tfngHTML}
+                </div>
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="mb-4 pb-3 border-b border-slate-100">
+                        <h3 class="font-bold text-brand-slate text-sm">Questions 4 - 6 (Summary)</h3>
+                        <p class="text-xs text-slate-500">NO MORE THAN TWO WORDS.</p>
+                    </div>
+                    <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
+                        ${summaryStr}
+                    </div>
+                </div>
+            `;
+        }
+
+        // View Toggles
+        function switchMobileView(view) {
+            const btnPassage = document.getElementById('btn-view-passage');
+            const btnQuestions = document.getElementById('btn-view-questions');
+            const panePassage = document.getElementById('pane-passage');
+            const paneQuestions = document.getElementById('pane-questions');
+
+            if (view === 'passage') {
+                btnPassage.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnQuestions.className = "flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                panePassage.classList.add('mobile-active-pane'); panePassage.classList.remove('hidden');
+                paneQuestions.classList.remove('mobile-active-pane'); paneQuestions.classList.add('hidden');
+            } else {
+                btnQuestions.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnPassage.className = "flex-1 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                paneQuestions.classList.add('mobile-active-pane'); paneQuestions.classList.remove('hidden');
+                panePassage.classList.remove('mobile-active-pane'); panePassage.classList.add('hidden');
+            }
+        }
+
+        // Exam Engine
+        function startExam() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                alert("Ingresa tu nombre para generar el reporte en PDF."); return;
+            }
+
+            // Load external HTML file into the iframe
+            const currentData = dailyData[currentDayId];
+            document.getElementById('external-text-frame').removeAttribute('srcdoc');
+            document.getElementById('external-text-frame').src = currentData.fileUrl;
+
+            document.getElementById('exam-blocker').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            isExamActive = true; timerStarted = true;
+            startTimer(1200); 
+        }
+
+        function startTimer(duration) {
+            let timer = duration;
+            const display = document.getElementById('timer-display');
+            timerInterval = setInterval(function () {
+                let m = parseInt(timer / 60, 10);
+                let s = parseInt(timer % 60, 10);
+                display.textContent = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+                if (timer <= 300) display.classList.add('warning');
+                if (--timer < 0) { clearInterval(timerInterval); autoSubmit(); }
+            }, 1000);
+        }
+
+        function autoSubmit() {
+            alert("⏰ Tiempo agotado. Evaluando..."); submitExam(true);
+        }
+
+        function submitExam(isAuto = false) {
+            if (!isAuto) {
+                if (!confirm("¿Deseas enviar tus respuestas y descargar el PDF?")) return;
+            }
+
+            clearInterval(timerInterval);
+            isExamActive = false;
+            document.getElementById('btn-submit').style.display = 'none';
+            
+            const data = dailyData[currentDayId];
+            const studentAnswers = {
+                q1: document.querySelector('input[name="q1"]:checked')?.value || "Not Answered",
+                q2: document.querySelector('input[name="q2"]:checked')?.value || "Not Answered",
+                q3: document.querySelector('input[name="q3"]:checked')?.value || "Not Answered",
+                q4: document.getElementById('q4').value.trim().toLowerCase(),
+                q5: document.getElementById('q5').value.trim().toLowerCase(),
+                q6: document.getElementById('q6').value.trim().toLowerCase()
+            };
+
+            let score = 0; const results = {};
+            for (let key in data.answers) {
+                if (studentAnswers[key] === data.answers[key]) {
+                    score++; results[key] = { status: "Correct" };
+                } else {
+                    results[key] = { status: "Incorrect" };
+                }
+            }
+
+            generatePDFReport(studentAnswers, results, score, data);
+        }
+
+        function generatePDFReport(studentAnswers, results, score, data) {
+            const studentName = document.getElementById('student-name').value.trim() || "Student";
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(15, 118, 110);
+            doc.text(`IELTS Reading: ${currentDayId.toUpperCase()}`, 105, 20, null, null, "center");
+
+            doc.setFontSize(12); doc.setFont("helvetica", "italic"); doc.setTextColor(100, 100, 100);
+            doc.text(`Candidate: ${studentName.toUpperCase()}`, 105, 30, null, null, "center");
+            doc.text(`Topic: ${data.title}`, 105, 37, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); doc.line(20, 45, 190, 45);
+
+            doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 41, 59);
+            doc.text(`Final Score: ${score} / 6`, 105, 60, null, null, "center");
+
+            doc.setFontSize(14); doc.text("Detailed Breakdown:", 20, 85);
+            doc.setFontSize(11); doc.setFont("helvetica", "normal");
+            
+            let y = 95;
+            for (let i = 1; i <= 6; i++) {
+                let qKey = `q${i}`;
+                let sAns = studentAnswers[qKey];
+                let isCorrect = results[qKey].status === "Correct";
+                
+                doc.setTextColor(50, 50, 50); doc.setFont("helvetica", "bold");
+                let qText = i <= 3 ? data.tfng[i-1] : `Q${i} (Summary Gap)`;
+                let splitQ = doc.splitTextToSize(qText, 170);
+                doc.text(splitQ, 20, y);
+                
+                y += (splitQ.length * 5) + 2;
+                doc.setFont("helvetica", "normal");
+                doc.text(`Your Answer: ${sAns.toUpperCase()}`, 25, y);
+                
+                if (!isCorrect) {
+                    doc.setTextColor(244, 63, 94);
+                    doc.text(`Correct Answer: ${data.answers[qKey].toUpperCase()} X`, 110, y);
+                } else {
+                    doc.setTextColor(34, 197, 94);
+                    doc.text(`Correct V`, 110, y);
+                }
+                y += 12;
+            }
+
+            doc.save(`${studentName.replace(/\s+/g, '_')}_Reading_${currentDayId.toUpperCase()}.pdf`);
+            document.querySelectorAll('input').forEach(i => i.disabled = true);
+        }
+    </script>
+</body>
+</html>
