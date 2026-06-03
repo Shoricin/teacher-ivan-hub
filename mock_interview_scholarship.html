@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scholarship Mock Interview | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .day-tab { white-space: nowrap; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid transparent;}
+        .day-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .day-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+        
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .pulse-ring { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(244, 63, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 min-h-screen font-sans flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-brand-slate text-white py-6 px-6 text-center border-b-4 border-brand-gold relative shadow-md">
+        <a href="index.html" class="absolute left-6 top-6 text-slate-300 hover:text-brand-gold font-semibold flex items-center gap-2 transition duration-200">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <h1 class="text-3xl font-bold flex items-center justify-center gap-3">
+            <span class="material-icons-round text-brand-gold text-4xl">school</span> 
+            Scholarship Interview
+        </h1>
+        <p class="text-slate-300 mt-2 font-light">Preparation Guide & Speaking Simulator</p>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="flex justify-center gap-4 mt-8 px-4 flex-wrap">
+        <button class="day-tab active flex items-center gap-2" onclick="switchTab('tab-guide')" id="btn-guide">
+            <span class="material-icons-round text-sm">menu_book</span> 1. The Guide
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchTab('tab-vocab')" id="btn-vocab">
+            <span class="material-icons-round text-sm">record_voice_over</span> 2. Power Phrases
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchTab('tab-simulator')" id="btn-simulator">
+            <span class="material-icons-round text-sm">videocam</span> 3. The Simulator
+        </button>
+    </div>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 mt-8 mb-16">
+
+        <!-- ================= TAB 1: THE GUIDE (STAR METHOD) ================= -->
+        <div id="tab-guide" class="view-section active">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold text-brand-teal flex items-center gap-2 border-b border-slate-100 pb-4 mb-6">
+                    <span class="material-icons-round">star</span> The STAR Method
+                </h2>
+                <p class="text-slate-600 mb-6 font-serif leading-relaxed">
+                    Las universidades prestigiosas rara vez hacen preguntas de "sí o no". Utilizan preguntas conductuales (Behavioral Questions) como: <em>"Tell me about a time you failed..."</em>. Para responder estructuradamente sin perderte en los detalles, usa el método <strong>STAR</strong>:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
+                        <h3 class="font-bold text-blue-700 text-lg">S - Situation</h3>
+                        <p class="text-sm text-slate-600 mt-2 font-serif">Establece el contexto. ¿Dónde estabas? ¿Cuál era el proyecto?<br><span class="italic text-slate-400">"During my final year of high school, my team and I had to present a science project..."</span></p>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-brand-gold shadow-sm">
+                        <h3 class="font-bold text-yellow-600 text-lg">T - Task</h3>
+                        <p class="text-sm text-slate-600 mt-2 font-serif">¿Cuál era tu responsabilidad o el desafío a superar?<br><span class="italic text-slate-400">"We realized our data was corrupted just two days before the deadline..."</span></p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-brand-coral shadow-sm">
+                        <h3 class="font-bold text-rose-600 text-lg">A - Action</h3>
+                        <p class="text-sm text-slate-600 mt-2 font-serif"><strong>Lo más importante.</strong> ¿Qué hiciste TÚ para resolverlo? Usa "I", no "We".<br><span class="italic text-slate-400">"I took the initiative to organize an emergency meeting and reassigned the research roles..."</span></p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-brand-teal shadow-sm">
+                        <h3 class="font-bold text-teal-700 text-lg">R - Result</h3>
+                        <p class="text-sm text-slate-600 mt-2 font-serif">El final feliz y la lección aprendida.<br><span class="italic text-slate-400">"As a result, we not only finished on time but received the highest grade. It taught me the value of crisis management."</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: POWER PHRASES ================= -->
+        <div id="tab-vocab" class="view-section">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 border-b border-slate-100 pb-4 mb-6">
+                    <span class="material-icons-round">record_voice_over</span> Power Phrases (B2/C1)
+                </h2>
+                <p class="text-slate-600 mb-6 font-serif leading-relaxed">
+                    Evita frases básicas como <em>"I think"</em> o <em>"I want to study here because it's good"</em>. Demuestra tu dominio del inglés usando este vocabulario estratégico:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                        <h4 class="font-bold text-emerald-800 mb-2">To express strong passion/motivation:</h4>
+                        <ul class="list-disc pl-5 text-slate-700 font-serif text-sm space-y-1">
+                            <li>"I have always been deeply passionate about..."</li>
+                            <li>"My academic background has equipped me to..."</li>
+                            <li>"I am highly driven by the prospect of..."</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <h4 class="font-bold text-indigo-800 mb-2">To connect your goals with the University:</h4>
+                        <ul class="list-disc pl-5 text-slate-700 font-serif text-sm space-y-1">
+                            <li>"Your university’s commitment to [Value/Research] perfectly aligns with my personal goals."</li>
+                            <li>"I was particularly drawn to your program because..."</li>
+                            <li>"Receiving this scholarship would be a transformative opportunity for me to..."</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-100">
+                        <h4 class="font-bold text-rose-800 mb-2">Buying time to think (Instead of saying "Ehh..."):</h4>
+                        <ul class="list-disc pl-5 text-slate-700 font-serif text-sm space-y-1">
+                            <li>"That is a very insightful question..."</li>
+                            <li>"I'm glad you asked that. I would say that..."</li>
+                            <li>"Let me reflect on that for a brief moment..."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: THE SIMULATOR ================= -->
+        <div id="tab-simulator" class="view-section">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 text-center">
+                
+                <!-- Intro State -->
+                <div id="sim-intro">
+                    <span class="material-icons-round text-6xl text-brand-teal mb-4">video_camera_front</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">The Live Interview Room</h2>
+                    <p class="text-slate-600 mb-8 max-w-lg mx-auto">Cuando presiones "Start", el comité de admisiones te hará una pregunta aleatoria. Tendrás <strong>2 minutos</strong> exactos para responder en voz alta. ¡Aplica el método STAR!</p>
+                    <button onclick="startInterview()" class="bg-brand-teal hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 text-lg flex items-center justify-center gap-2 mx-auto">
+                        <span class="material-icons-round">play_arrow</span> Enter Interview
+                    </button>
+                </div>
+
+                <!-- Active Interview State -->
+                <div id="sim-active" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2 text-brand-coral font-bold pulse-ring bg-rose-50 px-3 py-1 rounded-full">
+                            <span class="material-icons-round text-sm">fiber_manual_record</span> RECORDING
+                        </div>
+                        <div id="interview-timer" class="text-3xl font-mono font-bold text-slate-800">02:00</div>
+                    </div>
+
+                    <div class="bg-slate-50 p-8 rounded-2xl border-2 border-slate-200 mb-8 min-h-[200px] flex items-center justify-center">
+                        <h3 id="interview-question" class="text-2xl md:text-3xl font-bold text-brand-slate leading-tight font-serif">
+                            "Tell us about yourself."
+                        </h3>
+                    </div>
+
+                    <button onclick="nextQuestion()" class="bg-brand-gold hover:bg-yellow-500 text-slate-900 font-bold py-3 px-8 rounded-full shadow-md transition duration-200 text-lg flex items-center justify-center gap-2 mx-auto">
+                        Next Question <span class="material-icons-round">skip_next</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'tab-guide') document.getElementById('btn-guide').classList.add('active');
+            if(tabId === 'tab-vocab') document.getElementById('btn-vocab').classList.add('active');
+            if(tabId === 'tab-simulator') document.getElementById('btn-simulator').classList.add('active');
+
+            // Reset simulator if leaving the tab
+            if (tabId !== 'tab-simulator') {
+                clearInterval(interviewInterval);
+                document.getElementById('sim-intro').classList.remove('hidden');
+                document.getElementById('sim-active').classList.add('hidden');
+            }
+        }
+
+        // Interview Simulator Logic
+        const questions = [
+            "Tell us a little bit about yourself and your academic background.",
+            "Why did you choose to apply to our university specifically?",
+            "How will this scholarship help you achieve your long-term career goals?",
+            "Describe a time when you had to overcome a significant challenge. How did you handle it?",
+            "What do you consider to be your greatest strength, and what is your greatest weakness?",
+            "Tell us about a time you demonstrated leadership.",
+            "How do you plan to contribute to our university's campus community?",
+            "Where do you see yourself in 5 to 10 years?",
+            "Describe a time when you failed. What did you learn from that experience?",
+            "Why do you believe you deserve this scholarship over other highly qualified candidates?"
+        ];
+
+        let interviewInterval = null;
+        let askedQuestions = [];
+
+        function startInterview() {
+            document.getElementById('sim-intro').classList.add('hidden');
+            document.getElementById('sim-active').classList.remove('hidden');
+            askedQuestions = [];
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            clearInterval(interviewInterval);
+            
+            // Check if all questions asked
+            if (askedQuestions.length === questions.length) {
+                alert("¡Felicidades! Has completado todas las preguntas de la simulación de entrevista.");
+                document.getElementById('sim-intro').classList.remove('hidden');
+                document.getElementById('sim-active').classList.add('hidden');
+                return;
+            }
+
+            // Pick a random unasked question
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * questions.length);
+            } while (askedQuestions.includes(randomIndex));
+
+            askedQuestions.push(randomIndex);
+            document.getElementById('interview-question').innerText = `"${questions[randomIndex]}"`;
+
+            startInterviewTimer(120); // 2 minutes
+        }
+
+        function startInterviewTimer(duration) {
+            let timer = duration;
+            const display = document.getElementById('interview-timer');
+            display.style.color = "#1e293b"; // Reset color
+
+            interviewInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                // Warning colors
+                if (timer <= 30) {
+                    display.style.color = "#f5b041"; // Gold
+                }
+                if (timer <= 10) {
+                    display.style.color = "#f43f5e"; // Red
+                }
+
+                if (--timer < 0) {
+                    clearInterval(interviewInterval);
+                    display.textContent = "00:00";
+                    setTimeout(() => alert("Time is up! Please move to the next question."), 500);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
