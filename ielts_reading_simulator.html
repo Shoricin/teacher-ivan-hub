@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IELTS Reading Simulator | Teacher Ivan</title>
+    <title>Advanced IELTS Reading Simulator | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     
@@ -26,20 +26,27 @@
         }
     </script>
     <style>
-        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar { width: 8px; height: 8px;}
         .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
         .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .radio-label { display: flex; align-items: center; gap: 8px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label { display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
         .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
-        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.3); }
+        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.2); margin-top: 4px; flex-shrink: 0;}
         
-        .gap-input { width: 100%; padding: 4px 10px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #0f766e; outline: none; transition: 0.2s;}
+        .gap-input { width: 100%; padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #0f766e; outline: none; transition: 0.2s;}
         .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
         
+        .select-input { width: 100%; padding: 10px 12px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e293b; outline: none; transition: 0.2s; background-color: white; appearance: none; cursor: pointer;}
+        .select-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+
         .test-tab { white-space: nowrap; padding: 10px 25px; border-radius: 8px; font-weight: 700; font-size: 1rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid #e2e8f0; background: white;}
         .test-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
         .test-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        .question-block { background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; }
+        .section-header { font-weight: 700; color: #1e293b; font-size: 1.1rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;}
 
         .mobile-toggle { display: none; }
         @media (max-width: 1023px) {
@@ -73,10 +80,10 @@
 
     <div class="bg-slate-100 border-b border-slate-200 py-3 px-4 shrink-0 z-10 shadow-inner flex overflow-x-auto scroll-pane gap-3 items-center justify-center">
         <button class="test-tab active" onclick="loadTest('test1')" id="tab-test1">
-            <span class="material-icons-round align-middle text-sm mr-1">description</span> Mock Test 1
+            <span class="material-icons-round align-middle text-sm mr-1">history_edu</span> Test 1: The Global Journey of Coffee
         </button>
         <button class="test-tab" onclick="loadTest('test2')" id="tab-test2">
-            <span class="material-icons-round align-middle text-sm mr-1">science</span> Mock Test 2
+            <span class="material-icons-round align-middle text-sm mr-1">smart_toy</span> Test 2: AI in Modern Healthcare
         </button>
     </div>
 
@@ -91,10 +98,10 @@
 
     <main class="flex-grow flex relative overflow-hidden">
         
-        <div id="exam-blocker" class="absolute inset-0 bg-slate-800/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center text-white">
+        <div id="exam-blocker" class="absolute inset-0 bg-slate-800/95 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center text-white">
             <span class="material-icons-round text-7xl text-brand-gold mb-4">lock_clock</span>
             <h2 class="text-3xl font-bold mb-2">Test is Locked</h2>
-            <p class="text-slate-300 mb-6 max-w-md text-base">Ingresa tu nombre y presiona <strong>Start</strong> para desbloquear la lectura externa y tu hoja de respuestas.</p>
+            <p class="text-slate-300 mb-6 max-w-md text-base">Enter your name and press <strong>Start</strong> to unlock the full passage (800+ words) and the 13 IELTS questions.</p>
         </div>
 
         <div id="pane-passage" class="w-full lg:w-1/2 bg-white border-r border-slate-200 flex flex-col desktop-split mobile-active-pane">
@@ -103,17 +110,17 @@
                     <span class="material-icons-round text-brand-teal">menu_book</span> <span id="passage-title">Loading Topic...</span>
                 </h2>
             </div>
-            <iframe id="external-text-frame" class="w-full h-full border-none bg-white" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Please enter your name and press Start.</div>"></iframe>
+            <iframe id="external-text-frame" class="w-full h-full border-none bg-white" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked.</div>"></iframe>
         </div>
 
         <div id="pane-questions" class="w-full lg:w-1/2 bg-slate-50 flex flex-col desktop-split hidden">
             <div class="bg-brand-slate p-3 border-b border-slate-700 shrink-0 flex justify-between items-center shadow-sm">
-                <h2 class="font-bold text-white text-sm tracking-widest">ANSWER SHEET</h2>
+                <h2 class="font-bold text-white text-sm tracking-widest">ANSWER SHEET (13 Questions)</h2>
                 <button onclick="submitExam()" id="btn-submit" class="bg-brand-lightTeal hover:bg-teal-400 text-slate-900 font-bold py-1.5 px-4 rounded-lg text-xs transition shadow-sm hidden">
                     Submit & Export PDF
                 </button>
             </div>
-            <div class="p-4 md:p-6 overflow-y-auto scroll-pane pb-24" id="questions-content">
+            <div class="p-4 md:p-6 overflow-y-auto scroll-pane pb-32" id="questions-content">
                 </div>
         </div>
     </main>
@@ -124,33 +131,238 @@
         let currentTestId = 'test1';
         let isExamActive = false;
 
-        // --- EXAM DATABASE (Extracted from official IELTS Sample Tasks) ---
+        // --- FULL IELTS EXAM DATABASE ---
         const testData = {
             test1: {
-                title: "The Life and Work of Marie Curie",
-                fileUrl: "textos/mock_test_1.html", 
-                type1: "True / False / Not Given",
-                questions1: [
-                    "1. Marie Curie's husband was a joint winner of both Marie's Nobel Prizes.",
-                    "2. Marie became interested in science when she was a child.",
-                    "3. Marie was able to attend the Sorbonne because of her sister's financial contribution."
-                ],
-                type2: "Note Completion (ONE WORD ONLY)",
-                summaryText: "Marie and Irène Curie developed X-radiography which was used as a medical technique for <strong class='text-brand-teal'>4.</strong> [Q4]. Marie Curie saw the importance of collecting radioactive material both for research and for cases of <strong class='text-brand-teal'>5.</strong> [Q5]. The radioactive material stocked in Paris contributed to the discoveries in the 1930s of the <strong class='text-brand-teal'>6.</strong> [Q6] and of what was known as artificial radioactivity.",
-                answers: { q1: "false", q2: "not given", q3: "true", q4: "soldiers", q5: "illness", q6: "neutron" }
+                title: "The Global Journey of Coffee",
+                fileUrl: "textos/advanced_test_1.html",
+                answers: { 
+                    // Matching Headings (Paragraphs A-E)
+                    q1: "vi", q2: "iii", q3: "i", q4: "vii", q5: "iv",
+                    // True/False/Not Given
+                    q6: "false", q7: "not given", q8: "true", q9: "false",
+                    // Summary Completion
+                    q10: "monopoly", q11: "smuggled", q12: "plantations", q13: "rust"
+                },
+                htmlContent: `
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 1-5:</span> Matching Headings</div>
+                        <p class="text-sm text-slate-600 mb-4">Choose the correct heading for paragraphs <strong>A-E</strong> from the list of headings below.</p>
+                        
+                        <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 mb-6 text-sm font-serif">
+                            <p class="font-bold text-slate-800 mb-2 font-sans">List of Headings:</p>
+                            <ul class="space-y-1 list-none pl-2 text-slate-700">
+                                <li><strong>i.</strong> The rise of coffee houses as social hubs</li>
+                                <li><strong>ii.</strong> The health benefits of daily consumption</li>
+                                <li><strong>iii.</strong> Early discovery and initial uses</li>
+                                <li><strong>iv.</strong> A modern threat to global supply</li>
+                                <li><strong>v.</strong> How coffee was originally roasted</li>
+                                <li><strong>vi.</strong> An introduction to a global commodity</li>
+                                <li><strong>vii.</strong> The breaking of the Arabian control</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-700 w-24">1. Paragraph A</label>
+                                <select id="q1" class="select-input"><option value="">Select...</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-700 w-24">2. Paragraph B</label>
+                                <select id="q2" class="select-input"><option value="">Select...</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-700 w-24">3. Paragraph C</label>
+                                <select id="q3" class="select-input"><option value="">Select...</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-700 w-24">4. Paragraph D</label>
+                                <select id="q4" class="select-input"><option value="">Select...</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-700 w-24">5. Paragraph E</label>
+                                <select id="q5" class="select-input"><option value="">Select...</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 6-9:</span> True / False / Not Given</div>
+                        <p class="text-sm text-slate-600 mb-4">Do the following statements agree with the information given in the text?</p>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="font-serif text-slate-800 text-sm mb-2"><strong>6.</strong> Kaldi immediately understood how to brew the berries into a hot drink after seeing his goats.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q6" value="true"> True</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q6" value="false"> False</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q6" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-sm mb-2"><strong>7.</strong> Women were strictly forbidden from entering early European coffee houses.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q7" value="true"> True</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q7" value="false"> False</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q7" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-sm mb-2"><strong>8.</strong> The Dutch were responsible for initially spreading coffee cultivation to Asia.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q8" value="true"> True</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q8" value="false"> False</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q8" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-sm mb-2"><strong>9.</strong> Climate change only affects the Robusta species of coffee beans.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q9" value="true"> True</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q9" value="false"> False</label>
+                                    <label class="radio-label text-sm flex-1"><input type="radio" name="q9" value="not given"> Not Given</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 10-13:</span> Summary Completion</div>
+                        <p class="text-sm text-slate-600 mb-4">Complete the summary below. Choose <strong class="text-red-600">ONE WORD ONLY</strong> from the passage for each answer.</p>
+                        
+                        <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-5 rounded-xl border border-slate-200 text-[0.95rem]">
+                            For centuries, Arabian traders maintained a strict <strong class="text-brand-teal text-sm">10.</strong> <input type="text" id="q10" class="gap-input inline-block w-32 text-center mx-1 py-1 px-2" placeholder="[Word]"> on the coffee trade by boiling the beans before export. This control was finally broken when Baba Budan <strong class="text-brand-teal text-sm">11.</strong> <input type="text" id="q11" class="gap-input inline-block w-32 text-center mx-1 py-1 px-2" placeholder="[Word]"> fertile seeds into India. Following this, European powers rapidly established large <strong class="text-brand-teal text-sm">12.</strong> <input type="text" id="q12" class="gap-input inline-block w-32 text-center mx-1 py-1 px-2" placeholder="[Word]"> in their tropical colonies. Today, this massive global industry faces severe threats from rising temperatures and the spread of an agricultural disease known as coffee <strong class="text-brand-teal text-sm">13.</strong> <input type="text" id="q13" class="gap-input inline-block w-32 text-center mx-1 py-1 px-2" placeholder="[Word]">.
+                        </div>
+                    </div>
+                `
             },
             test2: {
-                title: "The Origins of Birds",
-                fileUrl: "textos/mock_test_2.html",
-                type1: "True / False / Not Given",
-                questions1: [
-                    "1. The 'birds are dinosaurs' theory was initially formulated by Thomas Huxley.",
-                    "2. Gerhard Heilmann's publication on bird origins was largely ignored for fifty years.",
-                    "3. Feduccia and Martin argue that flight likely originated from ancestors living on the ground."
-                ],
-                type2: "Sentence Completion (ONE WORD ONLY)",
-                summaryText: "Huxley formulated his theory while studying a dinosaur belonging to a group called <strong class='text-brand-teal'>4.</strong> [Q4]. Heilmann rejected Huxley's theory because of the apparent absence of <strong class='text-brand-teal'>5.</strong> [Q5] in dinosaurs. Later discoveries changed this view. For instance, the presence of a <strong class='text-brand-teal'>6.</strong> [Q6] on a primitive bird from Madagascar adds weight to the 'dino-bird' argument.",
-                answers: { q1: "true", q2: "false", q3: "false", q4: "theropods", q5: "collarbones", q6: "claw" }
+                title: "AI in Modern Healthcare",
+                fileUrl: "textos/advanced_test_2.html",
+                answers: { 
+                    // Multiple Choice
+                    q1: "c", q2: "b", q3: "a",
+                    // Matching Features (Systems to Functions)
+                    q4: "c", q5: "a", q6: "d", q7: "b",
+                    // Flow-chart Completion
+                    q8: "algorithms", q9: "patterns", q10: "diagnosis",
+                    // True/False/Not Given
+                    q11: "true", q12: "false", q13: "not given"
+                },
+                htmlContent: `
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 1-3:</span> Multiple Choice</div>
+                        <p class="text-sm text-slate-600 mb-4">Choose the correct letter, <strong>A, B, C or D</strong>.</p>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.95rem] mb-2"><strong>1.</strong> The passage suggests that the primary advantage of AI in radiology is:</p>
+                                <div class="flex flex-col gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="a"> A. It replaces the need for human radiologists.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="b"> B. It is cheaper to implement than traditional machines.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="c"> C. It can detect microscopic anomalies humans might miss.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q1" value="d"> D. It produces clearer, higher-resolution X-ray images.</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.95rem] mb-2"><strong>2.</strong> How is AI being utilized in the pharmaceutical industry?</p>
+                                <div class="flex flex-col gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="a"> A. To legally approve new drugs faster.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="b"> B. To simulate chemical reactions and identify promising compounds.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="c"> C. To test medications directly on human subjects safely.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q2" value="d"> D. To market new drugs to specific demographics.</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.95rem] mb-2"><strong>3.</strong> What is mentioned as a major ethical concern regarding AI in paragraph E?</p>
+                                <div class="flex flex-col gap-2">
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="a"> A. The potential for algorithmic bias affecting minority groups.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="b"> B. The high cost of accessing AI-driven healthcare.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="c"> C. The reduction of doctors' salaries.</label>
+                                    <label class="radio-label text-sm"><input type="radio" name="q3" value="d"> D. AI refusing to treat certain terminal illnesses.</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 4-7:</span> Matching Features</div>
+                        <p class="text-sm text-slate-600 mb-4">Match each AI application to its corresponding function. Choose the correct letter (A-E).</p>
+                        
+                        <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 mb-6 text-sm font-serif">
+                            <p class="font-bold text-slate-800 mb-2 font-sans">Functions:</p>
+                            <ul class="space-y-1 list-none pl-2 text-slate-700">
+                                <li><strong>A.</strong> Predicting global disease outbreaks</li>
+                                <li><strong>B.</strong> Providing continuous patient monitoring at home</li>
+                                <li><strong>C.</strong> Analyzing complex medical imagery</li>
+                                <li><strong>D.</strong> Accelerating the discovery of new medicines</li>
+                                <li><strong>E.</strong> Performing autonomous surgeries</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-slate-700 text-sm">4. Deep Learning Vision Systems</label>
+                                <select id="q4" class="select-input w-24"><option value="">...</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option></select>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-slate-700 text-sm">5. Epidemic Intelligence Algorithms</label>
+                                <select id="q5" class="select-input w-24"><option value="">...</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option></select>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-slate-700 text-sm">6. Pharmacological Simulation Models</label>
+                                <select id="q6" class="select-input w-24"><option value="">...</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option></select>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-slate-700 text-sm">7. Smart Wearable Devices</label>
+                                <select id="q7" class="select-input w-24"><option value="">...</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 8-10:</span> Flow-chart Completion</div>
+                        <p class="text-sm text-slate-600 mb-4">Choose <strong class="text-red-600">ONE WORD ONLY</strong> from the passage.</p>
+                        
+                        <div class="bg-indigo-50 border border-indigo-200 p-5 rounded-xl font-serif text-[0.95rem] text-center space-y-4">
+                            <p>Data from millions of patient files is fed into sophisticated <input type="text" id="q8" class="gap-input inline-block w-32 text-center py-1 px-2"></p>
+                            <div class="text-indigo-400">⬇</div>
+                            <p>The system is trained to identify hidden <input type="text" id="q9" class="gap-input inline-block w-32 text-center py-1 px-2"> that humans cannot see.</p>
+                            <div class="text-indigo-400">⬇</div>
+                            <p>The machine suggests a highly accurate <input type="text" id="q10" class="gap-input inline-block w-32 text-center py-1 px-2"> for the human doctor to review.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-block">
+                        <div class="section-header"><span class="text-brand-coral">Questions 11-13:</span> True / False / Not Given</div>
+                        <div class="space-y-5">
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.9rem] mb-2"><strong>11.</strong> AI is currently unable to show empathy to a scared patient.</p>
+                                <div class="flex gap-2">
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q11" value="true"> T</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q11" value="false"> F</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q11" value="not given"> NG</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.9rem] mb-2"><strong>12.</strong> Machine learning algorithms are legally responsible if a patient is harmed.</p>
+                                <div class="flex gap-2">
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q12" value="true"> T</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q12" value="false"> F</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q12" value="not given"> NG</label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-serif text-slate-800 text-[0.9rem] mb-2"><strong>13.</strong> The majority of doctors embrace AI implementation in their clinics.</p>
+                                <div class="flex gap-2">
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q13" value="true"> T</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q13" value="false"> F</label>
+                                    <label class="radio-label text-xs flex-1"><input type="radio" name="q13" value="not given"> NG</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
             }
         };
 
@@ -158,7 +370,7 @@
 
         function loadTest(testId) {
             if (isExamActive) {
-                alert("Please finish or submit your current test before switching.");
+                alert("Please finish your current test before switching.");
                 return;
             }
 
@@ -167,9 +379,10 @@
 
             document.querySelectorAll('.test-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${testId}`).classList.add('active');
+            
             document.getElementById('passage-title').innerText = data.title;
-            document.getElementById('questions-content').innerHTML = buildQuestionsHTML(data, testId);
-            document.getElementById('external-text-frame').srcdoc = "<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Please enter your name and press Start.</div>";
+            document.getElementById('questions-content').innerHTML = data.htmlContent;
+            document.getElementById('external-text-frame').srcdoc = "<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%; font-size:1.2rem;'>Text locked. Enter Name & Press Start.</div>";
 
             document.getElementById('exam-blocker').style.display = 'flex';
             document.getElementById('timer-display').textContent = "20:00";
@@ -178,46 +391,6 @@
             document.getElementById('btn-start').style.display = 'flex';
             
             switchMobileView('passage');
-        }
-
-        function buildQuestionsHTML(data, testId) {
-            let part1HTML = data.questions1.map((q, index) => {
-                let qNum = index + 1;
-                return `
-                    <div class="mb-5">
-                        <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${q}</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="true"> True</label>
-                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="false"> False</label>
-                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="not given"> Not Given</label>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            let summaryStr = data.summaryText;
-            [4, 5, 6].forEach(num => {
-                summaryStr = summaryStr.replace(`[Q${num}]`, `<input type="text" id="q${num}" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">`);
-            });
-
-            return `
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-6">
-                    <div class="mb-5 pb-3 border-b border-slate-100">
-                        <h3 class="font-bold text-brand-slate text-base uppercase tracking-wide">Questions 1 - 3</h3>
-                        <p class="text-sm text-brand-teal font-semibold mt-1">${data.type1}</p>
-                    </div>
-                    ${part1HTML}
-                </div>
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="mb-5 pb-3 border-b border-slate-100">
-                        <h3 class="font-bold text-brand-slate text-base uppercase tracking-wide">Questions 4 - 6</h3>
-                        <p class="text-sm text-brand-coral font-semibold mt-1">${data.type2}</p>
-                    </div>
-                    <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-5 rounded-xl border border-slate-200 text-sm md:text-base">
-                        ${summaryStr}
-                    </div>
-                </div>
-            `;
         }
 
         function switchMobileView(view) {
@@ -271,24 +444,29 @@
         }
 
         function submitExam(isAuto = false) {
-            if (!isAuto) { if (!confirm("Are you sure you want to submit your answers?")) return; }
+            if (!isAuto) { if (!confirm("Are you sure you want to submit your 13 answers?")) return; }
 
             clearInterval(timerInterval);
             isExamActive = false;
             document.getElementById('btn-submit').style.display = 'none';
             
             const data = testData[currentTestId];
-            const studentAnswers = {
-                q1: document.querySelector('input[name="q1"]:checked')?.value || "Not Answered",
-                q2: document.querySelector('input[name="q2"]:checked')?.value || "Not Answered",
-                q3: document.querySelector('input[name="q3"]:checked')?.value || "Not Answered",
-                q4: document.getElementById('q4').value.trim().toLowerCase(),
-                q5: document.getElementById('q5').value.trim().toLowerCase(),
-                q6: document.getElementById('q6').value.trim().toLowerCase()
-            };
+            let studentAnswers = {};
+            
+            // Collect Answers
+            for(let i=1; i<=13; i++) {
+                let el = document.getElementById(`q${i}`);
+                if(el) { // Select or Text Input
+                    studentAnswers[`q${i}`] = el.value.trim().toLowerCase();
+                } else { // Radio Buttons
+                    let radio = document.querySelector(`input[name="q${i}"]:checked`);
+                    studentAnswers[`q${i}`] = radio ? radio.value.toLowerCase() : "not answered";
+                }
+            }
 
             let score = 0; const results = {};
-            for (let key in data.answers) {
+            for (let i = 1; i <= 13; i++) {
+                let key = `q${i}`;
                 if (studentAnswers[key] === data.answers[key]) {
                     score++; results[key] = { status: "Correct" };
                 } else {
@@ -305,48 +483,57 @@
             const doc = new jsPDF();
 
             doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(15, 118, 110);
-            doc.text(`IELTS Reading Mock: ${currentTestId.toUpperCase()}`, 105, 20, null, null, "center");
+            doc.text(`IELTS Advanced Reading Mock`, 105, 20, null, null, "center");
 
             doc.setFontSize(12); doc.setFont("helvetica", "italic"); doc.setTextColor(100, 100, 100);
             doc.text(`Candidate: ${studentName.toUpperCase()}`, 105, 30, null, null, "center");
-            doc.text(`Topic: ${data.title}`, 105, 37, null, null, "center");
+            doc.text(`Module: ${data.title}`, 105, 37, null, null, "center");
 
             doc.setDrawColor(200, 200, 200); doc.line(20, 45, 190, 45);
 
             doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 41, 59);
-            doc.text(`Final Score: ${score} / 6`, 105, 60, null, null, "center");
+            doc.text(`Final Score: ${score} / 13`, 105, 60, null, null, "center");
 
-            doc.setFontSize(14); doc.text("Detailed Breakdown:", 20, 85);
+            // Simplified Band Score Estimate (Section 1 roughly)
+            let band = "Band 4.0 (Need more practice)";
+            if(score === 13) band = "Band 9.0 (Outstanding)";
+            else if (score >= 10) band = "Band 7.0 (Good)";
+            else if (score >= 7) band = "Band 6.0 (Competent)";
+            
+            doc.setFontSize(12); doc.setTextColor(score >= 7 ? 15 : 244, score >= 7 ? 118 : 63, score >= 7 ? 110 : 94);
+            doc.text(`Estimated Section Performance: ${band}`, 105, 70, null, null, "center");
+
+            doc.setFontSize(14); doc.setTextColor(30, 41, 59); doc.text("Detailed Breakdown:", 20, 85);
             doc.setFontSize(11); doc.setFont("helvetica", "normal");
             
             let y = 95;
-            for (let i = 1; i <= 6; i++) {
-                let qKey = `q${i}`;
-                let sAns = studentAnswers[qKey];
-                let isCorrect = results[qKey].status === "Correct";
+            for (let i = 1; i <= 13; i++) {
+                if (y > 270) { doc.addPage(); y = 20; } // Handle page break
+
+                let key = `q${i}`;
+                let sAns = studentAnswers[key] || "[-]";
+                let isCorrect = results[key].status === "Correct";
                 
                 doc.setTextColor(50, 50, 50); doc.setFont("helvetica", "bold");
+                doc.text(`Question ${i}:`, 20, y);
                 
-                let qText = i <= 3 ? data.questions1[i-1] : `Q${i} (Summary/Note Gap)`;
-                let splitQ = doc.splitTextToSize(qText, 170);
-                doc.text(splitQ, 20, y);
-                
-                y += (splitQ.length * 5) + 2;
                 doc.setFont("helvetica", "normal");
-                doc.text(`Your Answer: ${sAns.toUpperCase()}`, 25, y);
+                doc.text(`Your Answer: ${sAns.toUpperCase()}`, 50, y);
                 
                 if (!isCorrect) {
                     doc.setTextColor(244, 63, 94);
-                    doc.text(`Correct Answer: ${data.answers[qKey].toUpperCase()} X`, 110, y);
+                    doc.text(`(Correct: ${data.answers[key].toUpperCase()}) ❌`, 130, y);
                 } else {
                     doc.setTextColor(34, 197, 94);
-                    doc.text(`Correct V`, 110, y);
+                    doc.text(`✅`, 130, y);
                 }
-                y += 12;
+                y += 10;
             }
 
-            doc.save(`${studentName.replace(/\s+/g, '_')}_IELTS_Reading_${currentTestId}.pdf`);
-            document.querySelectorAll('input').forEach(i => i.disabled = true);
+            doc.save(`${studentName.replace(/\s+/g, '_')}_IELTS_Adv_Reading_${currentTestId}.pdf`);
+            
+            // Lock inputs
+            document.querySelectorAll('input, select').forEach(i => i.disabled = true);
         }
     </script>
 </body>
