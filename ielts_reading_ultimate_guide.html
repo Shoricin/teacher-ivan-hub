@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IELTS Reading Ultimate Guide | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: transparent; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+        
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: #f1f5f9; }
+        .main-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .nav-btn { transition: 0.3s; border-left: 4px solid transparent; }
+        .nav-btn:hover { background: rgba(255,255,255,0.05); }
+        .nav-btn.active { background: rgba(15, 118, 110, 0.2); color: #5dcbc3; border-left-color: #5dcbc3; font-weight: 700; }
+
+        .guide-section { display: none; animation: fadeIn 0.4s ease; }
+        .guide-section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .highlight-text { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;}
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 h-screen font-sans flex flex-col md:flex-row overflow-hidden">
+
+    <nav class="bg-brand-slate text-white w-full md:w-72 flex-shrink-0 flex flex-col shadow-xl z-20 transition-all">
+        <div class="p-6 border-b border-slate-700 text-center shrink-0">
+            <a href="index.html" class="text-slate-400 hover:text-brand-lightTeal transition flex items-center justify-center gap-1 text-sm font-semibold mb-4">
+                <span class="material-icons-round text-lg">arrow_back</span> Return to HUB
+            </a>
+            <h2 class="text-2xl font-bold text-brand-lightTeal">Teacher Ivan</h2>
+            <p class="text-xs text-slate-300 mt-1 uppercase tracking-widest">Reading Ultimate Guide</p>
+        </div>
+        
+        <div class="flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto scroll-pane py-2 md:py-6 gap-1 md:gap-2 px-2">
+            <button class="nav-btn active flex items-center gap-3 px-4 py-3 md:py-4 text-sm md:text-base text-slate-300 rounded-lg whitespace-nowrap md:whitespace-normal text-left" onclick="switchSection('intro')">
+                <span class="material-icons-round">gavel</span> 1. The Core Rules
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-4 py-3 md:py-4 text-sm md:text-base text-slate-300 rounded-lg whitespace-nowrap md:whitespace-normal text-left" onclick="switchSection('skills')">
+                <span class="material-icons-round">manage_search</span> 2. Skimming & Scanning
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-4 py-3 md:py-4 text-sm md:text-base text-slate-300 rounded-lg whitespace-nowrap md:whitespace-normal text-left" onclick="switchSection('tfng')">
+                <span class="material-icons-round">fact_check</span> 3. T / F / Not Given
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-4 py-3 md:py-4 text-sm md:text-base text-slate-300 rounded-lg whitespace-nowrap md:whitespace-normal text-left" onclick="switchSection('matching')">
+                <span class="material-icons-round">rule_folder</span> 4. Matching Tasks
+            </button>
+            <button class="nav-btn flex items-center gap-3 px-4 py-3 md:py-4 text-sm md:text-base text-slate-300 rounded-lg whitespace-nowrap md:whitespace-normal text-left" onclick="switchSection('completion')">
+                <span class="material-icons-round">border_color</span> 5. Completion Tasks
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content flex-grow overflow-y-auto p-6 md:p-10 lg:p-14 bg-brand-bg relative scroll-smooth">
+
+        <section id="intro" class="guide-section active max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-brand-slate mb-2 flex items-center gap-3">
+                <span class="material-icons-round text-brand-teal text-4xl md:text-5xl">gavel</span> The Core Rules
+            </h1>
+            <div class="w-20 h-1.5 bg-brand-gold mb-8 rounded-full"></div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 border-t-4 border-t-brand-teal">
+                <h3 class="text-xl font-bold text-brand-slate mb-4">Welcome to IELTS Academic Reading</h3>
+                <p class="font-serif text-slate-600 leading-relaxed mb-6">
+                    La sección de Reading es, para muchos, la más demandante por la presión del tiempo. El examen oficial consta de <strong>3 pasajes extensos</strong> (textos académicos y científicos) y un total de <strong>40 preguntas</strong>. 
+                </p>
+                
+                <div class="bg-red-50 p-6 rounded-xl border-l-4 border-brand-coral mb-6">
+                    <h4 class="font-bold text-rose-900 flex items-center gap-2 mb-2">
+                        <span class="material-icons-round">timer</span> Golden Rule: No Extra Transfer Time
+                    </h4>
+                    <p class="text-sm font-serif text-rose-800 leading-relaxed">
+                        A diferencia de la sección de Listening, en Reading <strong>NO te darán 10 minutos extra al final</strong> para pasar tus respuestas a la hoja oficial. Tienes exactamente 60 minutos para leer, resolver y transferir. Si se acaba la hora, debes soltar el lápiz.
+                    </p>
+                </div>
+
+                <h4 class="font-bold text-slate-800 text-lg mb-3">The 14 Official Task Types</h4>
+                <p class="font-serif text-slate-600 text-sm mb-4">Según los estándares oficiales del IELTS (2023), te enfrentarás a una combinación aleatoria de estos 14 tipos de ejercicios:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-600 font-serif">
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Multiple-choice</li>
+                        <li>Identifying information (True/False/Not Given)</li>
+                        <li>Identifying writer's views (Yes/No/Not Given)</li>
+                        <li>Matching information</li>
+                        <li>Matching headings</li>
+                        <li>Matching features</li>
+                        <li>Matching sentence endings</li>
+                    </ul>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Sentence completion</li>
+                        <li>Summary completion</li>
+                        <li>Note completion</li>
+                        <li>Table completion</li>
+                        <li>Flow-chart completion</li>
+                        <li>Diagram label completion</li>
+                        <li>Short-answer questions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="guide-section max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-brand-slate mb-2 flex items-center gap-3">
+                <span class="material-icons-round text-brand-teal text-4xl md:text-5xl">manage_search</span> Skimming & Scanning
+            </h1>
+            <div class="w-20 h-1.5 bg-brand-gold mb-8 rounded-full"></div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 border-t-4 border-t-brand-lightTeal">
+                <p class="font-serif text-slate-600 leading-relaxed mb-6">
+                    Es humanamente imposible leer 3 textos científicos a detalle, palabra por palabra, y contestar 40 preguntas en 60 minutos. El IELTS evalúa tu capacidad para extraer información estratégicamente utilizando dos técnicas:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-teal text-xl flex items-center gap-2 mb-3">
+                            <span class="material-icons-round">fast_forward</span> Skimming
+                        </h4>
+                        <p class="text-sm font-serif text-slate-600 leading-relaxed mb-4">
+                            Es leer "por encima" para captar la idea principal (Main Idea) de un texto o párrafo. No te detienes en palabras que no conoces.
+                        </p>
+                        <div class="bg-white p-3 rounded-lg text-sm text-slate-700 shadow-sm border border-slate-100">
+                            <strong>Estrategia:</strong> Lee únicamente la primera oración de cada párrafo (la <em>Topic Sentence</em>) y la última. Con esto, en 2 minutos sabrás de qué trata todo el pasaje.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-gold text-xl flex items-center gap-2 mb-3">
+                            <span class="material-icons-round">radar</span> Scanning
+                        </h4>
+                        <p class="text-sm font-serif text-slate-600 leading-relaxed mb-4">
+                            Es buscar un dato específico como si fueras un radar buscando una palabra clave, sin leer el resto del texto.
+                        </p>
+                        <div class="bg-white p-3 rounded-lg text-sm text-slate-700 shadow-sm border border-slate-100">
+                            <strong>Estrategia:</strong> Subraya en las preguntas nombres propios (ej. <em>Marie Curie</em>), años (<em>1867</em>), lugares (<em>Paris</em>) o términos técnicos, y busca esa "forma" visualmente en el texto.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-blue-50 p-5 rounded-xl border border-blue-200 flex gap-4">
+                    <span class="material-icons-round text-blue-500 text-3xl">lightbulb</span>
+                    <div>
+                        <h4 class="font-bold text-blue-900">Synonym Recognition (El verdadero examen)</h4>
+                        <p class="text-sm font-serif text-blue-800 mt-1">El IELTS es un examen de vocabulario disfrazado de examen de lectura. Las palabras que aparecen en las preguntas <strong>casi nunca</strong> serán las mismas del texto. Tienes que escanear buscando sinónimos. <br><br>Ejemplo: Si la pregunta dice <span class="highlight-text">"initial capital"</span>, el texto dirá <span class="highlight-text">"start-up funding"</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tfng" class="guide-section max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-brand-slate mb-2 flex items-center gap-3">
+                <span class="material-icons-round text-brand-teal text-4xl md:text-5xl">fact_check</span> T / F / Not Given
+            </h1>
+            <div class="w-20 h-1.5 bg-brand-gold mb-8 rounded-full"></div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 border-t-4 border-t-brand-coral">
+                <p class="font-serif text-slate-600 leading-relaxed mb-6">
+                    Esta es, sin duda, la tarea más temida. Se te presentarán afirmaciones y debes decidir si concuerdan con el texto (<strong>TRUE</strong>), lo contradicen (<strong>FALSE</strong>) o si es imposible saberlo basado <em>únicamente</em> en la lectura (<strong>NOT GIVEN</strong>).
+                </p>
+
+                <div class="space-y-4">
+                    <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-800 text-lg">✅ TRUE (or YES)</h4>
+                        <p class="font-serif text-sm text-emerald-700 mt-1">El significado de la oración coincide exactamente con el texto, usualmente expresado con sinónimos.</p>
+                    </div>
+
+                    <div class="p-5 bg-rose-50 rounded-xl border border-rose-200">
+                        <h4 class="font-bold text-rose-800 text-lg">❌ FALSE (or NO)</h4>
+                        <p class="font-serif text-sm text-rose-700 mt-1">La oración <strong>contradice directamente</strong> la información del texto. Si el texto dice "subió" y la pregunta dice "bajó", es False.</p>
+                    </div>
+
+                    <div class="p-5 bg-amber-50 rounded-xl border border-amber-200">
+                        <h4 class="font-bold text-amber-800 text-lg">❓ NOT GIVEN</h4>
+                        <p class="font-serif text-sm text-amber-700 mt-1">La información no está en el texto o la afirmación mezcla verdades con suposiciones. <strong>¡No uses tu conocimiento general del mundo!</strong> Si el texto dice "Las manzanas son rojas" y la pregunta dice "Las manzanas rojas son deliciosas", la respuesta es NOT GIVEN (el texto no menciona el sabor).</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800">Beware of Modifiers (Cuidado con los modificadores)</h4>
+                    <p class="text-sm font-serif text-slate-600 mt-2">Palabras como <span class="highlight-text">all, some, always, never, exactly, primarily</span> cambian el significado completo. Si el texto dice "Some scientists agree" y la pregunta dice "All scientists agree", la respuesta es <strong>FALSE</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="matching" class="guide-section max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-brand-slate mb-2 flex items-center gap-3">
+                <span class="material-icons-round text-brand-teal text-4xl md:text-5xl">rule_folder</span> Matching Tasks
+            </h1>
+            <div class="w-20 h-1.5 bg-brand-gold mb-8 rounded-full"></div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 border-t-4 border-t-brand-slate">
+                <h3 class="text-xl font-bold text-brand-slate mb-4">Matching Headings</h3>
+                <p class="font-serif text-slate-600 leading-relaxed mb-6 text-sm">
+                    En esta tarea debes elegir el título perfecto para cada párrafo de una lista de opciones. Siempre hay más opciones que párrafos para confundirte.
+                </p>
+
+                <div class="bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500 mb-8">
+                    <h4 class="font-bold text-indigo-900 mb-2">Strategy for Headings:</h4>
+                    <ol class="list-decimal pl-5 space-y-2 text-sm font-serif text-indigo-800">
+                        <li><strong>Lee la lista primero</strong> y subraya las palabras clave de los títulos.</li>
+                        <li>Ve al Párrafo A. <strong>Lee solo la primera oración y la última oración.</strong> Ahí suele estar la idea central.</li>
+                        <li>Busca el título que resuma esa idea. ¡Cuidado! Algunos títulos son solo detalles específicos mencionados en medio del párrafo, esos son trampas.</li>
+                    </ol>
+                </div>
+
+                <h3 class="text-xl font-bold text-brand-slate mb-4">Matching Features / Information</h3>
+                <p class="font-serif text-slate-600 leading-relaxed mb-4 text-sm">
+                    Por ejemplo, relacionar descubrimientos con el científico que los hizo, o ubicar en qué párrafo se menciona un dato en específico.
+                </p>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-sm font-serif text-slate-700">
+                    <span class="material-icons-round text-brand-gold align-middle mr-1">warning</span> <strong>Nota Importante:</strong> Las preguntas de <em>Matching</em> generalmente <strong>NO vienen en el orden del texto</strong> (a diferencia de las T/F/NG que sí siguen el flujo de la lectura).
+                </div>
+            </div>
+        </section>
+
+        <section id="completion" class="guide-section max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-brand-slate mb-2 flex items-center gap-3">
+                <span class="material-icons-round text-brand-teal text-4xl md:text-5xl">border_color</span> Completion Tasks
+            </h1>
+            <div class="w-20 h-1.5 bg-brand-gold mb-8 rounded-full"></div>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 border-t-4 border-t-brand-gold">
+                <p class="font-serif text-slate-600 leading-relaxed mb-6">
+                    Estas tareas incluyen completar un Resumen (Summary), un Diagrama, una Tabla o Notas. Deberás rellenar espacios en blanco (gaps) utilizando palabras del texto.
+                </p>
+
+                <div class="bg-rose-50 p-6 rounded-xl border border-rose-200 mb-6">
+                    <h4 class="font-bold text-rose-900 text-lg mb-2 flex items-center gap-2">
+                        <span class="material-icons-round">spellcheck</span> 1. The Word Count Rule
+                    </h4>
+                    <p class="text-sm font-serif text-rose-800 leading-relaxed">
+                        Las instrucciones siempre dirán en mayúsculas: <strong>CHOOSE NO MORE THAN TWO WORDS FROM THE PASSAGE</strong> (o One word, o Three words). <br><br>
+                        Si la instrucción dice "Una palabra" y tu respuesta correcta era "Water", pero tú escribes "The water", tu respuesta será marcada como incorrecta automáticamente. (Los números como '1995' o '15%' cuentan como una palabra).
+                    </p>
+                </div>
+
+                <div class="bg-teal-50 p-6 rounded-xl border border-teal-200">
+                    <h4 class="font-bold text-teal-900 text-lg mb-2 flex items-center gap-2">
+                        <span class="material-icons-round">extension</span> 2. Grammatical Fit
+                    </h4>
+                    <p class="text-sm font-serif text-teal-800 leading-relaxed">
+                        La palabra que elijas directamente del texto <strong>debe encajar gramaticalmente</strong> en el espacio en blanco de la pregunta. Si el espacio está precedido por un artículo o un adjetivo, asegúrate de que el sustantivo que elijas (singular o plural) tenga sentido al leer la frase completa.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchSection(sectionId) {
+            document.querySelectorAll('.guide-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Smooth scroll to top of main content
+            document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
