@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IELTS Reading Simulator | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .radio-label { display: flex; align-items: center; gap: 8px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
+        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.3); }
+        
+        .gap-input { width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e293b; outline: none; transition: 0.2s;}
+        .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+        
+        .test-tab { white-space: nowrap; padding: 10px 25px; border-radius: 8px; font-weight: 700; font-size: 1rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid #e2e8f0; background: white;}
+        .test-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .test-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        .mobile-toggle { display: none; }
+        @media (max-width: 1023px) {
+            .mobile-toggle { display: flex; }
+            .desktop-split { display: none !important; }
+            .mobile-active-pane { display: flex !important; width: 100% !important; height: 100% !important; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 h-screen font-sans flex flex-col overflow-hidden">
+
+    <header class="bg-brand-slate text-white py-3 px-4 shadow-md z-20 shrink-0">
+        <div class="flex justify-between items-center mb-3">
+            <a href="index.html" class="text-slate-300 hover:text-white transition flex items-center gap-1 text-sm font-semibold">
+                <span class="material-icons-round text-xl">arrow_back</span> HUB
+            </a>
+            <div id="timer-display" class="bg-brand-teal text-white font-mono font-bold text-xl px-4 py-1.5 rounded-lg border border-brand-lightTeal shadow-sm tracking-widest">
+                20:00
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="material-icons-round text-brand-gold">account_circle</span>
+                <input type="text" id="student-name" placeholder="Candidate Name (e.g. Valeria)" class="px-3 py-2 rounded-lg text-slate-800 font-bold w-full md:w-64 text-sm outline-none">
+            </div>
+            <button onclick="startExam()" id="btn-start" class="w-full md:w-auto bg-brand-coral hover:bg-rose-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+                <span class="material-icons-round text-lg">play_arrow</span> Start 20 Min Timer
+            </button>
+        </div>
+    </header>
+
+    <div class="bg-slate-100 border-b border-slate-200 py-3 px-4 shrink-0 z-10 shadow-inner flex overflow-x-auto scroll-pane gap-3 items-center justify-center">
+        <button class="test-tab active" onclick="loadTest('test1')" id="tab-test1">
+            <span class="material-icons-round align-middle text-sm mr-1">description</span> Mock Test 1
+        </button>
+        <button class="test-tab" onclick="loadTest('test2')" id="tab-test2">
+            <span class="material-icons-round align-middle text-sm mr-1">science</span> Mock Test 2
+        </button>
+    </div>
+
+    <div class="mobile-toggle bg-white p-2 shrink-0 border-b border-slate-200 flex justify-center gap-2">
+        <button onclick="switchMobileView('passage')" id="btn-view-passage" class="flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition">
+            📖 Read Passage
+        </button>
+        <button onclick="switchMobileView('questions')" id="btn-view-questions" class="flex-1 py-2 bg-slate-50 text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition">
+            📝 Answer Sheet
+        </button>
+    </div>
+
+    <main class="flex-grow flex relative overflow-hidden">
+        
+        <div id="exam-blocker" class="absolute inset-0 bg-slate-800/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center text-white">
+            <span class="material-icons-round text-7xl text-brand-gold mb-4">lock_clock</span>
+            <h2 class="text-3xl font-bold mb-2">Test is Locked</h2>
+            <p class="text-slate-300 mb-6 max-w-md text-base">Ingresa tu nombre y presiona <strong>Start</strong> para desbloquear la lectura externa y tu hoja de respuestas.</p>
+        </div>
+
+        <div id="pane-passage" class="w-full lg:w-1/2 bg-white border-r border-slate-200 flex flex-col desktop-split mobile-active-pane">
+            <div class="bg-slate-50 p-3 border-b border-slate-200 shrink-0 flex justify-between items-center shadow-sm">
+                <h2 class="font-bold text-brand-slate text-sm flex items-center gap-2">
+                    <span class="material-icons-round text-brand-teal">menu_book</span> <span id="passage-title">Loading Topic...</span>
+                </h2>
+            </div>
+            
+            <iframe id="external-text-frame" class="w-full h-full border-none bg-white" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Press Start.</div>"></iframe>
+        </div>
+
+        <div id="pane-questions" class="w-full lg:w-1/2 bg-slate-50 flex flex-col desktop-split hidden">
+            <div class="bg-brand-slate p-3 border-b border-slate-700 shrink-0 flex justify-between items-center shadow-sm">
+                <h2 class="font-bold text-white text-sm tracking-widest">ANSWER SHEET</h2>
+                <button onclick="submitExam()" id="btn-submit" class="bg-brand-lightTeal hover:bg-teal-400 text-slate-900 font-bold py-1.5 px-4 rounded-lg text-xs transition shadow-sm hidden">
+                    Submit & Export PDF
+                </button>
+            </div>
+            
+            <div class="p-4 md:p-6 overflow-y-auto scroll-pane pb-24" id="questions-content">
+                </div>
+        </div>
+    </main>
+
+    <script>
+        let timerStarted = false;
+        let timerInterval = null;
+        let currentTestId = 'test1';
+        let isExamActive = false;
+
+        // --- EXAM DATABASE ---
+        // Aquí configuramos las preguntas y respuestas. El iframe cargará los .html desde tu GitHub/Server local.
+        const testData = {
+            test1: {
+                title: "The Origins of Human Writing",
+                fileUrl: "textos/mock_test_1.html", 
+                type1: "True / False / Not Given",
+                questions1: [
+                    "1. The earliest forms of writing were developed primarily for storytelling and literature.",
+                    "2. Cuneiform script was invented by the Sumerians in Mesopotamia.",
+                    "3. The Rosetta Stone was discovered by French soldiers in 1799."
+                ],
+                type2: "Summary Completion (NO MORE THAN TWO WORDS)",
+                summaryText: "Before alphabets existed, ancient civilizations used <strong class='text-brand-teal'>4.</strong> [Q4] to represent objects and ideas. As society became more complex, particularly for trade and <strong class='text-brand-teal'>5.</strong> [Q5], a more sophisticated system was required. Eventually, the Phoenicians created the first true <strong class='text-brand-teal'>6.</strong> [Q6], which influenced modern languages.",
+                answers: { q1: "false", q2: "true", q3: "not given", q4: "pictograms", q5: "taxation", q6: "alphabet" }
+            },
+            test2: {
+                title: "The Impact of Microplastics on Marine Life",
+                fileUrl: "textos/mock_test_2.html",
+                type1: "Multiple Choice",
+                questions1: [
+                    { q: "1. According to the passage, microplastics are defined as plastic pieces that are:", opts: ["A. Visible only under a microscope", "B. Less than 5 millimeters in length", "C. Specifically produced for cosmetics"] },
+                    { q: "2. The primary reason marine animals consume microplastics is because:", opts: ["A. They mistake them for their natural food", "B. The plastics contain nutritional value", "C. They are forced to by changing currents"] },
+                    { q: "3. What is mentioned as a potential human health risk in paragraph 4?", opts: ["A. Swimming in polluted oceans", "B. Drinking tap water", "C. Eating contaminated seafood"] }
+                ],
+                type2: "Summary Completion (NO MORE THAN TWO WORDS)",
+                summaryText: "Microplastics enter the ocean through various channels, including the breakdown of larger debris and the washing of <strong class='text-brand-teal'>4.</strong> [Q4]. Once in the water, these particles absorb toxic <strong class='text-brand-teal'>5.</strong> [Q5] like sponges. When ingested by small fish, these toxins travel up the <strong class='text-brand-teal'>6.</strong> [Q6], eventually reaching apex predators.",
+                answers: { q1: "b", q2: "a", q3: "c", q4: "synthetic clothing", q5: "chemicals", q6: "food chain" }
+            }
+        };
+
+        window.onload = () => { loadTest('test1'); };
+
+        function loadTest(testId) {
+            if (isExamActive) {
+                alert("Please finish or submit your current test before switching.");
+                return;
+            }
+
+            currentTestId = testId;
+            const data = testData[testId];
+
+            // Tabs UI
+            document.querySelectorAll('.test-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${testId}`).classList.add('active');
+            
+            document.getElementById('passage-title').innerText = data.title;
+
+            // Generate Questions HTML
+            document.getElementById('questions-content').innerHTML = buildQuestionsHTML(data, testId);
+
+            // Reset iframe
+            document.getElementById('external-text-frame').srcdoc = "<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Please enter your name and press Start.</div>";
+
+            document.getElementById('exam-blocker').style.display = 'flex';
+            document.getElementById('timer-display').textContent = "20:00";
+            document.getElementById('timer-display').classList.remove('warning');
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'flex';
+            
+            switchMobileView('passage');
+        }
+
+        function buildQuestionsHTML(data, testId) {
+            let part1HTML = "";
+            
+            if (testId === 'test1') {
+                // T/F/NG Builder
+                part1HTML = data.questions1.map((q, index) => {
+                    let qNum = index + 1;
+                    return `
+                        <div class="mb-5">
+                            <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${q}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="true"> True</label>
+                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="false"> False</label>
+                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="not given"> Not Given</label>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // Multiple Choice Builder
+                part1HTML = data.questions1.map((item, index) => {
+                    let qNum = index + 1;
+                    let options = item.opts.map(opt => {
+                        let val = opt.charAt(0).toLowerCase(); // Gets 'a', 'b', or 'c'
+                        return `<label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="${val}"> ${opt}</label>`;
+                    }).join('');
+                    return `
+                        <div class="mb-5">
+                            <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${item.q}</p>
+                            <div class="flex flex-col gap-2">${options}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Summary Builder
+            let summaryStr = data.summaryText;
+            [4, 5, 6].forEach(num => {
+                summaryStr = summaryStr.replace(`[Q${num}]`, `<input type="text" id="q${num}" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">`);
+            });
+
+            return `
+                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                    <div class="mb-5 pb-3 border-b border-slate-100">
+                        <h3 class="font-bold text-brand-slate text-base uppercase tracking-wide">Questions 1 - 3</h3>
+                        <p class="text-sm text-brand-teal font-semibold mt-1">${data.type1}</p>
+                    </div>
+                    ${part1HTML}
+                </div>
+                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="mb-5 pb-3 border-b border-slate-100">
+                        <h3 class="font-bold text-brand-slate text-base uppercase tracking-wide">Questions 4 - 6</h3>
+                        <p class="text-sm text-brand-coral font-semibold mt-1">${data.type2}</p>
+                    </div>
+                    <div class="font-serif leading-loose text-slate-700 bg-slate-50 p-5 rounded-xl border border-slate-200 text-sm md:text-base">
+                        ${summaryStr}
+                    </div>
+                </div>
+            `;
+        }
+
+        // View Toggles for Mobile
+        function switchMobileView(view) {
+            const btnPassage = document.getElementById('btn-view-passage');
+            const btnQuestions = document.getElementById('btn-view-questions');
+            const panePassage = document.getElementById('pane-passage');
+            const paneQuestions = document.getElementById('pane-questions');
+
+            if (view === 'passage') {
+                btnPassage.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnQuestions.className = "flex-1 py-2 bg-slate-50 text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                panePassage.classList.add('mobile-active-pane'); panePassage.classList.remove('hidden');
+                paneQuestions.classList.remove('mobile-active-pane'); paneQuestions.classList.add('hidden');
+            } else {
+                btnQuestions.className = "flex-1 py-2 bg-brand-teal text-white rounded-lg font-bold text-sm shadow-sm transition";
+                btnPassage.className = "flex-1 py-2 bg-slate-50 text-slate-600 border border-slate-300 rounded-lg font-bold text-sm shadow-sm transition";
+                paneQuestions.classList.add('mobile-active-pane'); paneQuestions.classList.remove('hidden');
+                panePassage.classList.remove('mobile-active-pane'); panePassage.classList.add('hidden');
+            }
+        }
+
+        // Exam Engine
+        function startExam() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                alert("You must enter your Candidate Name to start."); return;
+            }
+
+            // Load external HTML file into the iframe
+            const currentData = testData[currentTestId];
+            document.getElementById('external-text-frame').removeAttribute('srcdoc');
+            document.getElementById('external-text-frame').src = currentData.fileUrl;
+
+            document.getElementById('exam-blocker').style.display = 'none';
+            document.getElementById('btn-start').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            isExamActive = true; timerStarted = true;
+            startTimer(1200); 
+        }
+
+        function startTimer(duration) {
+            let timer = duration;
+            const display = document.getElementById('timer-display');
+            timerInterval = setInterval(function () {
+                let m = parseInt(timer / 60, 10);
+                let s = parseInt(timer % 60, 10);
+                display.textContent = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+                if (timer <= 300) display.classList.add('warning');
+                if (--timer < 0) { clearInterval(timerInterval); autoSubmit(); }
+            }, 1000);
+        }
+
+        function autoSubmit() {
+            alert("⏰ Time's up! Generating your report..."); submitExam(true);
+        }
+
+        function submitExam(isAuto = false) {
+            if (!isAuto) {
+                if (!confirm("Are you sure you want to submit your answers?")) return;
+            }
+
+            clearInterval(timerInterval);
+            isExamActive = false;
+            document.getElementById('btn-submit').style.display = 'none';
+            
+            const data = testData[currentTestId];
+            const studentAnswers = {
+                q1: document.querySelector('input[name="q1"]:checked')?.value || "Not Answered",
+                q2: document.querySelector('input[name="q2"]:checked')?.value || "Not Answered",
+                q3: document.querySelector('input[name="q3"]:checked')?.value || "Not Answered",
+                q4: document.getElementById('q4').value.trim().toLowerCase(),
+                q5: document.getElementById('q5').value.trim().toLowerCase(),
+                q6: document.getElementById('q6').value.trim().toLowerCase()
+            };
+
+            let score = 0; const results = {};
+            for (let key in data.answers) {
+                if (studentAnswers[key] === data.answers[key]) {
+                    score++; results[key] = { status: "Correct" };
+                } else {
+                    results[key] = { status: "Incorrect" };
+                }
+            }
+
+            generatePDFReport(studentAnswers, results, score, data);
+        }
+
+        function generatePDFReport(studentAnswers, results, score, data) {
+            const studentName = document.getElementById('student-name').value.trim() || "Student";
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(15, 118, 110);
+            doc.text(`IELTS Reading Mock: ${currentTestId.toUpperCase()}`, 105, 20, null, null, "center");
+
+            doc.setFontSize(12); doc.setFont("helvetica", "italic"); doc.setTextColor(100, 100, 100);
+            doc.text(`Candidate: ${studentName.toUpperCase()}`, 105, 30, null, null, "center");
+            doc.text(`Topic: ${data.title}`, 105, 37, null, null, "center");
+
+            doc.setDrawColor(200, 200, 200); doc.line(20, 45, 190, 45);
+
+            doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 41, 59);
+            doc.text(`Final Score: ${score} / 6`, 105, 60, null, null, "center");
+
+            doc.setFontSize(14); doc.text("Detailed Breakdown:", 20, 85);
+            doc.setFontSize(11); doc.setFont("helvetica", "normal");
+            
+            let y = 95;
+            for (let i = 1; i <= 6; i++) {
+                let qKey = `q${i}`;
+                let sAns = studentAnswers[qKey];
+                let isCorrect = results[qKey].status === "Correct";
+                
+                doc.setTextColor(50, 50, 50); doc.setFont("helvetica", "bold");
+                
+                // Get question text
+                let qText = "";
+                if (i <= 3) {
+                    qText = currentTestId === 'test1' ? data.questions1[i-1] : data.questions1[i-1].q;
+                } else {
+                    qText = `Q${i} (Summary Gap)`;
+                }
+
+                let splitQ = doc.splitTextToSize(qText, 170);
+                doc.text(splitQ, 20, y);
+                
+                y += (splitQ.length * 5) + 2;
+                doc.setFont("helvetica", "normal");
+                doc.text(`Your Answer: ${sAns.toUpperCase()}`, 25, y);
+                
+                if (!isCorrect) {
+                    doc.setTextColor(244, 63, 94);
+                    doc.text(`Correct Answer: ${data.answers[qKey].toUpperCase()} X`, 110, y);
+                } else {
+                    doc.setTextColor(34, 197, 94);
+                    doc.text(`Correct V`, 110, y);
+                }
+                y += 12;
+            }
+
+            doc.save(`${studentName.replace(/\s+/g, '_')}_IELTS_Reading_${currentTestId}.pdf`);
+            document.querySelectorAll('input').forEach(i => i.disabled = true);
+        }
+    </script>
+</body>
+</html>
