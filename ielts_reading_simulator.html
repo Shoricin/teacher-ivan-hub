@@ -34,7 +34,7 @@
         .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
         .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.3); }
         
-        .gap-input { width: 100%; padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e293b; outline: none; transition: 0.2s;}
+        .gap-input { width: 100%; padding: 4px 10px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #0f766e; outline: none; transition: 0.2s;}
         .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
         
         .test-tab { white-space: nowrap; padding: 10px 25px; border-radius: 8px; font-weight: 700; font-size: 1rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid #e2e8f0; background: white;}
@@ -103,8 +103,7 @@
                     <span class="material-icons-round text-brand-teal">menu_book</span> <span id="passage-title">Loading Topic...</span>
                 </h2>
             </div>
-            
-            <iframe id="external-text-frame" class="w-full h-full border-none bg-white" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Press Start.</div>"></iframe>
+            <iframe id="external-text-frame" class="w-full h-full border-none bg-white" srcdoc="<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Please enter your name and press Start.</div>"></iframe>
         </div>
 
         <div id="pane-questions" class="w-full lg:w-1/2 bg-slate-50 flex flex-col desktop-split hidden">
@@ -114,7 +113,6 @@
                     Submit & Export PDF
                 </button>
             </div>
-            
             <div class="p-4 md:p-6 overflow-y-auto scroll-pane pb-24" id="questions-content">
                 </div>
         </div>
@@ -126,34 +124,33 @@
         let currentTestId = 'test1';
         let isExamActive = false;
 
-        // --- EXAM DATABASE ---
-        // Aquí configuramos las preguntas y respuestas. El iframe cargará los .html desde tu GitHub/Server local.
+        // --- EXAM DATABASE (Extracted from official IELTS Sample Tasks) ---
         const testData = {
             test1: {
-                title: "The Origins of Human Writing",
+                title: "The Life and Work of Marie Curie",
                 fileUrl: "textos/mock_test_1.html", 
                 type1: "True / False / Not Given",
                 questions1: [
-                    "1. The earliest forms of writing were developed primarily for storytelling and literature.",
-                    "2. Cuneiform script was invented by the Sumerians in Mesopotamia.",
-                    "3. The Rosetta Stone was discovered by French soldiers in 1799."
+                    "1. Marie Curie's husband was a joint winner of both Marie's Nobel Prizes.",
+                    "2. Marie became interested in science when she was a child.",
+                    "3. Marie was able to attend the Sorbonne because of her sister's financial contribution."
                 ],
-                type2: "Summary Completion (NO MORE THAN TWO WORDS)",
-                summaryText: "Before alphabets existed, ancient civilizations used <strong class='text-brand-teal'>4.</strong> [Q4] to represent objects and ideas. As society became more complex, particularly for trade and <strong class='text-brand-teal'>5.</strong> [Q5], a more sophisticated system was required. Eventually, the Phoenicians created the first true <strong class='text-brand-teal'>6.</strong> [Q6], which influenced modern languages.",
-                answers: { q1: "false", q2: "true", q3: "not given", q4: "pictograms", q5: "taxation", q6: "alphabet" }
+                type2: "Note Completion (ONE WORD ONLY)",
+                summaryText: "Marie and Irène Curie developed X-radiography which was used as a medical technique for <strong class='text-brand-teal'>4.</strong> [Q4]. Marie Curie saw the importance of collecting radioactive material both for research and for cases of <strong class='text-brand-teal'>5.</strong> [Q5]. The radioactive material stocked in Paris contributed to the discoveries in the 1930s of the <strong class='text-brand-teal'>6.</strong> [Q6] and of what was known as artificial radioactivity.",
+                answers: { q1: "false", q2: "not given", q3: "true", q4: "soldiers", q5: "illness", q6: "neutron" }
             },
             test2: {
-                title: "The Impact of Microplastics on Marine Life",
+                title: "The Origins of Birds",
                 fileUrl: "textos/mock_test_2.html",
-                type1: "Multiple Choice",
+                type1: "True / False / Not Given",
                 questions1: [
-                    { q: "1. According to the passage, microplastics are defined as plastic pieces that are:", opts: ["A. Visible only under a microscope", "B. Less than 5 millimeters in length", "C. Specifically produced for cosmetics"] },
-                    { q: "2. The primary reason marine animals consume microplastics is because:", opts: ["A. They mistake them for their natural food", "B. The plastics contain nutritional value", "C. They are forced to by changing currents"] },
-                    { q: "3. What is mentioned as a potential human health risk in paragraph 4?", opts: ["A. Swimming in polluted oceans", "B. Drinking tap water", "C. Eating contaminated seafood"] }
+                    "1. The 'birds are dinosaurs' theory was initially formulated by Thomas Huxley.",
+                    "2. Gerhard Heilmann's publication on bird origins was largely ignored for fifty years.",
+                    "3. Feduccia and Martin argue that flight likely originated from ancestors living on the ground."
                 ],
-                type2: "Summary Completion (NO MORE THAN TWO WORDS)",
-                summaryText: "Microplastics enter the ocean through various channels, including the breakdown of larger debris and the washing of <strong class='text-brand-teal'>4.</strong> [Q4]. Once in the water, these particles absorb toxic <strong class='text-brand-teal'>5.</strong> [Q5] like sponges. When ingested by small fish, these toxins travel up the <strong class='text-brand-teal'>6.</strong> [Q6], eventually reaching apex predators.",
-                answers: { q1: "b", q2: "a", q3: "c", q4: "synthetic clothing", q5: "chemicals", q6: "food chain" }
+                type2: "Sentence Completion (ONE WORD ONLY)",
+                summaryText: "Huxley formulated his theory while studying a dinosaur belonging to a group called <strong class='text-brand-teal'>4.</strong> [Q4]. Heilmann rejected Huxley's theory because of the apparent absence of <strong class='text-brand-teal'>5.</strong> [Q5] in dinosaurs. Later discoveries changed this view. For instance, the presence of a <strong class='text-brand-teal'>6.</strong> [Q6] on a primitive bird from Madagascar adds weight to the 'dino-bird' argument.",
+                answers: { q1: "true", q2: "false", q3: "false", q4: "theropods", q5: "collarbones", q6: "claw" }
             }
         };
 
@@ -168,16 +165,10 @@
             currentTestId = testId;
             const data = testData[testId];
 
-            // Tabs UI
             document.querySelectorAll('.test-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${testId}`).classList.add('active');
-            
             document.getElementById('passage-title').innerText = data.title;
-
-            // Generate Questions HTML
             document.getElementById('questions-content').innerHTML = buildQuestionsHTML(data, testId);
-
-            // Reset iframe
             document.getElementById('external-text-frame').srcdoc = "<div style='font-family:sans-serif; padding:20px; text-align:center; color:#64748b; margin-top:20%;'>Text locked. Please enter your name and press Start.</div>";
 
             document.getElementById('exam-blocker').style.display = 'flex';
@@ -190,41 +181,20 @@
         }
 
         function buildQuestionsHTML(data, testId) {
-            let part1HTML = "";
-            
-            if (testId === 'test1') {
-                // T/F/NG Builder
-                part1HTML = data.questions1.map((q, index) => {
-                    let qNum = index + 1;
-                    return `
-                        <div class="mb-5">
-                            <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${q}</p>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="true"> True</label>
-                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="false"> False</label>
-                                <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="not given"> Not Given</label>
-                            </div>
+            let part1HTML = data.questions1.map((q, index) => {
+                let qNum = index + 1;
+                return `
+                    <div class="mb-5">
+                        <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${q}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="true"> True</label>
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="false"> False</label>
+                            <label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="not given"> Not Given</label>
                         </div>
-                    `;
-                }).join('');
-            } else {
-                // Multiple Choice Builder
-                part1HTML = data.questions1.map((item, index) => {
-                    let qNum = index + 1;
-                    let options = item.opts.map(opt => {
-                        let val = opt.charAt(0).toLowerCase(); // Gets 'a', 'b', or 'c'
-                        return `<label class="radio-label text-sm"><input type="radio" name="q${qNum}" value="${val}"> ${opt}</label>`;
-                    }).join('');
-                    return `
-                        <div class="mb-5">
-                            <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">${item.q}</p>
-                            <div class="flex flex-col gap-2">${options}</div>
-                        </div>
-                    `;
-                }).join('');
-            }
+                    </div>
+                `;
+            }).join('');
 
-            // Summary Builder
             let summaryStr = data.summaryText;
             [4, 5, 6].forEach(num => {
                 summaryStr = summaryStr.replace(`[Q${num}]`, `<input type="text" id="q${num}" class="gap-input inline-block w-32 text-center mx-1 py-0.5 px-2">`);
@@ -250,7 +220,6 @@
             `;
         }
 
-        // View Toggles for Mobile
         function switchMobileView(view) {
             const btnPassage = document.getElementById('btn-view-passage');
             const btnQuestions = document.getElementById('btn-view-questions');
@@ -270,14 +239,10 @@
             }
         }
 
-        // Exam Engine
         function startExam() {
             const nameInput = document.getElementById('student-name').value.trim();
-            if (!nameInput) {
-                alert("You must enter your Candidate Name to start."); return;
-            }
+            if (!nameInput) { alert("You must enter your Candidate Name to start."); return; }
 
-            // Load external HTML file into the iframe
             const currentData = testData[currentTestId];
             document.getElementById('external-text-frame').removeAttribute('srcdoc');
             document.getElementById('external-text-frame').src = currentData.fileUrl;
@@ -294,8 +259,7 @@
             let timer = duration;
             const display = document.getElementById('timer-display');
             timerInterval = setInterval(function () {
-                let m = parseInt(timer / 60, 10);
-                let s = parseInt(timer % 60, 10);
+                let m = parseInt(timer / 60, 10); let s = parseInt(timer % 60, 10);
                 display.textContent = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
                 if (timer <= 300) display.classList.add('warning');
                 if (--timer < 0) { clearInterval(timerInterval); autoSubmit(); }
@@ -307,9 +271,7 @@
         }
 
         function submitExam(isAuto = false) {
-            if (!isAuto) {
-                if (!confirm("Are you sure you want to submit your answers?")) return;
-            }
+            if (!isAuto) { if (!confirm("Are you sure you want to submit your answers?")) return; }
 
             clearInterval(timerInterval);
             isExamActive = false;
@@ -365,14 +327,7 @@
                 
                 doc.setTextColor(50, 50, 50); doc.setFont("helvetica", "bold");
                 
-                // Get question text
-                let qText = "";
-                if (i <= 3) {
-                    qText = currentTestId === 'test1' ? data.questions1[i-1] : data.questions1[i-1].q;
-                } else {
-                    qText = `Q${i} (Summary Gap)`;
-                }
-
+                let qText = i <= 3 ? data.questions1[i-1] : `Q${i} (Summary/Note Gap)`;
                 let splitQ = doc.splitTextToSize(qText, 170);
                 doc.text(splitQ, 20, y);
                 
