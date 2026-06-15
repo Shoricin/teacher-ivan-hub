@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IELTS Listening Daily Simulator | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .radio-label, .check-label { display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label:hover, .check-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
+        .radio-label input[type="radio"], .check-label input[type="checkbox"] { accent-color: #0f766e; transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
+        
+        .gap-input { padding: 4px 10px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #0f766e; outline: none; transition: 0.2s; width: 160px;}
+        .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #166534; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .day-tab { white-space: nowrap; padding: 10px 25px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid transparent;}
+        .day-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .day-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .score-box { display: none; }
+        .score-box.active { display: flex; animation: fadeIn 0.4s ease; }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 min-h-screen font-sans flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-brand-slate text-white py-6 px-6 text-center border-b-4 border-brand-teal relative shadow-md shrink-0">
+        <a href="index.html" class="absolute left-6 top-6 text-slate-300 hover:text-brand-lightTeal font-semibold flex items-center gap-2 transition duration-200">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center gap-3">
+            <span class="material-icons-round text-brand-teal text-3xl md:text-4xl">headphones</span> 
+            IELTS Daily Listening
+        </h1>
+        <p class="text-slate-300 mt-2 font-light text-sm md:text-base">Real exam simulation with local audio files</p>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="bg-white border-b border-slate-200 py-4 px-4 shadow-sm flex overflow-x-auto scroll-pane gap-3 justify-center z-10 shrink-0">
+        <button class="day-tab active flex items-center gap-2" onclick="switchDay('guide')" id="tab-guide">
+            <span class="material-icons-round text-sm">menu_book</span> Guide
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('monday')" id="tab-monday">
+            <span class="material-icons-round text-sm">looks_one</span> Mon: Section 1
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('tuesday')" id="tab-tuesday">
+            <span class="material-icons-round text-sm">looks_two</span> Tue: Section 2
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('wednesday')" id="tab-wednesday">
+            <span class="material-icons-round text-sm">looks_3</span> Wed: Section 3
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('thursday')" id="tab-thursday">
+            <span class="material-icons-round text-sm">looks_4</span> Thu: Section 4
+        </button>
+    </div>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 mt-8 mb-16">
+
+        <!-- ================= THE GUIDE ================= -->
+        <div id="view-guide" class="view-section active">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 border-t-4 border-brand-teal mb-6">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
+                    <span class="material-icons-round text-brand-teal">gavel</span> Guía Práctica del Listening
+                </h2>
+                
+                <p class="font-serif text-slate-600 leading-relaxed mb-6">
+                    La sección de Listening dura <strong>30 minutos</strong> (más 10 minutos para transferir respuestas si haces el examen en papel). Consta de 4 grabaciones con un total de 40 preguntas. <strong>La regla más crítica: el audio se reproduce una sola vez.</strong>
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-slate text-sm uppercase tracking-wider mb-2">Section 1</h4>
+                        <p class="font-serif text-sm text-slate-600"><strong>Tipo:</strong> Conversación (2 personas)<br><strong>Contexto:</strong> Social/Cotidiano. Transacciones de datos como reservas de hotel o inscripciones.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-slate text-sm uppercase tracking-wider mb-2">Section 2</h4>
+                        <p class="font-serif text-sm text-slate-600"><strong>Tipo:</strong> Monólogo (1 persona)<br><strong>Contexto:</strong> Social/Cotidiano. Ej. Un guía explicando normas de un parque o distribución de un museo.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-slate text-sm uppercase tracking-wider mb-2">Section 3</h4>
+                        <p class="font-serif text-sm text-slate-600"><strong>Tipo:</strong> Conversación (Hasta 4 personas)<br><strong>Contexto:</strong> Educativo/Académico. Ej. Estudiantes discutiendo un proyecto escolar o tutorías.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-brand-slate text-sm uppercase tracking-wider mb-2">Section 4</h4>
+                        <p class="font-serif text-sm text-slate-600"><strong>Tipo:</strong> Monólogo continuo sin pausas<br><strong>Contexto:</strong> Educativo/Académico. Ej. Conferencia universitaria o clase magistral técnica.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-brand-slate mb-4">Estrategias Fundamentales de Puntuación</h3>
+                <div class="space-y-4">
+                    <div class="bg-rose-50 p-5 rounded-xl border-l-4 border-brand-coral">
+                        <h4 class="font-bold text-rose-900 flex items-center gap-2 mb-1">
+                            <span class="material-icons-round">spellcheck</span> Límites estrictos de palabras
+                        </h4>
+                        <p class="text-sm font-serif text-rose-800">Respete rigurosamente indicaciones como "NO MORE THAN TWO WORDS". Si excede el límite fijado, la respuesta se computará automáticamente como nula, sin importar la veracidad del contenido escrito.</p>
+                    </div>
+                    <div class="bg-amber-50 p-5 rounded-xl border-l-4 border-brand-gold">
+                        <h4 class="font-bold text-amber-900 flex items-center gap-2 mb-1">
+                            <span class="material-icons-round">psychology</span> Detección de distractores dinámicos
+                        </h4>
+                        <p class="text-sm font-serif text-amber-800">Los interlocutores corrigen frecuentemente su discurso sobre la marcha (ej. modificar una hora o precio inicialmente dados). Evite realizar anotaciones impulsivas antes de que se complete la idea.</p>
+                    </div>
+                    <div class="bg-teal-50 p-5 rounded-xl border-l-4 border-brand-teal">
+                        <h4 class="font-bold text-teal-900 flex items-center gap-2 mb-1">
+                            <span class="material-icons-round">sync</span> Sincronización y flujo continuo
+                        </h4>
+                        <p class="text-sm font-serif text-teal-800">Las respuestas avanzan de forma estrictamente paralela al audio. Si no logra identificar una respuesta, descarte la pregunta inmediatamente para evitar descolgarse de las secuencias posteriores.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MONDAY: SECTION 1 ================= -->
+        <div id="view-monday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 border-t-4 border-brand-teal mb-6">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-bold text-brand-slate">Section 1</h2>
+                </div>
+
+                <!-- NATIVE AUDIO PLAYER -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 max-w-lg mx-auto mb-8 shadow-inner text-center">
+                    <p class="text-xs font-bold text-slate-500 mb-2">AUDIO 5.1 (Press Play to begin)</p>
+                    <audio class="w-full" controls>
+                        <source src="audios/audio_5_1.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+
+                <!-- Q1 - Q5 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 1-5</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Write NO MORE THAN ONE WORD OR A NUMBER for each answer.</p>
+                    
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 font-serif overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="border-b-2 border-slate-300 pb-3 text-xl text-center">Apartment for rent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-4 font-bold">Street</td>
+                                    <td class="border-b border-slate-200 py-4">Bridge street</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-4 font-bold">Street #</td>
+                                    <td class="border-b border-slate-200 py-4">(1) <input type="text" id="q1" class="gap-input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-4 font-bold">Included utilities</td>
+                                    <td class="border-b border-slate-200 py-4">Gas, heat, water, (2) <input type="text" id="q2" class="gap-input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-4 font-bold">Not included utilities</td>
+                                    <td class="border-b border-slate-200 py-4">(3) <input type="text" id="q3" class="gap-input">, phone</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-4 font-bold">Public transport</td>
+                                    <td class="border-b border-slate-200 py-4">Underground, (4) <input type="text" id="q4" class="gap-input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 font-bold">Tenant's name</td>
+                                    <td class="py-4">John (5) <input type="text" id="q5" class="gap-input"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q6 - Q8 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 6-8</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Choose THREE letters, A-F. Which THREE things should the caller bring to the meeting?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="cb-6-8">
+                        <label class="check-label"><input type="checkbox" value="a"> A. Driving license</label>
+                        <label class="check-label"><input type="checkbox" value="b"> B. Passport</label>
+                        <label class="check-label"><input type="checkbox" value="c"> C. Tax bill</label>
+                        <label class="check-label"><input type="checkbox" value="d"> D. Employment contract</label>
+                        <label class="check-label"><input type="checkbox" value="e"> E. Reference from a friend or colleague</label>
+                        <label class="check-label"><input type="checkbox" value="f"> F. Reference from an employer</label>
+                    </div>
+                </div>
+
+                <!-- Q9 - Q10 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 9-10</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Choose the correct letters, A, B, or C.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">9. What time do the caller and apartment manager decide to meet?</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q9" value="a"> A. 5:30 PM</label>
+                                <label class="radio-label"><input type="radio" name="q9" value="b"> B. 6:00 PM</label>
+                                <label class="radio-label"><input type="radio" name="q9" value="c"> C. 6:30 PM</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">10. Where do they decide to meet?</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q10" value="a"> A. Near the manager's apartment</label>
+                                <label class="radio-label"><input type="radio" name="q10" value="b"> B. At the caller's future apartment</label>
+                                <label class="radio-label"><input type="radio" name="q10" value="c"> C. At the office</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="score-monday" class="score-box items-center justify-center p-6 bg-teal-50 border-2 border-brand-teal rounded-2xl mb-6">
+                    <div class="text-center">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Your Section 1 Score</p>
+                        <p class="text-4xl font-black text-brand-teal mt-1"><span id="val-monday">0</span> / 10</p>
+                    </div>
+                </div>
+
+                <button onclick="gradeMonday()" class="w-full bg-brand-slate hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md text-lg">
+                    Check Section 1 Answers
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= TUESDAY: SECTION 2 ================= -->
+        <div id="view-tuesday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 border-t-4 border-brand-teal mb-6">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-bold text-brand-slate">Section 2</h2>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 max-w-lg mx-auto mb-8 shadow-inner text-center">
+                    <p class="text-xs font-bold text-slate-500 mb-2">AUDIO 5.2 (Press Play to begin)</p>
+                    <audio class="w-full" controls>
+                        <source src="audios/audio_5_2.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- Q11 - Q16 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 11-16</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+                    
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 font-serif overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr>
+                                    <th class="border-b-2 border-slate-300 pb-3 font-bold text-slate-600">Ticket type</th>
+                                    <th class="border-b-2 border-slate-300 pb-3 font-bold text-slate-600">Ticket cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-3">Adult's ticket</td>
+                                    <td class="border-b border-slate-200 py-3">(11) <input type="text" id="q11" class="gap-input w-24"> pounds</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-3">Child's ticket<br><span class="text-sm text-slate-500">(for children between 5 and 15 years)</span></td>
+                                    <td class="border-b border-slate-200 py-3">(12) <input type="text" id="q12" class="gap-input w-24"> pounds</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-3">*Children under (13) <input type="text" id="q13" class="gap-input w-20"> years</td>
+                                    <td class="border-b border-slate-200 py-3">free</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-3">Reduced tariff<br><span class="text-sm text-slate-500">(for full-time students and disabled visitors)</span></td>
+                                    <td class="border-b border-slate-200 py-3">(14) <input type="text" id="q14" class="gap-input w-24"> pounds</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-b border-slate-200 py-3">(15) <input type="text" id="q15" class="gap-input"><br><span class="text-sm text-slate-500">(can be used by up to 2 adults and 3 children)</span></td>
+                                    <td class="border-b border-slate-200 py-3">55 pounds</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3">Annual membership</td>
+                                    <td class="py-3">(16) <input type="text" id="q16" class="gap-input w-24"> pounds</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q17 - Q20 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 17-20</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Complete the information about ordering tickets below. Write NO MORE THAN TWO WORDS.</p>
+                    
+                    <ul class="list-disc pl-5 space-y-4 font-serif text-slate-700 leading-relaxed">
+                        <li>The easiest way, is to buy your tickets (17) <input type="text" id="q17" class="gap-input">. Make sure that you receive a (18) <input type="text" id="q18" class="gap-input"> of your booking!</li>
+                        <li>The second way is to book your tickets (19) <input type="text" id="q19" class="gap-input"></li>
+                        <li>If you don't want to plan your visit in advance, you can simply purchase the tickets (20) <input type="text" id="q20" class="gap-input"> in ticket kiosks.</li>
+                    </ul>
+                </div>
+
+                <div id="score-tuesday" class="score-box items-center justify-center p-6 bg-teal-50 border-2 border-brand-teal rounded-2xl mb-6">
+                    <div class="text-center">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Your Section 2 Score</p>
+                        <p class="text-4xl font-black text-brand-teal mt-1"><span id="val-tuesday">0</span> / 10</p>
+                    </div>
+                </div>
+
+                <button onclick="gradeTuesday()" class="w-full bg-brand-slate hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md text-lg">
+                    Check Section 2 Answers
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= WEDNESDAY: SECTION 3 ================= -->
+        <div id="view-wednesday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 border-t-4 border-brand-teal mb-6">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-bold text-brand-slate">Section 3</h2>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 max-w-lg mx-auto mb-8 shadow-inner text-center">
+                    <p class="text-xs font-bold text-slate-500 mb-2">AUDIO 5.3 (Press Play to begin)</p>
+                    <audio class="w-full" controls>
+                        <source src="audios/audio_5_3.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- Q21 - Q23 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 21-23</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Write NO MORE THAN THREE WORDS for each answer.</p>
+                    <div class="space-y-4 font-serif text-slate-800">
+                        <p>21. The total course duration is <input type="text" id="q21" class="gap-input"></p>
+                        <p>22. During the final project students will work in teams of <input type="text" id="q22" class="gap-input"></p>
+                        <p>23. The professor told that the key thing in marketing strategy is to <input type="text" id="q23" class="gap-input"></p>
+                    </div>
+                </div>
+
+                <!-- Q24 - Q28 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 24-28</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Choose FIVE letters, A-I. What FIVE modules does the course include?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="cb-24-28">
+                        <label class="check-label"><input type="checkbox" value="a"> A. Marketing</label>
+                        <label class="check-label"><input type="checkbox" value="b"> B. Design of custom logos</label>
+                        <label class="check-label"><input type="checkbox" value="c"> C. Product management</label>
+                        <label class="check-label"><input type="checkbox" value="d"> D. Branding</label>
+                        <label class="check-label"><input type="checkbox" value="e"> E. E-commerce</label>
+                        <label class="check-label"><input type="checkbox" value="f"> F. Advertising</label>
+                        <label class="check-label"><input type="checkbox" value="g"> G. Analytics</label>
+                        <label class="check-label"><input type="checkbox" value="h"> H. Customer attraction</label>
+                        <label class="check-label"><input type="checkbox" value="i"> I. Business strategies</label>
+                    </div>
+                </div>
+
+                <!-- Q29 - Q30 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 29-30</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Write NO MORE THAN TWO WORDS for each answer.</p>
+                    <div class="space-y-4 font-serif text-slate-800">
+                        <p>29. The next lecture is in the big classroom on the <input type="text" id="q29" class="gap-input"></p>
+                        <p>30. Students need to take their <input type="text" id="q30" class="gap-input"> last week</p>
+                    </div>
+                </div>
+
+                <div id="score-wednesday" class="score-box items-center justify-center p-6 bg-teal-50 border-2 border-brand-teal rounded-2xl mb-6">
+                    <div class="text-center">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Your Section 3 Score</p>
+                        <p class="text-4xl font-black text-brand-teal mt-1"><span id="val-wednesday">0</span> / 10</p>
+                    </div>
+                </div>
+
+                <button onclick="gradeWednesday()" class="w-full bg-brand-slate hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md text-lg">
+                    Check Section 3 Answers
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= THURSDAY: SECTION 4 ================= -->
+        <div id="view-thursday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 border-t-4 border-brand-teal mb-6">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-2xl font-bold text-brand-slate">Section 4</h2>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 max-w-lg mx-auto mb-8 shadow-inner text-center">
+                    <p class="text-xs font-bold text-slate-500 mb-2">AUDIO 5.4 (Press Play to begin)</p>
+                    <audio class="w-full" controls>
+                        <source src="audios/audio_5_4.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- Q31 - Q35 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 31-35</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Choose the correct letter, A, B, or C.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">31. Initially, the Great Wall was built to</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q31" value="a"> A. prevent invaders from entering China</label>
+                                <label class="radio-label"><input type="radio" name="q31" value="b"> B. function as a psychological barrier</label>
+                                <label class="radio-label"><input type="radio" name="q31" value="c"> C. show country's enduring strength</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">32. The construction of the Great Wall started</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q32" value="a"> A. in third century B.C.</label>
+                                <label class="radio-label"><input type="radio" name="q32" value="b"> B. in 220 B.C.</label>
+                                <label class="radio-label"><input type="radio" name="q32" value="c"> C. in 390 A.D.</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">33. The Chinese name of the monument is</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q33" value="a"> A. the Great Wall</label>
+                                <label class="radio-label"><input type="radio" name="q33" value="b"> B. the Big Wall</label>
+                                <label class="radio-label"><input type="radio" name="q33" value="c"> C. the Long Wall</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">34. The wall as it exists today was constructed mainly by</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q34" value="a"> A. Qin dynasty</label>
+                                <label class="radio-label"><input type="radio" name="q34" value="b"> B. Northern Wei dynasty</label>
+                                <label class="radio-label"><input type="radio" name="q34" value="c"> C. Ming dynasty</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 mb-3">35. During the Ming dynasty, the wall's main purpose was</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label"><input type="radio" name="q35" value="a"> A. to be a military fortification</label>
+                                <label class="radio-label"><input type="radio" name="q35" value="b"> B. to protect caravans traveling along the trade routes</label>
+                                <label class="radio-label"><input type="radio" name="q35" value="c"> C. to contribute to the defense of the country</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q36 - Q40 -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">Questions 36-40</h3>
+                    <p class="text-sm text-brand-coral font-bold mb-4 uppercase tracking-wide">Complete the timeline with information about the history of the tomato in the United States. Write NO MORE THAN THREE WORDS.</p>
+                    <div class="space-y-4 font-serif text-slate-800">
+                        <p>36. Before the use of bricks, the Great Wall was mainly built from stones, wood and <input type="text" id="q36" class="gap-input"></p>
+                        <p>37. Many western sections of the wall are constructed from mud and thus are more <input type="text" id="q37" class="gap-input"></p>
+                        <p>38. A part of the wall in Gansu province may disappear in the next 20 years, due to <input type="text" id="q38" class="gap-input"></p>
+                        <p>39. To see the wall from the Moon would require superhuman <input type="text" id="q39" class="gap-input"></p>
+                        <p>40. The Great Wall is generally recognized as one of the most impressive <input type="text" id="q40" class="gap-input"> in history.</p>
+                    </div>
+                </div>
+
+                <div id="score-thursday" class="score-box items-center justify-center p-6 bg-teal-50 border-2 border-brand-teal rounded-2xl mb-6">
+                    <div class="text-center">
+                        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Your Section 4 Score</p>
+                        <p class="text-4xl font-black text-brand-teal mt-1"><span id="val-thursday">0</span> / 10</p>
+                    </div>
+                </div>
+
+                <button onclick="gradeThursday()" class="w-full bg-brand-slate hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md text-lg">
+                    Check Section 4 Answers
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- EVALUATION SCRIPTS -->
+    <script>
+        // Tab switching
+        function switchDay(dayId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${dayId}`).classList.add('active');
+            document.getElementById(`tab-${dayId}`).classList.add('active');
+            // Pause audios
+            document.querySelectorAll('audio').forEach(audio => audio.pause());
+        }
+
+        // Configuration of correct answers (Placeholders. Update based on your audio keys)
+        const ANSWERS = {
+            monday: {
+                q1: "32", q2: "electricity", q3: "internet", q4: "bus", q5: "smith",
+                q6_8: ["a", "d", "f"], 
+                q9: "b", q10: "c"
+            },
+            tuesday: {
+                q11: "20", q12: "10", q13: "5", q14: "15", q15: "family ticket", q16: "100",
+                q17: "online", q18: "confirmation email", q19: "by phone", q20: "in person"
+            },
+            wednesday: {
+                q21: "six months", q22: "four", q23: "know your target",
+                q24_28: ["a", "c", "d", "e", "g"], 
+                q29: "ground floor", q30: "student cards"
+            },
+            thursday: {
+                q31: "a", q32: "a", q33: "c", q34: "c", q35: "c",
+                q36: "earth", q37: "fragile", q38: "sandstorms", q39: "vision", q40: "architectural feats"
+            }
+        };
+
+        // Helpers
+        function checkGap(id, correctVal) {
+            const el = document.getElementById(id);
+            const val = el.value.trim().toLowerCase();
+            el.classList.remove('correct', 'wrong');
+            if (val === correctVal.toLowerCase()) { el.classList.add('correct'); return 1; }
+            else { el.classList.add('wrong'); return 0; }
+        }
+
+        function checkRadio(name, correctVal) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                input.parentElement.style.borderColor = "#e2e8f0";
+                input.parentElement.style.background = "white";
+            });
+            if (!selected) return 0;
+            if (selected.value === correctVal.toLowerCase()) {
+                selected.parentElement.style.borderColor = "#10b981";
+                selected.parentElement.style.background = "#d1fae5";
+                return 1;
+            } else {
+                selected.parentElement.style.borderColor = "#ef4444";
+                selected.parentElement.style.background = "#fee2e2";
+                const correctEl = document.querySelector(`input[name="${name}"][value="${correctVal.toLowerCase()}"]`);
+                if(correctEl) {
+                    correctEl.parentElement.style.borderColor = "#10b981";
+                    correctEl.parentElement.style.background = "#d1fae5";
+                }
+                return 0;
+            }
+        }
+
+        function checkMultiple(containerId, correctArr, requiredCount) {
+            let score = 0;
+            const container = document.getElementById(containerId);
+            const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
+            
+            container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                input.parentElement.style.borderColor = "#e2e8f0";
+                input.parentElement.style.background = "white";
+            });
+
+            if (selected.length !== requiredCount) {
+                alert(`Please select exactly ${requiredCount} options.`);
+                return -1; 
+            }
+
+            selected.forEach(val => {
+                const el = container.querySelector(`input[value="${val}"]`);
+                if (correctArr.includes(val)) {
+                    el.parentElement.style.borderColor = "#10b981";
+                    el.parentElement.style.background = "#d1fae5";
+                    score++;
+                } else {
+                    el.parentElement.style.borderColor = "#ef4444";
+                    el.parentElement.style.background = "#fee2e2";
+                }
+            });
+
+            correctArr.forEach(val => {
+                const el = container.querySelector(`input[value="${val}"]`);
+                if (!selected.includes(val)) {
+                    el.parentElement.style.borderColor = "#10b981";
+                    el.parentElement.style.borderStyle = "dashed";
+                }
+            });
+
+            return score;
+        }
+
+        // Graders
+        function gradeMonday() {
+            let score = 0;
+            score += checkGap('q1', ANSWERS.monday.q1);
+            score += checkGap('q2', ANSWERS.monday.q2);
+            score += checkGap('q3', ANSWERS.monday.q3);
+            score += checkGap('q4', ANSWERS.monday.q4);
+            score += checkGap('q5', ANSWERS.monday.q5);
+            
+            let cbScore = checkMultiple('cb-6-8', ANSWERS.monday.q6_8, 3);
+            if(cbScore === -1) return;
+            score += cbScore;
+
+            score += checkRadio('q9', ANSWERS.monday.q9);
+            score += checkRadio('q10', ANSWERS.monday.q10);
+
+            document.getElementById('val-monday').innerText = score;
+            document.getElementById('score-monday').classList.add('active');
+        }
+
+        function gradeTuesday() {
+            let score = 0;
+            for(let i=11; i<=20; i++) {
+                score += checkGap(`q${i}`, ANSWERS.tuesday[`q${i}`]);
+            }
+            document.getElementById('val-tuesday').innerText = score;
+            document.getElementById('score-tuesday').classList.add('active');
+        }
+
+        function gradeWednesday() {
+            let score = 0;
+            score += checkGap('q21', ANSWERS.wednesday.q21);
+            score += checkGap('q22', ANSWERS.wednesday.q22);
+            score += checkGap('q23', ANSWERS.wednesday.q23);
+            
+            let cbScore = checkMultiple('cb-24-28', ANSWERS.wednesday.q24_28, 5);
+            if(cbScore === -1) return;
+            score += cbScore;
+
+            score += checkGap('q29', ANSWERS.wednesday.q29);
+            score += checkGap('q30', ANSWERS.wednesday.q30);
+
+            document.getElementById('val-wednesday').innerText = score;
+            document.getElementById('score-wednesday').classList.add('active');
+        }
+
+        function gradeThursday() {
+            let score = 0;
+            score += checkRadio('q31', ANSWERS.thursday.q31);
+            score += checkRadio('q32', ANSWERS.thursday.q32);
+            score += checkRadio('q33', ANSWERS.thursday.q33);
+            score += checkRadio('q34', ANSWERS.thursday.q34);
+            score += checkRadio('q35', ANSWERS.thursday.q35);
+            
+            for(let i=36; i<=40; i++) {
+                score += checkGap(`q${i}`, ANSWERS.thursday[`q${i}`]);
+            }
+
+            document.getElementById('val-thursday').innerText = score;
+            document.getElementById('score-thursday').classList.add('active');
+        }
+    </script>
+</body>
+</html>
