@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Listening Prep 4-Day Challenge | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { teal: '#0f766e', lightTeal: '#5dcbc3', slate: '#1e293b', coral: '#f43f5e', gold: '#f5b041', bg: '#f8fafc' }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scroll-pane::-webkit-scrollbar { width: 6px; height: 6px;}
+        .scroll-pane::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        .scroll-pane::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        
+        .radio-label { display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white;}
+        .radio-label:hover { border-color: #5dcbc3; background: #f0fdfa; }
+        .radio-label input[type="radio"] { accent-color: #0f766e; transform: scale(1.2); margin-top: 4px; flex-shrink: 0;}
+        
+        .gap-input { padding: 4px 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #0f766e; outline: none; transition: 0.2s; width: 120px; text-align: center;}
+        .gap-input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.1); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #166534; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .day-tab { white-space: nowrap; padding: 10px 25px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid transparent;}
+        .day-tab.active { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 4px 10px rgba(15,118,110,0.3);}
+        .day-tab:hover:not(.active) { border-color: #5dcbc3; color: #0f766e;}
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; margin-bottom: 20px; border: 2px solid #e2e8f0; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 min-h-screen font-sans flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-brand-slate text-white py-6 px-6 text-center border-b-4 border-brand-lightTeal relative shadow-md shrink-0">
+        <a href="index.html" class="absolute left-6 top-6 text-slate-300 hover:text-brand-lightTeal font-semibold flex items-center gap-2 transition duration-200">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center gap-3">
+            <span class="material-icons-round text-brand-lightTeal text-3xl md:text-4xl">headphones</span> 
+            Listening 4-Day Prep
+        </h1>
+        <p class="text-slate-300 mt-2 font-light text-sm md:text-base">Prepara tu oído desde el Lunes hasta la clase del Jueves</p>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="bg-white border-b border-slate-200 py-4 px-4 shadow-sm flex overflow-x-auto scroll-pane gap-3 justify-center z-10 shrink-0">
+        <button class="day-tab active flex items-center gap-2" onclick="switchDay('monday')" id="tab-monday">
+            <span class="material-icons-round text-sm">looks_one</span> Monday
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('tuesday')" id="tab-tuesday">
+            <span class="material-icons-round text-sm">looks_two</span> Tuesday
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('wednesday')" id="tab-wednesday">
+            <span class="material-icons-round text-sm">looks_3</span> Wednesday
+        </button>
+        <button class="day-tab flex items-center gap-2" onclick="switchDay('thursday')" id="tab-thursday">
+            <span class="material-icons-round text-sm">looks_4</span> Thursday
+        </button>
+    </div>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 mt-8 mb-16">
+
+        <!-- ================= MONDAY: PART 1 ================= -->
+        <div id="view-monday" class="view-section active">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 mb-6 border-t-4 border-brand-teal">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 mb-4">
+                    <span class="material-icons-round text-brand-teal">info</span> Introduction & Part 1
+                </h2>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 font-serif text-slate-700 text-[0.95rem] leading-relaxed">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>El examen general dura 2 horas y 45 minutos[cite: 11].</li>
+                        <li>La sección de Listening dura 30 minutos (más 10 minutos para transferir respuestas en la versión de papel)[cite: 11].</li>
+                        <li>En total escucharás 4 grabaciones de hablantes nativos, respondiendo a 40 preguntas[cite: 11].</li>
+                        <li><strong>Regla de Oro:</strong> El audio se reproduce una sola vez[cite: 11]. Esto exige una alta capacidad de concentración[cite: 11].</li>
+                        <li><strong>Parte 1 del Examen:</strong> Escucharás una conversación entre 2 personas en un contexto social o cotidiano (ej. transacciones de datos como reservas de hotel)[cite: 11].</li>
+                    </ul>
+                </div>
+
+                <div class="bg-red-50 p-5 rounded-xl border-l-4 border-brand-coral mb-6">
+                    <h4 class="font-bold text-rose-900 flex items-center gap-2 mb-1">
+                        <span class="material-icons-round">warning</span> Estrategia: Límites de Palabras
+                    </h4>
+                    <p class="text-sm font-serif text-rose-800">
+                        Respete rigurosamente indicaciones como "NO MORE THAN TWO WORDS"[cite: 11]. Si excede el límite fijado, la respuesta se computará automáticamente como nula, sin importar si el contenido es correcto[cite: 11].
+                    </p>
+                </div>
+
+                <!-- Video Practice -->
+                <h3 class="font-bold text-lg mb-3">Daily Practice: Part 1 Form Completion</h3>
+                <div class="video-wrapper">
+                    <!-- Note to teacher: You can replace this YouTube ID with any IELTS Part 1 Listening test -->
+                    <iframe src="https://www.youtube-nocookie.com/embed/p14iT5Lp-xY?rel=0" allowfullscreen></iframe>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
+                    <p class="text-sm font-bold text-slate-500 mb-4 uppercase tracking-widest">Complete the notes below. Write NO MORE THAN ONE WORD AND/OR A NUMBER.</p>
+                    
+                    <div class="space-y-4 font-serif text-slate-800">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span class="font-bold">1. Customer Name:</span> 
+                            <span>John <input type="text" id="m1" data-ans="smith" class="gap-input"></span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span class="font-bold">2. Arrival Date:</span> 
+                            <span>15th <input type="text" id="m2" data-ans="august" class="gap-input"></span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span class="font-bold">3. Total Price:</span> 
+                            <span>£ <input type="text" id="m3" data-ans="120" class="gap-input"></span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="checkAnswers(['m1','m2','m3'], 'btn-check-mon')" id="btn-check-mon" class="mt-6 bg-brand-slate hover:bg-slate-700 text-white font-bold py-2.5 px-6 rounded-lg w-full transition">
+                        Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TUESDAY: PART 2 ================= -->
+        <div id="view-tuesday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 mb-6 border-t-4 border-brand-teal">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 mb-4">
+                    <span class="material-icons-round text-brand-teal">map</span> Part 2 & Map Labeling
+                </h2>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 font-serif text-slate-700 text-[0.95rem] leading-relaxed">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Parte 2 del Examen:</strong> Consiste en un monólogo impartido por 1 persona[cite: 11].</li>
+                        <li>El contexto sigue siendo social o cotidiano[cite: 11].</li>
+                        <li>Un ejemplo frecuente es un guía explicando las normas de un parque o la distribución de un museo[cite: 11].</li>
+                        <li>Uno de los ejercicios más comunes aquí es la "Identificación en mapas/diagramas", donde debes seguir instrucciones de orientación espacial para localizar elementos en un plano[cite: 11].</li>
+                    </ul>
+                </div>
+
+                <!-- Video Practice -->
+                <h3 class="font-bold text-lg mb-3">Daily Practice: Part 2 Map Orientation</h3>
+                <div class="video-wrapper">
+                    <!-- Note to teacher: You can replace this YouTube ID with any IELTS Part 2 Listening test -->
+                    <iframe src="https://www.youtube-nocookie.com/embed/W9n5Vj11lLE?rel=0" allowfullscreen></iframe>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
+                    <p class="text-sm font-bold text-slate-500 mb-4 uppercase tracking-widest">Label the map. Choose the correct letter (A, B, or C) for each building.</p>
+                    
+                    <div class="space-y-4 font-serif text-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold">1. Gift Shop</span> 
+                            <select id="t1" data-ans="b" class="gap-input bg-white cursor-pointer"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option></select>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold">2. Restrooms</span> 
+                            <select id="t2" data-ans="c" class="gap-input bg-white cursor-pointer"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option></select>
+                        </div>
+                    </div>
+                    
+                    <button onclick="checkAnswers(['t1','t2'], 'btn-check-tue')" id="btn-check-tue" class="mt-6 bg-brand-slate hover:bg-slate-700 text-white font-bold py-2.5 px-6 rounded-lg w-full transition">
+                        Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= WEDNESDAY: PART 3 ================= -->
+        <div id="view-wednesday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 mb-6 border-t-4 border-brand-teal">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 mb-4">
+                    <span class="material-icons-round text-brand-teal">record_voice_over</span> Part 3 & Dynamic Distractors
+                </h2>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 font-serif text-slate-700 text-[0.95rem] leading-relaxed">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Parte 3 del Examen:</strong> Escucharás una conversación de hasta 4 personas[cite: 11].</li>
+                        <li>El contexto cambia a un entorno educativo/académico, por ejemplo, estudiantes discutiendo un proyecto escolar o tutorías universitarias[cite: 11].</li>
+                    </ul>
+                </div>
+
+                <div class="bg-amber-50 p-5 rounded-xl border-l-4 border-brand-gold mb-6">
+                    <h4 class="font-bold text-amber-900 flex items-center gap-2 mb-1">
+                        <span class="material-icons-round">psychology</span> Estrategia: Detección de distractores dinámicos
+                    </h4>
+                    <p class="text-sm font-serif text-amber-800">
+                        Los interlocutores corrigen frecuentemente su discurso sobre la marcha (ej. modificar una hora o precio inicialmente dados)[cite: 11]. Evite realizar anotaciones impulsivas antes de que se complete la idea[cite: 11].
+                    </p>
+                </div>
+
+                <!-- Video Practice -->
+                <h3 class="font-bold text-lg mb-3">Daily Practice: Part 3 Multiple Choice</h3>
+                <div class="video-wrapper">
+                    <!-- Note to teacher: You can replace this YouTube ID with any IELTS Part 3 Listening test -->
+                    <iframe src="https://www.youtube-nocookie.com/embed/39iC52D7W2o?rel=0" allowfullscreen></iframe>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
+                    <p class="text-sm font-bold text-slate-500 mb-4 uppercase tracking-widest">Choose the correct letter, A, B, or C.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="font-serif font-bold text-slate-800 text-[0.95rem] mb-2">1. What topic did the students finally agree to choose for their project?</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="radio-label text-sm"><input type="radio" name="w1" value="a"> A. Solar Energy (The first idea)</label>
+                                <label class="radio-label text-sm"><input type="radio" name="w1" value="b"> B. Wind Power (The final agreed idea)</label>
+                                <label class="radio-label text-sm"><input type="radio" name="w1" value="c"> C. Hydroelectric dams (The rejected idea)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="checkRadios([{name: 'w1', correct: 'b'}], 'btn-check-wed')" id="btn-check-wed" class="mt-6 bg-brand-slate hover:bg-slate-700 text-white font-bold py-2.5 px-6 rounded-lg w-full transition">
+                        Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= THURSDAY: PART 4 ================= -->
+        <div id="view-thursday" class="view-section">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 mb-6 border-t-4 border-brand-teal">
+                <h2 class="text-2xl font-bold text-brand-slate flex items-center gap-2 mb-4">
+                    <span class="material-icons-round text-brand-teal">school</span> Part 4 & Synchronization
+                </h2>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 font-serif text-slate-700 text-[0.95rem] leading-relaxed">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Parte 4 del Examen:</strong> Consiste en un monólogo continuo sin pausas[cite: 11].</li>
+                        <li>El contexto es estrictamente educativo/académico, usualmente una conferencia universitaria o clase magistral técnica[cite: 11].</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-5 rounded-xl border-l-4 border-blue-500 mb-6">
+                    <h4 class="font-bold text-blue-900 flex items-center gap-2 mb-1">
+                        <span class="material-icons-round">sync</span> Estrategia: Sincronización y flujo continuo
+                    </h4>
+                    <p class="text-sm font-serif text-blue-800">
+                        Las respuestas avanzan de forma estrictamente paralela al audio[cite: 11]. Si no logra identificar una respuesta, descarte la pregunta inmediatamente para evitar descolgarse de las secuencias posteriores[cite: 11].
+                    </p>
+                </div>
+
+                <!-- Video Practice -->
+                <h3 class="font-bold text-lg mb-3">Daily Practice: Part 4 Summary Completion</h3>
+                <div class="video-wrapper">
+                    <!-- Note to teacher: You can replace this YouTube ID with any IELTS Part 4 Listening test -->
+                    <iframe src="https://www.youtube-nocookie.com/embed/s3yE0r0w84M?rel=0" allowfullscreen></iframe>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
+                    <p class="text-sm font-bold text-slate-500 mb-4 uppercase tracking-widest">Complete the summary. Write NO MORE THAN TWO WORDS.</p>
+                    
+                    <div class="font-serif leading-loose text-slate-800 text-[0.95rem]">
+                        During the lecture on marine biology, the professor noted that rising temperatures cause severe damage to coral <strong class="text-brand-teal text-sm">1.</strong> <input type="text" id="th1" data-ans="reefs" class="gap-input mx-1 py-1">. Consequently, this affects the entire oceanic <strong class="text-brand-teal text-sm">2.</strong> <input type="text" id="th2" data-ans="ecosystem" class="gap-input mx-1 py-1">.
+                    </div>
+                    
+                    <button onclick="checkAnswers(['th1','th2'], 'btn-check-thu')" id="btn-check-thu" class="mt-6 bg-brand-slate hover:bg-slate-700 text-white font-bold py-2.5 px-6 rounded-lg w-full transition">
+                        Check Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab switching logic
+        function switchDay(dayId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${dayId}`).classList.add('active');
+            document.getElementById(`tab-${dayId}`).classList.add('active');
+
+            // Pause iframes when switching
+            document.querySelectorAll('iframe').forEach(iframe => {
+                let src = iframe.src;
+                iframe.src = src; 
+            });
+        }
+
+        // Auto-grade text/select gaps
+        function checkAnswers(inputIds, btnId) {
+            let allFilled = true;
+            let score = 0;
+
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el.value.trim() === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("Please fill in all blanks before checking.");
+                return;
+            }
+
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                const correctAns = el.getAttribute('data-ans').toLowerCase();
+                const studentAns = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+
+                if (studentAns === correctAns) {
+                    el.classList.add('correct');
+                    score++;
+                } else {
+                    el.classList.add('wrong');
+                }
+            });
+
+            if (score === inputIds.length) {
+                document.getElementById(btnId).innerText = "Perfect Score! 🎉";
+                document.getElementById(btnId).classList.replace('bg-brand-slate', 'bg-emerald-600');
+            } else {
+                document.getElementById(btnId).innerText = "Try again!";
+                document.getElementById(btnId).classList.replace('bg-brand-slate', 'bg-rose-600');
+                setTimeout(() => {
+                    document.getElementById(btnId).innerText = "Check Answers";
+                    document.getElementById(btnId).classList.replace('bg-rose-600', 'bg-brand-slate');
+                }, 2000);
+            }
+        }
+
+        // Auto-grade radio buttons
+        function checkRadios(questions, btnId) {
+            let allAnswered = true;
+            let score = 0;
+
+            questions.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.name}"]:checked`);
+                if (!selected) allAnswered = false;
+            });
+
+            if (!allAnswered) {
+                alert("Please select an answer before checking.");
+                return;
+            }
+
+            questions.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.name}"]:checked`);
+                const label = selected.parentElement;
+                
+                // Clear previous highlights
+                document.querySelectorAll(`input[name="${q.name}"]`).forEach(input => {
+                    input.parentElement.classList.remove('bg-d1fae5', 'border-emerald-500', 'bg-fee2e2', 'border-rose-500');
+                    input.parentElement.style.borderColor = "#e2e8f0";
+                    input.parentElement.style.background = "white";
+                });
+
+                if (selected.value === q.correct) {
+                    label.style.borderColor = "#10b981";
+                    label.style.background = "#d1fae5";
+                    score++;
+                } else {
+                    label.style.borderColor = "#ef4444";
+                    label.style.background = "#fee2e2";
+                    
+                    // Highlight correct
+                    const correctRadio = document.querySelector(`input[name="${q.name}"][value="${q.correct}"]`);
+                    if(correctRadio) {
+                        correctRadio.parentElement.style.borderColor = "#10b981";
+                        correctRadio.parentElement.style.background = "#d1fae5";
+                    }
+                }
+            });
+
+            if (score === questions.length) {
+                document.getElementById(btnId).innerText = "Perfect! 🎉";
+                document.getElementById(btnId).classList.replace('bg-brand-slate', 'bg-emerald-600');
+            }
+        }
+    </script>
+</body>
+</html>
