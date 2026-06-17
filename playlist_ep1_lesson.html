@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Playlist: Ep 1 Worksheet | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 
+                            primario: '#0A468C', 
+                            naranja: '#F56E1E', 
+                            claro: '#96C8E6', 
+                            neutro: '#C8CDD2', 
+                            nieve: '#FAFAF0', 
+                            puro: '#FFFFFF',
+                            netflix: '#E50914',
+                            dark: '#141414'
+                        }
+                    },
+                    fontFamily: {
+                        titulares: ['Montserrat', 'sans-serif'],
+                        cuerpo: ['Open Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Open Sans', sans-serif; background-color: var(--nieve); color: #333; }
+        h1, h2, h3, h4, .font-titulares { font-family: 'Montserrat', sans-serif; }
+        
+        .hero {
+            background-image: linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.95)), url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center;
+        }
+
+        .tab-btn {
+            white-space: nowrap; padding: 12px 25px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; transition: 0.3s; color: #64748b; cursor: pointer; border: 2px solid #e2e8f0; background: white;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .tab-btn.active { background: #E50914; color: white; border-color: #E50914; box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);}
+        .tab-btn:hover:not(.active) { border-color: #E50914; color: #E50914;}
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Inputs & Radios */
+        .radio-label { display: flex; align-items: flex-start; gap: 10px; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.2s; background: white; font-weight: 600; color: #444;}
+        .radio-label:hover { border-color: #E50914; background: #fff5f5; }
+        .radio-label input[type="radio"] { accent-color: #E50914; transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
+        
+        .gap-input { padding: 4px 10px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-weight: 700; color: #E50914; outline: none; transition: 0.2s; width: 150px; text-align: center;}
+        .gap-input:focus { border-color: #E50914; box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #166534; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+
+        .vocab-card { transition: transform 0.2s; }
+        .vocab-card:hover { transform: translateY(-3px); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="hero py-12 px-6 text-center text-white relative shadow-lg">
+        <a href="index.html" class="absolute left-6 top-6 text-gray-300 hover:text-white font-semibold flex items-center gap-2 transition duration-200">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <div class="max-w-3xl mx-auto">
+            <span class="bg-brand-netflix text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest mb-4 inline-block font-titulares">Special Lesson</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 font-titulares tracking-tight">THE PLAYLIST</h1>
+            <p class="text-xl text-gray-300 font-light">Episode 1: The Vision (Daniel Ek)</p>
+        </div>
+    </header>
+
+    <div class="bg-white border-b border-gray-200 py-4 px-4 shadow-sm flex overflow-x-auto gap-3 justify-center z-10 shrink-0">
+        <button class="tab-btn active flex items-center gap-2" onclick="switchSection('vocab')" id="tab-vocab">
+            <span class="material-icons-round text-sm">menu_book</span> 1. Vocabulary
+        </button>
+        <button class="tab-btn flex items-center gap-2" onclick="switchSection('questions')" id="tab-questions">
+            <span class="material-icons-round text-sm">live_tv</span> 2. The Scenes
+        </button>
+        <button class="tab-btn flex items-center gap-2" onclick="switchSection('dialogue')" id="tab-dialogue">
+            <span class="material-icons-round text-sm">forum</span> 3. The Dialogue
+        </button>
+    </div>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 mt-8 mb-16">
+
+        <div id="view-vocab" class="view-section active">
+            <div class="bg-white rounded-xl p-6 md:p-8 shadow-md border border-gray-100 border-t-4 border-t-brand-naranja">
+                <h2 class="text-2xl font-bold text-brand-primario mb-2 flex items-center gap-2">
+                    <span class="material-icons-round text-brand-naranja">translate</span> Essential Vocabulary
+                </h2>
+                <p class="text-gray-600 mb-8">Before watching the episode, familiarize yourself with these key business and tech terms used by Daniel Ek and the developers.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">1. Start-up <span class="text-sm font-normal text-gray-500 italic">(noun)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">A newly established business, usually in the tech sector, designed to grow very quickly.</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"Spotify began as a small start-up in Stockholm."</p>
+                    </div>
+
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">2. Buffering <span class="text-sm font-normal text-gray-500 italic">(noun)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">The delay when a computer downloads a certain amount of data before playing a video or music.</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"Daniel hated waiting for the music; he wanted zero buffering."</p>
+                    </div>
+
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">3. To Pitch <span class="text-sm font-normal text-gray-500 italic">(verb)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">To present a business idea to an investor in order to get funding.</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"He pitched his idea for a legal streaming service to Martin."</p>
+                    </div>
+
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">4. Piracy <span class="text-sm font-normal text-gray-500 italic">(noun)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">The unauthorized and illegal copying or downloading of copyrighted content (like music or movies).</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"Pirate Bay was the biggest piracy website in Sweden."</p>
+                    </div>
+
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">5. Royalties <span class="text-sm font-normal text-gray-500 italic">(noun)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">Money paid to an artist or creator every time their work is played or sold.</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"The record labels demanded high royalties for their songs."</p>
+                    </div>
+
+                    <div class="vocab-card bg-gray-50 p-5 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg text-brand-primario mb-1">6. Bandwidth <span class="text-sm font-normal text-gray-500 italic">(noun)</span></h3>
+                        <p class="text-gray-700 text-sm mb-2">The maximum amount of data that can be sent over an internet connection in a given amount of time.</p>
+                        <p class="text-brand-naranja text-sm font-semibold">"They needed a lot of bandwidth to stream high-quality audio."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-questions" class="view-section">
+            <div class="bg-white rounded-xl p-6 md:p-8 shadow-md border border-gray-100 border-t-4 border-t-brand-netflix">
+                <h2 class="text-2xl font-bold text-brand-dark mb-2 flex items-center gap-2">
+                    <span class="material-icons-round text-brand-netflix">smart_display</span> Scene Comprehension
+                </h2>
+                <p class="text-gray-600 mb-8">Answer the following questions based on the events of Episode 1.</p>
+
+                <div class="space-y-8">
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg mb-3">1. At the beginning of the episode, what is Daniel Ek's primary frustration with downloading music?</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="radio-label"><input type="radio" name="sq1" value="a"> A. The music is too expensive to buy legally.</label>
+                            <label class="radio-label"><input type="radio" name="sq1" value="b"> B. The downloads are too slow and the system constantly crashes.</label>
+                            <label class="radio-label"><input type="radio" name="sq1" value="c"> C. He cannot find his favorite Swedish bands online.</label>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg mb-3">2. How does Daniel convince Martin Lorentzon to listen to his new pitch?</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="radio-label"><input type="radio" name="sq2" value="a"> A. He tells him that his current company (TradeDoubler) has a flawed structure.</label>
+                            <label class="radio-label"><input type="radio" name="sq2" value="b"> B. He offers him 50% of the shares in Spotify for free.</label>
+                            <label class="radio-label"><input type="radio" name="sq2" value="c"> C. He threatens to release a virus into Martin's servers.</label>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800 text-lg mb-3">3. What is the fundamental difference between Spotify and "Pirate Bay" according to Daniel's vision?</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="radio-label"><input type="radio" name="sq3" value="a"> A. Spotify will allow users to download movies as well as music.</label>
+                            <label class="radio-label"><input type="radio" name="sq3" value="b"> B. Spotify will charge a $100 monthly fee for premium users.</label>
+                            <label class="radio-label"><input type="radio" name="sq3" value="c"> C. Spotify will be completely legal, instantaneous, and compensate the music industry.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <button onclick="checkQuestions()" id="btn-check-q" class="w-full md:w-auto bg-brand-netflix hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition shadow-md font-titulares tracking-wide text-lg">
+                        Submit Answers
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-dialogue" class="view-section">
+            <div class="bg-white rounded-xl p-6 md:p-8 shadow-md border border-gray-100 border-t-4 border-t-brand-primario">
+                <h2 class="text-2xl font-bold text-brand-primario mb-2 flex items-center gap-2">
+                    <span class="material-icons-round text-brand-primario">forum</span> Complete the Pitch
+                </h2>
+                <p class="text-gray-600 mb-6">Listen carefully to Daniel's explanation of his vision. Fill in the blanks with the correct words. <em>(Hint: Use the vocabulary from Section 1)</em>.</p>
+
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 font-cuerpo text-lg leading-loose text-gray-800">
+                    <p>
+                        "The music industry is broken. People are tired of waiting for hours just to <input type="text" id="g1" data-ans="download" class="gap-input mx-1" placeholder="[verb]"> a single track filled with viruses. We need to build a media player that is completely <input type="text" id="g2" data-ans="free" class="gap-input mx-1" placeholder="[adjective]"> and legal. But the most important thing is speed. There can be absolutely no <input type="text" id="g3" data-ans="buffering" class="gap-input mx-1" placeholder="[noun]">. When you press play, the song needs to start immediately. It needs to feel like you have all the world's music right on your own <input type="text" id="g4" data-ans="hard drive" class="gap-input mx-1" placeholder="[noun phrase]两天."
+                    </p>
+                </div>
+
+                <div class="mt-8">
+                    <button onclick="checkDialogue()" id="btn-check-d" class="w-full md:w-auto bg-brand-primario hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition shadow-md font-titulares tracking-wide text-lg">
+                        Verify Dialogue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab switching logic
+        function switchSection(sectionId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${sectionId}`).classList.add('active');
+            document.getElementById(`tab-${sectionId}`).classList.add('active');
+        }
+
+        // Check Scene Questions
+        function checkQuestions() {
+            const answers = { sq1: 'b', sq2: 'a', sq3: 'c' };
+            let score = 0;
+            let allAnswered = true;
+
+            for (let key in answers) {
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Please answer all the multiple-choice questions first!");
+                return;
+            }
+
+            for (let key in answers) {
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                
+                // Reset styles
+                document.querySelectorAll(`input[name="${key}"]`).forEach(input => {
+                    input.parentElement.style.borderColor = "#e2e8f0";
+                    input.parentElement.style.background = "white";
+                });
+
+                // Apply new styles
+                if (selected.value === answers[key]) {
+                    selected.parentElement.style.borderColor = "#10b981";
+                    selected.parentElement.style.background = "#d1fae5";
+                    score++;
+                } else {
+                    selected.parentElement.style.borderColor = "#ef4444";
+                    selected.parentElement.style.background = "#fee2e2";
+                    
+                    // Show correct answer
+                    const correctEl = document.querySelector(`input[name="${key}"][value="${answers[key]}"]`);
+                    if (correctEl) {
+                        correctEl.parentElement.style.borderColor = "#10b981";
+                        correctEl.parentElement.style.background = "#d1fae5";
+                    }
+                }
+            }
+
+            const btn = document.getElementById('btn-check-q');
+            if (score === 3) {
+                btn.innerText = "Perfect! 3/3 🎉";
+                btn.classList.replace('bg-brand-netflix', 'bg-green-600');
+                btn.classList.replace('hover:bg-red-700', 'hover:bg-green-700');
+            } else {
+                btn.innerText = `You got ${score}/3. Review mistakes.`;
+            }
+        }
+
+        // Check Dialogue Gaps
+        function checkDialogue() {
+            const inputs = ['g1', 'g2', 'g3', 'g4'];
+            let score = 0;
+            let allFilled = true;
+
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el.value.trim() === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("Please fill in all the blanks in the dialogue.");
+                return;
+            }
+
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                const correctAns = el.getAttribute('data-ans').toLowerCase();
+                const studentAns = el.value.trim().toLowerCase();
+
+                el.classList.remove('correct', 'wrong');
+
+                if (studentAns === correctAns) {
+                    el.classList.add('correct');
+                    score++;
+                } else {
+                    el.classList.add('wrong');
+                }
+            });
+
+            const btn = document.getElementById('btn-check-d');
+            if (score === inputs.length) {
+                btn.innerText = "Script Perfect! 🎬";
+                btn.classList.replace('bg-brand-primario', 'bg-green-600');
+                btn.classList.replace('hover:bg-blue-800', 'hover:bg-green-700');
+            } else {
+                btn.innerText = "Some words are incorrect. Try again!";
+                btn.classList.replace('bg-brand-primario', 'bg-red-600');
+                btn.classList.replace('hover:bg-blue-800', 'hover:bg-red-700');
+                
+                setTimeout(() => {
+                    btn.innerText = "Verify Dialogue";
+                    btn.classList.replace('bg-red-600', 'bg-brand-primario');
+                    btn.classList.replace('hover:bg-red-700', 'hover:bg-blue-800');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
