@@ -351,17 +351,20 @@
     </div>
 
     <script>
-        // ¡IVAN! IMPORTANTE: Reemplaza estos valores con la clave de respuestas real del Test 11.
-        // He colocado valores de marcador ("Rellenar") para que la lógica funcione.
+        // Clave de respuestas oficial del Sample 11 actualizada
         const ANSWERS = {
-            q1: "rellenar", q2: "rellenar", q3: "rellenar", q4: "rellenar", q5: "rellenar",
-            q6: "rellenar", q7: "rellenar", q8: "rellenar", q9: "rellenar", q10: "rellenar",
-            q11: "c", q12: "b", q13: "b", q14: "c", 
-            q15: "rellenar", q16: "rellenar", q17: "rellenar", q18: "rellenar", q19: "rellenar", q20: "rellenar",
-            q21: "b", q22: "a", q23: "b", q24: "a", q25: "c", q26: "b",
-            q27: "a", q28: "b", q29: "c", q30: "d", 
-            q31: "a", q32: "c", q33: "b", q34: "a", q35: "c",
-            q36: "rellenar", q37: "rellenar", q38: "rellenar", q39: "rellenar", q40: "rellenar"
+            // Section 1
+            q1: "Grieg", q2: "March 15th", q3: "Ellendale", q4: "W5 2AT", q5: "0",
+            q6: "8 months", q7: "1", q8: "Back door", q9: "G4168770", q10: "Silver-colored cloth",
+            // Section 2
+            q11: "c", q12: "b", q13: "b", q14: "a", 
+            q15: "Teaching methods", q16: "Accomodation", q17: "Flats", q18: "Disco", q19: "International Evening", q20: "Two minutes",
+            // Section 3
+            q21: "c", q22: "a", q23: "b", q24: "a", q25: "c", q26: "a",
+            q27: "e", q28: "d", q29: "a", q30: "b", 
+            // Section 4
+            q31: "c", q32: "c", q33: "b", q34: "b", q35: "c",
+            q36: "Market", q37: "Interviews", q38: "Useless", q39: "Photographs", q40: "Crime"
         };
 
         let timeLeft = 40 * 60; // 40 minutos
@@ -400,7 +403,7 @@
             const correct = ANSWERS[key].toLowerCase();
             
             el.classList.remove('correct', 'wrong');
-            if (val === correct && val !== "rellenar") { 
+            if (val === correct) { 
                 el.classList.add('correct'); 
                 return 1; 
             } else { 
@@ -433,13 +436,13 @@
             
             totalScore = 0;
 
-            // Grabar Seccion 1 & 2 (Inputs)
+            // Evaluar Secciones con Text Inputs (Fill in the blanks)
             for(let i=1; i<=10; i++) totalScore += checkInput(`q${i}`, `q${i}`);
             for(let i=15; i<=20; i++) totalScore += checkInput(`q${i}`, `q${i}`);
             for(let i=27; i<=30; i++) totalScore += checkInput(`q${i}`, `q${i}`);
             for(let i=36; i<=40; i++) totalScore += checkInput(`q${i}`, `q${i}`);
 
-            // Grabar Radios
+            // Evaluar Secciones de Opción Múltiple (Radio buttons)
             for(let i=11; i<=14; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
             for(let i=21; i<=26; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
             for(let i=31; i<=35; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
@@ -483,7 +486,7 @@
             else band = "< 5.0";
 
             doc.setFontSize(24);
-            doc.setTextColor(245, 110, 30); // Naranja
+            doc.setTextColor(245, 110, 30); // Naranja Vibrante
             doc.text(`Estimated IELTS Band: ${band}`, 20, 75);
 
             doc.setTextColor(100, 100, 100);
