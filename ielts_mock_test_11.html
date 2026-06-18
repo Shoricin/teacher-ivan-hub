@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IELTS Full Mock Test - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Librería jsPDF para exportar resultados -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); }
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); }
+
+        /* Timer Sticky */
+        #timer-bar {
+            position: sticky; top: 0; z-index: 50;
+            background: var(--azul-primario); color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+        #timer-bar.warning { background: #ef4444; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+
+        /* Estilos de Inputs */
+        .gap-input { 
+            padding: 4px 10px; border: 2px solid var(--gris-neutro); border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario); 
+            outline: none; transition: 0.2s; width: 140px; background: #fff;
+        }
+        .gap-input:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 0 3px rgba(245, 110, 30, 0.1); }
+        .gap-input.correct { border-color: #10b981; background: #d1fae5; color: #166534; pointer-events: none;}
+        .gap-input.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+        
+        .radio-label { 
+            display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; 
+            border: 1px solid var(--gris-neutro); border-radius: 8px; cursor: pointer; 
+            background: var(--blanco-puro); color: #444; font-size: 0.95rem; margin-bottom: 8px;
+        }
+        .radio-label:hover { border-color: var(--azul-claro); }
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px;}
+
+        .card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); margin-bottom: 2rem; border-top: 5px solid var(--naranja-vibrante); }
+        .audio-container { background: var(--blanco-nieve); padding: 1rem; border-radius: 8px; border: 1px solid var(--gris-neutro); margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- PANTALLA DE INICIO (GUÍA) -->
+    <div id="intro-screen" class="max-w-4xl mx-auto p-6 mt-10">
+        <div class="text-center mb-10">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo" class="h-20 mx-auto mb-4">
+            <h1 class="text-4xl font-extrabold font-titulares uppercase mb-2">IELTS Listening <span style="color: var(--naranja-vibrante);">Mock Test</span></h1>
+            <p class="text-lg text-gray-600">Sample 11 - Full Simulator</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2 text-[#0A468C]">
+                <span class="material-icons-round text-[#F56E1E]">info</span> Exam Instructions
+            </h2>
+            <ul class="list-disc pl-6 space-y-3 text-gray-700 mb-8">
+                <li>El examen consta de <strong>4 secciones</strong> y un total de 40 preguntas.</li>
+                <li>Tendrás exactamente <strong>40 minutos</strong> para completarlo. El temporizador comenzará en cuanto presiones "Start Test".</li>
+                <li>Los audios se reproducirán <strong>una sola vez</strong>. Escucha atentamente.</li>
+                <li>Respeta los límites de palabras (ej. "NO MORE THAN TWO WORDS").</li>
+                <li>Al finalizar el tiempo, el examen se corregirá automáticamente y podrás descargar tu reporte en PDF.</li>
+            </ul>
+
+            <button onclick="startExam()" class="w-full bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold text-xl py-4 rounded-xl shadow-md transition transform hover:-translate-y-1 font-titulares uppercase">
+                Start Test (40 Minutes)
+            </button>
+        </div>
+    </div>
+
+    <!-- PANTALLA DEL EXAMEN -->
+    <div id="exam-screen" style="display: none;">
+        
+        <!-- Timer Bar -->
+        <div id="timer-bar" class="py-3 px-6 flex justify-between items-center">
+            <div class="font-bold font-titulares text-lg">Listening Sample 11</div>
+            <div class="flex items-center gap-2 text-2xl font-black font-titulares tracking-wider bg-black bg-opacity-20 px-4 py-1 rounded">
+                <span class="material-icons-round">timer</span> <span id="time-display">40:00</span>
+            </div>
+        </div>
+
+        <main class="max-w-4xl mx-auto p-4 md:p-6 w-full">
+            
+            <!-- SECTION 1 -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-4 text-[#0A468C] border-b pb-2">SECTION 1. Questions 1-10</h2>
+                <div class="audio-container">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Audio Section 1</p>
+                    <audio class="w-full" controls><source src="audios/11.1.mp3" type="audio/mpeg"></audio>
+                </div>
+                
+                <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="font-bold text-center text-xl mb-4 uppercase tracking-widest text-[#0A468C]">Registration Form</h3>
+                    <p class="mb-4"><strong>Example:</strong> Type of crime: <span class="bg-yellow-200 px-2">Robbery</span></p>
+                    
+                    <table class="w-full text-left border-collapse text-gray-700">
+                        <tbody>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200 w-1/2">Name:</td><td class="py-3 border-b border-gray-200">Anna (1) <input type="text" id="q1" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Date of birth:</td><td class="py-3 border-b border-gray-200">(2) <input type="text" id="q2" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Address:</td><td class="py-3 border-b border-gray-200">4 (3) <input type="text" id="q3" class="gap-input"> St.</td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Post code:</td><td class="py-3 border-b border-gray-200">(4) <input type="text" id="q4" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Nationality:</td><td class="py-3 border-b border-gray-200">Grenadian</td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Number of previous burglaries:</td><td class="py-3 border-b border-gray-200">(5) <input type="text" id="q5" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Time of apartment tenancy:</td><td class="py-3 border-b border-gray-200">(6) <input type="text" id="q6" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Number of occupants:</td><td class="py-3 border-b border-gray-200">(7) <input type="text" id="q7" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Entry point of burglar:</td><td class="py-3 border-b border-gray-200">(8) <input type="text" id="q8" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold text-[#0A468C] pt-4" colspan="2">Details of lost property:</td></tr>
+                            <tr><td class="py-3 font-semibold border-b border-gray-200">Serial number of lost computer:</td><td class="py-3 border-b border-gray-200">(9) <input type="text" id="q9" class="gap-input"></td></tr>
+                            <tr><td class="py-3 font-semibold">Material of stolen purse:</td><td class="py-3">(10) <input type="text" id="q10" class="gap-input"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 2 -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-4 text-[#0A468C] border-b pb-2">SECTION 2. Questions 11-20</h2>
+                <div class="audio-container">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Audio Section 2</p>
+                    <audio class="w-full" controls><source src="audios/11.2.mp3" type="audio/mpeg"></audio>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="font-bold text-lg mb-2">Questions 11-14</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Choose the correct letter, A, B, or C.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-bold mb-2">11. What is the project that Mark and Gina want to start?</p>
+                            <label class="radio-label"><input type="radio" name="q11" value="a"> A. Business school requirements.</label>
+                            <label class="radio-label"><input type="radio" name="q11" value="b"> B. Directions to the business school.</label>
+                            <label class="radio-label"><input type="radio" name="q11" value="c"> C. Explaining the business school experience.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">12. Who is the target audience?</p>
+                            <label class="radio-label"><input type="radio" name="q12" value="a"> A. Business students.</label>
+                            <label class="radio-label"><input type="radio" name="q12" value="b"> B. Business school applicants.</label>
+                            <label class="radio-label"><input type="radio" name="q12" value="c"> C. Summer school attendees.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">13. How will they convey the information?</p>
+                            <label class="radio-label"><input type="radio" name="q13" value="a"> A. Summer course lecture.</label>
+                            <label class="radio-label"><input type="radio" name="q13" value="b"> B. Informational video.</label>
+                            <label class="radio-label"><input type="radio" name="q13" value="c"> C. Pamphlet in the mail.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">14. They want to do this project because</p>
+                            <label class="radio-label"><input type="radio" name="q14" value="a"> A. students worry about their studies.</label>
+                            <label class="radio-label"><input type="radio" name="q14" value="b"> B. they want to obtain a good grade.</label>
+                            <label class="radio-label"><input type="radio" name="q14" value="c"> C. they want to attract future business school applicants.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Questions 15-20</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Complete the table below. Write NO MORE THAN TWO WORDS.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-gray-50 rounded-lg overflow-hidden border border-gray-200 text-left">
+                            <thead class="bg-gray-200">
+                                <tr><th class="p-3">Topic</th><th class="p-3">Time</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border-b border-gray-200">Academics</td><td class="p-3 border-b border-gray-200">(15) <input type="text" id="q15" class="gap-input"></td><td class="p-3 border-b border-gray-200">7 minutes</td></tr>
+                                <tr><td class="p-3 border-b border-gray-200">(16) <input type="text" id="q16" class="gap-input"></td><td class="p-3 border-b border-gray-200">cafeteria</td><td class="p-3 border-b border-gray-200">6 minutes</td></tr>
+                                <tr><td class="p-3 border-b border-gray-200">(17) <input type="text" id="q17" class="gap-input"></td><td class="p-3 border-b border-gray-200">Social activity</td><td class="p-3 border-b border-gray-200">(18) <input type="text" id="q18" class="gap-input"></td></tr>
+                                <tr><td class="p-3 border-b border-gray-200"></td><td class="p-3 border-b border-gray-200">- (19) <input type="text" id="q19" class="gap-input"></td><td class="p-3 border-b border-gray-200">8 minutes</td></tr>
+                                <tr><td class="p-3">Conclusion</td><td class="p-3">nearly (20) <input type="text" id="q20" class="gap-input"></td><td class="p-3"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3 -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-4 text-[#0A468C] border-b pb-2">SECTION 3. Questions 21-30</h2>
+                <div class="audio-container">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Audio Section 3</p>
+                    <audio class="w-full" controls><source src="audios/11.3.mp3" type="audio/mpeg"></audio>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="font-bold text-lg mb-2">Questions 21-26</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Choose the correct letter, A, B or C.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-bold mb-2">21. The subjects in questionnaire are</p>
+                            <label class="radio-label"><input type="radio" name="q21" value="a"> A. tourists in the hotel in this area.</label>
+                            <label class="radio-label"><input type="radio" name="q21" value="b"> B. local residents.</label>
+                            <label class="radio-label"><input type="radio" name="q21" value="c"> C. people who are living in this area.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">22. The results of the questionnaire should be</p>
+                            <label class="radio-label"><input type="radio" name="q22" value="a"> A. directly entered into the computer.</label>
+                            <label class="radio-label"><input type="radio" name="q22" value="b"> B. scored by hand.</label>
+                            <label class="radio-label"><input type="radio" name="q22" value="c"> C. submitted directly to Professor Curran.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">23. Why should John give a copy of plans to the professor?</p>
+                            <label class="radio-label"><input type="radio" name="q23" value="a"> A. To receive a good grade.</label>
+                            <label class="radio-label"><input type="radio" name="q23" value="b"> B. To get advice.</label>
+                            <label class="radio-label"><input type="radio" name="q23" value="c"> C. To earn high praise.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">24. How will the instructions be presented?</p>
+                            <label class="radio-label"><input type="radio" name="q24" value="a"> A. Given by a group representative.</label>
+                            <label class="radio-label"><input type="radio" name="q24" value="b"> B. Given by all members of the group.</label>
+                            <label class="radio-label"><input type="radio" name="q24" value="c"> C. Given by the professor.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">25. What does Dani suggest to John when those subjects receive the questionnaire?</p>
+                            <label class="radio-label"><input type="radio" name="q25" value="a"> A. Divide into 2 part to argue.</label>
+                            <label class="radio-label"><input type="radio" name="q25" value="b"> B. Focus on the opinion of the interviewees.</label>
+                            <label class="radio-label"><input type="radio" name="q25" value="c"> C. Take consideration of both sides.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">26. Why is this project particularly important to John?</p>
+                            <label class="radio-label"><input type="radio" name="q26" value="a"> A. To earn respect from professors in the department.</label>
+                            <label class="radio-label"><input type="radio" name="q26" value="b"> B. To raise his grade.</label>
+                            <label class="radio-label"><input type="radio" name="q26" value="c"> C. To impress his professor.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Questions 27-30</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">What is the source of each one below in this survey? Write the letters A-F.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-4 border border-blue-100 rounded-lg">
+                            <ul class="space-y-1 font-semibold text-gray-700">
+                                <li>A. radio</li><li>B. council meeting</li><li>C. the television</li>
+                                <li>D. newspaper</li><li>E. journal</li><li>F. the Internet</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="font-bold">27. Map: <select id="q27" class="gap-input w-20"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option><option value="f">F</option></select></p>
+                            <p class="font-bold">28. Photo: <select id="q28" class="gap-input w-20"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option><option value="f">F</option></select></p>
+                            <p class="font-bold">29. Budget: <select id="q29" class="gap-input w-20"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option><option value="f">F</option></select></p>
+                            <p class="font-bold">30. Comment: <select id="q30" class="gap-input w-20"><option value="">--</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option><option value="e">E</option><option value="f">F</option></select></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4 -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-4 text-[#0A468C] border-b pb-2">SECTION 4. Questions 31-40</h2>
+                <div class="audio-container">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Audio Section 4</p>
+                    <audio class="w-full" controls><source src="audios/11.4.mp3" type="audio/mpeg"></audio>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="font-bold text-lg mb-2">Questions 31-35</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Choose the correct letter, A, B, or C.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-bold mb-2">31. Why did the lecturer choose to focus on the Pleasanton Town Market?</p>
+                            <label class="radio-label"><input type="radio" name="q31" value="a"> A. It was the first ever Town Market.</label>
+                            <label class="radio-label"><input type="radio" name="q31" value="b"> B. It has been covered extensively in local history classes.</label>
+                            <label class="radio-label"><input type="radio" name="q31" value="c"> C. It is often mentioned in some literature of the library.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">32. The Town Market originally made a large profit selling</p>
+                            <label class="radio-label"><input type="radio" name="q32" value="a"> A. handcrafts.</label>
+                            <label class="radio-label"><input type="radio" name="q32" value="b"> B. vegetables.</label>
+                            <label class="radio-label"><input type="radio" name="q32" value="c"> C. animals.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">33. The money that the marketers made contributes to local</p>
+                            <label class="radio-label"><input type="radio" name="q33" value="a"> A. reconstruction.</label>
+                            <label class="radio-label"><input type="radio" name="q33" value="b"> B. development.</label>
+                            <label class="radio-label"><input type="radio" name="q33" value="c"> C. defense.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">34. Market sales plummeted due to lack of viable</p>
+                            <label class="radio-label"><input type="radio" name="q34" value="a"> A. agriculture.</label>
+                            <label class="radio-label"><input type="radio" name="q34" value="b"> B. transport.</label>
+                            <label class="radio-label"><input type="radio" name="q34" value="c"> C. city planning.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">35. Major John C. Wiley decided the Clock tower would be used as a ____ in the early stages of the uprising.</p>
+                            <label class="radio-label"><input type="radio" name="q35" value="a"> A. clock</label>
+                            <label class="radio-label"><input type="radio" name="q35" value="b"> B. grounds for battle</label>
+                            <label class="radio-label"><input type="radio" name="q35" value="c"> C. jail</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Questions 36-40</h3>
+                    <p class="text-sm font-bold mb-4 uppercase tracking-wide text-[#F56E1E]">Complete the table below. Write ONLY ONE WORD.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-gray-50 rounded-lg overflow-hidden border border-gray-200 text-left">
+                            <thead class="bg-gray-200">
+                                <tr><th class="p-3 border-b border-gray-300">Research Methods</th><th class="p-3 border-b border-gray-300">Objects</th><th class="p-3 border-b border-gray-300">Problems</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border-b border-gray-200">reference section</td><td class="p-3 border-b border-gray-200">36. <input type="text" id="q36" class="gap-input"></td><td class="p-3 border-b border-gray-200">there is too much information</td></tr>
+                                <tr><td class="p-3 border-b border-gray-200">37. <input type="text" id="q37" class="gap-input"></td><td class="p-3 border-b border-gray-200">Rebellion</td><td class="p-3 border-b border-gray-200">bias makes it 38. <input type="text" id="q38" class="gap-input"></td></tr>
+                                <tr><td class="p-3 border-b border-gray-200">39. <input type="text" id="q39" class="gap-input"></td><td class="p-3 border-b border-gray-200">Jim Wiley</td><td class="p-3 border-b border-gray-200">the information is insufficient</td></tr>
+                                <tr><td class="p-3">newspaper archives</td><td class="p-3">40. <input type="text" id="q40" class="gap-input"></td><td class="p-3">more detail is needed</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="submitExam()" id="btn-submit" class="w-full bg-[#0A468C] hover:bg-blue-800 text-white font-bold text-2xl py-5 rounded-xl shadow-lg transition mb-20 font-titulares uppercase">
+                Submit Exam
+            </button>
+        </main>
+    </div>
+
+    <!-- PANTALLA DE RESULTADOS -->
+    <div id="result-screen" style="display: none;" class="max-w-2xl mx-auto p-6 mt-10 text-center">
+        <div class="bg-white p-10 rounded-xl shadow-2xl border-t-8 border-[#10b981]">
+            <span class="material-icons-round text-6xl text-[#10b981] mb-4">task_alt</span>
+            <h1 class="text-4xl font-extrabold font-titulares text-[#0A468C] mb-2">Test Completed!</h1>
+            <p class="text-xl text-gray-600 mb-6">Your official Mock Test score is:</p>
+            
+            <div class="bg-blue-50 py-8 rounded-xl border-2 border-blue-200 mb-8">
+                <span class="text-6xl font-black text-[#F56E1E]" id="final-score">0</span>
+                <span class="text-3xl text-gray-500 font-bold"> / 40</span>
+            </div>
+
+            <button onclick="downloadPDF()" class="bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold py-3 px-8 rounded-lg transition shadow-md flex items-center gap-2 mx-auto text-lg font-titulares">
+                <span class="material-icons-round">picture_as_pdf</span> Download Official Report
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ¡IVAN! IMPORTANTE: Reemplaza estos valores con la clave de respuestas real del Test 11.
+        // He colocado valores de marcador ("Rellenar") para que la lógica funcione.
+        const ANSWERS = {
+            q1: "rellenar", q2: "rellenar", q3: "rellenar", q4: "rellenar", q5: "rellenar",
+            q6: "rellenar", q7: "rellenar", q8: "rellenar", q9: "rellenar", q10: "rellenar",
+            q11: "c", q12: "b", q13: "b", q14: "c", 
+            q15: "rellenar", q16: "rellenar", q17: "rellenar", q18: "rellenar", q19: "rellenar", q20: "rellenar",
+            q21: "b", q22: "a", q23: "b", q24: "a", q25: "c", q26: "b",
+            q27: "a", q28: "b", q29: "c", q30: "d", 
+            q31: "a", q32: "c", q33: "b", q34: "a", q35: "c",
+            q36: "rellenar", q37: "rellenar", q38: "rellenar", q39: "rellenar", q40: "rellenar"
+        };
+
+        let timeLeft = 40 * 60; // 40 minutos
+        let timerInterval;
+        let totalScore = 0;
+
+        function startExam() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'block';
+            
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            
+            let displayTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('time-display').innerText = displayTime;
+
+            if (timeLeft <= 60) {
+                document.getElementById('timer-bar').classList.add('warning');
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitExam();
+            }
+            timeLeft--;
+        }
+
+        function checkInput(id, key) {
+            const el = document.getElementById(id);
+            if(!el) return 0;
+            const val = el.value.trim().toLowerCase();
+            const correct = ANSWERS[key].toLowerCase();
+            
+            el.classList.remove('correct', 'wrong');
+            if (val === correct && val !== "rellenar") { 
+                el.classList.add('correct'); 
+                return 1; 
+            } else { 
+                el.classList.add('wrong'); 
+                return 0; 
+            }
+        }
+
+        function checkRadio(name, key) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                input.parentElement.style.borderColor = "var(--gris-neutro)";
+                input.parentElement.style.background = "var(--blanco-puro)";
+            });
+            if (!selected) return 0;
+            if (selected.value === ANSWERS[key].toLowerCase()) {
+                selected.parentElement.style.borderColor = "#10b981";
+                selected.parentElement.style.background = "#d1fae5";
+                return 1;
+            } else {
+                selected.parentElement.style.borderColor = "#ef4444";
+                selected.parentElement.style.background = "#fee2e2";
+                return 0;
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            document.querySelectorAll('audio').forEach(a => a.pause());
+            
+            totalScore = 0;
+
+            // Grabar Seccion 1 & 2 (Inputs)
+            for(let i=1; i<=10; i++) totalScore += checkInput(`q${i}`, `q${i}`);
+            for(let i=15; i<=20; i++) totalScore += checkInput(`q${i}`, `q${i}`);
+            for(let i=27; i<=30; i++) totalScore += checkInput(`q${i}`, `q${i}`);
+            for(let i=36; i<=40; i++) totalScore += checkInput(`q${i}`, `q${i}`);
+
+            // Grabar Radios
+            for(let i=11; i<=14; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
+            for(let i=21; i<=26; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
+            for(let i=31; i<=35; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
+
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = totalScore;
+            window.scrollTo(0,0);
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFillColor(10, 70, 140); // Azul primario
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("HUB Writing - Teacher Ivan", 105, 20, null, null, "center");
+            
+            doc.setFontSize(14);
+            doc.text("IELTS Listening Mock Test - Official Report", 105, 30, null, null, "center");
+
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(16);
+            doc.text(`Final Score: ${totalScore} / 40`, 20, 60);
+
+            // Cálculo estimado de banda IELTS
+            let band = 0;
+            if(totalScore >= 39) band = 9.0;
+            else if(totalScore >= 37) band = 8.5;
+            else if(totalScore >= 35) band = 8.0;
+            else if(totalScore >= 32) band = 7.5;
+            else if(totalScore >= 30) band = 7.0;
+            else if(totalScore >= 26) band = 6.5;
+            else if(totalScore >= 23) band = 6.0;
+            else if(totalScore >= 18) band = 5.5;
+            else if(totalScore >= 16) band = 5.0;
+            else band = "< 5.0";
+
+            doc.setFontSize(24);
+            doc.setTextColor(245, 110, 30); // Naranja
+            doc.text(`Estimated IELTS Band: ${band}`, 20, 75);
+
+            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(10);
+            let today = new Date().toLocaleDateString();
+            doc.text(`Date of examination: ${today}`, 20, 90);
+            doc.text("Keep practicing hard! Consistency is key.", 20, 100);
+
+            doc.save(`IELTS_Listening_Result_${today}.pdf`);
+        }
+    </script>
+</body>
+</html>
