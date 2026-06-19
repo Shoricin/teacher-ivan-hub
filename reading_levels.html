@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reading Skill Mastery - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); }
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); }
+
+        /* Level Cards */
+        .level-card {
+            background: white; border-radius: 16px; padding: 1.5rem; text-align: center;
+            box-shadow: 0 10px 20px rgba(10, 70, 140, 0.05); transition: all 0.3s ease;
+            position: relative; overflow: hidden; border: 2px solid transparent; cursor: pointer;
+        }
+        .level-card.locked {
+            background: #f3f4f6; color: #9ca3af; cursor: not-allowed; border-color: #e5e7eb;
+        }
+        .level-card.locked img, .level-card.locked .material-icons-round { opacity: 0.4; }
+        .level-card.unlocked { border-color: var(--azul-primario); }
+        .level-card.unlocked:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(10, 70, 140, 0.15); border-color: var(--naranja-vibrante); }
+        .level-card.completed { border-color: #10b981; background: #f0fdf4; }
+
+        /* Reading Test Elements */
+        .reading-text-box {
+            background: #fff; padding: 2rem; border-radius: 12px; font-size: 1.1rem; line-height: 1.8;
+            color: #333; border-left: 5px solid var(--naranja-vibrante); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem; white-space: pre-line;
+        }
+
+        .radio-label { 
+            display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; 
+            border: 2px solid var(--gris-neutro); border-radius: 8px; cursor: pointer; 
+            background: var(--blanco-puro); color: #444; font-size: 1rem; margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .radio-label:hover:not(.disabled) { border-color: var(--azul-claro); background: #f8fbff; }
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px;}
+        .radio-label input[type="radio"]:disabled { cursor: not-allowed; }
+        .radio-label.disabled { cursor: not-allowed; opacity: 0.7; }
+
+        /* Progress Bar */
+        .progress-bg { background: #e5e7eb; height: 10px; border-radius: 10px; width: 100%; overflow: hidden; margin-top: 10px;}
+        .progress-fill { background: var(--naranja-vibrante); height: 100%; transition: width 0.5s ease; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen pb-10">
+
+    <!-- HEADER -->
+    <div class="bg-[#0A468C] text-white py-8 px-6 text-center shadow-md relative">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-extrabold font-titulares uppercase mb-2">Reading <span class="text-[#F56E1E]">Mastery Quest</span></h1>
+            <p class="text-blue-200 text-lg">Unlock levels by proving your reading comprehension skills.</p>
+            <div class="max-w-md mx-auto mt-4">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                    <span>Progress</span> <span id="progress-text">0%</span>
+                </div>
+                <div class="progress-bg"><div class="progress-fill" id="progress-bar" style="width: 0%;"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-6 w-full mt-4">
+
+        <!-- DASHBOARD (NIVELES) -->
+        <div id="dashboard-screen">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="levels-container">
+                <!-- Los niveles se generan con JS -->
+            </div>
+            <div class="text-center mt-10">
+                <button onclick="resetProgress()" class="text-gray-400 hover:text-red-500 text-sm font-bold underline transition">Reset all progress</button>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE EXAMEN -->
+        <div id="exam-screen" style="display: none;">
+            <button onclick="showDashboard()" class="mb-6 flex items-center gap-2 text-[#0A468C] font-bold hover:text-[#F56E1E] transition">
+                <span class="material-icons-round">arrow_back</span> Back to Levels
+            </button>
+
+            <!-- Panel de Resultados (Oculto inicialmente) -->
+            <div id="result-panel" style="display: none;" class="bg-white p-8 rounded-xl shadow-xl border-t-8 mb-8 text-center">
+                <span id="result-icon" class="material-icons-round text-6xl mb-2"></span>
+                <h2 id="result-title" class="text-3xl font-extrabold font-titulares mb-2"></h2>
+                <p id="result-message" class="text-lg text-gray-600 mb-6"></p>
+                <div class="bg-gray-50 py-4 rounded-lg inline-block px-10 mb-6 border">
+                    <span class="text-5xl font-black" id="result-score"></span>
+                    <span class="text-2xl text-gray-500 font-bold" id="result-total"></span>
+                </div>
+                <div id="result-action"></div>
+            </div>
+
+            <div id="exam-content">
+                <div class="flex justify-between items-end border-b-2 border-gray-200 pb-4 mb-6">
+                    <div>
+                        <h2 id="test-level-title" class="text-3xl font-bold text-[#0A468C] font-titulares uppercase">Level</h2>
+                        <p id="test-level-stats" class="text-gray-500 font-semibold mt-1">X Words • Y Questions</p>
+                    </div>
+                </div>
+
+                <div id="reading-text" class="reading-text-box"></div>
+                
+                <h3 class="text-2xl font-bold mb-6 text-[#0A468C] font-titulares border-b pb-2">Questions</h3>
+                <div id="questions-container" class="space-y-8"></div>
+
+                <button onclick="submitExam()" id="btn-submit" class="w-full bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold text-2xl py-5 rounded-xl shadow-lg transition mt-8 font-titulares uppercase">
+                    Submit Answers
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // BASE DE DATOS DE LECTURAS
+        const levelsData = [
+            {
+                id: 'A1', name: 'Level A1', title: 'Beginner', words: 31,
+                text: "My name is Anna. I am from Spain, but I live in London. I am a teacher. I have a cat named Luna. I like to drink coffee every morning.",
+                questions: [
+                    { q: "Where is Anna from?", options: ["Spain", "London", "Italy"], correct: 0 },
+                    { q: "What is her job?", options: ["Doctor", "Teacher", "Student"], correct: 1 },
+                    { q: "What pet does she have?", options: ["Dog", "Bird", "Cat"], correct: 2 }
+                ]
+            },
+            {
+                id: 'A2', name: 'Level A2', title: 'Elementary', words: 50,
+                text: "David works in a big library in the city center. He starts work at nine o'clock and finishes at five. He loves his job because he enjoys reading and helping people find books. On weekends, he plays tennis with his brother or goes to the cinema with his friends.",
+                questions: [
+                    { q: "Where does David work?", options: ["In a library", "In a cinema", "In a hospital"], correct: 0 },
+                    { q: "What time does he finish work?", options: ["9:00", "5:00", "10:00"], correct: 1 },
+                    { q: "Why does he love his job?", options: ["It pays well", "It is easy", "He enjoys reading"], correct: 2 },
+                    { q: "What sport does he play?", options: ["Football", "Tennis", "Golf"], correct: 1 },
+                    { q: "Who does he play sports with?", options: ["His brother", "His friends", "His father"], correct: 0 }
+                ]
+            },
+            {
+                id: 'B1', name: 'Level B1', title: 'Intermediate', words: 102,
+                text: "Last summer, Maria traveled to Kyoto, Japan, for a two-week vacation. Kyoto is famous for its beautiful temples, traditional gardens, and delicious food. She stayed in a small guesthouse near the city center. On her first day, she visited the Golden Pavilion, which was crowded with tourists. The weather was very hot and humid, so she ate a lot of matcha ice cream to stay cool. During her trip, she also learned how to make sushi in a local cooking class. Maria bought many souvenirs, including silk scarves and green tea, to give to her family back home in Mexico.",
+                questions: [
+                    { q: "Where did Maria go for her vacation?", options: ["Tokyo", "Osaka", "Kyoto"], correct: 2 },
+                    { q: "How long was her trip?", options: ["Two weeks", "One month", "Three days"], correct: 0 },
+                    { q: "What is Kyoto famous for?", options: ["Beaches", "Temples and gardens", "Tall buildings"], correct: 1 },
+                    { q: "Where did she stay?", options: ["A luxury hotel", "A friend's house", "A guesthouse"], correct: 2 },
+                    { q: "What did she visit on her first day?", options: ["Golden Pavilion", "A museum", "A mountain"], correct: 0 },
+                    { q: "How was the weather during her trip?", options: ["Cold and rainy", "Warm and dry", "Hot and humid"], correct: 2 },
+                    { q: "What did she eat to stay cool?", options: ["Sushi", "Matcha ice cream", "Noodles"], correct: 1 },
+                    { q: "What new skill did she learn?", options: ["Making sushi", "Speaking Japanese", "Traditional dancing"], correct: 0 },
+                    { q: "What souvenirs did she buy?", options: ["Electronics", "Silk scarves and tea", "Clothes"], correct: 1 },
+                    { q: "Where is Maria's family from?", options: ["Japan", "Spain", "Mexico"], correct: 2 }
+                ]
+            },
+            {
+                id: 'B2', name: 'Level B2', title: 'Upper-Intermediate', words: 210,
+                text: "The history of chocolate begins in Mesoamerica. Cacao trees grow wild in the tropical rainforests of the Amazon basin and other tropical areas in the Americas. The ancient Maya and Aztec cultures were the first to cultivate cacao trees and use the beans to make a bitter, spicy drink called 'xocolatl'. They believed that cacao was a gift from the gods, and the beans were so valuable that they were used as a form of currency.\n\nWhen Spanish explorers arrived in the Americas in the 16th century, they were introduced to this drink. They brought cacao beans back to Spain, where they added sugar and honey to sweeten the bitter taste. For nearly a century, the recipe for sweet chocolate was kept a secret in Spain. Eventually, the popularity of chocolate spread across Europe. However, it remained a luxury item only the wealthy could afford until the Industrial Revolution.\n\nIn the 19th century, the invention of the cocoa press and other machinery made it possible to mass-produce chocolate, transforming it into the solid chocolate bars we know and love today. Modern chocolate production is now a multi-billion dollar global industry, though it faces challenges regarding sustainable farming.",
+                questions: [
+                    { q: "Where does the history of chocolate begin?", options: ["Europe", "Mesoamerica", "Asia"], correct: 1 },
+                    { q: "Where do cacao trees naturally grow wild?", options: ["Amazon basin", "Sahara desert", "Himalayas"], correct: 0 },
+                    { q: "Who were the first to cultivate cacao trees?", options: ["Romans", "Egyptians", "Maya and Aztec"], correct: 2 },
+                    { q: "What was the original name of the cacao drink?", options: ["Mocha", "Xocolatl", "Choco"], correct: 1 },
+                    { q: "How did ancient cultures view cacao?", options: ["As a medicine", "As a poison", "As a gift from the gods"], correct: 2 },
+                    { q: "Besides drinking, what else were cacao beans used for?", options: ["Weapons", "Currency", "Clothing"], correct: 1 },
+                    { q: "Who brought cacao beans to Europe in the 16th century?", options: ["Spanish explorers", "British sailors", "French merchants"], correct: 0 },
+                    { q: "What did the Spanish add to the drink?", options: ["Milk and salt", "Sugar and honey", "Pepper and spices"], correct: 1 },
+                    { q: "How long was the sweet chocolate recipe kept a secret in Spain?", options: ["Ten years", "Five centuries", "Nearly a century"], correct: 2 },
+                    { q: "Who could afford chocolate in Europe before the 19th century?", options: ["Only the wealthy", "Everyone", "Farmers"], correct: 0 },
+                    { q: "What historical event changed chocolate production?", options: ["Industrial Revolution", "World War I", "Agricultural Revolution"], correct: 0 },
+                    { q: "What 19th-century invention allowed for solid chocolate bars?", options: ["Steam engine", "Electricity", "Cocoa press"], correct: 2 }
+                ]
+            },
+            {
+                id: 'C1', name: 'Level C1', title: 'Advanced', words: 356,
+                text: "Habit formation is the process by which behaviors become automatic. Habits can form without a person intending to acquire them, but they can also be deliberately cultivated—or eliminated—to better suit one's personal goals. According to researchers at University College London, it takes an average of 66 days for a new behavior to become automatic, though this can vary widely from 18 to 254 days depending on the complexity of the habit and the individual's circumstances.\n\nAt the core of habit formation is a psychological pattern known as the 'habit loop,' a concept popularized by Charles Duhigg. The habit loop consists of three distinct components: the cue, the routine, and the reward. The cue is the trigger that initiates the behavior. It can be a specific time of day, an emotional state, or a particular environment. The routine is the behavior itself, which can be physical, mental, or emotional. Finally, the reward is the positive reinforcement that helps the brain figure out if this particular loop is worth remembering for the future. Over time, this loop—cue, routine, reward—becomes increasingly automatic as the cue and reward become neurologically intertwined.\n\nUnderstanding this framework is essential for anyone looking to change a deeply ingrained behavior. Simply trying to rely on willpower to stop a bad habit is rarely effective in the long term because willpower is a finite resource that depletes throughout the day. Instead, psychologists recommend identifying the cue and the reward, and then substituting the negative routine with a positive one. For instance, if stress (cue) leads to eating junk food (routine) to feel temporary relief (reward), a person could substitute the routine by taking a brisk walk or practicing deep breathing when stressed. By keeping the cue and the reward the same but changing the routine, the brain's craving is satisfied in a healthier way. Furthermore, environmental design plays a crucial role; removing triggers from one's surroundings can significantly decrease the cognitive load required to resist temptation, making positive habit formation much more attainable.",
+                questions: [
+                    { q: "What is the primary definition of habit formation?", options: ["Learning new facts", "Behaviors becoming automatic", "Building muscle memory"], correct: 1 },
+                    { q: "According to University College London, what is the average time to form a habit?", options: ["21 days", "254 days", "66 days"], correct: 2 },
+                    { q: "What is the full range of days it might take to form a habit?", options: ["18 to 254 days", "1 to 10 days", "50 to 100 days"], correct: 0 },
+                    { q: "Who popularized the concept of the 'habit loop'?", options: ["Sigmund Freud", "Charles Duhigg", "B.F. Skinner"], correct: 1 },
+                    { q: "What are the three components of the habit loop?", options: ["Cue, routine, reward", "Thought, action, regret", "Start, middle, end"], correct: 0 },
+                    { q: "What role does the 'cue' play in the habit loop?", options: ["It provides reinforcement", "It initiates the behavior", "It satisfies a craving"], correct: 1 },
+                    { q: "A routine in the habit loop can be described as:", options: ["Only a physical action", "Physical, mental, or emotional", "Only an emotional response"], correct: 1 },
+                    { q: "What is the neurological purpose of the 'reward'?", options: ["To distract the brain", "To punish bad behavior", "To help the brain remember the loop"], correct: 2 },
+                    { q: "As a habit becomes automatic, what two elements become neurologically intertwined?", options: ["Cue and reward", "Routine and willpower", "Environment and routine"], correct: 0 },
+                    { q: "Why is relying solely on willpower to stop a bad habit generally ineffective?", options: ["It doesn't exist", "It is a finite resource", "It is too strong"], correct: 1 },
+                    { q: "What do psychologists recommend doing to change a bad habit?", options: ["Substitute the routine", "Stop the behavior entirely", "Ignore the cue completely"], correct: 0 },
+                    { q: "In the example provided, what serves as the 'cue' for eating junk food?", options: ["Hunger", "Stress", "Boredom"], correct: 1 },
+                    { q: "What is suggested as a healthy substitute routine for stress?", options: ["Eating a large meal", "Sleeping all day", "Taking a brisk walk"], correct: 2 },
+                    { q: "When substituting a routine, what must remain the same?", options: ["The environment", "The cue and the reward", "The physical location"], correct: 1 },
+                    { q: "How does environmental design aid in habit formation?", options: ["It decorates the room", "It makes tasks physically harder", "It decreases the cognitive load"], correct: 2 }
+                ]
+            },
+            {
+                id: 'C2', name: 'Level C2', title: 'Proficient / Master', words: 498,
+                text: "Quantum mechanics, since its inception in the early 20th century, has not merely revolutionized our understanding of the physical world; it has precipitated a profound epistemological crisis. Classical physics, underpinned by Newtonian mechanics and Maxwell's equations, was predicated on a deterministic and objective universe. In this paradigm, physical properties existed independently of observation, and the future state of a system could, in principle, be calculated with absolute precision given its initial conditions. This deterministic worldview formed the bedrock of post-Enlightenment scientific thought.\n\nHowever, the advent of quantum theory dismantled these foundational assumptions. The principle of superposition posits that particles exist in a multiplicity of states simultaneously until a measurement is made. This act of measurement—the 'collapse of the wave function'—forces the system into a definite state. The Copenhagen interpretation, spearheaded by Niels Bohr and Werner Heisenberg, famously asserts that it is meaningless to inquire about the properties of a quantum system prior to measurement. Thus, the observer is inextricably woven into the fabric of physical reality. Reality, at the quantum level, ceases to be an independent backdrop and becomes a participatory phenomenon.\n\nThis observer-dependency introduces severe epistemological challenges. If the properties of an electron—such as its position or momentum, which Heisenberg's uncertainty principle dictates cannot be simultaneously known to arbitrary precision—are not defined prior to observation, what does it mean to claim that the electron 'exists' in a specific state? Albert Einstein famously resisted this inherent randomness and lack of objective reality, questioning whether the moon only exists when one looks at it. His skepticism culminated in the EPR paradox, intended to demonstrate the incompleteness of quantum mechanics by highlighting the 'spooky action at a distance' inherent in quantum entanglement.\n\nDespite Einstein's objections, Bell's theorem and subsequent empirical tests have repeatedly vindicated quantum mechanics, proving that local hidden variables cannot account for the correlations observed between entangled particles. This empirical triumph, however, leaves the philosophical conundrum unresolved. Alternate interpretations, such as Hugh Everett's Many-Worlds interpretation, attempt to salvage determinism by proposing that all possible outcomes of a quantum measurement are realized in a branching multiverse. While mathematically elegant, this interpretation exacts a heavy ontological toll, postulating an infinity of unobservable universes.\n\nUltimately, quantum mechanics forces a reevaluation of the nature of scientific knowledge. It suggests that our mathematical formalisms do not map onto an underlying, independent reality in a straightforwardly representational manner. Instead, they provide exceptionally accurate predictive models for the outcomes of our interactions with the universe. The epistemological shift is from a stance of passive discovery to one of active structural formulation. Science, in the quantum era, is perhaps less about unveiling the 'things in themselves'—to borrow Kantian terminology—and more about mapping the limits and structure of our informational exchange with the cosmos.",
+                questions: [
+                    { q: "What field of study caused a profound epistemological crisis in the 20th century?", options: ["Biology", "Quantum mechanics", "Thermodynamics"], correct: 1 },
+                    { q: "Classical physics was heavily underpinned by whose mechanics?", options: ["Niels Bohr", "Albert Einstein", "Isaac Newton"], correct: 2 },
+                    { q: "How did classical physics view the universe?", options: ["As deterministic and objective", "As random and chaotic", "As fundamentally unknowable"], correct: 0 },
+                    { q: "In the classical paradigm, physical properties existed independently of what?", options: ["Observation", "Mathematics", "Gravity"], correct: 0 },
+                    { q: "What principle states that particles exist in multiple states simultaneously?", options: ["Uncertainty Principle", "Superposition", "Entanglement"], correct: 1 },
+                    { q: "What action causes the 'collapse of the wave function'?", options: ["Measurement", "Speeding up", "Cooling down"], correct: 0 },
+                    { q: "Who spearheaded the Copenhagen interpretation alongside Heisenberg?", options: ["Albert Einstein", "Niels Bohr", "Hugh Everett"], correct: 1 },
+                    { q: "What does the Copenhagen interpretation assert about a system prior to measurement?", options: ["It is perfectly predictable", "It is in a state of decay", "It is meaningless to inquire about its properties"], correct: 2 },
+                    { q: "At the quantum level, reality becomes what kind of phenomenon?", options: ["Participatory", "Passive", "Irrelevant"], correct: 0 },
+                    { q: "Heisenberg's principle dictates that which two properties cannot be simultaneously known precisely?", options: ["Mass and energy", "Position and momentum", "Time and space"], correct: 1 },
+                    { q: "How did Albert Einstein feel about the inherent randomness of quantum mechanics?", options: ["He accepted it immediately", "He resisted it", "He invented it"], correct: 1 },
+                    { q: "What famous analogy did Einstein use to question observer-dependency?", options: ["A cat in a box", "An apple falling", "The moon existing only when looked at"], correct: 2 },
+                    { q: "What was the EPR paradox intended to demonstrate?", options: ["The incompleteness of quantum mechanics", "The speed of light", "The existence of parallel universes"], correct: 0 },
+                    { q: "What did Einstein call the phenomenon of quantum entanglement?", options: ["A mathematical error", "Spooky action at a distance", "A beautiful illusion"], correct: 1 },
+                    { q: "What theorem vindicated quantum mechanics against local hidden variables?", options: ["Fermat's Last Theorem", "Pythagorean theorem", "Bell's theorem"], correct: 2 },
+                    { q: "What alternate interpretation attempts to salvage determinism?", options: ["The Matrix theory", "The Many-Worlds interpretation", "String Theory"], correct: 1 },
+                    { q: "What does the Many-Worlds interpretation postulate to mathematically work?", options: ["A single, expanding universe", "An infinity of unobservable universes", "That time travels backwards"], correct: 1 },
+                    { q: "According to the text, what do mathematical formalisms provide in quantum mechanics?", options: ["Predictive models for outcomes", "A perfect picture of reality", "Proof of God"], correct: 0 },
+                    { q: "The epistemological shift described moves from passive discovery to what?", options: ["Active structural formulation", "Religious belief", "Random guessing"], correct: 0 },
+                    { q: "In the quantum era, science is less about unveiling what Kantian concept?", options: ["Categorical imperatives", "Things in themselves", "Transcendental idealism"], correct: 1 }
+                ]
+            }
+        ];
+
+        let maxUnlockedLevel = parseInt(localStorage.getItem('readingHubLevel')) || 0;
+        let currentTestIndex = 0;
+        const PASS_PERCENTAGE = 0.7; // 70% to pass
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+        });
+
+        function renderDashboard() {
+            const container = document.getElementById('levels-container');
+            container.innerHTML = '';
+            
+            let unlockedCount = 0;
+
+            levelsData.forEach((level, index) => {
+                const isUnlocked = index <= maxUnlockedLevel;
+                const isCompleted = index < maxUnlockedLevel;
+                if(isUnlocked) unlockedCount++;
+
+                let statusClass = isUnlocked ? 'unlocked' : 'locked';
+                if(isCompleted) statusClass = 'completed';
+
+                let icon = isCompleted ? 'star' : (isUnlocked ? 'lock_open' : 'lock');
+                let colorClass = isCompleted ? 'text-green-500' : (isUnlocked ? 'text-[#0A468C]' : 'text-gray-400');
+
+                const cardHTML = `
+                    <div class="level-card ${statusClass}" onclick="openLevel(${index}, ${isUnlocked})">
+                        <div class="absolute top-4 right-4">
+                            <span class="material-icons-round ${colorClass} text-3xl">${icon}</span>
+                        </div>
+                        <h2 class="text-3xl font-black font-titulares mt-4 mb-1 ${isUnlocked ? 'text-[#0A468C]' : ''}">${level.name}</h2>
+                        <h3 class="text-lg font-bold mb-4 ${isUnlocked ? 'text-[#F56E1E]' : ''}">${level.title}</h3>
+                        <div class="bg-gray-100 rounded-lg p-3 inline-block">
+                            <p class="text-sm font-semibold text-gray-600">${level.words} Words • ${level.questions.length} Questions</p>
+                        </div>
+                        ${isUnlocked ? `<p class="mt-4 text-sm font-bold text-[#0A468C]">Click to Start <span class="material-icons-round align-middle text-sm">arrow_forward</span></p>` : `<p class="mt-4 text-sm font-bold text-gray-400">Locked</p>`}
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+
+            // Update Progress Bar
+            let percent = Math.round((unlockedCount - 1) / levelsData.length * 100);
+            if(maxUnlockedLevel >= levelsData.length) percent = 100;
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-text').innerText = percent + '%';
+        }
+
+        function openLevel(index, isUnlocked) {
+            if(!isUnlocked) return;
+            currentTestIndex = index;
+            const level = levelsData[index];
+
+            document.getElementById('dashboard-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'block';
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('exam-content').style.display = 'block';
+            
+            document.getElementById('test-level-title').innerText = `${level.name} - ${level.title}`;
+            document.getElementById('test-level-stats').innerText = `${level.words} Words • ${level.questions.length} Questions`;
+            document.getElementById('reading-text').innerText = level.text;
+
+            const qContainer = document.getElementById('questions-container');
+            qContainer.innerHTML = '';
+
+            level.questions.forEach((q, qIndex) => {
+                let optionsHTML = '';
+                q.options.forEach((opt, optIndex) => {
+                    optionsHTML += `
+                        <label class="radio-label">
+                            <input type="radio" name="q_${qIndex}" value="${optIndex}">
+                            <span>${opt}</span>
+                        </label>
+                    `;
+                });
+
+                qContainer.innerHTML += `
+                    <div class="question-block" id="block_${qIndex}">
+                        <p class="font-bold text-lg mb-3 text-[#0A468C]">${qIndex + 1}. ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            });
+
+            window.scrollTo(0, 0);
+        }
+
+        function submitExam() {
+            const level = levelsData[currentTestIndex];
+            let score = 0;
+
+            level.questions.forEach((q, qIndex) => {
+                const radios = document.querySelectorAll(`input[name="q_${qIndex}"]`);
+                const selected = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+                const correctIndex = q.correct.toString();
+
+                radios.forEach(radio => {
+                    radio.disabled = true;
+                    radio.parentElement.classList.add("disabled");
+                    radio.parentElement.style.borderColor = "var(--gris-neutro)";
+                    radio.parentElement.style.background = "var(--blanco-puro)";
+                });
+
+                if (selected) {
+                    if (selected.value === correctIndex) {
+                        selected.parentElement.style.borderColor = "#10b981";
+                        selected.parentElement.style.background = "#d1fae5";
+                        selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-700 font-bold text-sm bg-green-200 px-2 py-0.5 rounded">✓</span>`);
+                        score++;
+                    } else {
+                        selected.parentElement.style.borderColor = "#ef4444";
+                        selected.parentElement.style.background = "#fee2e2";
+                        selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-red-700 font-bold text-sm bg-red-200 px-2 py-0.5 rounded">✗</span>`);
+                    }
+                }
+
+                // Resaltar la correcta siempre
+                const correctRadio = document.querySelector(`input[name="q_${qIndex}"][value="${correctIndex}"]`);
+                if (correctRadio && (!selected || selected.value !== correctIndex)) {
+                    correctRadio.parentElement.style.borderColor = "#10b981";
+                    correctRadio.parentElement.style.background = "#d1fae5";
+                    correctRadio.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Correct Answer</span>`);
+                }
+            });
+
+            document.getElementById('btn-submit').style.display = 'none';
+            
+            // Mostrar resultados
+            const resultPanel = document.getElementById('result-panel');
+            const total = level.questions.length;
+            const percentage = score / total;
+
+            document.getElementById('result-score').innerText = score;
+            document.getElementById('result-total').innerText = `/ ${total}`;
+            document.getElementById('result-score').className = percentage >= PASS_PERCENTAGE ? "text-5xl font-black text-[#10b981]" : "text-5xl font-black text-[#ef4444]";
+
+            if (percentage >= PASS_PERCENTAGE) {
+                resultPanel.style.borderColor = "#10b981";
+                document.getElementById('result-icon').innerText = "workspace_premium";
+                document.getElementById('result-icon').className = "material-icons-round text-6xl mb-2 text-[#10b981]";
+                document.getElementById('result-title').innerText = "Level Cleared!";
+                document.getElementById('result-title').className = "text-3xl font-extrabold font-titulares mb-2 text-[#10b981]";
+                
+                if(currentTestIndex === levelsData.length - 1) {
+                    document.getElementById('result-message').innerText = "Incredible! You have mastered all Reading Levels!";
+                } else {
+                    document.getElementById('result-message').innerText = "Excellent work! You have unlocked the next level.";
+                }
+
+                if (currentTestIndex >= maxUnlockedLevel) {
+                    maxUnlockedLevel = currentTestIndex + 1;
+                    localStorage.setItem('readingHubLevel', maxUnlockedLevel);
+                }
+
+                document.getElementById('result-action').innerHTML = `<button onclick="showDashboard()" class="bg-[#10b981] hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow transition text-lg font-titulares">Continue</button>`;
+
+            } else {
+                resultPanel.style.borderColor = "#ef4444";
+                document.getElementById('result-icon').innerText = "sentiment_dissatisfied";
+                document.getElementById('result-icon').className = "material-icons-round text-6xl mb-2 text-[#ef4444]";
+                document.getElementById('result-title').innerText = "Try Again";
+                document.getElementById('result-title').className = "text-3xl font-extrabold font-titulares mb-2 text-[#ef4444]";
+                document.getElementById('result-message').innerText = `You need at least ${Math.round(PASS_PERCENTAGE*100)}% to unlock the next level. Review your mistakes below.`;
+                document.getElementById('result-action').innerHTML = `<button onclick="openLevel(${currentTestIndex}, true)" class="bg-[#0A468C] hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow transition text-lg font-titulares">Retry Level</button>`;
+            }
+
+            resultPanel.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showDashboard() {
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('dashboard-screen').style.display = 'block';
+            document.getElementById('btn-submit').style.display = 'block';
+            renderDashboard();
+            window.scrollTo(0, 0);
+        }
+
+        function resetProgress() {
+            if(confirm("Are you sure you want to reset all your progress and lock the levels again?")) {
+                localStorage.setItem('readingHubLevel', 0);
+                maxUnlockedLevel = 0;
+                renderDashboard();
+            }
+        }
+    </script>
+</body>
+</html>
