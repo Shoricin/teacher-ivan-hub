@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Advanced English Phrases | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+            
+            --card-shadow: 0 10px 30px rgba(10, 70, 140, 0.08);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: var(--azul-primario);
+            overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); margin: 0; }
+        
+        /* --- Hero Section --- */
+        .hero {
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            background-image: linear-gradient(rgba(10, 70, 140, 0.9), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
+            background-size: cover; background-position: center;
+            color: var(--blanco-nieve);
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute; top: 1.5rem; left: 1.5rem;
+            color: var(--blanco-puro); text-decoration: none;
+            display: flex; align-items: center; gap: 5px;
+            font-family: var(--font-titulares); font-size: 0.9rem;
+            opacity: 0.8; transition: opacity 0.3s;
+        }
+        .back-btn:hover { opacity: 1; color: var(--naranja-vibrante); }
+
+        .hero-title {
+            font-size: 2.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;
+        }
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        /* --- Navigation Tabs --- */
+        .filter-section {
+            background-color: var(--blanco-puro);
+            padding: 1rem;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex; justify-content: center;
+            overflow-x: auto; white-space: nowrap;
+        }
+
+        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
+
+        .filter-btn {
+            background: transparent; border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
+            cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
+
+        .filter-btn.active {
+            background: var(--azul-primario); color: var(--blanco-puro);
+            box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+        }
+
+        /* --- Main Content --- */
+        .content-wrapper { flex: 1; padding: 2rem 1rem; display: flex; justify-content: center; width: 100%; }
+        .main-container { width: 100%; max-width: 900px; }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--blanco-puro); border-radius: 10px;
+            padding: 2rem; box-shadow: var(--card-shadow);
+            border: 1px solid rgba(200, 205, 210, 0.3);
+            border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+
+        /* --- Phrase List Styling --- */
+        .phrase-list { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 768px) { .phrase-list { grid-template-columns: 1fr 1fr; } }
+        .phrase-item {
+            background: var(--blanco-nieve); padding: 12px 15px; border-radius: 8px;
+            border-left: 4px solid var(--azul-claro); display: flex; flex-direction: column;
+        }
+        .phrase-item strong { color: var(--azul-primario); font-size: 1.05rem; }
+        .phrase-item span { color: #555; font-size: 0.9rem; margin-top: 4px; font-style: italic;}
+
+        /* --- Interactive Elements --- */
+        .radio-label { 
+            display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; 
+            border: 1px solid var(--gris-neutro); border-radius: 8px; cursor: pointer; 
+            transition: 0.2s; background: var(--blanco-puro); color: #444; font-size: 0.95rem; margin-bottom: 8px;
+        }
+        .radio-label:hover:not(.disabled) { border-color: var(--azul-claro); background: rgba(150, 200, 230, 0.1); }
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
+        .radio-label input[type="radio"]:disabled { cursor: not-allowed; }
+        
+        .gap-input { 
+            padding: 6px 12px; border: 2px solid var(--gris-neutro); border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario); 
+            outline: none; transition: 0.2s; width: 100%; max-width: 250px; background: #fff;
+        }
+        .gap-select {
+            padding: 6px 12px; border: 2px solid var(--gris-neutro); border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario); 
+            outline: none; transition: 0.2s; width: auto; background: #fff; cursor: pointer;
+        }
+        .gap-input:focus, .gap-select:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 0 3px rgba(245, 110, 30, 0.1); }
+        .gap-input:disabled, .gap-select:disabled { background: #f3f4f6; cursor: not-allowed; }
+        
+        .correct-field { border-color: #10b981 !important; background: #d1fae5 !important; color: #166534 !important;}
+        .wrong-field { border-color: #ef4444 !important; background: #fee2e2 !important; color: #991b1b !important; }
+
+        .check-btn {
+            display: block; width: 100%;
+            background: var(--naranja-vibrante); color: white;
+            text-decoration: none; padding: 15px; text-align: center;
+            border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            font-family: var(--font-titulares); border: none; cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            text-transform: uppercase;
+        }
+        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
+
+        .score-box { display: none; }
+        .score-box.active { display: flex; animation: fadeIn 0.4s ease; }
+
+        .site-footer {
+            background: var(--azul-primario); color: var(--blanco-puro);
+            text-align: center; padding: 1.5rem; border-top: 4px solid var(--naranja-vibrante);
+            font-family: var(--font-cuerpo); font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <a href="index.html" class="back-btn"><span class="material-icons-round">arrow_back</span> HUB</a>
+        <h1 class="hero-title">Advanced <span>Phrases</span></h1>
+        <p>Set 1 - Vocabulario esencial para IELTS Speaking & Writing</p>
+    </section>
+
+    <div class="filter-section">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="switchTab('study')" id="tab-study">
+                <span class="material-icons-round text-sm">menu_book</span> 1. Study Sheet
+            </button>
+            <button class="filter-btn" onclick="switchTab('practice')" id="tab-practice">
+                <span class="material-icons-round text-sm">edit_document</span> 2. Practice Test
+            </button>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <main class="main-container">
+
+            <div id="view-study" class="view-section active">
+                <div class="card">
+                    <h2 class="text-2xl font-bold mb-4 border-b border-gray-200 pb-4 flex items-center gap-2" style="color: var(--azul-primario);">
+                        <span class="material-icons-round" style="color: var(--naranja-vibrante);">lightbulb</span> Phrase Dictionary
+                    </h2>
+                    <p class="mb-6 text-gray-600">Revisa cuidadosamente estas 25 frases avanzadas y sus significados antes de pasar a la sección de práctica.</p>
+                    
+                    <div class="phrase-list">
+                        <div class="phrase-item"><strong>1. As a matter of fact</strong><span>In reality</span></div>
+                        <div class="phrase-item"><strong>2. In the long run</strong><span>Over a long period of time</span></div>
+                        <div class="phrase-item"><strong>3. On the contrary</strong><span>Opposite to what was said</span></div>
+                        <div class="phrase-item"><strong>4. To say the least</strong><span>Used for emphasis; mildly speaking</span></div>
+                        <div class="phrase-item"><strong>5. In a nutshell</strong><span>In summary</span></div>
+                        <div class="phrase-item"><strong>6. As far as I know</strong><span>Based on my knowledge</span></div>
+                        <div class="phrase-item"><strong>7. At all costs</strong><span>No matter what the expense or effort</span></div>
+                        <div class="phrase-item"><strong>8. In the meantime</strong><span>Until then; for the time being</span></div>
+                        <div class="phrase-item"><strong>9. By and large</strong><span>Generally speaking</span></div>
+                        <div class="phrase-item"><strong>10. On the other hand</strong><span>In contrast</span></div>
+                        <div class="phrase-item"><strong>11. To a certain extent</strong><span>Partly; to some degree</span></div>
+                        <div class="phrase-item"><strong>12. In hindsight</strong><span>Looking back with understanding</span></div>
+                        <div class="phrase-item"><strong>13. Under the circumstances</strong><span>Considering the situation</span></div>
+                        <div class="phrase-item"><strong>14. Needless to say</strong><span>Obviously</span></div>
+                        <div class="phrase-item"><strong>15. In order to</strong><span>For the purpose of</span></div>
+                        <div class="phrase-item"><strong>16. With all due respect</strong><span>Used to express polite disagreement</span></div>
+                        <div class="phrase-item"><strong>17. At the end of the day</strong><span>Ultimately</span></div>
+                        <div class="phrase-item"><strong>18. To be honest</strong><span>To speak frankly</span></div>
+                        <div class="phrase-item"><strong>19. Once in a while</strong><span>From time to time</span></div>
+                        <div class="phrase-item"><strong>20. As it happens</strong><span>By chance; coincidentally</span></div>
+                        <div class="phrase-item"><strong>21. To the point</strong><span>Direct and clear</span></div>
+                        <div class="phrase-item"><strong>22. For the most part</strong><span>Mostly; generally</span></div>
+                        <div class="phrase-item"><strong>23. In the face of</strong><span>When faced with</span></div>
+                        <div class="phrase-item"><strong>24. All things considered</strong><span>When everything is evaluated</span></div>
+                        <div class="phrase-item"><strong>25. Bear in mind</strong><span>Remember; keep in mind</span></div>
+                    </div>
+
+                    <button onclick="switchTab('practice')" class="check-btn mt-8">Ir a la Práctica</button>
+                </div>
+            </div>
+
+            <div id="view-practice" class="view-section">
+                
+                <div id="result-screen" style="display: none;" class="text-center mb-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-t-8 border-[#10b981]">
+                        <span class="material-icons-round text-6xl text-[#10b981] mb-2">task_alt</span>
+                        <h2 class="text-3xl font-extrabold font-titulares text-[#0A468C] mb-2">Worksheet Completed!</h2>
+                        <div class="bg-blue-50 py-6 rounded-xl border-2 border-blue-200 mb-4 max-w-sm mx-auto">
+                            <span class="text-5xl font-black text-[#F56E1E]" id="final-score">0</span>
+                            <span class="text-2xl text-gray-500 font-bold"> / 15</span>
+                        </div>
+                        <p class="text-gray-500 font-semibold italic">Revisa tus respuestas correctas e incorrectas abajo.</p>
+                    </div>
+                </div>
+
+                <div class="card" id="exam-form">
+                    <h2 class="text-2xl font-bold mb-6 border-b border-gray-200 pb-4" style="color: var(--azul-primario);">Phrasal Practice Test</h2>
+                    
+                    <div class="mb-10">
+                        <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Part A: Choose the best phrase</h3>
+                        <div class="space-y-6 text-gray-800 leading-loose">
+                            <div>
+                                <strong>1.</strong> I thought the restaurant was going to be terrible. 
+                                <select id="q1" class="gap-select mx-1">
+                                    <option value="">-- Select --</option>
+                                    <option value="as a matter of fact">As a matter of fact</option>
+                                    <option value="in hindsight">In hindsight</option>
+                                    <option value="for the most part">For the most part</option>
+                                </select>, it was one of the best meals I've ever had!
+                            </div>
+                            <div>
+                                <strong>2.</strong> Buying a cheap laptop might save you money now, but 
+                                <select id="q2" class="gap-select mx-1">
+                                    <option value="">-- Select --</option>
+                                    <option value="once in a while">once in a while</option>
+                                    <option value="in the long run">in the long run</option>
+                                    <option value="in the meantime">in the meantime</option>
+                                </select>, it will cost you more when it breaks.
+                            </div>
+                            <div>
+                                <strong>3.</strong> The hotel was dirty, the food was cold, and the staff was rude. It was a disaster, 
+                                <select id="q3" class="gap-select mx-1">
+                                    <option value="">-- Select --</option>
+                                    <option value="to say the least">to say the least</option>
+                                    <option value="on the contrary">on the contrary</option>
+                                    <option value="in order to">in order to</option>
+                                </select>.
+                            </div>
+                            <div>
+                                <strong>4.</strong> We don't have the budget to hire a new designer yet. 
+                                <select id="q4" class="gap-select mx-1">
+                                    <option value="">-- Select --</option>
+                                    <option value="At all costs">At all costs</option>
+                                    <option value="In the meantime">In the meantime</option>
+                                    <option value="Needless to say">Needless to say</option>
+                                </select>, we will have to use Canva.
+                            </div>
+                            <div>
+                                <strong>5.</strong> I'm not ignoring your advice. 
+                                <select id="q5" class="gap-select mx-1">
+                                    <option value="">-- Select --</option>
+                                    <option value="On the contrary">On the contrary</option>
+                                    <option value="By and large">By and large</option>
+                                    <option value="To the point">To the point</option>
+                                </select>, I think it's very helpful, I just need time to apply it.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-10">
+                        <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Part B: Match the Meaning</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <p class="font-bold mb-2 text-gray-800">6. If you want to "express polite disagreement", which phrase should you use before arguing?</p>
+                                <label class="radio-label"><input type="radio" name="q6" value="a"> A. To be honest</label>
+                                <label class="radio-label"><input type="radio" name="q6" value="b"> B. With all due respect</label>
+                                <label class="radio-label"><input type="radio" name="q6" value="c"> C. As far as I know</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-2 text-gray-800">7. What does "In hindsight" mean?</p>
+                                <label class="radio-label"><input type="radio" name="q7" value="a"> A. Looking back with understanding</label>
+                                <label class="radio-label"><input type="radio" name="q7" value="b"> B. Considering the situation</label>
+                                <label class="radio-label"><input type="radio" name="q7" value="c"> C. When everything is evaluated</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-2 text-gray-800">8. Which phrase is a synonym for "Ultimately"?</p>
+                                <label class="radio-label"><input type="radio" name="q8" value="a"> A. At all costs</label>
+                                <label class="radio-label"><input type="radio" name="q8" value="b"> B. In a nutshell</label>
+                                <label class="radio-label"><input type="radio" name="q8" value="c"> C. At the end of the day</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-2 text-gray-800">9. "No matter what the expense or effort" is the definition of...</p>
+                                <label class="radio-label"><input type="radio" name="q9" value="a"> A. At all costs</label>
+                                <label class="radio-label"><input type="radio" name="q9" value="b"> B. For the most part</label>
+                                <label class="radio-label"><input type="radio" name="q9" value="c"> C. In the face of</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-2 text-gray-800">10. "By chance; coincidentally" translates to...</p>
+                                <label class="radio-label"><input type="radio" name="q10" value="a"> A. Once in a while</label>
+                                <label class="radio-label"><input type="radio" name="q10" value="b"> B. As it happens</label>
+                                <label class="radio-label"><input type="radio" name="q10" value="c"> C. By and large</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="font-bold text-lg mb-2 text-[#F56E1E] uppercase tracking-wide">Part C: Fill in the Blanks</h3>
+                        <p class="text-sm text-gray-500 mb-4 italic">Type the exact phrase from the study sheet. Watch your spelling!</p>
+                        <div class="space-y-6 text-gray-800">
+                            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                <span class="font-bold">11.</span> 
+                                <span>Please <input type="text" id="q11" class="gap-input" placeholder="..."> that the train leaves at 8:00 AM. (Remember)</span>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                <span class="font-bold">12.</span> 
+                                <span><input type="text" id="q12" class="gap-input" placeholder="...">, you will be paid for your extra hours. (Obviously)</span>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                <span class="font-bold">13.</span> 
+                                <span>I agree with you <input type="text" id="q13" class="gap-input" placeholder="...">, but I still have some doubts. (Partly)</span>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                <span class="font-bold">14.</span> 
+                                <span>The weather was bad, but <input type="text" id="q14" class="gap-input" placeholder="...">, it was a great trip. (When evaluated)</span>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                <span class="font-bold">15.</span> 
+                                <span>I only eat fast food <input type="text" id="q15" class="gap-input" placeholder="...">. (From time to time)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="submitWorksheet()" id="btn-submit" class="check-btn mt-8">Submit Answers</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <p>© 2026 Teacher Ivan HUB | Repositorio Educativo</p>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        const ANSWERS = {
+            // Dropdowns
+            q1: "as a matter of fact",
+            q2: "in the long run",
+            q3: "to say the least",
+            q4: "in the meantime",
+            q5: "on the contrary",
+            // Radios
+            q6: "b",
+            q7: "a",
+            q8: "c",
+            q9: "a",
+            q10: "b",
+            // Text Inputs
+            q11: "bear in mind",
+            q12: "needless to say",
+            q13: "to a certain extent",
+            q14: "all things considered",
+            q15: "once in a while"
+        };
+
+        function checkDropdownOrText(id, correctVal) {
+            const el = document.getElementById(id);
+            if(!el) return 0;
+            const val = el.value.trim().toLowerCase();
+            
+            el.disabled = true; 
+            el.classList.remove('correct-field', 'wrong-field');
+
+            let feedback = document.createElement('span');
+            feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
+
+            if (val === correctVal.toLowerCase()) { 
+                el.classList.add('correct-field'); 
+                feedback.classList.add("bg-green-100", "text-green-700");
+                feedback.innerText = "✓";
+                el.parentNode.insertBefore(feedback, el.nextSibling);
+                return 1; 
+            } else { 
+                el.classList.add('wrong-field'); 
+                feedback.classList.add("bg-red-100", "text-red-700");
+                feedback.innerText = "✗ Correct: " + correctVal;
+                el.parentNode.insertBefore(feedback, el.nextSibling);
+                return 0; 
+            }
+        }
+
+        function checkRadio(name, correctVal) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            
+            document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                input.disabled = true;
+                input.parentElement.classList.add("disabled");
+                input.parentElement.style.borderColor = "var(--gris-neutro)";
+                input.parentElement.style.background = "var(--blanco-puro)";
+                input.parentElement.style.opacity = "0.6";
+            });
+
+            let score = 0;
+
+            if (selected) {
+                if (selected.value === correctVal) {
+                    selected.parentElement.style.borderColor = "#10b981";
+                    selected.parentElement.style.background = "#d1fae5";
+                    selected.parentElement.style.opacity = "1";
+                    selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-700 font-bold text-sm bg-green-200 px-2 py-0.5 rounded">✓</span>`);
+                    score = 1;
+                } else {
+                    selected.parentElement.style.borderColor = "#ef4444";
+                    selected.parentElement.style.background = "#fee2e2";
+                    selected.parentElement.style.opacity = "1";
+                    selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-red-700 font-bold text-sm bg-red-200 px-2 py-0.5 rounded">✗</span>`);
+                }
+            }
+
+            const correctEl = document.querySelector(`input[name="${name}"][value="${correctVal}"]`);
+            if (correctEl && (!selected || selected.value !== correctVal)) {
+                correctEl.parentElement.style.borderColor = "#10b981";
+                correctEl.parentElement.style.background = "#d1fae5";
+                correctEl.parentElement.style.opacity = "1";
+                correctEl.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Correct Answer</span>`);
+            }
+            
+            return score;
+        }
+
+        function submitWorksheet() {
+            let totalScore = 0;
+
+            // Eval Part A (Dropdowns)
+            for(let i=1; i<=5; i++) totalScore += checkDropdownOrText(`q${i}`, ANSWERS[`q${i}`]);
+            
+            // Eval Part B (Radios)
+            for(let i=6; i<=10; i++) totalScore += checkRadio(`q${i}`, ANSWERS[`q${i}`]);
+            
+            // Eval Part C (Text Inputs)
+            for(let i=11; i<=15; i++) totalScore += checkDropdownOrText(`q${i}`, ANSWERS[`q${i}`]);
+
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = totalScore;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
