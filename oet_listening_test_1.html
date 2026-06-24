@@ -29,6 +29,29 @@
             margin-bottom: 2rem;
         }
 
+        /* Tabs Navigation */
+        .filter-section {
+            background-color: var(--blanco-puro); padding: 1rem;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex; justify-content: center; overflow-x: auto; white-space: nowrap;
+        }
+        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
+        .filter-btn {
+            background: transparent; border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
+        .filter-btn.active { background: var(--azul-primario); color: var(--blanco-puro); box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); }
+        
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Inputs & Radios */
         .oet-input {
             border: none; border-bottom: 2px solid var(--gris-neutro); background: transparent;
             font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario);
@@ -44,7 +67,7 @@
             transition: all 0.2s;
         }
         .radio-label:hover:not(.disabled) { border-color: var(--azul-claro); background: #f8fbff; }
-        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px;}
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
         .radio-label input[type="radio"]:disabled { cursor: not-allowed; }
         .radio-label.disabled { cursor: not-allowed; opacity: 0.7; }
 
@@ -52,11 +75,18 @@
         .incorrect-input { border-bottom-color: #ef4444 !important; color: #ef4444 !important; background: #fee2e2 !important; }
 
         .sticky-audio {
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 68px; z-index: 90;
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            padding: 15px; border-bottom: 2px solid var(--azul-claro);
+            padding: 10px 15px; border-bottom: 2px solid var(--azul-claro);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;
         }
+
+        .check-btn {
+            display: block; width: 100%; background: var(--naranja-vibrante); color: white;
+            padding: 15px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen pb-10">
@@ -64,282 +94,354 @@
     <!-- HEADER PARA JOSE & NAT -->
     <div class="bg-[#0A468C] text-white py-10 px-6 text-center shadow-md">
         <h1 class="text-3xl md:text-4xl font-extrabold font-titulares uppercase mb-2">OET Listening <span class="text-[#F56E1E]">Mock Test 1</span></h1>
-        <p class="text-blue-200 text-lg font-bold">Welcome Jose & Nat! 40 Minutes on the clock. Good luck!</p>
+        <p class="text-blue-200 text-lg font-bold">Welcome Jose & Nat! 4-Day Challenge</p>
+    </div>
+
+    <!-- TABS DE DÍAS -->
+    <div class="filter-section">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="switchTab('tuesday')" id="tab-tuesday">
+                <span class="material-icons-round text-sm">lightbulb</span> Martes
+            </button>
+            <button class="filter-btn" onclick="switchTab('wednesday')" id="tab-wednesday">
+                <span class="material-icons-round text-sm">headphones</span> Miércoles
+            </button>
+            <button class="filter-btn" onclick="switchTab('thursday')" id="tab-thursday">
+                <span class="material-icons-round text-sm">headphones</span> Jueves
+            </button>
+            <button class="filter-btn" onclick="switchTab('friday')" id="tab-friday">
+                <span class="material-icons-round text-sm">headphones</span> Viernes
+            </button>
+        </div>
     </div>
 
     <!-- REPRODUCTOR DE AUDIO STICKY -->
     <div class="sticky-audio">
-        <p class="font-bold text-[#0A468C] mb-2 font-titulares">OET Sample Test 1 Audio[cite: 1]</p>
         <audio id="test-audio" controls class="w-full max-w-md mx-auto h-10">
-            <source src="OET_Sample_Test_1.mp3" type="audio/mpeg">
+            <source src="audios/OET_Sample_Test_1.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
     </div>
 
     <main class="max-w-4xl mx-auto p-4 md:p-6 w-full mt-4">
 
-        <!-- PART A -->
-        <div class="card" id="part-a">
-            <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Part A[cite: 1]</h2>
-            <p class="mb-6 text-gray-600">In this part of the test, you'll hear two different extracts. In each extract, a health professional is talking to a patient. For questions 1-24, complete the notes with information that you hear[cite: 1].</p>
+        <!-- ================= MARTES: TIPS Y GUÍA ================= -->
+        <div id="view-tuesday" class="view-section active">
+            <div class="card">
+                <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">OET Listening: Essential Guide</h2>
+                <p class="mb-6 text-gray-600">Bienvenido al desafío de 4 días. El OET evalúa tu capacidad para comprender consultas médicas, presentaciones y diálogos en entornos de salud. Antes de comenzar el test, lee estos consejos vitales.</p>
 
-            <!-- Extract 1 -->
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
-                <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 1-12[cite: 1]</h3>
-                <p class="mb-4 text-sm font-semibold text-gray-500">You hear a physiotherapist talking to a new patient called Ray Sands. Complete the notes with a word or short phrase that you hear[cite: 1].</p>
-                
-                <div class="space-y-4 text-gray-800 leading-loose">
-                    <p><strong>Patient:</strong> Ray Sands[cite: 1]</p>
-                    <p><strong>18 months ago:</strong> back injury sustained lifting <strong>(1)</strong> <input type="text" id="q1" class="oet-input" placeholder="...">[cite: 1]</p>
-                    <p><strong>1 year ago:</strong> sciatica developed[cite: 1]</p>
-                    <p><strong>6 months ago:</strong> clear of symptoms[cite: 1]</p>
-                    <p><strong>Last month:</strong> recurrence of symptoms[cite: 1]</p>
-                    <h4 class="font-bold mt-4 border-b pb-1">Patient's description of symptoms[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>pain located in <strong>(2)</strong> <input type="text" id="q2" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>pain described as <strong>(3)</strong> <input type="text" id="q3" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>loss of mobility[cite: 1]</li>
-                        <li>problems sleeping[cite: 1]</li>
-                        <li>mentions inability to <strong>(4)</strong> <input type="text" id="q4" class="oet-input" placeholder="..."> as most frustrating aspect[cite: 1]</li>
-                        <li>general numbness in affected area[cite: 1]</li>
-                        <li><strong>(5)</strong> <input type="text" id="q5" class="oet-input" placeholder="..."> sensation (calves)[cite: 1]</li>
-                    </ul>
-                    <p><strong>Occupation:</strong> <strong>(6)</strong> <input type="text" id="q6" class="oet-input" placeholder="..."> (involves travel/some manual work)[cite: 1]</p>
-                    <h4 class="font-bold mt-4 border-b pb-1">Initial treatment[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>prescribed NSAIDs[cite: 1]</li>
-                        <li>application of <strong>(7)</strong> <input type="text" id="q7" class="oet-input" placeholder="..."> (provided some relief)[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Referrals[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li><strong>(8)</strong> <input type="text" id="q8" class="oet-input" placeholder="..."> (briefly)[cite: 1]</li>
-                        <li>sports injury specialist for manipulation and exercise programme[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Further treatment[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>epidural injections[cite: 1]</li>
-                        <li><strong>(9)</strong> <input type="text" id="q9" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>electrical impulses[cite: 1]</li>
-                        <li>decided not to try <strong>(10)</strong> <input type="text" id="q10" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>patient attributes recovery to <strong>(11)</strong> <input type="text" id="q11" class="oet-input" placeholder="...">[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Previous diagnosis[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>sciatica probably related to <strong>(12)</strong> <input type="text" id="q12" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>reports no history of pain in buttocks[cite: 1]</li>
-                    </ul>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
+                        <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">edit_note</span> Part A (Consultations)</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                            <li><strong>Predecir:</strong> Usa el tiempo de lectura (30s) para predecir qué tipo de palabra falta (un síntoma, un medicamento, una profesión, un tratamiento).</li>
+                            <li><strong>Escucha las señales:</strong> Los títulos en negrita en el papel te indican exactamente dónde estás en el audio. Si el paciente cambia de tema, mueve tu mirada a la siguiente sección.</li>
+                            <li><strong>Usa las mismas palabras:</strong> No parafrasees. Debes escribir exactamente la palabra o frase corta que escuches en el audio.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
+                        <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">forum</span> Part B (Workplace)</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                            <li><strong>Lee el contexto:</strong> La frase introductoria (ej. "You hear a nurse briefing...") te da el contexto vital. Identifica los roles de los hablantes.</li>
+                            <li><strong>Busca la idea principal:</strong> A diferencia de la parte A, aquí debes entender el propósito general, la razón de la acción o el acuerdo final entre los profesionales.</li>
+                            <li><strong>Cuidado con los distractores:</strong> Los hablantes pueden mencionar opciones A, B y C, pero solo una responde la pregunta directamente.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-100 md:col-span-2">
+                        <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">record_voice_over</span> Part C (Presentations)</h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                            <li><strong>Sigue la estructura:</strong> Las preguntas (6 por extracto) siguen el mismo orden cronológico que el audio. </li>
+                            <li><strong>Enfócate en la actitud/opinión:</strong> Muchas preguntas te pedirán identificar qué opina el hablante sobre un tema, o por qué da un ejemplo específico. Presta atención al tono y verbos de opinión.</li>
+                            <li><strong>No te estanques:</strong> Si pierdes una respuesta, déjala ir. El orador usará frases de transición ("Moving on to...", "Another case is...") que te indicarán que pasó a la siguiente pregunta.</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Extract 2 -->
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 13-24[cite: 1]</h3>
-                <p class="mb-4 text-sm font-semibold text-gray-500">You hear a consultant dermatologist talking to a patient called Jake Ventor. Complete the notes.[cite: 1]</p>
-                
-                <div class="space-y-4 text-gray-800 leading-loose">
-                    <p><strong>Patient:</strong> Jake Ventor[cite: 1]</p>
-                    <p><strong>Reason for referral:</strong> skin lesion[cite: 1]</p>
-                    <h4 class="font-bold mt-4 border-b pb-1">Patient's description of condition[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>on the <strong>(13)</strong> <input type="text" id="q13" class="oet-input" placeholder="..."> of his left hand[cite: 1]</li>
-                        <li>preceded by <strong>(14)</strong> <input type="text" id="q14" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>then <strong>(15)</strong> <input type="text" id="q15" class="oet-input" placeholder="..."> form and join up[cite: 1]</li>
-                        <li>surrounding erythema[cite: 1]</li>
-                        <li>GP describes appearance of lesion as <strong>(16)</strong> <input type="text" id="q16" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>normally resolves within two weeks[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">History of condition[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>first experienced in 1990s when living in China[cite: 1]</li>
-                        <li>also had a lesion on his <strong>(17)</strong> <input type="text" id="q17" class="oet-input" placeholder="..."> there - never recurred[cite: 1]</li>
-                        <li>recurs regularly on different parts of his left hand[cite: 1]</li>
-                        <li>not becoming more <strong>(18)</strong> <input type="text" id="q18" class="oet-input" placeholder="...">[cite: 1]</li>
-                        <li>no apparent link to general state of health, <strong>(19)</strong> <input type="text" id="q19" class="oet-input" placeholder="..."> or stress[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Medical history[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li><strong>(20)</strong> <input type="text" id="q20" class="oet-input" placeholder="..."> on lower back in 2006 - no sign of recurrence[cite: 1]</li>
-                        <li>reports no history of <strong>(21)</strong> <input type="text" id="q21" class="oet-input" placeholder="...">[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Information given[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>advised that <strong>(22)</strong> <input type="text" id="q22" class="oet-input" placeholder="..."> was unlikely to be effective[cite: 1]</li>
-                        <li>told him to take care if the skin is <strong>(23)</strong> <input type="text" id="q23" class="oet-input" placeholder="...">[cite: 1]</li>
-                    </ul>
-                    <h4 class="font-bold mt-4 border-b pb-1">Outcome[cite: 1]</h4>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li>says his quality of life isn't affected[cite: 1]</li>
-                        <li>a <strong>(24)</strong> <input type="text" id="q24" class="oet-input" placeholder="..."> will be arranged[cite: 1]</li>
-                    </ul>
+                <div class="mt-8 text-center">
+                    <button onclick="switchTab('wednesday')" class="check-btn">Estoy listo para empezar el Miércoles</button>
                 </div>
             </div>
         </div>
 
-        <!-- PART B -->
-        <div class="card" id="part-b">
-            <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Part B[cite: 1]</h2>
-            <p class="mb-6 text-gray-600">In this part of the test, you'll hear six different extracts. In each extract, you'll hear people talking in a different healthcare setting. Choose the answer (A, B or C) which fits best according to what you hear.[cite: 1]</p>
+        <!-- ================= MIÉRCOLES: PART A ================= -->
+        <div id="view-wednesday" class="view-section">
+            <div class="card" id="part-a">
+                <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Miércoles: Part A</h2>
+                <p class="mb-6 text-gray-600">En esta parte escucharás dos extractos diferentes de profesionales de la salud hablando con pacientes. Completa las notas con las palabras exactas que escuches.</p>
 
-            <div class="space-y-8">
-                <!-- Q25 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">25. You hear a nurse briefing her colleague about a patient. What does she warn her colleague about?[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q25" value="A"> A. The patient is allergic to some types of antibiotics.[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q25" value="B"> B. Care must be taken to prevent the patient from falling.[cite: 1, 2]</label>
-                    <label class="radio-label"><input type="radio" name="q25" value="C"> C. Oxygen may be needed.[cite: 1]</label>
+                <!-- Extract 1 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 1-12</h3>
+                    <p class="mb-4 text-sm font-semibold text-gray-500">You hear a physiotherapist talking to a new patient called Ray Sands. Complete the notes.</p>
+                    
+                    <div class="space-y-4 text-gray-800 leading-loose">
+                        <p><strong>Patient:</strong> Ray Sands</p>
+                        <p><strong>18 months ago:</strong> back injury sustained lifting <strong>(1)</strong> <input type="text" id="q1" class="oet-input" placeholder="..."></p>
+                        <p><strong>1 year ago:</strong> sciatica developed</p>
+                        <p><strong>6 months ago:</strong> clear of symptoms</p>
+                        <p><strong>Last month:</strong> recurrence of symptoms</p>
+                        <h4 class="font-bold mt-4 border-b pb-1">Patient's description of symptoms</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>pain located in <strong>(2)</strong> <input type="text" id="q2" class="oet-input" placeholder="..."></li>
+                            <li>pain described as <strong>(3)</strong> <input type="text" id="q3" class="oet-input" placeholder="..."></li>
+                            <li>loss of mobility</li>
+                            <li>problems sleeping</li>
+                            <li>mentions inability to <strong>(4)</strong> <input type="text" id="q4" class="oet-input" placeholder="..."> as most frustrating aspect</li>
+                            <li>general numbness in affected area</li>
+                            <li><strong>(5)</strong> <input type="text" id="q5" class="oet-input" placeholder="..."> sensation (calves)</li>
+                        </ul>
+                        <p><strong>Occupation:</strong> <strong>(6)</strong> <input type="text" id="q6" class="oet-input" placeholder="..."> (involves travel/some manual work)</p>
+                        <h4 class="font-bold mt-4 border-b pb-1">Initial treatment</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>prescribed NSAIDs</li>
+                            <li>application of <strong>(7)</strong> <input type="text" id="q7" class="oet-input" placeholder="..."> (provided some relief)</li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Referrals</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>(8)</strong> <input type="text" id="q8" class="oet-input" placeholder="..."> (briefly)</li>
+                            <li>sports injury specialist for manipulation and exercise programme</li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Further treatment</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>epidural injections</li>
+                            <li><strong>(9)</strong> <input type="text" id="q9" class="oet-input" placeholder="..."></li>
+                            <li>electrical impulses</li>
+                            <li>decided not to try <strong>(10)</strong> <input type="text" id="q10" class="oet-input" placeholder="..."></li>
+                            <li>patient attributes recovery to <strong>(11)</strong> <input type="text" id="q11" class="oet-input" placeholder="..."></li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Previous diagnosis</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>sciatica probably related to <strong>(12)</strong> <input type="text" id="q12" class="oet-input" placeholder="..."></li>
+                            <li>reports no history of pain in buttocks</li>
+                        </ul>
+                    </div>
                 </div>
-                <!-- Q26 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">26. You hear the manager of a care home for the elderly talking to the nursing staff. He says that errors in dispensing medication to patients usually result from...[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q26" value="A"> A. interruptions while calculating dosages.[cite: 1, 2]</label>
-                    <label class="radio-label"><input type="radio" name="q26" value="B"> B. a failure to check for patients' allergies.[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q26" value="C"> C. administering drugs late in the day.[cite: 1]</label>
+
+                <!-- Extract 2 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 13-24</h3>
+                    <p class="mb-4 text-sm font-semibold text-gray-500">You hear a consultant dermatologist talking to a patient called Jake Ventor. Complete the notes.</p>
+                    
+                    <div class="space-y-4 text-gray-800 leading-loose">
+                        <p><strong>Patient:</strong> Jake Ventor</p>
+                        <p><strong>Reason for referral:</strong> skin lesion</p>
+                        <h4 class="font-bold mt-4 border-b pb-1">Patient's description of condition</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>on the <strong>(13)</strong> <input type="text" id="q13" class="oet-input" placeholder="..."> of his left hand</li>
+                            <li>preceded by <strong>(14)</strong> <input type="text" id="q14" class="oet-input" placeholder="..."></li>
+                            <li>then <strong>(15)</strong> <input type="text" id="q15" class="oet-input" placeholder="..."> form and join up</li>
+                            <li>surrounding erythema</li>
+                            <li>GP describes appearance of lesion as <strong>(16)</strong> <input type="text" id="q16" class="oet-input" placeholder="..."></li>
+                            <li>normally resolves within two weeks</li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">History of condition</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>first experienced in 1990s when living in China</li>
+                            <li>also had a lesion on his <strong>(17)</strong> <input type="text" id="q17" class="oet-input" placeholder="..."> there - never recurred</li>
+                            <li>recurs regularly on different parts of his left hand</li>
+                            <li>not becoming more <strong>(18)</strong> <input type="text" id="q18" class="oet-input" placeholder="..."></li>
+                            <li>no apparent link to general state of health, <strong>(19)</strong> <input type="text" id="q19" class="oet-input" placeholder="..."> or stress</li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Medical history</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>(20)</strong> <input type="text" id="q20" class="oet-input" placeholder="..."> on lower back in 2006 - no sign of recurrence</li>
+                            <li>reports no history of <strong>(21)</strong> <input type="text" id="q21" class="oet-input" placeholder="..."></li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Information given</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>advised that <strong>(22)</strong> <input type="text" id="q22" class="oet-input" placeholder="..."> was unlikely to be effective</li>
+                            <li>told him to take care if the skin is <strong>(23)</strong> <input type="text" id="q23" class="oet-input" placeholder="..."></li>
+                        </ul>
+                        <h4 class="font-bold mt-4 border-b pb-1">Outcome</h4>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>says his quality of life isn't affected</li>
+                            <li>a <strong>(24)</strong> <input type="text" id="q24" class="oet-input" placeholder="..."> will be arranged</li>
+                        </ul>
+                    </div>
                 </div>
-                <!-- Q27 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">27. You hear part of a morning briefing on a hospital ward. What is the plan for the patient today?[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q27" value="A"> A. Her emotional state will be carefully observed.[cite: 1, 2]</label>
-                    <label class="radio-label"><input type="radio" name="q27" value="B"> B. She will be transferred to a more specialised unit.[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q27" value="C"> C. A social worker will come to see what help she needs.[cite: 1]</label>
+
+                <div id="result-part-a" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Miércoles (Part A): <span id="score-a" class="text-[#F56E1E] text-2xl">0</span> / 24</p>
                 </div>
-                <!-- Q28 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">28. You hear part of an ante-natal consultation at a GP practice. What does the patient want to know about?[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q28" value="A"> A. the advisability of a home birth[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q28" value="B"> B. ways of avoiding post-natal depression[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q28" value="C"> C. what painkillers might be available during labour[cite: 1, 2]</label>
-                </div>
-                <!-- Q29 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">29. You hear a trainee doctor telling his supervisor about a problem he had carrying out a procedure. The trainee feels the cause of the problem was...[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q29" value="A"> A. treatment administered previously.[cite: 1, 2]</label>
-                    <label class="radio-label"><input type="radio" name="q29" value="B"> B. the patient's negative reaction.[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q29" value="C"> C. inappropriate equipment.[cite: 1]</label>
-                </div>
-                <!-- Q30 -->
-                <div>
-                    <p class="font-bold mb-3 text-[#0A468C]">30. You hear a doctor talking to a teenage boy who has a painful wrist. The doctor wants to establish whether...[cite: 1]</p>
-                    <label class="radio-label"><input type="radio" name="q30" value="A"> A. a fracture may be misaligned.[cite: 1, 2]</label>
-                    <label class="radio-label"><input type="radio" name="q30" value="B"> B. the swelling may be due to a sprain.[cite: 1]</label>
-                    <label class="radio-label"><input type="radio" name="q30" value="C"> C. there may be more than one bone affected.[cite: 1]</label>
-                </div>
+
+                <button onclick="checkPartA()" id="btn-a" class="check-btn mt-6">Check Part A Answers</button>
             </div>
         </div>
 
-        <!-- PART C -->
-        <div class="card" id="part-c">
-            <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Part C[cite: 1]</h2>
-            <p class="mb-6 text-gray-600">In this part of the test, you'll hear two different extracts. In each extract, you'll hear health professionals talking about aspects of their work. Choose the answer (A, B or C) which fits best according to what you hear.[cite: 1]</p>
-
-            <!-- Extract 1 -->
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
-                <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 31-36[cite: 1]</h3>
-                <p class="mb-6 text-sm font-semibold text-gray-500">You hear an interview with a cardiologist called Dr Jack Robson, who's an expert on Chagas disease.[cite: 1]</p>
+        <!-- ================= JUEVES: PART B ================= -->
+        <div id="view-thursday" class="view-section">
+            <div class="card" id="part-b">
+                <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Jueves: Part B</h2>
+                <p class="mb-6 text-gray-600">Escucharás seis extractos en distintos entornos de salud. Escoge la respuesta correcta (A, B o C).</p>
 
                 <div class="space-y-8">
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">31. Why does Dr Robson regard Chagas as a neglected disease?[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q31" value="A"> A. because of the social groups it mainly affects[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q31" value="B"> B. because patients often don't realise they're infected[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q31" value="C"> C. because its impact is severe in a relatively small number of cases[cite: 1]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">25. You hear a nurse briefing her colleague about a patient. What does she warn her colleague about?</p>
+                        <label class="radio-label"><input type="radio" name="q25" value="A"> A. The patient is allergic to some types of antibiotics.</label>
+                        <label class="radio-label"><input type="radio" name="q25" value="B"> B. Care must be taken to prevent the patient from falling.</label>
+                        <label class="radio-label"><input type="radio" name="q25" value="C"> C. Oxygen may be needed.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">32. Dr Robson says that concerns over Chagas in the USA are the result of...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q32" value="A"> A. a rise in the number of people at risk of being infected with the disease.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q32" value="B"> B. a greater awareness of how many people there have the disease.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q32" value="C"> C. an increased prevalence of the insect which carries the disease.[cite: 1]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">26. You hear the manager of a care home for the elderly talking to the nursing staff. He says that errors in dispensing medication to patients usually result from...</p>
+                        <label class="radio-label"><input type="radio" name="q26" value="A"> A. interruptions while calculating dosages.</label>
+                        <label class="radio-label"><input type="radio" name="q26" value="B"> B. a failure to check for patients' allergies.</label>
+                        <label class="radio-label"><input type="radio" name="q26" value="C"> C. administering drugs late in the day.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">33. A patient called Marisol recently asked Dr Robson to test her for Chagas because...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q33" value="A"> A. she was worried about the health of any children she might give birth to.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q33" value="B"> B. she wanted to know whether it was safe for her to donate blood.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q33" value="C"> C. she thought she had symptoms associated with the disease.[cite: 1]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">27. You hear part of a morning briefing on a hospital ward. What is the plan for the patient today?</p>
+                        <label class="radio-label"><input type="radio" name="q27" value="A"> A. Her emotional state will be carefully observed.</label>
+                        <label class="radio-label"><input type="radio" name="q27" value="B"> B. She will be transferred to a more specialised unit.</label>
+                        <label class="radio-label"><input type="radio" name="q27" value="C"> C. A social worker will come to see what help she needs.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">34. What problem does Dr Robson identify in the case of a patient called Jennifer?[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q34" value="A"> A. an unwillingness to accept that she was ill[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q34" value="B"> B. an inability to tolerate the prescribed medicine[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q34" value="C"> C. a delay between the initial infection and treatment[cite: 1, 2]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">28. You hear part of an ante-natal consultation at a GP practice. What does the patient want to know about?</p>
+                        <label class="radio-label"><input type="radio" name="q28" value="A"> A. the advisability of a home birth</label>
+                        <label class="radio-label"><input type="radio" name="q28" value="B"> B. ways of avoiding post-natal depression</label>
+                        <label class="radio-label"><input type="radio" name="q28" value="C"> C. what painkillers might be available during labour</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">35. What does Dr Robson say about his patient called Juan?[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q35" value="A"> A. The development of his illness was typical of people with Chagas.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q35" value="B"> B. An incorrect initial diagnosis resulted in his condition worsening.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q35" value="C"> C. The medication he took was largely ineffective.[cite: 1]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">29. You hear a trainee doctor telling his supervisor about a problem he had carrying out a procedure. The trainee feels the cause of the problem was...</p>
+                        <label class="radio-label"><input type="radio" name="q29" value="A"> A. treatment administered previously.</label>
+                        <label class="radio-label"><input type="radio" name="q29" value="B"> B. the patient's negative reaction.</label>
+                        <label class="radio-label"><input type="radio" name="q29" value="C"> C. inappropriate equipment.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">36. Dr Robson thinks the short-term priority in the fight against Chagas is to...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q36" value="A"> A. increase efforts to eliminate the insects which carry the parasite.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q36" value="B"> B. produce medication in a form that is suitable for children.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q36" value="C"> C. design and manufacture a viable vaccine.[cite: 1]</label>
+                        <p class="font-bold mb-3 text-[#0A468C]">30. You hear a doctor talking to a teenage boy who has a painful wrist. The doctor wants to establish whether...</p>
+                        <label class="radio-label"><input type="radio" name="q30" value="A"> A. a fracture may be misaligned.</label>
+                        <label class="radio-label"><input type="radio" name="q30" value="B"> B. the swelling may be due to a sprain.</label>
+                        <label class="radio-label"><input type="radio" name="q30" value="C"> C. there may be more than one bone affected.</label>
                     </div>
                 </div>
-            </div>
 
-            <!-- Extract 2 -->
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 37-42[cite: 1]</h3>
-                <p class="mb-6 text-sm font-semibold text-gray-500">You hear an occupational therapist called Anna Matthews giving a presentation to a group of trainee doctors.[cite: 1]</p>
-
-                <div class="space-y-8">
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">37. Anna says that the main focus of her work as an occupational therapist is...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q37" value="A"> A. designing activities to meet the changing needs of each patient.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q37" value="B"> B. making sure she supports patients in reaching their goals.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q37" value="C"> C. being flexible enough to deal with patients of all ages.[cite: 1]</label>
-                    </div>
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">38. When Anna first met the patient called Ted, she was...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q38" value="A"> A. unable to identify completely with his attitude.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q38" value="B"> B. optimistic that he would regain full mobility.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q38" value="C"> C. mainly concerned about his state of mind.[cite: 1, 2]</label>
-                    </div>
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">39. Because Ted seemed uninterested in treatment, Anna initially decided to focus on...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q39" value="A"> A. what he could achieve most easily.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q39" value="B"> B. allowing him to try and help himself.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q39" value="C"> C. making him come to terms with his injuries.[cite: 1]</label>
-                    </div>
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">40. Anna feels that, in the long term, her therapy helped Ted because...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q40" value="A"> A. it led him to become less emotional.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q40" value="B"> B. it made him appreciate the need for patience.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q40" value="C"> C. it showed him there was something to work towards.[cite: 1, 2]</label>
-                    </div>
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">41. Anna describes the day Ted had his plaster casts removed in order to...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q41" value="A"> A. demonstrate how slow any progress can seem to patients.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q41" value="B"> B. illustrate the problems caused by raising a patient's hopes.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q41" value="C"> C. give advice on what to do when patients experience setbacks.[cite: 1]</label>
-                    </div>
-                    <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">42. Anna suggests that when patients like Ted recover enough to go home, they are often...[cite: 1]</p>
-                        <label class="radio-label"><input type="radio" name="q42" value="A"> A. too ambitious in what they try to achieve initially.[cite: 1]</label>
-                        <label class="radio-label"><input type="radio" name="q42" value="B"> B. able to build on the work of the occupational therapist.[cite: 1, 2]</label>
-                        <label class="radio-label"><input type="radio" name="q42" value="C"> C. held back by the over-protective attitude of family members.[cite: 1]</label>
-                    </div>
+                <div id="result-part-b" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Jueves (Part B): <span id="score-b" class="text-[#F56E1E] text-2xl">0</span> / 6</p>
                 </div>
+
+                <button onclick="checkPartB()" id="btn-b" class="check-btn mt-6">Check Part B Answers</button>
             </div>
         </div>
 
-        <!-- RESULT PANEL -->
-        <div id="result-panel" style="display: none;" class="bg-white p-8 rounded-xl shadow-xl border-t-8 border-[#0A468C] mb-8 text-center">
-            <h2 class="text-3xl font-extrabold font-titulares mb-2 text-[#0A468C]">Test Completed, Jose & Nat!</h2>
-            <div class="bg-gray-50 py-4 rounded-lg inline-block px-10 mb-6 border">
-                <span class="text-5xl font-black text-[#F56E1E]" id="result-score"></span>
-                <span class="text-2xl text-gray-500 font-bold" id="result-total">/ 42</span>
-            </div>
-            <p class="text-gray-600 font-semibold mb-4">Review your answers carefully. OET requires extreme precision in Part A!</p>
-        </div>
+        <!-- ================= VIERNES: PART C ================= -->
+        <div id="view-friday" class="view-section">
+            <div class="card" id="part-c">
+                <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Viernes: Part C</h2>
+                <p class="mb-6 text-gray-600">Escucharás dos extractos largos con entrevistas o presentaciones de profesionales de salud. Responde a las preguntas eligiendo A, B o C.</p>
 
-        <button onclick="submitOETMock()" id="btn-submit" class="w-full bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold text-2xl py-5 rounded-xl shadow-lg transition mt-4 font-titulares uppercase">
-            Submit OET Test
-        </button>
+                <!-- Extract 1 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 31-36</h3>
+                    <p class="mb-6 text-sm font-semibold text-gray-500">You hear an interview with a cardiologist called Dr Jack Robson, who's an expert on Chagas disease.</p>
+
+                    <div class="space-y-8">
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">31. Why does Dr Robson regard Chagas as a neglected disease?</p>
+                            <label class="radio-label"><input type="radio" name="q31" value="A"> A. because of the social groups it mainly affects</label>
+                            <label class="radio-label"><input type="radio" name="q31" value="B"> B. because patients often don't realise they're infected</label>
+                            <label class="radio-label"><input type="radio" name="q31" value="C"> C. because its impact is severe in a relatively small number of cases</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">32. Dr Robson says that concerns over Chagas in the USA are the result of...</p>
+                            <label class="radio-label"><input type="radio" name="q32" value="A"> A. a rise in the number of people at risk of being infected with the disease.</label>
+                            <label class="radio-label"><input type="radio" name="q32" value="B"> B. a greater awareness of how many people there have the disease.</label>
+                            <label class="radio-label"><input type="radio" name="q32" value="C"> C. an increased prevalence of the insect which carries the disease.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">33. A patient called Marisol recently asked Dr Robson to test her for Chagas because...</p>
+                            <label class="radio-label"><input type="radio" name="q33" value="A"> A. she was worried about the health of any children she might give birth to.</label>
+                            <label class="radio-label"><input type="radio" name="q33" value="B"> B. she wanted to know whether it was safe for her to donate blood.</label>
+                            <label class="radio-label"><input type="radio" name="q33" value="C"> C. she thought she had symptoms associated with the disease.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">34. What problem does Dr Robson identify in the case of a patient called Jennifer?</p>
+                            <label class="radio-label"><input type="radio" name="q34" value="A"> A. an unwillingness to accept that she was ill</label>
+                            <label class="radio-label"><input type="radio" name="q34" value="B"> B. an inability to tolerate the prescribed medicine</label>
+                            <label class="radio-label"><input type="radio" name="q34" value="C"> C. a delay between the initial infection and treatment</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">35. What does Dr Robson say about his patient called Juan?</p>
+                            <label class="radio-label"><input type="radio" name="q35" value="A"> A. The development of his illness was typical of people with Chagas.</label>
+                            <label class="radio-label"><input type="radio" name="q35" value="B"> B. An incorrect initial diagnosis resulted in his condition worsening.</label>
+                            <label class="radio-label"><input type="radio" name="q35" value="C"> C. The medication he took was largely ineffective.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">36. Dr Robson thinks the short-term priority in the fight against Chagas is to...</p>
+                            <label class="radio-label"><input type="radio" name="q36" value="A"> A. increase efforts to eliminate the insects which carry the parasite.</label>
+                            <label class="radio-label"><input type="radio" name="q36" value="B"> B. produce medication in a form that is suitable for children.</label>
+                            <label class="radio-label"><input type="radio" name="q36" value="C"> C. design and manufacture a viable vaccine.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extract 2 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 37-42</h3>
+                    <p class="mb-6 text-sm font-semibold text-gray-500">You hear an occupational therapist called Anna Matthews giving a presentation to a group of trainee doctors.</p>
+
+                    <div class="space-y-8">
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">37. Anna says that the main focus of her work as an occupational therapist is...</p>
+                            <label class="radio-label"><input type="radio" name="q37" value="A"> A. designing activities to meet the changing needs of each patient.</label>
+                            <label class="radio-label"><input type="radio" name="q37" value="B"> B. making sure she supports patients in reaching their goals.</label>
+                            <label class="radio-label"><input type="radio" name="q37" value="C"> C. being flexible enough to deal with patients of all ages.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">38. When Anna first met the patient called Ted, she was...</p>
+                            <label class="radio-label"><input type="radio" name="q38" value="A"> A. unable to identify completely with his attitude.</label>
+                            <label class="radio-label"><input type="radio" name="q38" value="B"> B. optimistic that he would regain full mobility.</label>
+                            <label class="radio-label"><input type="radio" name="q38" value="C"> C. mainly concerned about his state of mind.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">39. Because Ted seemed uninterested in treatment, Anna initially decided to focus on...</p>
+                            <label class="radio-label"><input type="radio" name="q39" value="A"> A. what he could achieve most easily.</label>
+                            <label class="radio-label"><input type="radio" name="q39" value="B"> B. allowing him to try and help himself.</label>
+                            <label class="radio-label"><input type="radio" name="q39" value="C"> C. making him come to terms with his injuries.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">40. Anna feels that, in the long term, her therapy helped Ted because...</p>
+                            <label class="radio-label"><input type="radio" name="q40" value="A"> A. it led him to become less emotional.</label>
+                            <label class="radio-label"><input type="radio" name="q40" value="B"> B. it made him appreciate the need for patience.</label>
+                            <label class="radio-label"><input type="radio" name="q40" value="C"> C. it showed him there was something to work towards.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">41. Anna describes the day Ted had his plaster casts removed in order to...</p>
+                            <label class="radio-label"><input type="radio" name="q41" value="A"> A. demonstrate how slow any progress can seem to patients.</label>
+                            <label class="radio-label"><input type="radio" name="q41" value="B"> B. illustrate the problems caused by raising a patient's hopes.</label>
+                            <label class="radio-label"><input type="radio" name="q41" value="C"> C. give advice on what to do when patients experience setbacks.</label>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-3 text-[#0A468C]">42. Anna suggests that when patients like Ted recover enough to go home, they are often...</p>
+                            <label class="radio-label"><input type="radio" name="q42" value="A"> A. too ambitious in what they try to achieve initially.</label>
+                            <label class="radio-label"><input type="radio" name="q42" value="B"> B. able to build on the work of the occupational therapist.</label>
+                            <label class="radio-label"><input type="radio" name="q42" value="C"> C. held back by the over-protective attitude of family members.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="result-part-c" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Viernes (Part C): <span id="score-c" class="text-[#F56E1E] text-2xl">0</span> / 12</p>
+                </div>
+
+                <button onclick="checkPartC()" id="btn-c" class="check-btn mt-6">Check Part C Answers</button>
+            </div>
+        </div>
 
     </main>
 
     <script>
-        // Official Answers extracted from Answer Key[cite: 2]
+        // Tab switching logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Official Answers
         const partAAnswers = {
             q1: ['heavy suitcase', 'suitcase'],
             q2: ['his right leg', 'right leg'],
@@ -373,35 +475,10 @@
             q37: 'B', q38: 'C', q39: 'A', q40: 'C', q41: 'A', q42: 'B'
         };
 
-        function submitOETMock() {
+        // Logic for evaluating multiple choice (Parts B & C)
+        function evaluateMCQ(start, end) {
             let score = 0;
-
-            // Eval Part A
-            for (let i = 1; i <= 24; i++) {
-                const el = document.getElementById('q' + i);
-                const val = el.value.trim().toLowerCase();
-                el.disabled = true;
-
-                const accepted = partAAnswers['q' + i].map(a => a.toLowerCase());
-                
-                let feedback = document.createElement('span');
-                feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
-
-                if (accepted.includes(val)) {
-                    el.classList.add('correct-input');
-                    feedback.classList.add("bg-green-100", "text-green-700");
-                    feedback.innerText = "✓";
-                    score++;
-                } else {
-                    el.classList.add('incorrect-input');
-                    feedback.classList.add("bg-red-100", "text-red-700");
-                    feedback.innerText = "✗ Key: " + partAAnswers['q' + i][0];
-                }
-                el.parentNode.insertBefore(feedback, el.nextSibling);
-            }
-
-            // Eval Parts B & C
-            for (let i = 25; i <= 42; i++) {
+            for (let i = start; i <= end; i++) {
                 const correctVal = partB_C_Answers['q' + i];
                 const selected = document.querySelector(`input[name="q${i}"]:checked`);
                 
@@ -429,16 +506,53 @@
                 if (correctEl && (!selected || selected.value !== correctVal)) {
                     correctEl.parentElement.style.borderColor = "#10b981";
                     correctEl.parentElement.style.background = "#d1fae5";
-                    correctEl.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Key[cite: 2]</span>`);
+                    correctEl.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Correct</span>`);
                 }
             }
+            return score;
+        }
 
-            // UI Updates
-            document.getElementById('btn-submit').style.display = 'none';
-            document.getElementById('result-panel').style.display = 'block';
-            document.getElementById('result-score').innerText = score;
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function checkPartA() {
+            let score = 0;
+            for (let i = 1; i <= 24; i++) {
+                const el = document.getElementById('q' + i);
+                const val = el.value.trim().toLowerCase();
+                el.disabled = true;
+
+                const accepted = partAAnswers['q' + i].map(a => a.toLowerCase());
+                
+                let feedback = document.createElement('span');
+                feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
+
+                if (accepted.includes(val)) {
+                    el.classList.add('correct-input');
+                    feedback.classList.add("bg-green-100", "text-green-700");
+                    feedback.innerText = "✓";
+                    score++;
+                } else {
+                    el.classList.add('incorrect-input');
+                    feedback.classList.add("bg-red-100", "text-red-700");
+                    feedback.innerText = "✗ Key: " + partAAnswers['q' + i][0];
+                }
+                el.parentNode.insertBefore(feedback, el.nextSibling);
+            }
+            document.getElementById('btn-a').style.display = 'none';
+            document.getElementById('result-part-a').classList.remove('hidden');
+            document.getElementById('score-a').innerText = score;
+        }
+
+        function checkPartB() {
+            let score = evaluateMCQ(25, 30);
+            document.getElementById('btn-b').style.display = 'none';
+            document.getElementById('result-part-b').classList.remove('hidden');
+            document.getElementById('score-b').innerText = score;
+        }
+
+        function checkPartC() {
+            let score = evaluateMCQ(31, 42);
+            document.getElementById('btn-c').style.display = 'none';
+            document.getElementById('result-part-c').classList.remove('hidden');
+            document.getElementById('score-c').innerText = score;
         }
     </script>
 </body>
