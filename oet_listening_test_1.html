@@ -87,17 +87,26 @@
             font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
         .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
+
+        /* Timestamp Buttons */
+        .time-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: #eef2f6; color: var(--azul-primario); border: 1px solid var(--azul-claro);
+            padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .time-btn:hover { background: var(--azul-primario); color: white; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen pb-10">
 
-    <!-- HEADER PARA JOSE & NAT -->
+    <!-- HEADER -->
     <div class="bg-[#0A468C] text-white py-10 px-6 text-center shadow-md">
         <h1 class="text-3xl md:text-4xl font-extrabold font-titulares uppercase mb-2">OET Listening <span class="text-[#F56E1E]">Mock Test 1</span></h1>
         <p class="text-blue-200 text-lg font-bold">Welcome Jose & Nat! 4-Day Challenge</p>
     </div>
 
-    <!-- TABS DE DÍAS -->
+    <!-- TABS -->
     <div class="filter-section">
         <div class="filter-container">
             <button class="filter-btn active" onclick="switchTab('tuesday')" id="tab-tuesday">
@@ -115,17 +124,18 @@
         </div>
     </div>
 
-    <!-- REPRODUCTOR DE AUDIO STICKY -->
+    <!-- AUDIO STICKY -->
     <div class="sticky-audio">
+        <!-- El formato %20 reemplaza los espacios para evitar errores 404 -->
         <audio id="test-audio" controls class="w-full max-w-md mx-auto h-10">
-            <source src="audios/OET_Sample_Test_1.mp3" type="audio/mpeg">
+            <source src="audios/OET%20Sample%20Test%201.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
     </div>
 
     <main class="max-w-4xl mx-auto p-4 md:p-6 w-full mt-4">
 
-        <!-- ================= MARTES: TIPS Y GUÍA ================= -->
+        <!-- ================= MARTES ================= -->
         <div id="view-tuesday" class="view-section active">
             <div class="card">
                 <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">OET Listening: Essential Guide</h2>
@@ -135,86 +145,78 @@
                     <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
                         <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">edit_note</span> Part A (Consultations)</h3>
                         <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
-                            <li><strong>Predecir:</strong> Usa el tiempo de lectura (30s) para predecir qué tipo de palabra falta (un síntoma, un medicamento, una profesión, un tratamiento).</li>
-                            <li><strong>Escucha las señales:</strong> Los títulos en negrita en el papel te indican exactamente dónde estás en el audio. Si el paciente cambia de tema, mueve tu mirada a la siguiente sección.</li>
-                            <li><strong>Usa las mismas palabras:</strong> No parafrasees. Debes escribir exactamente la palabra o frase corta que escuches en el audio.</li>
+                            <li><strong>Predecir:</strong> Usa el tiempo de lectura (30s) para predecir qué tipo de palabra falta (un síntoma, medicamento, etc).</li>
+                            <li><strong>Escucha las señales:</strong> Los títulos en negrita en el papel te indican exactamente dónde estás en el audio.</li>
+                            <li><strong>Usa las mismas palabras:</strong> No parafrasees. Escribe exactamente la palabra o frase corta que escuches.</li>
                         </ul>
                     </div>
 
                     <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
                         <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">forum</span> Part B (Workplace)</h3>
                         <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
-                            <li><strong>Lee el contexto:</strong> La frase introductoria (ej. "You hear a nurse briefing...") te da el contexto vital. Identifica los roles de los hablantes.</li>
-                            <li><strong>Busca la idea principal:</strong> A diferencia de la parte A, aquí debes entender el propósito general, la razón de la acción o el acuerdo final entre los profesionales.</li>
-                            <li><strong>Cuidado con los distractores:</strong> Los hablantes pueden mencionar opciones A, B y C, pero solo una responde la pregunta directamente.</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-100 md:col-span-2">
-                        <h3 class="font-bold text-[#F56E1E] text-lg mb-2 flex items-center gap-2"><span class="material-icons-round">record_voice_over</span> Part C (Presentations)</h3>
-                        <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
-                            <li><strong>Sigue la estructura:</strong> Las preguntas (6 por extracto) siguen el mismo orden cronológico que el audio. </li>
-                            <li><strong>Enfócate en la actitud/opinión:</strong> Muchas preguntas te pedirán identificar qué opina el hablante sobre un tema, o por qué da un ejemplo específico. Presta atención al tono y verbos de opinión.</li>
-                            <li><strong>No te estanques:</strong> Si pierdes una respuesta, déjala ir. El orador usará frases de transición ("Moving on to...", "Another case is...") que te indicarán que pasó a la siguiente pregunta.</li>
+                            <li><strong>Lee el contexto:</strong> Identifica los roles de los hablantes antes de escuchar.</li>
+                            <li><strong>Busca la idea principal:</strong> Entiende el propósito general o acuerdo final.</li>
+                            <li><strong>Cuidado con los distractores:</strong> Pueden mencionar opciones A, B y C, pero solo una responde la pregunta.</li>
                         </ul>
                     </div>
                 </div>
-
                 <div class="mt-8 text-center">
                     <button onclick="switchTab('wednesday')" class="check-btn">Estoy listo para empezar el Miércoles</button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= MIÉRCOLES: PART A ================= -->
+        <!-- ================= MIÉRCOLES ================= -->
         <div id="view-wednesday" class="view-section">
             <div class="card" id="part-a">
                 <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Miércoles: Part A</h2>
-                <p class="mb-6 text-gray-600">En esta parte escucharás dos extractos diferentes de profesionales de la salud hablando con pacientes. Completa las notas con las palabras exactas que escuches.</p>
+                <p class="mb-4 text-gray-600">Completa las notas con las palabras exactas. Usa los botones para ir al tiempo exacto del audio.</p>
 
                 <!-- Extract 1 -->
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
-                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 1-12</h3>
-                    <p class="mb-4 text-sm font-semibold text-gray-500">You hear a physiotherapist talking to a new patient called Ray Sands. Complete the notes.</p>
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h3 class="text-xl font-bold text-[#F56E1E]">Extract 1: Questions 1-12</h3>
+                        <button onclick="seekAudio(35)" class="time-btn"><span class="material-icons-round text-sm">play_arrow</span> Escuchar (0:35 a 4:30)</button>
+                    </div>
                     
                     <div class="space-y-4 text-gray-800 leading-loose">
                         <p><strong>Patient:</strong> Ray Sands</p>
-                        <p><strong>18 months ago:</strong> back injury sustained lifting <strong>(1)</strong> <input type="text" id="q1" class="oet-input" placeholder="..."></p>
+                        <p><strong>18 months ago:</strong> back injury sustained lifting <strong>(1)</strong> <input type="text" id="q1" class="oet-input"></p>
                         <p><strong>1 year ago:</strong> sciatica developed</p>
                         <p><strong>6 months ago:</strong> clear of symptoms</p>
                         <p><strong>Last month:</strong> recurrence of symptoms</p>
                         <h4 class="font-bold mt-4 border-b pb-1">Patient's description of symptoms</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li>pain located in <strong>(2)</strong> <input type="text" id="q2" class="oet-input" placeholder="..."></li>
-                            <li>pain described as <strong>(3)</strong> <input type="text" id="q3" class="oet-input" placeholder="..."></li>
+                            <li>pain located in <strong>(2)</strong> <input type="text" id="q2" class="oet-input"></li>
+                            <li>pain described as <strong>(3)</strong> <input type="text" id="q3" class="oet-input"></li>
                             <li>loss of mobility</li>
                             <li>problems sleeping</li>
-                            <li>mentions inability to <strong>(4)</strong> <input type="text" id="q4" class="oet-input" placeholder="..."> as most frustrating aspect</li>
+                            <li>mentions inability to <strong>(4)</strong> <input type="text" id="q4" class="oet-input"> as most frustrating aspect</li>
                             <li>general numbness in affected area</li>
-                            <li><strong>(5)</strong> <input type="text" id="q5" class="oet-input" placeholder="..."> sensation (calves)</li>
+                            <li><strong>(5)</strong> <input type="text" id="q5" class="oet-input"> sensation (calves)</li>
                         </ul>
-                        <p><strong>Occupation:</strong> <strong>(6)</strong> <input type="text" id="q6" class="oet-input" placeholder="..."> (involves travel/some manual work)</p>
+                        <p><strong>Occupation:</strong> <strong>(6)</strong> <input type="text" id="q6" class="oet-input"> (involves travel/some manual work)</p>
                         <h4 class="font-bold mt-4 border-b pb-1">Initial treatment</h4>
                         <ul class="list-disc pl-6 space-y-2">
                             <li>prescribed NSAIDs</li>
-                            <li>application of <strong>(7)</strong> <input type="text" id="q7" class="oet-input" placeholder="..."> (provided some relief)</li>
+                            <li>application of <strong>(7)</strong> <input type="text" id="q7" class="oet-input"> (provided some relief)</li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Referrals</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li><strong>(8)</strong> <input type="text" id="q8" class="oet-input" placeholder="..."> (briefly)</li>
+                            <li><strong>(8)</strong> <input type="text" id="q8" class="oet-input"> (briefly)</li>
                             <li>sports injury specialist for manipulation and exercise programme</li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Further treatment</h4>
                         <ul class="list-disc pl-6 space-y-2">
                             <li>epidural injections</li>
-                            <li><strong>(9)</strong> <input type="text" id="q9" class="oet-input" placeholder="..."></li>
+                            <li><strong>(9)</strong> <input type="text" id="q9" class="oet-input"></li>
                             <li>electrical impulses</li>
-                            <li>decided not to try <strong>(10)</strong> <input type="text" id="q10" class="oet-input" placeholder="..."></li>
-                            <li>patient attributes recovery to <strong>(11)</strong> <input type="text" id="q11" class="oet-input" placeholder="..."></li>
+                            <li>decided not to try <strong>(10)</strong> <input type="text" id="q10" class="oet-input"></li>
+                            <li>patient attributes recovery to <strong>(11)</strong> <input type="text" id="q11" class="oet-input"></li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Previous diagnosis</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li>sciatica probably related to <strong>(12)</strong> <input type="text" id="q12" class="oet-input" placeholder="..."></li>
+                            <li>sciatica probably related to <strong>(12)</strong> <input type="text" id="q12" class="oet-input"></li>
                             <li>reports no history of pain in buttocks</li>
                         </ul>
                     </div>
@@ -222,60 +224,64 @@
 
                 <!-- Extract 2 -->
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 13-24</h3>
-                    <p class="mb-4 text-sm font-semibold text-gray-500">You hear a consultant dermatologist talking to a patient called Jake Ventor. Complete the notes.</p>
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h3 class="text-xl font-bold text-[#F56E1E]">Extract 2: Questions 13-24</h3>
+                        <button onclick="seekAudio(290)" class="time-btn"><span class="material-icons-round text-sm">play_arrow</span> Escuchar (4:50 a 8:40)</button>
+                    </div>
                     
                     <div class="space-y-4 text-gray-800 leading-loose">
                         <p><strong>Patient:</strong> Jake Ventor</p>
                         <p><strong>Reason for referral:</strong> skin lesion</p>
                         <h4 class="font-bold mt-4 border-b pb-1">Patient's description of condition</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li>on the <strong>(13)</strong> <input type="text" id="q13" class="oet-input" placeholder="..."> of his left hand</li>
-                            <li>preceded by <strong>(14)</strong> <input type="text" id="q14" class="oet-input" placeholder="..."></li>
-                            <li>then <strong>(15)</strong> <input type="text" id="q15" class="oet-input" placeholder="..."> form and join up</li>
+                            <li>on the <strong>(13)</strong> <input type="text" id="q13" class="oet-input"> of his left hand</li>
+                            <li>preceded by <strong>(14)</strong> <input type="text" id="q14" class="oet-input"></li>
+                            <li>then <strong>(15)</strong> <input type="text" id="q15" class="oet-input"> form and join up</li>
                             <li>surrounding erythema</li>
-                            <li>GP describes appearance of lesion as <strong>(16)</strong> <input type="text" id="q16" class="oet-input" placeholder="..."></li>
+                            <li>GP describes appearance of lesion as <strong>(16)</strong> <input type="text" id="q16" class="oet-input"></li>
                             <li>normally resolves within two weeks</li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">History of condition</h4>
                         <ul class="list-disc pl-6 space-y-2">
                             <li>first experienced in 1990s when living in China</li>
-                            <li>also had a lesion on his <strong>(17)</strong> <input type="text" id="q17" class="oet-input" placeholder="..."> there - never recurred</li>
+                            <li>also had a lesion on his <strong>(17)</strong> <input type="text" id="q17" class="oet-input"> there - never recurred</li>
                             <li>recurs regularly on different parts of his left hand</li>
-                            <li>not becoming more <strong>(18)</strong> <input type="text" id="q18" class="oet-input" placeholder="..."></li>
-                            <li>no apparent link to general state of health, <strong>(19)</strong> <input type="text" id="q19" class="oet-input" placeholder="..."> or stress</li>
+                            <li>not becoming more <strong>(18)</strong> <input type="text" id="q18" class="oet-input"></li>
+                            <li>no apparent link to general state of health, <strong>(19)</strong> <input type="text" id="q19" class="oet-input"> or stress</li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Medical history</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li><strong>(20)</strong> <input type="text" id="q20" class="oet-input" placeholder="..."> on lower back in 2006 - no sign of recurrence</li>
-                            <li>reports no history of <strong>(21)</strong> <input type="text" id="q21" class="oet-input" placeholder="..."></li>
+                            <li><strong>(20)</strong> <input type="text" id="q20" class="oet-input"> on lower back in 2006 - no sign of recurrence</li>
+                            <li>reports no history of <strong>(21)</strong> <input type="text" id="q21" class="oet-input"></li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Information given</h4>
                         <ul class="list-disc pl-6 space-y-2">
-                            <li>advised that <strong>(22)</strong> <input type="text" id="q22" class="oet-input" placeholder="..."> was unlikely to be effective</li>
-                            <li>told him to take care if the skin is <strong>(23)</strong> <input type="text" id="q23" class="oet-input" placeholder="..."></li>
+                            <li>advised that <strong>(22)</strong> <input type="text" id="q22" class="oet-input"> was unlikely to be effective</li>
+                            <li>told him to take care if the skin is <strong>(23)</strong> <input type="text" id="q23" class="oet-input"></li>
                         </ul>
                         <h4 class="font-bold mt-4 border-b pb-1">Outcome</h4>
                         <ul class="list-disc pl-6 space-y-2">
                             <li>says his quality of life isn't affected</li>
-                            <li>a <strong>(24)</strong> <input type="text" id="q24" class="oet-input" placeholder="..."> will be arranged</li>
+                            <li>a <strong>(24)</strong> <input type="text" id="q24" class="oet-input"> will be arranged</li>
                         </ul>
                     </div>
                 </div>
 
                 <div id="result-part-a" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
-                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Miércoles (Part A): <span id="score-a" class="text-[#F56E1E] text-2xl">0</span> / 24</p>
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Miércoles: <span id="score-a" class="text-[#F56E1E] text-2xl">0</span> / 24</p>
                 </div>
-
-                <button onclick="checkPartA()" id="btn-a" class="check-btn mt-6">Check Part A Answers</button>
+                <button onclick="checkPartA()" id="btn-a" class="check-btn mt-6">Check Part A</button>
             </div>
         </div>
 
-        <!-- ================= JUEVES: PART B ================= -->
+        <!-- ================= JUEVES ================= -->
         <div id="view-thursday" class="view-section">
             <div class="card" id="part-b">
-                <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Jueves: Part B</h2>
-                <p class="mb-6 text-gray-600">Escucharás seis extractos en distintos entornos de salud. Escoge la respuesta correcta (A, B o C).</p>
+                <div class="flex justify-between items-center mb-4 border-b-2 border-gray-100 pb-2">
+                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares">Jueves: Part B</h2>
+                    <button onclick="seekAudio(535)" class="time-btn"><span class="material-icons-round text-sm">play_arrow</span> Escuchar (8:55 a 16:00)</button>
+                </div>
+                <p class="mb-6 text-gray-600">Escucharás seis extractos cortos. Escoge la respuesta correcta (A, B o C).</p>
 
                 <div class="space-y-8">
                     <div>
@@ -285,7 +291,7 @@
                         <label class="radio-label"><input type="radio" name="q25" value="C"> C. Oxygen may be needed.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">26. You hear the manager of a care home for the elderly talking to the nursing staff. He says that errors in dispensing medication to patients usually result from...</p>
+                        <p class="font-bold mb-3 text-[#0A468C]">26. You hear the manager of a care home for the elderly talking to the nursing staff...</p>
                         <label class="radio-label"><input type="radio" name="q26" value="A"> A. interruptions while calculating dosages.</label>
                         <label class="radio-label"><input type="radio" name="q26" value="B"> B. a failure to check for patients' allergies.</label>
                         <label class="radio-label"><input type="radio" name="q26" value="C"> C. administering drugs late in the day.</label>
@@ -303,13 +309,13 @@
                         <label class="radio-label"><input type="radio" name="q28" value="C"> C. what painkillers might be available during labour</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">29. You hear a trainee doctor telling his supervisor about a problem he had carrying out a procedure. The trainee feels the cause of the problem was...</p>
+                        <p class="font-bold mb-3 text-[#0A468C]">29. You hear a trainee doctor telling his supervisor about a problem...</p>
                         <label class="radio-label"><input type="radio" name="q29" value="A"> A. treatment administered previously.</label>
                         <label class="radio-label"><input type="radio" name="q29" value="B"> B. the patient's negative reaction.</label>
                         <label class="radio-label"><input type="radio" name="q29" value="C"> C. inappropriate equipment.</label>
                     </div>
                     <div>
-                        <p class="font-bold mb-3 text-[#0A468C]">30. You hear a doctor talking to a teenage boy who has a painful wrist. The doctor wants to establish whether...</p>
+                        <p class="font-bold mb-3 text-[#0A468C]">30. You hear a doctor talking to a teenage boy who has a painful wrist...</p>
                         <label class="radio-label"><input type="radio" name="q30" value="A"> A. a fracture may be misaligned.</label>
                         <label class="radio-label"><input type="radio" name="q30" value="B"> B. the swelling may be due to a sprain.</label>
                         <label class="radio-label"><input type="radio" name="q30" value="C"> C. there may be more than one bone affected.</label>
@@ -317,25 +323,25 @@
                 </div>
 
                 <div id="result-part-b" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
-                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Jueves (Part B): <span id="score-b" class="text-[#F56E1E] text-2xl">0</span> / 6</p>
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Jueves: <span id="score-b" class="text-[#F56E1E] text-2xl">0</span> / 6</p>
                 </div>
-
-                <button onclick="checkPartB()" id="btn-b" class="check-btn mt-6">Check Part B Answers</button>
+                <button onclick="checkPartB()" id="btn-b" class="check-btn mt-6">Check Part B</button>
             </div>
         </div>
 
-        <!-- ================= VIERNES: PART C ================= -->
+        <!-- ================= VIERNES ================= -->
         <div id="view-friday" class="view-section">
             <div class="card" id="part-c">
                 <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-2 border-b-2 border-gray-100 pb-2">Viernes: Part C</h2>
-                <p class="mb-6 text-gray-600">Escucharás dos extractos largos con entrevistas o presentaciones de profesionales de salud. Responde a las preguntas eligiendo A, B o C.</p>
+                <p class="mb-6 text-gray-600">Escucharás dos presentaciones largas. Responde a las preguntas eligiendo A, B o C.</p>
 
                 <!-- Extract 1 -->
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
-                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 1: Questions 31-36</h3>
-                    <p class="mb-6 text-sm font-semibold text-gray-500">You hear an interview with a cardiologist called Dr Jack Robson, who's an expert on Chagas disease.</p>
-
-                    <div class="space-y-8">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h3 class="text-xl font-bold text-[#F56E1E]">Extract 1: Questions 31-36</h3>
+                        <button onclick="seekAudio(970)" class="time-btn"><span class="material-icons-round text-sm">play_arrow</span> Escuchar (16:10 a 24:00)</button>
+                    </div>
+                    <div class="space-y-8 mt-4">
                         <div>
                             <p class="font-bold mb-3 text-[#0A468C]">31. Why does Dr Robson regard Chagas as a neglected disease?</p>
                             <label class="radio-label"><input type="radio" name="q31" value="A"> A. because of the social groups it mainly affects</label>
@@ -377,10 +383,11 @@
 
                 <!-- Extract 2 -->
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-bold text-[#F56E1E] mb-4">Extract 2: Questions 37-42</h3>
-                    <p class="mb-6 text-sm font-semibold text-gray-500">You hear an occupational therapist called Anna Matthews giving a presentation to a group of trainee doctors.</p>
-
-                    <div class="space-y-8">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h3 class="text-xl font-bold text-[#F56E1E]">Extract 2: Questions 37-42</h3>
+                        <button onclick="seekAudio(1540)" class="time-btn"><span class="material-icons-round text-sm">play_arrow</span> Escuchar (25:40 a Final)</button>
+                    </div>
+                    <div class="space-y-8 mt-4">
                         <div>
                             <p class="font-bold mb-3 text-[#0A468C]">37. Anna says that the main focus of her work as an occupational therapist is...</p>
                             <label class="radio-label"><input type="radio" name="q37" value="A"> A. designing activities to meet the changing needs of each patient.</label>
@@ -421,16 +428,24 @@
                 </div>
 
                 <div id="result-part-c" class="hidden text-center mt-6 p-4 rounded bg-blue-50 border border-blue-200">
-                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Viernes (Part C): <span id="score-c" class="text-[#F56E1E] text-2xl">0</span> / 12</p>
+                    <p class="text-xl font-bold text-[#0A468C]">Puntaje Viernes: <span id="score-c" class="text-[#F56E1E] text-2xl">0</span> / 12</p>
                 </div>
-
-                <button onclick="checkPartC()" id="btn-c" class="check-btn mt-6">Check Part C Answers</button>
+                <button onclick="checkPartC()" id="btn-c" class="check-btn mt-6">Check Part C</button>
             </div>
         </div>
 
     </main>
 
     <script>
+        // Función para saltar al timestamp y reproducir
+        function seekAudio(seconds) {
+            const audio = document.getElementById('test-audio');
+            audio.currentTime = seconds;
+            audio.play();
+            // Scroll suave hacia el reproductor
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         // Tab switching logic
         function switchTab(tabId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -441,7 +456,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Official Answers
+        // Respuestas Oficiales
         const partAAnswers = {
             q1: ['heavy suitcase', 'suitcase'],
             q2: ['his right leg', 'right leg'],
@@ -475,7 +490,7 @@
             q37: 'B', q38: 'C', q39: 'A', q40: 'C', q41: 'A', q42: 'B'
         };
 
-        // Logic for evaluating multiple choice (Parts B & C)
+        // Evaluador MCQ
         function evaluateMCQ(start, end) {
             let score = 0;
             for (let i = start; i <= end; i++) {
@@ -512,6 +527,7 @@
             return score;
         }
 
+        // Validaciones por Parte
         function checkPartA() {
             let score = 0;
             for (let i = 1; i <= 24; i++) {
@@ -520,7 +536,6 @@
                 el.disabled = true;
 
                 const accepted = partAAnswers['q' + i].map(a => a.toLowerCase());
-                
                 let feedback = document.createElement('span');
                 feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
 
