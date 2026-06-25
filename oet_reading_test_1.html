@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Reading Mock Test 1 - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); }
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); }
+
+        .card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+
+        /* Timer Sticky */
+        #timer-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--azul-primario); color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: background 0.3s;
+        }
+        #timer-bar.warning { background: #ef4444; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+
+        /* Tabs Navigation */
+        .filter-section {
+            background-color: var(--blanco-puro); padding: 1rem;
+            border-bottom: 2px solid var(--gris-neutro);
+            display: flex; justify-content: center; overflow-x: auto; white-space: nowrap;
+        }
+        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
+        .filter-btn {
+            background: transparent; border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem;
+        }
+        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
+        .filter-btn.active { background: var(--azul-primario); color: var(--blanco-puro); box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); }
+        
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Inputs & Radios */
+        .oet-input {
+            border: 2px solid var(--gris-neutro); border-radius: 6px; padding: 4px 10px;
+            font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario);
+            outline: none; transition: 0.3s; width: 100%; max-width: 250px; background: #fff;
+        }
+        .oet-input.short { max-width: 80px; text-align: center;}
+        .oet-input:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 0 3px rgba(245, 110, 30, 0.1); }
+        .oet-input:disabled { color: #555; background: #f9fafb; cursor: not-allowed; }
+
+        .radio-label { 
+            display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; 
+            border: 2px solid var(--gris-neutro); border-radius: 8px; cursor: pointer; 
+            background: var(--blanco-puro); color: #444; font-size: 0.95rem; margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .radio-label:hover:not(.disabled) { border-color: var(--azul-claro); background: #f8fbff; }
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
+        .radio-label input[type="radio"]:disabled { cursor: not-allowed; }
+        .radio-label.disabled { cursor: not-allowed; opacity: 0.7; }
+
+        .correct-input { border-color: #10b981 !important; color: #10b981 !important; background: #d1fae5 !important; }
+        .incorrect-input { border-color: #ef4444 !important; color: #ef4444 !important; background: #fee2e2 !important; }
+
+        .text-box { background: #f8fafc; border-left: 4px solid var(--naranja-vibrante); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0;}
+
+        .check-btn {
+            display: block; width: 100%; background: var(--naranja-vibrante); color: white;
+            padding: 15px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- INTRO SCREEN -->
+    <div id="intro-screen" class="max-w-4xl mx-auto p-6 mt-10">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold font-titulares uppercase mb-2">OET Reading <span style="color: var(--naranja-vibrante);">Mock Test 1</span></h1>
+            <p class="text-lg text-gray-600">Teacher Ivan - Full Simulator</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2 text-[#0A468C]">
+                <span class="material-icons-round text-[#F56E1E]">info</span> Test Instructions
+            </h2>
+            <ul class="list-disc pl-6 space-y-3 text-gray-700 mb-8">
+                <li>This test consists of <strong>3 parts (A, B, and C)</strong> with a total of <strong>42 questions</strong>.</li>
+                <li>You have exactly <strong>60 minutes</strong> to complete the entire test.</li>
+                <li><strong>Part A (Q1-20):</strong> Scanning and skimming 4 short medical texts. You must write the exact words found in the texts.</li>
+                <li><strong>Part B (Q21-26):</strong> Reading 6 short workplace texts and answering multiple-choice questions.</li>
+                <li><strong>Part C (Q27-42):</strong> Reading 2 long presentations/articles and answering multiple-choice questions.</li>
+                <li>The timer will start as soon as you click "Start Test". Do not refresh the page.</li>
+            </ul>
+
+            <button onclick="startExam()" class="w-full bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold text-xl py-4 rounded-xl shadow-md transition transform hover:-translate-y-1 font-titulares uppercase">
+                Start Test (60 Minutes)
+            </button>
+        </div>
+    </div>
+
+    <!-- EXAM SCREEN -->
+    <div id="exam-screen" style="display: none;">
+        
+        <!-- Timer Bar -->
+        <div id="timer-bar" class="py-3 px-6 flex justify-between items-center">
+            <div class="font-bold font-titulares text-lg" id="test-status">OET Reading Sample 1</div>
+            <div class="flex items-center gap-2 text-2xl font-black font-titulares tracking-wider bg-black bg-opacity-20 px-4 py-1 rounded">
+                <span class="material-icons-round">timer</span> <span id="time-display">60:00</span>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="filter-section">
+            <div class="filter-container">
+                <button class="filter-btn active" onclick="switchTab('part-a')" id="tab-part-a">Part A (Q1-20)</button>
+                <button class="filter-btn" onclick="switchTab('part-b')" id="tab-part-b">Part B (Q21-26)</button>
+                <button class="filter-btn" onclick="switchTab('part-c')" id="tab-part-c">Part C (Q27-42)</button>
+            </div>
+        </div>
+
+        <main class="max-w-5xl mx-auto p-4 md:p-6 w-full mt-4">
+            
+            <!-- RESULTS PANEL (Hidden initially) -->
+            <div id="result-panel" style="display: none;" class="bg-white p-8 rounded-xl shadow-xl border-t-8 border-[#10b981] mb-8 text-center">
+                <span class="material-icons-round text-6xl text-[#10b981] mb-4">task_alt</span>
+                <h2 class="text-4xl font-extrabold font-titulares text-[#0A468C] mb-2">Test Completed!</h2>
+                <div class="bg-blue-50 py-8 rounded-xl border-2 border-blue-200 mb-4 max-w-sm mx-auto">
+                    <span class="text-6xl font-black text-[#F56E1E]" id="final-score">0</span>
+                    <span class="text-3xl text-gray-500 font-bold"> / 42</span>
+                </div>
+                <p class="text-gray-500 font-semibold italic border-t pt-4">You can now navigate through the tabs to review your correct and incorrect answers.</p>
+            </div>
+
+            <!-- ================= PART A ================= -->
+            <div id="view-part-a" class="view-section active">
+                <div class="card">
+                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">Part A: Fractures, dislocations and sprains</h2>
+                    
+                    <!-- Texts A-D -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="text-box">
+                            <h3 class="font-bold text-lg mb-2 text-[#0A468C]">Text A</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                Fractures (buckle or break in the bone) often occur following direct or indirect injury, e.g. twisting, violence to bones. Clinically, fractures are either:<br>
+                                - closed, where the skin is intact, or<br>
+                                - compound, where there is a break in the overlying skin<br><br>
+                                Dislocation is where a bone is completely displaced from the joint. It often results from injuries away from the affected joint, e.g. elbow dislocation after falling on an outstretched hand.<br>
+                                Sprain is a partial disruption of a ligament or capsule of a joint.
+                            </p>
+                        </div>
+                        <div class="text-box">
+                            <h3 class="font-bold text-lg mb-2 text-[#0A468C]">Text B</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                <strong>Immediate management:</strong> Simple Fracture of Limbs<br>
+                                - Halt any external haemorrhage by pressure bandage or direct pressure<br>
+                                - Immobilise the affected area. Provide pain relief<br><br>
+                                <strong>Clinical assessment:</strong><br>
+                                Obtain complete patient history, including circumstances and method of injury.<br>
+                                - medication history - enquire about anticoagulant use, e.g. warfarin<br>
+                                Perform physical examination. Examine: all places where it is painful, any wounds or swelling, colour of the whole limb, range of movement. Check whether the limb is warm, throbbing or getting bigger, and if peripheral pulses are palpable.<br><br>
+                                <strong>Management:</strong> Splint the site, elevate the limb - a sling for arm injuries, a pillow for leg injuries. Administer analgesia (morphine preferable; if allergic, use fentanyl). Consider compartment syndrome where pain is severe and unrelieved.
+                            </p>
+                        </div>
+                        <div class="text-box">
+                            <h3 class="font-bold text-lg mb-2 text-[#0A468C]">Text C</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                <strong>Drug Therapy Protocol:</strong><br>
+                                <strong>Drug:</strong> Morphine Ampoule 10mg/mL<br>
+                                <strong>Adult only IM/SC:</strong> 0.1-0.2 mg/kg to a max. of 10 mg (Stat)<br>
+                                <strong>Adult only IV:</strong> Initial dose of 2 mg then 0.5-1 mg increments slowly, repeated every 3-5 minutes if required to a max. of 10 mg.<br><br>
+                                Use the lower end of dose range in patients ≥70 years.<br>
+                                Provide Consumer Medicine Information: advise can cause nausea and vomiting, drowsiness. Respiratory depression is rare - if it should occur, give naloxone.
+                            </p>
+                        </div>
+                        <div class="text-box">
+                            <h3 class="font-bold text-lg mb-2 text-[#0A468C]">Text D</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                <strong>Technique for plaster backslab for arm fractures</strong><br>
+                                1. Measure a length of non-compression cotton stockinette from half way up the middle finger to just below the elbow.<br>
+                                2. Wrap cotton padding over top for the full length of the stockinette - 2 layers, 50% overlap.<br>
+                                3. Measure a length of plaster of Paris. Fold the roll in about ten layers.<br>
+                                4. Immerse the layered plaster in a bowl of room temperature water.<br>
+                                5. Ensure any jewellery is removed from the injured limb.<br>
+                                6. Lightly mould the slab to the contours of the arm and hand in a neutral position.<br>
+                                7. Do not apply pressure over bony prominences. Extra padding can be placed over bony prominences if applicable.<br>
+                                8. Wrap crepe bandage firmly around plaster backslab.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Questions 1-7 -->
+                    <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Questions 1-7</h3>
+                    <p class="text-sm mb-4">Decide which text (A, B, C or D) the information comes from. Write the letter A, B, C or D.</p>
+                    <div class="space-y-4 mb-8 text-gray-800">
+                        <p><strong>1.</strong> procedures for delivering pain relief? <input type="text" id="q1" class="oet-input short"></p>
+                        <p><strong>2.</strong> the procedure to follow when splinting a fractured limb? <input type="text" id="q2" class="oet-input short"></p>
+                        <p><strong>3.</strong> what to record when assessing a patient? <input type="text" id="q3" class="oet-input short"></p>
+                        <p><strong>4.</strong> the terms used to describe different types of fractures? <input type="text" id="q4" class="oet-input short"></p>
+                        <p><strong>5.</strong> the practitioners who administer analgesia? <input type="text" id="q5" class="oet-input short"></p>
+                        <p><strong>6.</strong> what to look for when checking an injury? <input type="text" id="q6" class="oet-input short"></p>
+                        <p><strong>7.</strong> how fractures can be caused? <input type="text" id="q7" class="oet-input short"></p>
+                    </div>
+
+                    <!-- Questions 8-14 -->
+                    <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Questions 8-14</h3>
+                    <p class="text-sm mb-4">Answer each of the questions with a word or short phrase from one of the texts.</p>
+                    <div class="space-y-4 mb-8 text-gray-800">
+                        <p><strong>8.</strong> What should be used to elevate a patient's fractured leg? <br><input type="text" id="q8" class="oet-input mt-1"></p>
+                        <p><strong>9.</strong> What is the maximum dose of morphine per kilo of a patient's weight that can be given using the intra-muscular (IM) route? <br><input type="text" id="q9" class="oet-input mt-1"></p>
+                        <p><strong>10.</strong> Which parts of a limb may need extra padding? <br><input type="text" id="q10" class="oet-input mt-1"></p>
+                        <p><strong>11.</strong> What should be used to treat a patient who suffers respiratory depression? <br><input type="text" id="q11" class="oet-input mt-1"></p>
+                        <p><strong>12.</strong> What should be used to cover a freshly applied plaster backslab? <br><input type="text" id="q12" class="oet-input mt-1"></p>
+                        <p><strong>13.</strong> What analgesic should be given to a patient who is allergic to morphine? <br><input type="text" id="q13" class="oet-input mt-1"></p>
+                        <p><strong>14.</strong> What condition might a patient have if severe pain persists after splinting, elevation and repeated analgesia? <br><input type="text" id="q14" class="oet-input mt-1"></p>
+                    </div>
+
+                    <!-- Questions 15-20 -->
+                    <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Questions 15-20</h3>
+                    <p class="text-sm mb-4">Complete each of the sentences with a word or short phrase from one of the texts.</p>
+                    <div class="space-y-4 text-gray-800 leading-loose">
+                        <p><strong>15.</strong> Falling on an outstretched hand is a typical cause of a <input type="text" id="q15" class="oet-input"></p>
+                        <p><strong>16.</strong> Upper limb fractures should be elevated by means of a <input type="text" id="q16" class="oet-input"></p>
+                        <p><strong>17.</strong> Make sure the patient isn't wearing any <input type="text" id="q17" class="oet-input"> on the part of the body where the plaster backslab is going to be placed.</p>
+                        <p><strong>18.</strong> Check to see whether swollen limbs are <input type="text" id="q18" class="oet-input"> or increasing in size.</p>
+                        <p><strong>19.</strong> In a plaster backslab, there is a layer of <input type="text" id="q19" class="oet-input"> closest to the skin.</p>
+                        <p><strong>20.</strong> Patients aged <input type="text" id="q20" class="oet-input"> and over shouldn't be given the higher dosages of pain relief.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PART B ================= -->
+            <div id="view-part-b" class="view-section">
+                <div class="card">
+                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">Part B</h2>
+                    <p class="text-gray-600 mb-6">Choose the answer (A, B or C) which you think fits best according to the text.</p>
+
+                    <div class="space-y-10">
+                        <!-- Q21 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">Instruction Manual: Digital Automatic Blood Pressure Monitor</h4>
+                                <p class="text-sm">With the increased use of portable electronic devices, medical equipment may be susceptible to electromagnetic interference. This may result in incorrect operation... Nevertheless, care should be taken to avoid the use of the monitor within 7 metres of cellphones or other devices generating strong electrical or electromagnetic fields.</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">21. The manual informs us that the Blood Pressure Monitor...</p>
+                            <label class="radio-label"><input type="radio" name="q21" value="A"> A. is likely to interfere with the operation of other medical equipment.</label>
+                            <label class="radio-label"><input type="radio" name="q21" value="B"> B. may not work correctly in close proximity to some other devices.</label>
+                            <label class="radio-label"><input type="radio" name="q21" value="C"> C. should be considered safe to use in all hospital environments.</label>
+                        </div>
+                        
+                        <!-- Q22 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">NG feeding tubes</h4>
+                                <p class="text-sm">Displacement of nasogastric (NG) feeding tubes can have serious implications if undetected... Insertion and care of an NG tube should therefore only be carried out by a registered doctor or nurse who has undergone theoretical and practical training and is deemed competent...</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">22. The notice is giving information about...</p>
+                            <label class="radio-label"><input type="radio" name="q22" value="A"> A. ways of checking that an NG tube has been placed correctly.</label>
+                            <label class="radio-label"><input type="radio" name="q22" value="B"> B. how the use of NG feeding tubes is authorised.</label>
+                            <label class="radio-label"><input type="radio" name="q22" value="C"> C. which staff should perform NG tube placement.</label>
+                        </div>
+
+                        <!-- Q23 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">'Right Patient, Right Blood' Assessments</h4>
+                                <p class="text-sm">The administration of blood can have significant morbidity and mortality. Following the introduction of the 'Right Patient, Right Blood' safety policy, all staff involved in the transfusion process must be competency assessed. Staff must ensure that if they take any part in the transfusion process, their competency assessment is updated every three years.</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">23. What must all staff involved in the transfusion process do?</p>
+                            <label class="radio-label"><input type="radio" name="q23" value="A"> A. check that their existing training is still valid</label>
+                            <label class="radio-label"><input type="radio" name="q23" value="B"> B. attend a course to learn about new procedures</label>
+                            <label class="radio-label"><input type="radio" name="q23" value="C"> C. read a document that explains changes in policy</label>
+                        </div>
+
+                        <!-- Q24 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">Extract from 'Chaperones: Guidelines for Good Practice'</h4>
+                                <p class="text-sm">A patient may specifically request a chaperone or in certain circumstances may nominate one, but it will not always be the case that a chaperone is required. It is often a question of using professional judgement to assess an individual situation.</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">24. The guidelines establish that the healthcare professional should...</p>
+                            <label class="radio-label"><input type="radio" name="q24" value="A"> A. aim to make patients fully aware of their right to a chaperone.</label>
+                            <label class="radio-label"><input type="radio" name="q24" value="B"> B. evaluate the need for a chaperone on a case-by-case basis.</label>
+                            <label class="radio-label"><input type="radio" name="q24" value="C"> C. respect the wishes of the patient above all else.</label>
+                        </div>
+
+                        <!-- Q25 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">Annual medication review</h4>
+                                <p class="text-sm">To give all patients an annual medication review is an ideal to strive for... Our guidelines state that 'at least a level 2 medication review will occur'... However, the guidelines go on to say that 'all patients should have the chance to raise questions and highlight problems about their medicines' and that 'any changes resulting from the review are agreed with the patient'.</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">25. The guidelines require those undertaking a clinical medication review to...</p>
+                            <label class="radio-label"><input type="radio" name="q25" value="A"> A. involve the patient in their decisions.</label>
+                            <label class="radio-label"><input type="radio" name="q25" value="B"> B. consider the cost of any change in treatments.</label>
+                            <label class="radio-label"><input type="radio" name="q25" value="C"> C. recommend other services as an alternative to medication.</label>
+                        </div>
+
+                        <!-- Q26 -->
+                        <div>
+                            <div class="text-box">
+                                <h4 class="font-bold mb-2">Advisory Email: Safe use of opioids</h4>
+                                <p class="text-sm">In August, an alert was issued on the safe use of opioids in hospitals. This reported the incidence of respiratory depression among post-surgical patients... Failure to recognise respiratory depression and institute timely intervention can lead to cardiopulmonary arrest... It is therefore recommended that post-operative patients now have continuous monitoring, instead of spot checks, of both oxygenation and ventilation.</p>
+                            </div>
+                            <p class="font-bold mb-3 text-[#0A468C]">26. The purpose of this email is to...</p>
+                            <label class="radio-label"><input type="radio" name="q26" value="A"> A. report on a rise in post-surgical complications.</label>
+                            <label class="radio-label"><input type="radio" name="q26" value="B"> B. explain the background to a change in patient care.</label>
+                            <label class="radio-label"><input type="radio" name="q26" value="C"> C. remind staff about procedures for administrating drugs.</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PART C ================= -->
+            <div id="view-part-c" class="view-section">
+                <div class="card">
+                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">Part C</h2>
+                    <p class="text-gray-600 mb-6">Choose the answer (A, B, C or D) which you think fits best according to the text.</p>
+
+                    <!-- Text 1: Sleep -->
+                    <div class="mb-12">
+                        <div class="text-box">
+                            <h3 class="font-bold text-xl mb-4 text-[#0A468C]">Text 1: Sleep deprivation</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                Millions of people who suffer sleep problems also suffer myriad health burdens. In addition to emotional distress and cognitive impairments, these can include high blood pressure, obesity, and metabolic syndrome. 'In the studies we've done, almost every variable we measured was affected. There's not a system in the body that's not affected by sleep,' says University of Chicago sleep researcher Eve Van Cauter. 'Every time we sleep-deprive ourselves, things go wrong.'
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                A common refrain among sleep scientists about two decades ago was that sleep was performed by the brain in the interest of the brain. That wasn't a fully elaborated theory, but it wasn't wrong. Numerous recent studies have hinted at the purpose of sleep by confirming that neurological function and cognition are messed up during sleep loss, with the patient's reaction time, mood, and judgement all suffering if they are kept awake too long.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                In 1997, Bob McCarley and colleagues at Harvard Medical School found that when they kept cats awake by playing with them, a compound known as adenosine increased in the basal forebrain... McCarley and colleagues found that infusing adenosine into rats' basal forebrain impaired their performance on an attention test... But adenosine levels are by no means the be-all and end-all of sleep deprivation's effects on the brain or the body.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                Over a century of sleep research has revealed numerous undesirable outcomes from staying awake too long. In 1999, Van Cauter and colleagues had eleven men sleep in the university lab... During sleep debt and recovery, researchers gave the participants a glucose tolerance test and found striking differences. While sleep deprived, the men's glucose metabolism resembled a pre-diabetic state. 'We knew it would be affected,' says Van Cauter. 'The big surprise was the effect being much greater than we thought.'
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                Subsequent studies also found insulin resistance increased during bouts of sleep restriction... Echoing Van Cauter's results, Basheer has found evidence that enforced lack of sleep sends the brain into a catabolic, or energy-consuming, state. This is because it degrades the energy molecule...
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                Within the brain, scientists have glimpsed signs of physical damage from sleep loss... Chiara Cirelli's team found structural changes in the cortical neurons of mice when the animals are kept awake for long periods... After thirty-six hours of sleep recovery, a period during which she expected normalcy to resume, those changes remained.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                Further insights could be drawn from the study of shift workers and insomniacs... But with so much of our physiology affected, an effective therapy other than sleep itself - is hard to imagine. 'People like to define a clear pathway of action for health conditions,' says Van Cauter. 'With sleep deprivation, everything you measure is affected and interacts synergistically to produce the effect.'
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">27. In the first paragraph, the writer uses Eve Van Cauter's words to...</p>
+                                <label class="radio-label"><input type="radio" name="q27" value="A"> A. explain the main causes of sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q27" value="B"> B. reinforce a view about the impact of sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q27" value="C"> C. question some research findings about sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q27" value="D"> D. describe the challenges involved in sleep deprivation research.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">28. What do we learn about sleep in the second paragraph?</p>
+                                <label class="radio-label"><input type="radio" name="q28" value="A"> A. Scientific opinion about its function has changed in recent years.</label>
+                                <label class="radio-label"><input type="radio" name="q28" value="B"> B. There is now more controversy about it than there was in the past.</label>
+                                <label class="radio-label"><input type="radio" name="q28" value="C"> C. Researchers have tended to confirm earlier ideas about its purpose.</label>
+                                <label class="radio-label"><input type="radio" name="q28" value="D"> D. Studies undertaken in the past have formed the basis of current research.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">29. What particularly impressed Bob McCarley of Harvard Medical School?</p>
+                                <label class="radio-label"><input type="radio" name="q29" value="A"> A. the effectiveness of adenosine as a sedative</label>
+                                <label class="radio-label"><input type="radio" name="q29" value="B"> B. the influence of caffeine on adenosine receptors</label>
+                                <label class="radio-label"><input type="radio" name="q29" value="C"> C. the simultaneous production of adenosine and adenosine receptors</label>
+                                <label class="radio-label"><input type="radio" name="q29" value="D"> D. the extent to which adenosine levels fall when subjects are allowed to sleep</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">30. In the third paragraph, what idea is emphasised by the phrase 'by no means the be-all and end-all'?</p>
+                                <label class="radio-label"><input type="radio" name="q30" value="A"> A. Sleep deprivation has consequences beyond its impact on adenosine levels.</label>
+                                <label class="radio-label"><input type="radio" name="q30" value="B"> B. Adenosine levels are a significant factor in situations other than sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q30" value="C"> C. The role of adenosine as a response to sleep deprivation is not yet fully understood.</label>
+                                <label class="radio-label"><input type="radio" name="q30" value="D"> D. The importance of the link between sleep deprivation and adenosine should not be underestimated.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">31. What was significant about the findings in Van Cauter's experiment?</p>
+                                <label class="radio-label"><input type="radio" name="q31" value="A"> A. the rate at which the sleep-deprived men entered a pre-diabetic state</label>
+                                <label class="radio-label"><input type="radio" name="q31" value="B"> B. the fact that sleep deprivation had an influence on the men's glucose levels</label>
+                                <label class="radio-label"><input type="radio" name="q31" value="C"> C. the differences between individual men with regard to their glucose tolerance</label>
+                                <label class="radio-label"><input type="radio" name="q31" value="D"> D. the extent of the contrast in the men's metabolic states between sleep debt and recovery</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">32. In the fifth paragraph, what does the word 'it' refer to?</p>
+                                <label class="radio-label"><input type="radio" name="q32" value="A"> A. an enzyme</label>
+                                <label class="radio-label"><input type="radio" name="q32" value="B"> B. new evidence</label>
+                                <label class="radio-label"><input type="radio" name="q32" value="C"> C. a catabolic state</label>
+                                <label class="radio-label"><input type="radio" name="q32" value="D"> D. enforced lack of sleep</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">33. What did the Madison School of Medicine study discover about the mice, according to Chiara Cirelli?</p>
+                                <label class="radio-label"><input type="radio" name="q33" value="A"> A. There was no reversal of a certain effect of sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q33" value="B"> B. The cortical neurons of the mice underwent structural changes.</label>
+                                <label class="radio-label"><input type="radio" name="q33" value="C"> C. There was evidence of an increased need for energy in the brains of the mice.</label>
+                                <label class="radio-label"><input type="radio" name="q33" value="D"> D. The neurological response to sleep deprivation only took a few hours to become apparent.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">34. In the final paragraph, the quote from Van Cauter is used to suggest that...</p>
+                                <label class="radio-label"><input type="radio" name="q34" value="A"> A. the goals of sleep deprivation research are sometimes unclear.</label>
+                                <label class="radio-label"><input type="radio" name="q34" value="B"> B. it could be difficult to develop any treatment for sleep deprivation.</label>
+                                <label class="radio-label"><input type="radio" name="q34" value="C"> C. opinions about the best way to deal with sleep deprivation are divided.</label>
+                                <label class="radio-label"><input type="radio" name="q34" value="D"> D. there is still a great deal to be learnt about the effects of sleep deprivation.</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text 2: ADHD -->
+                    <div class="mb-8">
+                        <div class="text-box">
+                            <h3 class="font-bold text-xl mb-4 text-[#0A468C]">Text 2: ADHD</h3>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                The American Psychiatric Association (APA) recognised Attention Deficit Hyperactivity Disorder (ADHD) as a childhood disorder in the 1960s, but it wasn't until 1978 that the condition was formally recognised as afflicting adults. In recent years, the USA has seen a 40% rise in diagnoses of ADHD in children. It could be that the disorder is becoming more prevalent, or, as seems more plausible, doctors are making the diagnosis more frequently. The issue is complicated by the lack of any recognised neurological markers for ADHD.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                ADHD can be a controversial condition... Dr Richard Saul, a behavioural neurologist with five decades of experience, disagrees; 'Many of us have difficulty with organization or details... Under such subjective criteria, the entire population could potentially qualify... the lumping together of many vague and subjective symptoms could be causing a national phenomenon of misdiagnosis and over-prescription of stimulants.'
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                A recent study found children in foster care three times more likely than others to be diagnosed with ADHD. Researchers also found that children with ADHD in foster care were more likely to have another disorder, such as depression or anxiety. This finding certainly reveals the need for medical and behavioural services for these children, but it could also prove the non-specific nature of the symptoms of ADHD: anxiety and depression, or an altered state, can easily be mistaken for manifestations of ADHD.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                ADHD, the thinking goes, begins in childhood. In fact, in order to be diagnosed with it as an adult, a patient must demonstrate that they had traits of the condition in childhood. However, studies from the UK and Brazil, published in JAMA Psychiatry, are fuelling questions about the origins and trajectory of ADHD... They echo earlier research from New Zealand. However, an editorial by Dr Stephen Faraone highlights potential flaws in the findings... In Dr Faraone's words, 'the researchers found a group of people who had sub-threshold ADHD in their youth... Perhaps these were smart kids with particularly supportive parents or teachers who helped them cope... when the scaffolding is removed, full ADHD could develop'.
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                                Until this century, adult ADHD was a seldom-diagnosed disorder. Nowadays however, it's common in mainstream medicine in the USA, a paradigm shift apparently driven by two factors: reworked - many say less stringent - diagnostic criteria, introduced by the APA in 2013, and marketing by manufacturers of ADHD medications...
+                            </p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                This brings us to the issue of the addictive nature of ADHD medication. As Dr Saul asserts, 'addiction to stimulant medication isn't rare; it's common... This is because the body stops producing the appropriate levels of neurotransmitters that ADHD drugs replace a trademark of addictive substances.' Much has been written about the staggering increase in opioid overdoses... but the abuse of drugs used to treat ADHD is no less a threat.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">35. In the first paragraph, the writer questions whether...</p>
+                                <label class="radio-label"><input type="radio" name="q35" value="A"> A. adult ADHD should have been recognised as a disorder at an earlier date.</label>
+                                <label class="radio-label"><input type="radio" name="q35" value="B"> B. ADHD should be diagnosed in the same way for children and adults.</label>
+                                <label class="radio-label"><input type="radio" name="q35" value="C"> C. ADHD can actually be indicated by neurological markers.</label>
+                                <label class="radio-label"><input type="radio" name="q35" value="D"> D. cases of ADHD have genuinely increased in the USA.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">36. What does Dr Saul object to?</p>
+                                <label class="radio-label"><input type="radio" name="q36" value="A"> A. the suggestion that people need stimulants to cope with everyday life</label>
+                                <label class="radio-label"><input type="radio" name="q36" value="B"> B. the implication that everyone has some symptoms of ADHD</label>
+                                <label class="radio-label"><input type="radio" name="q36" value="C"> C. the grouping of imprecise symptoms into a mental disorder</label>
+                                <label class="radio-label"><input type="radio" name="q36" value="D"> D. the treatment for ADHD suggested by Dr Barkley</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">37. The writer regards the study of children in foster care as significant because it...</p>
+                                <label class="radio-label"><input type="radio" name="q37" value="A"> A. highlights the difficulty of distinguishing ADHD from other conditions.</label>
+                                <label class="radio-label"><input type="radio" name="q37" value="B"> B. focuses on children known to have complex mental disorders.</label>
+                                <label class="radio-label"><input type="radio" name="q37" value="C"> C. suggests a link between ADHD and a child's upbringing.</label>
+                                <label class="radio-label"><input type="radio" name="q37" value="D"> D. draws attention to the poor care given to such children.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">38. In the fourth paragraph, the word 'They' refers to...</p>
+                                <label class="radio-label"><input type="radio" name="q38" value="A"> A. syndromes.</label>
+                                <label class="radio-label"><input type="radio" name="q38" value="B"> B. questions.</label>
+                                <label class="radio-label"><input type="radio" name="q38" value="C"> C. studies.</label>
+                                <label class="radio-label"><input type="radio" name="q38" value="D"> D. origins.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">39. Dr Faraone suggests that the group of patients diagnosed with adult-onset ADHD...</p>
+                                <label class="radio-label"><input type="radio" name="q39" value="A"> A. had teachers or parents who recognised the symptoms of ADHD.</label>
+                                <label class="radio-label"><input type="radio" name="q39" value="B"> B. should have consulted a doctor at a younger age.</label>
+                                <label class="radio-label"><input type="radio" name="q39" value="C"> C. had mild undiagnosed ADHD in childhood.</label>
+                                <label class="radio-label"><input type="radio" name="q39" value="D"> D. were specially chosen by the researchers.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">40. In the fifth paragraph, it is suggested that drug companies have...</p>
+                                <label class="radio-label"><input type="radio" name="q40" value="A"> A. been overly aggressive in their marketing of ADHD medication.</label>
+                                <label class="radio-label"><input type="radio" name="q40" value="B"> B. influenced research that led to the reworking of ADHD diagnostic criteria.</label>
+                                <label class="radio-label"><input type="radio" name="q40" value="C"> C. attempted to change the rules about incentives for doctors who diagnose ADHD.</label>
+                                <label class="radio-label"><input type="radio" name="q40" value="D"> D. encouraged the APA to rush through changes to the criteria for diagnosing ADHD.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">41. In the final paragraph, the word 'trademark' refers to...</p>
+                                <label class="radio-label"><input type="radio" name="q41" value="A"> A. a physiological reaction.</label>
+                                <label class="radio-label"><input type="radio" name="q41" value="B"> B. a substitute medication.</label>
+                                <label class="radio-label"><input type="radio" name="q41" value="C"> C. a need for research.</label>
+                                <label class="radio-label"><input type="radio" name="q41" value="D"> D. a common request.</label>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-3 text-[#0A468C]">42. In the final paragraph, what does the writer imply about addiction to ADHD medication?</p>
+                                <label class="radio-label"><input type="radio" name="q42" value="A"> A. It is unlikely to turn into a problem on the scale of that caused by opioid abuse.</label>
+                                <label class="radio-label"><input type="radio" name="q42" value="B"> B. The effects are more marked in certain sectors of the population.</label>
+                                <label class="radio-label"><input type="radio" name="q42" value="C"> C. Insufficient attention seems to have been paid to it.</label>
+                                <label class="radio-label"><input type="radio" name="q42" value="D"> D. The reasons for it are not yet fully understood.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="mt-8 mb-20 text-center">
+                <button onclick="submitExam()" id="btn-submit" class="w-full bg-[#0A468C] hover:bg-blue-800 text-white font-bold text-2xl py-5 rounded-xl shadow-lg transition font-titulares uppercase">
+                    Submit Exam (Stop Timer)
+                </button>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Official Answers Key
+        const ANSWERS = {
+            // Part A
+            q1: ['c', 'C'], q2: ['d', 'D'], q3: ['b', 'B'], q4: ['a', 'A'], q5: ['c', 'C'], q6: ['b', 'B'], q7: ['a', 'A'],
+            q8: ['pillow', 'a pillow'], q9: ['0.2 mg', '0.2mg'], q10: ['bony prominences'], q11: ['naloxone'], 
+            q12: ['crepe bandage', 'a crepe bandage'], q13: ['fentanyl'], q14: ['compartment syndrome'], 
+            q15: ['dislocation'], q16: ['sling', 'a sling'], q17: ['jewellery'], q18: ['throbbing'], 
+            q19: ['stockinette', 'cotton stockinette', 'non-compression cotton stockinette'], 
+            q20: ['70 years', 'seventy years'],
+            // Part B
+            q21: 'B', q22: 'C', q23: 'A', q24: 'B', q25: 'A', q26: 'B',
+            // Part C
+            q27: 'B', q28: 'C', q29: 'C', q30: 'A', q31: 'D', q32: 'D', q33: 'A', q34: 'B',
+            q35: 'D', q36: 'C', q37: 'A', q38: 'C', q39: 'C', q40: 'B', q41: 'A', q42: 'C'
+        };
+
+        let timeLeft = 60 * 60; // 60 minutos
+        let timerInterval;
+        let totalScore = 0;
+        let isSubmitted = false;
+
+        function startExam() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'block';
+            timerInterval = setInterval(updateTimer, 1000);
+            window.scrollTo(0,0);
+        }
+
+        function updateTimer() {
+            if(isSubmitted) return;
+            
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            
+            document.getElementById('time-display').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 300) { document.getElementById('timer-bar').classList.add('warning'); } // Últimos 5 mins
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitExam();
+            }
+            timeLeft--;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkInput(id, key) {
+            const el = document.getElementById(id);
+            if(!el) return 0;
+            const val = el.value.trim().toLowerCase();
+            const accepted = ANSWERS[key].map(a => a.toLowerCase());
+            
+            el.disabled = true; 
+            el.classList.remove('correct-input', 'incorrect-input');
+
+            let feedback = document.createElement('span');
+            feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
+
+            if (accepted.includes(val)) { 
+                el.classList.add('correct-input'); 
+                feedback.classList.add("bg-green-100", "text-green-700");
+                feedback.innerText = "✓";
+                el.parentNode.insertBefore(feedback, el.nextSibling);
+                return 1; 
+            } else { 
+                el.classList.add('incorrect-input'); 
+                feedback.classList.add("bg-red-100", "text-red-700");
+                feedback.innerText = "✗ Key: " + ANSWERS[key][0];
+                el.parentNode.insertBefore(feedback, el.nextSibling);
+                return 0; 
+            }
+        }
+
+        function checkRadio(name, key) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            const correctVal = ANSWERS[key];
+
+            document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                input.disabled = true;
+                input.parentElement.classList.add("disabled");
+                input.parentElement.style.borderColor = "var(--gris-neutro)";
+                input.parentElement.style.background = "var(--blanco-puro)";
+                input.parentElement.style.opacity = "0.6";
+            });
+
+            let score = 0;
+
+            if (selected) {
+                if (selected.value === correctVal) {
+                    selected.parentElement.style.borderColor = "#10b981";
+                    selected.parentElement.style.background = "#d1fae5";
+                    selected.parentElement.style.opacity = "1";
+                    selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-700 font-bold text-sm bg-green-200 px-2 py-0.5 rounded">✓</span>`);
+                    score = 1;
+                } else {
+                    selected.parentElement.style.borderColor = "#ef4444";
+                    selected.parentElement.style.background = "#fee2e2";
+                    selected.parentElement.style.opacity = "1";
+                    selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-red-700 font-bold text-sm bg-red-200 px-2 py-0.5 rounded">✗</span>`);
+                }
+            }
+
+            const correctEl = document.querySelector(`input[name="${name}"][value="${correctVal}"]`);
+            if (correctEl && (!selected || selected.value !== correctVal)) {
+                correctEl.parentElement.style.borderColor = "#10b981";
+                correctEl.parentElement.style.background = "#d1fae5";
+                correctEl.parentElement.style.opacity = "1";
+                correctEl.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Key</span>`);
+            }
+            
+            return score;
+        }
+
+        function submitExam() {
+            if(isSubmitted) return;
+            isSubmitted = true;
+
+            clearInterval(timerInterval);
+            document.getElementById('timer-bar').classList.remove('warning');
+            document.getElementById('timer-bar').style.background = "#10b981";
+            document.getElementById('test-status').innerText = "Test Completed";
+            document.getElementById('time-display').innerText = "DONE";
+            
+            totalScore = 0;
+
+            // Part A
+            for(let i=1; i<=20; i++) totalScore += checkInput(`q${i}`, `q${i}`);
+            // Part B
+            for(let i=21; i<=26; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
+            // Part C
+            for(let i=27; i<=42; i++) totalScore += checkRadio(`q${i}`, `q${i}`);
+
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('result-panel').style.display = 'block';
+            document.getElementById('final-score').innerText = totalScore;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
