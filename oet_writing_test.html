@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OET Writing Mock Test - Teacher Ivan</title>
+    <title>OET Writing Mock Test 1 - Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
@@ -37,307 +39,246 @@
         }
         #timer-bar.warning { background: #ef4444; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
-
-        /* Tabs */
-        .filter-section {
-            background-color: var(--blanco-puro); padding: 1rem;
-            border-bottom: 2px solid var(--gris-neutro);
-            display: flex; justify-content: center; overflow-x: auto; white-space: nowrap;
-        }
-        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
-        .filter-btn {
-            background: transparent; border: 2px solid var(--azul-primario);
-            padding: 8px 20px; border-radius: 50px;
-            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
-            cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem;
-        }
-        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
-        .filter-btn.active { background: var(--azul-primario); color: var(--blanco-puro); box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); }
         
-        .view-section { display: none; animation: fadeIn 0.4s ease; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .oet-textarea {
             width: 100%; height: 500px; padding: 1.5rem; border: 2px solid var(--gris-neutro);
-            border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 1.1rem;
-            color: #333; resize: vertical; line-height: 1.6; outline: none; transition: 0.3s;
+            border-radius: 8px; font-family: 'Times New Roman', Times, serif; font-size: 1.1rem;
+            line-height: 1.6; color: #333; resize: vertical; transition: 0.3s;
         }
-        .oet-textarea:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 0 4px rgba(245, 110, 30, 0.1); }
-        .oet-textarea:disabled { background: #f9fafb; color: #6b7280; cursor: not-allowed; }
+        .oet-textarea:focus { border-color: var(--naranja-vibrante); outline: none; box-shadow: 0 0 0 4px rgba(245, 110, 30, 0.1); }
+        .oet-textarea:disabled { background: #f3f4f6; cursor: not-allowed; }
 
-        .check-btn {
-            display: inline-block; background: var(--naranja-vibrante); color: white;
-            padding: 15px 30px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+        .case-notes-box {
+            background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--gris-neutro);
+            font-family: 'Courier New', Courier, monospace; font-size: 0.95rem; color: #222;
+            height: 600px; overflow-y: auto; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .case-notes-box h4 { font-family: Arial, Helvetica, sans-serif; font-weight: bold; margin-bottom: 0.5rem; border-bottom: 1px solid #ccc; padding-bottom: 5px;}
+        .case-notes-box ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .case-notes-box li { margin-bottom: 0.25rem; }
+
+        .start-input {
+            width: 100%; padding: 12px 15px; border: 2px solid var(--gris-neutro);
+            border-radius: 8px; font-family: var(--font-cuerpo); font-size: 1.1rem;
+            margin-bottom: 1.5rem; transition: 0.3s;
+        }
+        .start-input:focus { border-color: var(--azul-primario); outline: none; }
+
+        .action-btn {
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; background: var(--naranja-vibrante); color: white;
+            padding: 15px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
             font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
-        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
-        
-        .criteria-table th, .criteria-table td { border: 1px solid var(--gris-neutro); padding: 12px; text-align: left; }
-        .criteria-table th { background-color: var(--azul-primario); color: white; }
-        .criteria-table tr:nth-child(even) { background-color: #f8fafc; }
+        .action-btn:hover { background: #e05e15; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 110, 30, 0.3); }
+
+        /* Custom scrollbar for case notes */
+        .case-notes-box::-webkit-scrollbar { width: 8px; }
+        .case-notes-box::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .case-notes-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .case-notes-box::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- INTRO SCREEN -->
-    <div id="intro-screen" class="max-w-4xl mx-auto p-6 mt-10">
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold font-titulares uppercase mb-2">OET Writing <span style="color: var(--naranja-vibrante);">Mock Test</span></h1>
-            <p class="text-lg text-gray-600">Official Clinical Case Notes & Evaluation Criteria</p>
+    <div id="intro-screen" class="max-w-5xl mx-auto p-4 md:p-6 mt-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold font-titulares uppercase mb-2">OET Writing <span style="color: var(--naranja-vibrante);">Mock Test 1</span></h1>
+            <p class="text-lg text-gray-600 font-semibold">Teacher Ivan HUB - Official Assessment Simulator</p>
         </div>
 
-        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2 text-[#0A468C]">
-                <span class="material-icons-round text-[#F56E1E]">info</span> Test Instructions
-            </h2>
-            <ul class="list-disc pl-6 space-y-3 text-gray-700 mb-8">
-                <li>You will have <strong>45 minutes</strong> in total to complete this sub-test.</li>
-                <li><strong>Reading time:</strong> Spend the first 5 minutes analyzing the case notes.</li>
-                <li><strong>Writing time:</strong> You have 40 minutes to write a formal referral letter.</li>
-                <li>Your letter must be between <strong>180-200 words</strong>. A live word counter is provided.</li>
-                <li>Your letter will be assessed by an AI Assessor based on the 6 Official OET Criteria.</li>
-            </ul>
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2 text-[#0A468C]">
+                    <span class="material-icons-round text-[#F56E1E]">info</span> Instructions
+                </h2>
+                <ul class="list-disc pl-6 space-y-3 text-gray-700 mb-6">
+                    <li><strong>Duration:</strong> 45 Minutes.</li>
+                    <li><strong>Reading time:</strong> The first 5 minutes are for reading the case notes. You may start writing at any time.</li>
+                    <li><strong>Task:</strong> You will write a formal referral letter based on the medical case notes provided.</li>
+                    <li><strong>Format:</strong> Use standard formal letter formatting. Do not use note-form in your letter.</li>
+                    <li><strong>Submission:</strong> When the time is up (or when you click submit), you will download a PDF of your letter. <strong>You must send this PDF to Teacher Ivan for grading.</strong></li>
+                </ul>
+                
+                <h3 class="font-bold text-[#0A468C] mb-2">Enter your details to begin:</h3>
+                <input type="text" id="student-name" class="start-input" placeholder="Your Full Name (e.g. Jose Perez)">
+                <button onclick="startExam()" class="action-btn">
+                    <span class="material-icons-round">edit_document</span> Start Writing Test
+                </button>
+            </div>
 
-            <button onclick="startExam()" class="w-full bg-[#F56E1E] hover:bg-[#e05e15] text-white font-bold text-xl py-4 rounded-xl shadow-md transition transform hover:-translate-y-1 font-titulares uppercase">
-                Start Test (45 Minutes)
-            </button>
+            <div class="bg-[#f8fafc] p-8 rounded-xl shadow-md border-t-4 border-[#0A468C]">
+                <h2 class="text-xl font-bold mb-4 border-b pb-2 flex items-center gap-2 text-[#0A468C]">
+                    <span class="material-icons-round text-[#0A468C]">fact_check</span> The 6 OET Assessment Criteria
+                </h2>
+                <p class="text-sm text-gray-600 mb-4">Your letter will be marked by your teacher against these official OET criteria:</p>
+                <div class="space-y-3 text-sm text-gray-800">
+                    <p><strong>1. Purpose:</strong> Is the reason for the letter immediately apparent and clearly expanded?</p>
+                    <p><strong>2. Content:</strong> Is all necessary key information included? Is the case accurately represented?</p>
+                    <p><strong>3. Conciseness & Clarity:</strong> Are irrelevant details omitted? Is the information effectively summarised?</p>
+                    <p><strong>4. Genre & Style:</strong> Is the tone clinical, factual, and polite? Are medical abbreviations used appropriately?</p>
+                    <p><strong>5. Organisation & Layout:</strong> Are the paragraphs logical? Is key information highlighted clearly for the reader?</p>
+                    <p><strong>6. Language:</strong> Are grammar, vocabulary, spelling, and punctuation accurate?</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- EXAM SCREEN -->
     <div id="exam-screen" style="display: none;">
         
-        <!-- Timer Bar -->
         <div id="timer-bar" class="py-3 px-6 flex justify-between items-center">
-            <div class="font-bold font-titulares text-lg" id="test-status">OET Writing Simulator</div>
+            <div class="font-bold font-titulares text-lg" id="test-status">OET Writing Sample 1</div>
             <div class="flex items-center gap-4">
-                <span class="font-bold text-sm bg-white text-[#0A468C] px-3 py-1 rounded-full">Words: <span id="word-count">0</span></span>
+                <div class="hidden md:block text-sm font-semibold bg-white bg-opacity-20 px-3 py-1 rounded">
+                    Word Count: <span id="word-count" class="font-bold">0</span>
+                </div>
                 <div class="flex items-center gap-2 text-2xl font-black font-titulares tracking-wider bg-black bg-opacity-20 px-4 py-1 rounded">
                     <span class="material-icons-round">timer</span> <span id="time-display">45:00</span>
                 </div>
             </div>
         </div>
 
-        <!-- TABS -->
-        <div class="filter-section">
-            <div class="filter-container">
-                <button class="filter-btn active" onclick="switchTab('case-notes')" id="tab-case-notes">1. Case Notes</button>
-                <button class="filter-btn" onclick="switchTab('writing-pad')" id="tab-writing-pad">2. Writing Pad</button>
-                <button class="filter-btn" onclick="switchTab('criteria')" id="tab-criteria">3. Assessment Criteria</button>
-            </div>
-        </div>
-
-        <main class="max-w-6xl mx-auto p-4 md:p-6 w-full mt-4">
-
-            <!-- ================= TAB 1: CASE NOTES ================= -->
-            <div id="view-case-notes" class="view-section active">
-                <div class="card bg-[#fcfdf8]">
-                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-200 pb-2">Patient Case Notes</h2>
-                    <p class="text-gray-600 mb-6 italic">Assume today's date is 25 June 2026. You are a doctor at a General Practice examining a patient.</p>
-                    
-                    <div class="font-mono text-sm leading-relaxed text-gray-800 space-y-4">
-                        <p><strong>Patient Details:</strong><br>
-                        Name: Mr. Robert Smith<br>
-                        DOB: 12 May 1984 (Age 42)<br>
-                        Address: 154 Elm Street, Hillview</p>
-
-                        <p><strong>Social History:</strong><br>
-                        Married, 2 children.<br>
-                        Works as a civil engineer.<br>
-                        Smoker (10 cigarettes/day). Social drinker.</p>
-
-                        <p><strong>Medical History:</strong><br>
-                        Hypertension (diagnosed 2020) - well managed on Ramipril 20mg.<br>
-                        Appendicectomy (2002).</p>
-
-                        <p><strong>Presenting Complaint (Today):</strong><br>
-                        Presented at 09:00 AM.<br>
-                        Severe, crushing central chest pain radiating to left jaw and shoulder.<br>
-                        Onset 1 hour ago while walking the dog.<br>
-                        Associated with diaphoresis (sweating), nausea, and severe shortness of breath.</p>
-
-                        <p><strong>Clinical Examination:</strong><br>
-                        Distressed, pale, and clammy.<br>
-                        BP: 165/95 mmHg, HR: 110 bpm, RR: 24/min, Temp: 37.1°C, O2 Sats: 94% on room air.<br>
-                        Heart: Normal sounds, no murmurs.<br>
-                        Lungs: Clear bilaterally.</p>
-
-                        <p><strong>Initial Management (At Clinic):</strong><br>
-                        Administered Sublingual GTN spray x 2 doses (minimal relief).<br>
-                        Given Aspirin 300mg orally.<br>
-                        Given Oxygen via face mask at 4L/min.<br>
-                        ECG performed: ST-segment elevation in leads V2-V5.</p>
-
-                        <p><strong>Provisional Diagnosis:</strong><br>
-                        Acute Anterior ST-Elevation Myocardial Infarction (STEMI).</p>
-
-                        <p><strong>Plan:</strong><br>
-                        Arrange urgent ambulance transfer to Emergency Department.<br>
-                        Refer to Emergency Physician on duty for urgent cardiological assessment and primary percutaneous coronary intervention (PCI).</p>
-
-                        <div class="mt-8 border-t-2 border-gray-300 pt-4">
-                            <p class="font-bold text-[#F56E1E]">Writing Task:</p>
-                            <p>Using the information given in the case notes, write a letter of referral to Dr. Sarah Jones, Emergency Physician at Hillview City Hospital, 100 Health Drive, Hillview, requesting urgent assessment and management for Mr. Smith.</p>
-                            <ul class="list-disc pl-6 mt-2">
-                                <li>In your answer, expand the relevant notes into complete sentences.</li>
-                                <li>Do not use note form.</li>
-                                <li>Use correct letter format.</li>
+        <main class="max-w-7xl mx-auto p-4 md:p-6 w-full mt-2">
+            
+            <div class="grid lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5">
+                    <div class="card h-full mb-0" style="padding: 1.5rem;">
+                        <h2 class="text-xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2 flex justify-between items-center">
+                            Case Notes
+                            <span class="text-xs text-gray-500 font-normal">Read Carefully</span>
+                        </h2>
+                        
+                        <div class="case-notes-box">
+                            <p><strong>Assume that today's date is 18 June 2018.</strong></p>
+                            <br>
+                            <p>You are a General Practitioner at a local clinic. Ms Anne Hall is a patient of yours.</p>
+                            <br>
+                            <h4>PATIENT DETAILS</h4>
+                            <ul>
+                                <li><strong>Name:</strong> Ms Anne Hall</li>
+                                <li><strong>DOB:</strong> 19.9.1972 (Age 45)</li>
+                                <li><strong>Occupation:</strong> Secondary school teacher</li>
                             </ul>
+
+                            <h4>PRESENTING COMPLAINT</h4>
+                            <ul>
+                                <li>2-week history of gastro-oesophageal reflux</li>
+                                <li>Possible stricture</li>
+                            </ul>
+
+                            <h4>SYMPTOMS & HISTORY</h4>
+                            <ul>
+                                <li>Symptoms follow a constant course.</li>
+                                <li>Dysphagia for solids.</li>
+                                <li>Epigastric pain radiating posteriorly to T12 level.</li>
+                                <li>Concomitant 1-2kg weight loss.</li>
+                                <li>Problem commenced after an upper respiratory tract infection (URTI) 2 weeks ago.</li>
+                                <li>Self-prescribed an over-the-counter (OTC) Chinese herbal product (unknown ingredients) for the URTI.</li>
+                                <li>No apparent signs of anxiety.</li>
+                                <li>No sensation of a lump.</li>
+                            </ul>
+
+                            <h4>MEDICAL HISTORY</h4>
+                            <ul>
+                                <li>Dyspepsia (2012).</li>
+                                <li>Dermatitis (prescribed oral and topical cortisone).</li>
+                                <li>Allergic to codeine.</li>
+                            </ul>
+
+                            <h4>SOCIAL / LIFESTYLE</h4>
+                            <ul>
+                                <li>Recently increased coffee consumption.</li>
+                                <li>Takes aspirin 2-3 times a month.</li>
+                                <li>Ceased smoking 15 years ago.</li>
+                                <li>Drinks socially (mainly spirits).</li>
+                                <li>Family history of peptic ulcer disease.</li>
+                                <li>Current BMI: 28.2</li>
+                            </ul>
+
+                            <h4>MANAGEMENT / PLAN</h4>
+                            <ul>
+                                <li>Recommended patient reduces coffee and alcohol intake.</li>
+                                <li>Advised to immediately stop taking the OTC herbal product.</li>
+                                <li>Prescribed Pantoprazole 40mg daily.</li>
+                                <li>Refer to Gastroenterologist for definitive diagnosis, further investigation, and endoscopy if required.</li>
+                            </ul>
+
+                            <br>
+                            <h4>WRITING TASK</h4>
+                            <p>Using the information in the case notes, write a letter of referral to Dr Roberts, a Gastroenterologist, requesting further investigation and an endoscopy if required.</p>
+                            <br>
+                            <p><strong>Address the letter to:</strong></p>
+                            <p>Dr Roberts<br>Gastroenterology Department<br>City Hospital</p>
+                            <br>
+                            <p><em>In your answer:</em><br>
+                                - Expand the relevant notes into complete sentences.<br>
+                                - Do not use note form.<br>
+                                - Use letter format.
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ================= TAB 2: WRITING PAD ================= -->
-            <div id="view-writing-pad" class="view-section">
-                <div class="card">
-                    <div class="flex justify-between items-center mb-4 border-b-2 border-gray-100 pb-2">
-                        <h2 class="text-2xl font-black text-[#0A468C] font-titulares">Your Letter</h2>
-                        <span class="text-gray-500 font-bold text-sm bg-gray-100 px-3 py-1 rounded">Target: 180 - 200 words</span>
+                <div class="lg:col-span-7 flex flex-col">
+                    <div class="card flex-grow mb-0 flex flex-col" style="padding: 1.5rem;">
+                        <h2 class="text-xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">Your Letter</h2>
+                        <textarea id="letter-textarea" class="oet-textarea flex-grow" placeholder="Type your letter here..." oninput="updateWordCount()"></textarea>
+                        
+                        <div class="mt-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+                            <p class="text-sm text-gray-500 italic">Target length is generally 180–200 words, but focus on the 6 criteria.</p>
+                            <button onclick="finishAndGeneratePDF()" id="btn-submit" class="action-btn w-full md:w-auto px-8">
+                                <span class="material-icons-round">send</span> Submit & Download PDF
+                            </button>
+                        </div>
                     </div>
-                    
-                    <textarea id="oet-editor" class="oet-textarea" placeholder="Start typing your formal referral letter here..."></textarea>
-                    
-                    <div class="mt-6 text-right">
-                        <button onclick="submitTest()" id="btn-submit" class="check-btn">Finish & Submit for Assessment</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= TAB 3: ASSESSMENT CRITERIA ================= -->
-            <div id="view-criteria" class="view-section">
-                <div class="card">
-                    <h2 class="text-2xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">OET Assessment Criteria</h2>
-                    <p class="mb-6 text-gray-600">Your letter will be graded by OET Assessors across six distinct areas[cite: 9]:</p>
-
-                    <div class="overflow-x-auto">
-                        <table class="criteria-table w-full text-sm text-gray-800">
-                            <thead>
-                                <tr>
-                                    <th>Criterion</th>
-                                    <th>Description</th>
-                                    <th>Key Elements for High Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="font-bold">Purpose</td>
-                                    <td>Helps the reader get a quick and precise sense of what is asked of them[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>Introduced early in the document[cite: 9].</li>
-                                            <li>Clearly expanded on later[cite: 9].</li>
-                                            <li>Immediately identifiable to the reader[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold">Content</td>
-                                    <td>Considers necessary information (what does the reader need to know?) and accuracy[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>All key information is included[cite: 9].</li>
-                                            <li>Information is accurately represented[cite: 9].</li>
-                                            <li>Appropriate to the reader and their knowledge to continue care[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold">Conciseness & Clarity</td>
-                                    <td>Considers irrelevant information and how effectively the case is summarised[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>Unnecessary information is left out[cite: 9].</li>
-                                            <li>The case is effectively summarised and presented clearly[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold">Genre & Style</td>
-                                    <td>Considers appropriateness of register and tone to the document's purpose and audience[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>Written in a clinical/factual manner[cite: 9].</li>
-                                            <li>Professional register and tone[cite: 9].</li>
-                                            <li>Judicious use of abbreviations depending on the recipient's discipline[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold">Organisation & Layout</td>
-                                    <td>Considers organisational features so the reader can retrieve information efficiently[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>Appropriate paragraphing[cite: 9].</li>
-                                            <li>Logically organised sub-sections[cite: 9].</li>
-                                            <li>Key information is clearly highlighted[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold">Language</td>
-                                    <td>Considers vocabulary, grammar, spelling, and punctuation[cite: 9].</td>
-                                    <td>
-                                        <ul class="list-disc pl-4 space-y-1">
-                                            <li>Language is accurate and used appropriately[cite: 9].</li>
-                                            <li>Does not interfere with reading comprehension or speed[cite: 9].</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ================= SUBMIT / AI ASSESSOR SCREEN ================= -->
-            <div id="view-result" class="view-section text-center">
-                <div class="card border-t-8 border-[#10b981]">
-                    <span class="material-icons-round text-6xl text-[#10b981] mb-4">gavel</span>
-                    <h2 class="text-3xl font-extrabold font-titulares text-[#0A468C] mb-2">Time's Up! Letter Submitted.</h2>
-                    <p class="text-lg text-gray-600 mb-6">Your writing session is over. To receive your detailed band score based on the 6 OET criteria, copy your letter below and send it to your AI Assessor (Teacher Ivan's AI).</p>
-                    
-                    <div class="bg-gray-50 p-6 rounded-lg text-left border border-gray-300 mb-6 font-mono text-sm whitespace-pre-wrap" id="final-letter-display">
-                        <!-- Letter will appear here -->
-                    </div>
-
-                    <button onclick="copyLetter()" class="check-btn flex items-center gap-2 mx-auto justify-center">
-                        <span class="material-icons-round">content_copy</span> Copy Letter for AI Assessment
-                    </button>
-                    <p id="copy-feedback" class="text-green-600 font-bold mt-3 hidden">Copied to clipboard!</p>
                 </div>
             </div>
 
         </main>
     </div>
 
+    <div id="result-screen" style="display: none;" class="max-w-3xl mx-auto p-6 mt-10 text-center">
+        <div class="bg-white p-10 rounded-xl shadow-2xl border-t-8 border-[#10b981]">
+            <span class="material-icons-round text-6xl text-[#10b981] mb-4">task_alt</span>
+            <h1 class="text-4xl font-extrabold font-titulares text-[#0A468C] mb-4">Letter Submitted!</h1>
+            
+            <p class="text-xl text-gray-700 mb-6">Your official OET Writing submission has been converted to a PDF document.</p>
+            
+            <div class="bg-amber-50 p-6 rounded-lg border border-amber-200 mb-8 text-left">
+                <h3 class="font-bold text-amber-800 text-lg mb-2 flex items-center gap-2">
+                    <span class="material-icons-round">warning</span> Next Steps:
+                </h3>
+                <ol class="list-decimal pl-5 text-amber-900 space-y-2">
+                    <li>Check your Downloads folder for the file named <strong>OET_Writing_[YourName].pdf</strong>.</li>
+                    <li>Send this PDF file directly to <strong>Teacher Ivan</strong> via Inbox or WhatsApp.</li>
+                    <li>Teacher Ivan will use the rubric included in the PDF to grade your letter based on the 6 official OET criteria.</li>
+                </ol>
+            </div>
+
+            <button onclick="location.reload()" class="text-gray-500 hover:text-[#0A468C] font-bold underline transition">
+                Return to Home
+            </button>
+        </div>
+    </div>
+
     <script>
-        let timeLeft = 45 * 60; // 45 minutes
+        let timeLeft = 45 * 60; // 45 minutos en segundos
         let timerInterval;
         let isSubmitted = false;
-
-        // Word Counter Logic
-        const editor = document.getElementById('oet-editor');
-        const wordCountDisplay = document.getElementById('word-count');
-
-        editor.addEventListener('input', () => {
-            if(isSubmitted) return;
-            const text = editor.value.trim();
-            const wordCount = text.length > 0 ? text.split(/\s+/).length : 0;
-            wordCountDisplay.innerText = wordCount;
-
-            // Highlight if outside 180-200 range
-            if(wordCount > 0 && (wordCount < 180 || wordCount > 200)) {
-                wordCountDisplay.style.color = '#ef4444';
-            } else {
-                wordCountDisplay.style.color = '#0A468C';
-            }
-        });
+        let studentNameStr = "";
 
         function startExam() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if(nameInput === "") {
+                alert("Please enter your name before starting the test.");
+                return;
+            }
+            studentNameStr = nameInput;
+
             document.getElementById('intro-screen').style.display = 'none';
             document.getElementById('exam-screen').style.display = 'block';
+            
             timerInterval = setInterval(updateTimer, 1000);
             window.scrollTo(0,0);
         }
@@ -350,56 +291,166 @@
             
             document.getElementById('time-display').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-            if (timeLeft <= 300) { document.getElementById('timer-bar').classList.add('warning'); } // Last 5 mins
+            if (timeLeft <= 300) { // Menos de 5 minutos
+                document.getElementById('timer-bar').classList.add('warning');
+            }
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                submitTest();
+                alert("Time is up! Your letter will now be submitted and downloaded automatically.");
+                finishAndGeneratePDF();
             }
             timeLeft--;
         }
 
-        function switchTab(tabId) {
-            if(isSubmitted) return; // Disable tabs after submission
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`view-${tabId}`).classList.add('active');
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function updateWordCount() {
+            const text = document.getElementById('letter-textarea').value.trim();
+            const count = text === "" ? 0 : text.split(/\s+/).length;
+            document.getElementById('word-count').innerText = count;
         }
 
-        function submitTest() {
+        function finishAndGeneratePDF() {
             if(isSubmitted) return;
             isSubmitted = true;
-
             clearInterval(timerInterval);
+
+            // Bloquear UI
+            document.getElementById('letter-textarea').disabled = true;
             document.getElementById('timer-bar').classList.remove('warning');
-            document.getElementById('timer-bar').style.background = "#10b981";
+            document.getElementById('timer-bar').style.background = "#10b981"; // Verde
             document.getElementById('test-status').innerText = "Test Completed";
-            document.getElementById('time-display').innerText = "00:00";
+            document.getElementById('time-display').innerText = "DONE";
+
+            // Recolectar info
+            const letterContent = document.getElementById('letter-textarea').value;
+            const wordCount = letterContent.trim() === "" ? 0 : letterContent.trim().split(/\s+/).length;
+            const dateStr = new Date().toLocaleDateString();
+
+            // === GENERAR PDF CON jsPDF ===
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            // --- Página 1: La Carta del Estudiante ---
+            // Header
+            doc.setFillColor(10, 70, 140); // Azul primario
+            doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.setFont("helvetica", "bold");
+            doc.text("OET Writing Sub-test: Official Submission", 105, 15, null, null, "center");
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.text("Teacher Ivan HUB", 105, 23, null, null, "center");
+
+            // Meta info
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Student Name:`, 20, 40);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${studentNameStr}`, 55, 40);
             
-            editor.disabled = true;
+            doc.setFont("helvetica", "bold");
+            doc.text(`Date:`, 140, 40);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${dateStr}`, 155, 40);
 
-            // Hide tabs and show results
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelector('.filter-section').style.display = 'none';
-            document.getElementById('view-result').classList.add('active');
+            doc.setFont("helvetica", "bold");
+            doc.text(`Word Count:`, 20, 47);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${wordCount} words`, 55, 47);
 
-            // Transfer text to display
-            const finalLetter = editor.value || "[No text was entered during the test.]";
-            document.getElementById('final-letter-display').innerText = finalLetter;
+            // Título Carta
+            doc.setDrawColor(245, 110, 30); // Naranja
+            doc.setLineWidth(1);
+            doc.line(20, 52, 190, 52);
+
+            doc.setFontSize(12);
+            doc.setFont("times", "normal");
             
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+            // Procesar texto para que respete los márgenes (wrap)
+            const lines = doc.splitTextToSize(letterContent, 170); // 170mm de ancho max
+            
+            // Añadir texto controlando saltos de página
+            let y = 60;
+            const pageHeight = doc.internal.pageSize.height;
 
-        function copyLetter() {
-            const textToCopy = document.getElementById('final-letter-display').innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const feedback = document.getElementById('copy-feedback');
-                feedback.classList.remove('hidden');
-                setTimeout(() => feedback.classList.add('hidden'), 3000);
+            for (let i = 0; i < lines.length; i++) {
+                if (y > pageHeight - 20) {
+                    doc.addPage();
+                    y = 20; // reset Y
+                }
+                doc.text(lines[i], 20, y);
+                y += 6; // line spacing
+            }
+
+            // --- Página 2: Rúbrica de Evaluación para Teacher Ivan ---
+            doc.addPage();
+            
+            // Header Rubric
+            doc.setFillColor(245, 110, 30); // Naranja
+            doc.rect(0, 0, 210, 25, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text("Assessor Rubric: OET Writing Criteria", 105, 16, null, null, "center");
+
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text(`Student: ${studentNameStr}`, 20, 35);
+            
+            const criteria = [
+                { name: "1. Purpose", desc: "Is the reason for the letter immediately apparent and clearly expanded?" },
+                { name: "2. Content", desc: "Is all necessary key information included? Is the case accurately represented?" },
+                { name: "3. Conciseness & Clarity", desc: "Are irrelevant details omitted? Is the information effectively summarised?" },
+                { name: "4. Genre & Style", desc: "Is the tone clinical, factual, and polite? Are medical abbreviations appropriate?" },
+                { name: "5. Organisation & Layout", desc: "Are the paragraphs logical? Is key information highlighted clearly?" },
+                { name: "6. Language", desc: "Are grammar, vocabulary, spelling, and punctuation accurate?" }
+            ];
+
+            let rubricY = 50;
+
+            criteria.forEach(c => {
+                // Título del criterio
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text(c.name, 20, rubricY);
+                
+                // Descripción
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(9);
+                doc.setTextColor(100, 100, 100);
+                doc.text(c.desc, 20, rubricY + 5);
+                
+                // Caja de comentarios/score
+                doc.setDrawColor(200, 200, 200);
+                doc.setFillColor(250, 250, 250);
+                doc.rect(20, rubricY + 8, 170, 15, 'FD');
+                
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(200, 200, 200);
+                doc.text("Score / Comments:", 23, rubricY + 13);
+                
+                doc.setTextColor(0, 0, 0);
+                rubricY += 32;
             });
+
+            // Banda estimada
+            doc.setDrawColor(10, 70, 140);
+            doc.setLineWidth(1);
+            doc.rect(20, rubricY, 170, 20);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.text("ESTIMATED OET GRADE (A / B / C+ / C / D / E):", 25, rubricY + 13);
+
+            // Guardar PDF
+            const safeName = studentNameStr.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            doc.save(`OET_Writing_${safeName}.pdf`);
+
+            // Mostrar pantalla final
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            window.scrollTo(0,0);
         }
     </script>
 </body>
