@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A1 Lesson: Español Conversacional - Teacher Ivan</title>
+    <title>B1 Lesson: Español Conversacional - Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -66,7 +66,8 @@
 
         .question { margin-bottom: 18px; font-size: 1.05rem; }
         
-        input[type="text"] {
+        /* Inputs and Selects */
+        input[type="text"], select {
             font-family: 'Open Sans', sans-serif;
             font-size: 1rem;
             padding: 6px 12px;
@@ -78,7 +79,8 @@
             color: #333;
             font-weight: 600;
         }
-        input[type="text"]:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 5px rgba(245, 110, 30, 0.3); }
+        input[type="text"]:focus, select:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 5px rgba(245, 110, 30, 0.3); }
+        select { cursor: pointer; max-width: 100%; }
         
         .short-input { width: 100px; text-align: center; }
         .medium-input { width: 180px; text-align: center; }
@@ -112,7 +114,7 @@
             .worksheet-container { box-shadow: none; margin: 0; padding: 0; border: none; }
             .exercise-section { background: transparent; border: none; padding: 0; }
             .actions, .btn-check, .btn-print, #feedback-message { display: none !important; }
-            input[type="text"] { border: none; border-bottom: 1px solid black; border-radius: 0; background: transparent; }
+            input[type="text"], select { border: none; border-bottom: 1px solid black; border-radius: 0; background: transparent; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         }
     </style>
 </head>
@@ -122,112 +124,124 @@
         
         <div class="header">
             <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
-            <h1>Español Práctico</h1>
-            <p>Level A1 | Conversational Spanish & Survival Phrases</p>
+            <h1>Español en Acción</h1>
+            <p>Level A2/B1 | Reacciones, Opiniones y Conversaciones Reales</p>
         </div>
 
         <div class="grammar-box">
-            <div style="font-size: 4rem;">🗣️</div>
+            <div style="font-size: 4rem;">💬</div>
             <div class="grammar-content">
-                <h2>Survival Spanish / Español de Supervivencia</h2>
-                <p>You don't need perfect grammar to communicate! These are the most common everyday expressions you will use in a Spanish-speaking country.</p>
+                <h2>Reacciones y Opiniones Naturales</h2>
+                <p>To sound natural in Spanish, you need to react to what others say and express your agreement or disagreement.</p>
                 <table class="grammar-table">
                     <tr>
-                        <th>English</th>
-                        <th>Español</th>
+                        <th>Para reaccionar (To react)</th>
+                        <th>Para opinar (To give opinions)</th>
                     </tr>
                     <tr>
-                        <td>Excuse me / I'm sorry</td>
-                        <td>Disculpe / Lo siento / Perdón</td>
+                        <td><strong>¡No me digas!</strong> (No way! / You don't say!)</td>
+                        <td><strong>Me parece que...</strong> (It seems to me that...)</td>
                     </tr>
                     <tr>
-                        <td>How much does it cost?</td>
-                        <td>¿Cuánto cuesta?</td>
+                        <td><strong>¡Qué pena! / ¡Qué lástima!</strong> (What a shame!)</td>
+                        <td><strong>Estoy de acuerdo.</strong> (I agree.)</td>
                     </tr>
                     <tr>
-                        <td>Where is the bathroom?</td>
-                        <td>¿Dónde está el baño?</td>
-                    </tr>
-                    <tr>
-                        <td>I don't understand.</td>
-                        <td>No entiendo / No comprendo.</td>
-                    </tr>
-                    <tr>
-                        <td>Can you speak slower?</td>
-                        <td>¿Puedes hablar más despacio?</td>
+                        <td><strong>¡Qué buena onda! / ¡Genial!</strong> (That's awesome!)</td>
+                        <td><strong>No tienes razón.</strong> (You are not right.)</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <div class="exercise-section">
-            <h3><span>A</span> Greetings and Politeness</h3>
-            <p class="instructions">Complete the essential conversational phrases with the missing word.</p>
+            <h3><span>A</span> Elige la mejor reacción</h3>
+            <p class="instructions">Read the situation and choose the most natural conversational response from the dropdown.</p>
             
             <div class="question">
-                1. ¡Buenos <input type="text" class="short-input" data-answer="días">! (Good morning!)
+                1. Tu amigo te cuenta que cancelaron su vuelo para sus vacaciones en Japón. <br>
+                <select data-answer="b">
+                    <option value="0">-- Selecciona una respuesta --</option>
+                    <option value="a">A) ¡Qué buena onda! Me parece excelente.</option>
+                    <option value="b">B) ¡No me digas! Qué lástima, lo siento mucho.</option>
+                    <option value="c">C) Estoy de acuerdo contigo.</option>
+                </select>
             </div>
+            
             <div class="question">
-                2. Mucho <input type="text" class="short-input" data-answer="gusto">. (Nice to meet you)
+                2. Alguien te invita a entrenar CrossFit este fin de semana para una competencia. <br>
+                <select data-answer="a">
+                    <option value="0">-- Selecciona una respuesta --</option>
+                    <option value="a">A) ¡Por supuesto! Me parece una gran idea.</option>
+                    <option value="b">B) ¡Qué pena! Tienes mucha razón.</option>
+                    <option value="c">C) Buen provecho.</option>
+                </select>
             </div>
+
             <div class="question">
-                3. ¿Cómo te <input type="text" class="short-input" data-answer="llamas">? (What is your name?)
-            </div>
-            <div class="question">
-                4. ¡Nos <input type="text" class="short-input" data-answer="vemos"> pronto! (See you soon!)
-            </div>
-            <div class="question">
-                5. Un café, por <input type="text" class="short-input" data-answer="favor">. (A coffee, please)
+                3. Tu compañero dice que <em>Warcraft III</em> o <em>League of Legends</em> son juegos muy aburridos, pero a ti te encantan. <br>
+                <select data-answer="c">
+                    <option value="0">-- Selecciona una respuesta --</option>
+                    <option value="a">A) Tienes toda la razón, son terribles.</option>
+                    <option value="b">B) ¡Qué buena onda! Me parece bien.</option>
+                    <option value="c">C) No estoy de acuerdo contigo, son muy divertidos.</option>
+                </select>
             </div>
         </div>
 
         <div class="exercise-section">
-            <h3><span>B</span> At the Restaurant</h3>
-            <p class="instructions">Read the dialogue and fill in the blanks to order food successfully.</p>
+            <h3><span>B</span> Situaciones Específicas</h3>
+            <p class="instructions">Choose the most appropriate phrase for these specific daily situations.</p>
+            
+            <div class="question">
+                1. Estás en una pizzería con tus amigos. El mesero se acerca a la mesa y pregunta: "¿Ya saben qué van a pedir?" <br>
+                <select data-answer="b">
+                    <option value="0">-- Selecciona una respuesta --</option>
+                    <option value="a">A) Sí, ¿dónde está el baño por favor?</option>
+                    <option value="b">B) Sí, queremos una pizza hawayana para compartir.</option>
+                    <option value="c">C) No me digas. Queremos la cuenta.</option>
+                </select>
+            </div>
+
+            <div class="question">
+                2. Tienes mucha hambre y usas tu teléfono para pedir comida rápida a domicilio. ¿Qué dices al repartidor cuando llega? <br>
+                <select data-answer="a">
+                    <option value="0">-- Selecciona una respuesta --</option>
+                    <option value="a">A) Muchas gracias. Pedí una milanesa de pollo con papas.</option>
+                    <option value="b">B) ¡Qué pena! No entiendo nada.</option>
+                    <option value="c">C) Estoy de acuerdo con la comida.</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>C</span> Una conversación de viaje</h3>
+            <p class="instructions">Read the conversation between two friends. Fill in the blanks with logical conversational words based on the context.</p>
             
             <div class="reading-box">
-                <strong>Mesero:</strong> ¡Hola! Buenas noches. ¿Qué van a pedir?<br><br>
-                <strong>Cliente:</strong> ¡Hola! Yo quiero una <input type="text" class="medium-input" data-answer="milanesa de pollo|milanesa"> (1 - chicken milanesa) y para mi amigo una pizza <input type="text" class="medium-input" data-answer="hawayana|hawaiiana"> (2 - Hawaiian).<br><br>
-                <strong>Mesero:</strong> Excelente. ¿Y para beber?<br><br>
-                <strong>Cliente:</strong> Un vaso de <input type="text" class="medium-input" data-answer="agua"> (3 - water), por favor.<br><br>
-                <strong>Mesero:</strong> ¡Perfecto! ¿Desean algo más?<br><br>
-                <strong>Cliente:</strong> No, eso es todo. ¿Me trae la <input type="text" class="medium-input" data-answer="cuenta"> (4 - bill), por favor?
+                <strong>Ana:</strong> ¡Hola! ¿Cómo estuvo tu viaje al Salar de <input type="text" class="medium-input" data-answer="uyuni"> (1 - famous salt flat in Bolivia)?<br><br>
+                <strong>Carlos:</strong> ¡Fue increíble! Los paisajes son hermosos, pero el clima estaba muy <input type="text" class="medium-input" data-answer="frío|frio"> (2 - cold) por las noches.<br><br>
+                <strong>Ana:</strong> ¡No me <input type="text" class="medium-input" data-answer="digas"> (3 - say)! ¿Llevaste suficiente ropa abrigada?<br><br>
+                <strong>Carlos:</strong> Sí, afortunadamente. Me <input type="text" class="medium-input" data-answer="parece"> (4 - seems) que es uno de los mejores lugares del mundo. Tienes que ir.<br><br>
+                <strong>Ana:</strong> ¡Estoy de <input type="text" class="medium-input" data-answer="acuerdo"> (5 - agree)! Quiero ir el próximo año.
             </div>
         </div>
 
         <div class="exercise-section">
-            <h3><span>C</span> Sentence Order</h3>
-            <p class="instructions">Put the words in the correct order to form survival questions. Watch out for punctuation!</p>
+            <h3><span>D</span> Ordenar Oraciones (Avanzado)</h3>
+            <p class="instructions">Put the words in the correct order to form complex conversational sentences. Watch out for punctuation!</p>
 
             <div class="question">
-                1. el / está / dónde / baño / ?
-                <input type="text" class="long-input" data-answer="¿dónde está el baño?|dónde está el baño?|donde esta el baño?|¿donde esta el baño?">
+                1. parece / te / pedimos / una / si / hoy / milanesa / ?
+                <input type="text" class="long-input" data-answer="¿te parece si pedimos una milanesa hoy?|te parece si pedimos una milanesa hoy?|¿te parece si hoy pedimos una milanesa?|te parece si hoy pedimos una milanesa?">
             </div>
             <div class="question">
-                2. cuesta / cuánto / esto / ?
-                <input type="text" class="long-input" data-answer="¿cuánto cuesta esto?|cuánto cuesta esto?|cuanto cuesta esto?|¿cuanto cuesta esto?">
+                2. no / contigo / acuerdo / estoy / de / nada / para / .
+                <input type="text" class="long-input" data-answer="no estoy de acuerdo contigo para nada.|para nada estoy de acuerdo contigo.">
             </div>
             <div class="question">
-                3. hablar / más / puedes / despacio / ?
-                <input type="text" class="long-input" data-answer="¿puedes hablar más despacio?|puedes hablar más despacio?|puedes hablar mas despacio?|¿puedes hablar mas despacio?">
-            </div>
-        </div>
-
-        <div class="exercise-section">
-            <h3><span>D</span> What do you say?</h3>
-            <p class="instructions">Read the situation in English and write the correct expression in Spanish. <br><em>Example: You want to say thank you -> Gracias</em></p>
-
-            <div class="question">
-                1. You accidentally bump into someone on the street.
-                <input type="text" class="long-input" data-answer="perdón|lo siento|disculpe|perdon">
-            </div>
-            <div class="question">
-                2. Someone is speaking Spanish way too fast for you to understand.
-                <input type="text" class="long-input" data-answer="no entiendo|¿puedes hablar más despacio?|no comprendo|habla más despacio">
-            </div>
-            <div class="question">
-                3. You are leaving a store and want to say "Goodbye".
-                <input type="text" class="long-input" data-answer="adiós|adios|hasta luego|nos vemos|chau">
+                3. buena / qué / aprobaste / que / onda / el / examen / !
+                <input type="text" class="long-input" data-answer="¡qué buena onda que aprobaste el examen!|qué buena onda que aprobaste el examen!|¡que buena onda que aprobaste el examen!|que buena onda que aprobaste el examen!">
             </div>
         </div>
 
@@ -242,7 +256,8 @@
 
     <script>
         function checkAnswers() {
-            const inputs = document.querySelectorAll('input[type="text"]');
+            // Selecciona tanto los inputs de texto como los selects (desplegables)
+            const inputs = document.querySelectorAll('input[type="text"], select');
             let allCorrect = true;
 
             inputs.forEach(input => {
@@ -250,10 +265,11 @@
                 // Limpiar espacios dobles por si acaso
                 userAnswer = userAnswer.replace(/\s+/g, ' '); 
                 
-                let correctAnswers = input.getAttribute('data-answer').split('|');
+                // Extraer las respuestas correctas permitidas (separadas por |)
+                let correctAnswers = input.getAttribute('data-answer').toLowerCase().split('|');
                 
-                if (userAnswer === "") {
-                    // Si está vacío, marcar rojo pero no contar como un intento fallido definitivo para el mensaje
+                if (userAnswer === "" || userAnswer === "0") {
+                    // Si está vacío o es la opción por defecto "0", marcar rojo
                     input.style.borderColor = "var(--rojo-error)";
                     input.style.backgroundColor = "#ffebee";
                     allCorrect = false;
@@ -276,11 +292,11 @@
             if (allCorrect) {
                 feedback.style.backgroundColor = "#e8f5e9";
                 feedback.style.color = "var(--verde-correcto)";
-                feedback.innerHTML = "🎉 ¡Excelente trabajo! Todas tus respuestas son correctas.";
+                feedback.innerHTML = "🎉 ¡Excelente trabajo! Demostraste un nivel muy natural de español.";
             } else {
                 feedback.style.backgroundColor = "#fff3e0";
                 feedback.style.color = "#ff9800";
-                feedback.innerHTML = "⚠️ Tienes algunos errores (marcados en rojo). ¡Intenta corregirlos!";
+                feedback.innerHTML = "⚠️ Tienes algunos errores (marcados en rojo). ¡Revisa bien las opciones!";
             }
         }
     </script>
