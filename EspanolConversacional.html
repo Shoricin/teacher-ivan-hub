@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1 Lesson: Español Conversacional - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --gris-claro: #f0f4f8;
+            --verde-correcto: #4CAF50;
+            --rojo-error: #F44336;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--blanco-nieve);
+            color: #333;
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--azul-primario); }
+
+        .worksheet-container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.1);
+            border-top: 8px solid var(--azul-primario);
+        }
+
+        /* Header */
+        .header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px dashed #ccc; }
+        .header img { height: 60px; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; }
+        .header p { color: #666; font-size: 1.1rem; margin-top: 5px; }
+
+        /* Grammar Box */
+        .grammar-box {
+            background-color: var(--gris-claro);
+            border-left: 5px solid var(--naranja-vibrante);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .grammar-content { flex: 1; }
+        .grammar-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        .grammar-table th, .grammar-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        .grammar-table th { background-color: var(--azul-primario); color: white; }
+
+        /* Exercises */
+        .exercise-section { margin-bottom: 45px; background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #eee; }
+        .exercise-section h3 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin-top: 0; }
+        .exercise-section h3 span { background: var(--naranja-vibrante); color: white; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; }
+        .instructions { font-style: italic; color: #555; margin-bottom: 20px; }
+
+        .question { margin-bottom: 18px; font-size: 1.05rem; }
+        
+        input[type="text"] {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            padding: 6px 12px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s;
+            background-color: white;
+            color: #333;
+            font-weight: 600;
+        }
+        input[type="text"]:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 5px rgba(245, 110, 30, 0.3); }
+        
+        .short-input { width: 100px; text-align: center; }
+        .medium-input { width: 180px; text-align: center; }
+        .long-input { width: 80%; display: block; margin-top: 10px; }
+
+        /* Reading Box */
+        .reading-box {
+            line-height: 2;
+            font-size: 1.1rem;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* Action Buttons */
+        .actions { display: flex; justify-content: space-between; margin-top: 30px; border-top: 2px solid #eee; padding-top: 25px; }
+        button {
+            padding: 12px 30px; font-size: 1rem; font-family: 'Montserrat', sans-serif; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s, background 0.3s; text-transform: uppercase;
+        }
+        .btn-check { background-color: var(--naranja-vibrante); color: white; box-shadow: 0 4px 10px rgba(245, 110, 30, 0.3); }
+        .btn-check:hover { background-color: #d85c14; transform: translateY(-2px); }
+        .btn-print { background-color: #4A5568; color: white; }
+        .btn-print:hover { background-color: #2d3748; transform: translateY(-2px); }
+
+        #feedback-message { display: none; text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.1rem; padding: 15px; border-radius: 8px; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .worksheet-container { box-shadow: none; margin: 0; padding: 0; border: none; }
+            .exercise-section { background: transparent; border: none; padding: 0; }
+            .actions, .btn-check, .btn-print, #feedback-message { display: none !important; }
+            input[type="text"] { border: none; border-bottom: 1px solid black; border-radius: 0; background: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="worksheet-container">
+        
+        <div class="header">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h1>Español Práctico</h1>
+            <p>Level A1 | Conversational Spanish & Survival Phrases</p>
+        </div>
+
+        <div class="grammar-box">
+            <div style="font-size: 4rem;">🗣️</div>
+            <div class="grammar-content">
+                <h2>Survival Spanish / Español de Supervivencia</h2>
+                <p>You don't need perfect grammar to communicate! These are the most common everyday expressions you will use in a Spanish-speaking country.</p>
+                <table class="grammar-table">
+                    <tr>
+                        <th>English</th>
+                        <th>Español</th>
+                    </tr>
+                    <tr>
+                        <td>Excuse me / I'm sorry</td>
+                        <td>Disculpe / Lo siento / Perdón</td>
+                    </tr>
+                    <tr>
+                        <td>How much does it cost?</td>
+                        <td>¿Cuánto cuesta?</td>
+                    </tr>
+                    <tr>
+                        <td>Where is the bathroom?</td>
+                        <td>¿Dónde está el baño?</td>
+                    </tr>
+                    <tr>
+                        <td>I don't understand.</td>
+                        <td>No entiendo / No comprendo.</td>
+                    </tr>
+                    <tr>
+                        <td>Can you speak slower?</td>
+                        <td>¿Puedes hablar más despacio?</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>A</span> Greetings and Politeness</h3>
+            <p class="instructions">Complete the essential conversational phrases with the missing word.</p>
+            
+            <div class="question">
+                1. ¡Buenos <input type="text" class="short-input" data-answer="días">! (Good morning!)
+            </div>
+            <div class="question">
+                2. Mucho <input type="text" class="short-input" data-answer="gusto">. (Nice to meet you)
+            </div>
+            <div class="question">
+                3. ¿Cómo te <input type="text" class="short-input" data-answer="llamas">? (What is your name?)
+            </div>
+            <div class="question">
+                4. ¡Nos <input type="text" class="short-input" data-answer="vemos"> pronto! (See you soon!)
+            </div>
+            <div class="question">
+                5. Un café, por <input type="text" class="short-input" data-answer="favor">. (A coffee, please)
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>B</span> At the Restaurant</h3>
+            <p class="instructions">Read the dialogue and fill in the blanks to order food successfully.</p>
+            
+            <div class="reading-box">
+                <strong>Mesero:</strong> ¡Hola! Buenas noches. ¿Qué van a pedir?<br><br>
+                <strong>Cliente:</strong> ¡Hola! Yo quiero una <input type="text" class="medium-input" data-answer="milanesa de pollo|milanesa"> (1 - chicken milanesa) y para mi amigo una pizza <input type="text" class="medium-input" data-answer="hawayana|hawaiiana"> (2 - Hawaiian).<br><br>
+                <strong>Mesero:</strong> Excelente. ¿Y para beber?<br><br>
+                <strong>Cliente:</strong> Un vaso de <input type="text" class="medium-input" data-answer="agua"> (3 - water), por favor.<br><br>
+                <strong>Mesero:</strong> ¡Perfecto! ¿Desean algo más?<br><br>
+                <strong>Cliente:</strong> No, eso es todo. ¿Me trae la <input type="text" class="medium-input" data-answer="cuenta"> (4 - bill), por favor?
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>C</span> Sentence Order</h3>
+            <p class="instructions">Put the words in the correct order to form survival questions. Watch out for punctuation!</p>
+
+            <div class="question">
+                1. el / está / dónde / baño / ?
+                <input type="text" class="long-input" data-answer="¿dónde está el baño?|dónde está el baño?|donde esta el baño?|¿donde esta el baño?">
+            </div>
+            <div class="question">
+                2. cuesta / cuánto / esto / ?
+                <input type="text" class="long-input" data-answer="¿cuánto cuesta esto?|cuánto cuesta esto?|cuanto cuesta esto?|¿cuanto cuesta esto?">
+            </div>
+            <div class="question">
+                3. hablar / más / puedes / despacio / ?
+                <input type="text" class="long-input" data-answer="¿puedes hablar más despacio?|puedes hablar más despacio?|puedes hablar mas despacio?|¿puedes hablar mas despacio?">
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>D</span> What do you say?</h3>
+            <p class="instructions">Read the situation in English and write the correct expression in Spanish. <br><em>Example: You want to say thank you -> Gracias</em></p>
+
+            <div class="question">
+                1. You accidentally bump into someone on the street.
+                <input type="text" class="long-input" data-answer="perdón|lo siento|disculpe|perdon">
+            </div>
+            <div class="question">
+                2. Someone is speaking Spanish way too fast for you to understand.
+                <input type="text" class="long-input" data-answer="no entiendo|¿puedes hablar más despacio?|no comprendo|habla más despacio">
+            </div>
+            <div class="question">
+                3. You are leaving a store and want to say "Goodbye".
+                <input type="text" class="long-input" data-answer="adiós|adios|hasta luego|nos vemos|chau">
+            </div>
+        </div>
+
+        <div id="feedback-message"></div>
+
+        <div class="actions">
+            <button class="btn-print" onclick="window.print()">🖨️ Print</button>
+            <button class="btn-check" onclick="checkAnswers()">🔍 Check Answers</button>
+        </div>
+
+    </div>
+
+    <script>
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                let userAnswer = input.value.toLowerCase().trim();
+                // Limpiar espacios dobles por si acaso
+                userAnswer = userAnswer.replace(/\s+/g, ' '); 
+                
+                let correctAnswers = input.getAttribute('data-answer').split('|');
+                
+                if (userAnswer === "") {
+                    // Si está vacío, marcar rojo pero no contar como un intento fallido definitivo para el mensaje
+                    input.style.borderColor = "var(--rojo-error)";
+                    input.style.backgroundColor = "#ffebee";
+                    allCorrect = false;
+                } else if (correctAnswers.includes(userAnswer)) {
+                    input.style.borderColor = "var(--verde-correcto)";
+                    input.style.backgroundColor = "#e8f5e9";
+                    input.style.color = "#2e7d32";
+                } else {
+                    input.style.borderColor = "var(--rojo-error)";
+                    input.style.backgroundColor = "#ffebee";
+                    input.style.color = "#c62828";
+                    allCorrect = false;
+                }
+            });
+
+            // Mensaje de retroalimentación
+            const feedback = document.getElementById('feedback-message');
+            feedback.style.display = 'block';
+
+            if (allCorrect) {
+                feedback.style.backgroundColor = "#e8f5e9";
+                feedback.style.color = "var(--verde-correcto)";
+                feedback.innerHTML = "🎉 ¡Excelente trabajo! Todas tus respuestas son correctas.";
+            } else {
+                feedback.style.backgroundColor = "#fff3e0";
+                feedback.style.color = "#ff9800";
+                feedback.innerHTML = "⚠️ Tienes algunos errores (marcados en rojo). ¡Intenta corregirlos!";
+            }
+        }
+    </script>
+</body>
+</html>
