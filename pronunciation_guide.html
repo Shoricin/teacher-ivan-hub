@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultimate Pronunciation Guide - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); }
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); }
+
+        .card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+
+        /* Tabs Navigation */
+        .filter-section {
+            background-color: var(--blanco-puro); padding: 1rem;
+            border-bottom: 2px solid var(--gris-neutro);
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: center; overflow-x: auto; white-space: nowrap;
+        }
+        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
+        .filter-btn {
+            background: transparent; border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
+        .filter-btn.active { background: var(--azul-primario); color: var(--blanco-puro); box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); }
+        
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Interactive Elements */
+        .radio-label { 
+            display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; 
+            border: 2px solid var(--gris-neutro); border-radius: 8px; cursor: pointer; 
+            background: var(--blanco-puro); color: #444; font-size: 0.95rem; margin-bottom: 10px;
+            transition: all 0.2s; font-weight: 600;
+        }
+        .radio-label:hover:not(.disabled) { border-color: var(--azul-claro); background: #f8fbff; }
+        .radio-label input[type="radio"] { accent-color: var(--naranja-vibrante); transform: scale(1.3); margin-top: 4px; flex-shrink: 0;}
+        .radio-label input[type="radio"]:disabled { cursor: not-allowed; }
+        .radio-label.disabled { cursor: not-allowed; opacity: 0.7; }
+
+        .phonetic { font-family: "Courier New", Courier, monospace; font-weight: bold; color: var(--naranja-vibrante); background: #fff3ed; padding: 2px 6px; border-radius: 4px; }
+
+        .check-btn {
+            display: block; width: 100%; background: var(--naranja-vibrante); color: white;
+            padding: 15px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
+
+        .lesson-box {
+            background: #f8fafc; border-left: 4px solid var(--azul-primario);
+            padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- HERO SECTION -->
+    <div class="bg-[#0A468C] text-white py-12 px-6 text-center shadow-md relative">
+        <a href="index.html" class="absolute top-6 left-6 text-white opacity-80 hover:opacity-100 hover:text-[#F56E1E] transition flex items-center gap-1 font-bold">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <h1 class="text-4xl md:text-5xl font-extrabold font-titulares uppercase mb-3">Pronunciation <span class="text-[#F56E1E]">Ultimate Guide</span></h1>
+        <p class="text-blue-200 text-lg font-light max-w-2xl mx-auto">Domina los sonidos del inglés, mejora tu acento y logra una comunicación clara y fluida con estas 5 lecciones maestras.</p>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="filter-section">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="switchTab('vowels')" id="tab-vowels">
+                <span class="material-icons-round text-sm">record_voice_over</span> 1. Vowels & Schwa
+            </button>
+            <button class="filter-btn" onclick="switchTab('consonants')" id="tab-consonants">
+                <span class="material-icons-round text-sm">hearing</span> 2. Consonants
+            </button>
+            <button class="filter-btn" onclick="switchTab('stress')" id="tab-stress">
+                <span class="material-icons-round text-sm">compress</span> 3. Word Stress
+            </button>
+            <button class="filter-btn" onclick="switchTab('connected')" id="tab-connected">
+                <span class="material-icons-round text-sm">link</span> 4. Connected Speech
+            </button>
+            <button class="filter-btn" onclick="switchTab('intonation')" id="tab-intonation">
+                <span class="material-icons-round text-sm">graphic_eq</span> 5. Intonation
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-6 w-full mt-4">
+
+        <!-- ================= TAB 1: VOWELS & SCHWA ================= -->
+        <div id="view-vowels" class="view-section active">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">1. Vowels & The Schwa</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">school</span> Master Lesson
+                    </h3>
+                    <p class="text-gray-700 mb-3">En español solo tenemos 5 sonidos vocálicos. En inglés hay <strong>más de 15</strong>. El error más común es pronunciar el inglés como se lee en español.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>Long vs. Short Vowels:</strong> No es lo mismo <span class="phonetic">/ɪ/</span> (corto y relajado, como en <em>it</em>) que <span class="phonetic">/i:/</span> (largo y sonriendo, como en <em>eat</em>). Un error aquí cambia el significado de la palabra (ej. <em>sheet</em> vs <em>sh*t</em>).</li>
+                        <li><strong>The Schwa <span class="phonetic">/ə/</span>:</strong> Es el sonido más común del inglés. Es un sonido muy débil y vago (como un gemido suave "uh"). Reemplaza a casi cualquier vocal en las sílabas que <strong>no llevan acento</strong> (ej. comp<strong>u</strong>ter, <strong>a</strong>bout).</li>
+                    </ul>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <p class="text-sm text-gray-500 mb-6">Choose the correct sound or word based on the pronunciation rules.</p>
+
+                <div class="space-y-6" id="quiz-vowels">
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">1. Which word contains a LONG vowel sound <span class="phonetic">/i:/</span>?</p>
+                        <label class="radio-label"><input type="radio" name="v1" value="a"> A) Ship</label>
+                        <label class="radio-label"><input type="radio" name="v1" value="b"> B) Slip</label>
+                        <label class="radio-label"><input type="radio" name="v1" value="c"> C) Hit</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">2. In the word "Doctor", which vowel sound becomes a Schwa <span class="phonetic">/ə/</span>?</p>
+                        <label class="radio-label"><input type="radio" name="v2" value="a"> A) The first 'o' (D-o-ctor)</label>
+                        <label class="radio-label"><input type="radio" name="v2" value="b"> B) The second 'o' (Doct-o-r)</label>
+                        <label class="radio-label"><input type="radio" name="v2" value="c"> C) Neither, both are pronounced clearly.</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">3. Which minimal pair correctly demonstrates Short vs. Long vowels?</p>
+                        <label class="radio-label"><input type="radio" name="v3" value="a"> A) Cat / Cut</label>
+                        <label class="radio-label"><input type="radio" name="v3" value="b"> B) Fit / Feet</label>
+                        <label class="radio-label"><input type="radio" name="v3" value="c"> C) Run / Ran</label>
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers('vowels', ['a', 'b', 'b'])" id="btn-vowels" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: CONSONANTS ================= -->
+        <div id="view-consonants" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">2. Tricky Consonants</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">school</span> Master Lesson
+                    </h3>
+                    <p class="text-gray-700 mb-3">Hay consonantes en inglés que simplemente no existen en español. Si las sustituyes por la consonante más parecida, tu acento sonará muy fuerte.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>The 'TH' Sounds:</strong> Hay dos tipos. El <em>Unvoiced</em> <span class="phonetic">/θ/</span> (como "think" o "bath" - aire pasando por los dientes) y el <em>Voiced</em> <span class="phonetic">/ð/</span> (como "this" o "brother" - vibrando las cuerdas vocales). No digas "sink" en lugar de "think".</li>
+                        <li><strong>V vs. B:</strong> En español suenan igual. En inglés, la 'V' vibra (labio inferior contra dientes superiores).</li>
+                        <li><strong>Z vs. S:</strong> La 'Z' en inglés <span class="phonetic">/z/</span> es como el zumbido de una abeja (Zoo). La 'S' <span class="phonetic">/s/</span> es aire como una serpiente (Sue).</li>
+                    </ul>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <div class="space-y-6" id="quiz-consonants">
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">1. If you pronounce the 'th' in "Think" as an 's', what word are you actually saying?</p>
+                        <label class="radio-label"><input type="radio" name="c1" value="a"> A) Thing</label>
+                        <label class="radio-label"><input type="radio" name="c1" value="b"> B) Sink</label>
+                        <label class="radio-label"><input type="radio" name="c1" value="c"> C) Brink</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">2. Which word uses the VOICED 'th' sound <span class="phonetic">/ð/</span> (vibrating)?</p>
+                        <label class="radio-label"><input type="radio" name="c2" value="a"> A) Thanks</label>
+                        <label class="radio-label"><input type="radio" name="c2" value="b"> B) Math</label>
+                        <label class="radio-label"><input type="radio" name="c2" value="c"> C) Mother</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">3. To correctly pronounce the word "Very", you must...</p>
+                        <label class="radio-label"><input type="radio" name="c3" value="a"> A) Put your lips together like an 'M'.</label>
+                        <label class="radio-label"><input type="radio" name="c3" value="b"> B) Place your top teeth on your bottom lip and vibrate.</label>
+                        <label class="radio-label"><input type="radio" name="c3" value="c"> C) Keep your mouth completely open.</label>
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers('consonants', ['b', 'c', 'b'])" id="btn-consonants" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: WORD STRESS ================= -->
+        <div id="view-stress" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">3. Word Stress</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">school</span> Master Lesson
+                    </h3>
+                    <p class="text-gray-700 mb-3">En inglés no hay tildes (´) escritas, pero la acentuación de las sílabas es estricta. Una palabra puede cambiar de <em>Sustantivo</em> a <em>Verbo</em> solo cambiando el estrés.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>Regla de 2 Sílabas:</strong> Los <strong>sustantivos</strong> y adjetivos suelen acentuarse en la PRIMERA sílaba (ej. <strong>WA</strong>-ter, <strong>HAP</strong>-py). Los <strong>verbos</strong> suelen acentuarse en la SEGUNDA sílaba (ej. de-<strong>CIDE</strong>, be-<strong>GIN</strong>).</li>
+                        <li><strong>Palabras Mágicas:</strong> "Record". Si dices <strong>RE</strong>-cord, es un sustantivo (un disco). Si dices re-<strong>CORD</strong>, es el verbo (grabar).</li>
+                    </ul>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <div class="space-y-6" id="quiz-stress">
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">1. Choose the correct stress for the word "Present" when it means 'a gift' (Noun).</p>
+                        <label class="radio-label"><input type="radio" name="s1" value="a"> A) PRE-sent</label>
+                        <label class="radio-label"><input type="radio" name="s1" value="b"> B) pre-SENT</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">2. Choose the correct stress for the word "Object" when it means 'to disagree' (Verb).</p>
+                        <label class="radio-label"><input type="radio" name="s2" value="a"> A) OB-ject</label>
+                        <label class="radio-label"><input type="radio" name="s2" value="b"> B) ob-JECT</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">3. Which syllable is stressed in the word "Photograph"?</p>
+                        <label class="radio-label"><input type="radio" name="s3" value="a"> A) The first syllable (PHO-to-graph)</label>
+                        <label class="radio-label"><input type="radio" name="s3" value="b"> B) The second syllable (pho-TO-graph)</label>
+                        <label class="radio-label"><input type="radio" name="s3" value="c"> C) The third syllable (pho-to-GRAPH)</label>
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers('stress', ['a', 'b', 'a'])" id="btn-stress" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: CONNECTED SPEECH ================= -->
+        <div id="view-connected" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">4. Connected Speech</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">school</span> Master Lesson
+                    </h3>
+                    <p class="text-gray-700 mb-3">Los hablantes nativos no dicen palabra... por... palabra. Las encadenan. Esto se llama <em>Connected Speech</em> y es la razón por la que a veces no entiendes el Listening.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>Catenation (Consonante a Vocal):</strong> Si una palabra termina en consonante y la siguiente empieza en vocal, se unen. "An apple" suena como "a-napple".</li>
+                        <li><strong>Assimilation & Elision:</strong> Los sonidos se fusionan o desaparecen. "Want to" se vuelve "Wanna". "Next door" pierde la T y suena "Nex-door". "Did you" suena a "Di-joo".</li>
+                    </ul>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <div class="space-y-6" id="quiz-connected">
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">1. How will a native speaker likely link the phrase: "Stop it"?</p>
+                        <label class="radio-label"><input type="radio" name="cs1" value="a"> A) Sto-pit</label>
+                        <label class="radio-label"><input type="radio" name="cs1" value="b"> B) Stop... it</label>
+                        <label class="radio-label"><input type="radio" name="cs1" value="c"> C) St-opit</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">2. The phrase "What are you doing?" often reduces in fast speech to...</p>
+                        <label class="radio-label"><input type="radio" name="cs2" value="a"> A) What are you doing?</label>
+                        <label class="radio-label"><input type="radio" name="cs2" value="b"> B) Whatcha doin'?</label>
+                        <label class="radio-label"><input type="radio" name="cs2" value="c"> C) What do you do?</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">3. In the phrase "I need an umbrella", where does Catenation (linking) occur?</p>
+                        <label class="radio-label"><input type="radio" name="cs3" value="a"> A) I-need</label>
+                        <label class="radio-label"><input type="radio" name="cs3" value="b"> B) need-an-umbrella (nee-dan-umbrella)</label>
+                        <label class="radio-label"><input type="radio" name="cs3" value="c"> C) It doesn't link.</label>
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers('connected', ['a', 'b', 'b'])" id="btn-connected" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: INTONATION ================= -->
+        <div id="view-intonation" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">5. Intonation & Rhythm</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">school</span> Master Lesson
+                    </h3>
+                    <p class="text-gray-700 mb-3">La entonación es la música del idioma. Controla el tono (pitch) de tu voz para sonar seguro y natural.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>Falling Intonation (Tono descendente):</strong> Se usa en afirmaciones, órdenes y preguntas con WH- (What, Where, Why). Tu voz baja al final. Expresa seguridad. (Ej. <em>What's your name? ↘</em>)</li>
+                        <li><strong>Rising Intonation (Tono ascendente):</strong> Se usa en preguntas de Sí/No (Yes/No questions) o para expresar sorpresa/duda. Tu voz sube al final. (Ej. <em>Are you ready? ↗</em>)</li>
+                    </ul>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <div class="space-y-6" id="quiz-intonation">
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">1. Which intonation pattern should you use for: "Where do you live?"</p>
+                        <label class="radio-label"><input type="radio" name="i1" value="a"> A) Rising Intonation (Voice goes UP ↗)</label>
+                        <label class="radio-label"><input type="radio" name="i1" value="b"> B) Falling Intonation (Voice goes DOWN ↘)</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">2. Which intonation pattern should you use for: "Did you finish the report?"</p>
+                        <label class="radio-label"><input type="radio" name="i2" value="a"> A) Rising Intonation (Voice goes UP ↗)</label>
+                        <label class="radio-label"><input type="radio" name="i2" value="b"> B) Falling Intonation (Voice goes DOWN ↘)</label>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-3 text-gray-800">3. When reading a list (e.g., "I bought apples, bananas, and oranges"), the intonation goes...</p>
+                        <label class="radio-label"><input type="radio" name="i3" value="a"> A) UP on 'apples' and 'bananas', and DOWN on 'oranges'.</label>
+                        <label class="radio-label"><input type="radio" name="i3" value="b"> B) DOWN on every word.</label>
+                        <label class="radio-label"><input type="radio" name="i3" value="c"> C) UP on every word including the last one.</label>
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers('intonation', ['b', 'a', 'a'])" id="btn-intonation" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#0A468C] text-white text-center py-6 border-t-4 border-[#F56E1E] mt-auto">
+        <p class="text-sm font-semibold">© 2026 Teacher Ivan HUB | Ultimate Pronunciation Guide</p>
+    </footer>
+
+    <!-- LOGIC SCRIPTS -->
+    <script>
+        // Tab switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Evaluation Logic
+        function checkAnswers(tabName, correctAnswersArray) {
+            const quizContainer = document.getElementById(`quiz-${tabName}`);
+            const questions = quizContainer.querySelectorAll('div > p'); // count questions
+            
+            let score = 0;
+            const btn = document.getElementById(`btn-${tabName}`);
+            btn.style.display = 'none';
+
+            correctAnswersArray.forEach((correctVal, index) => {
+                // Determine prefix dynamically based on tab
+                let prefix = '';
+                if(tabName === 'vowels') prefix = 'v';
+                if(tabName === 'consonants') prefix = 'c';
+                if(tabName === 'stress') prefix = 's';
+                if(tabName === 'connected') prefix = 'cs';
+                if(tabName === 'intonation') prefix = 'i';
+
+                const qName = `${prefix}${index + 1}`;
+                const selected = document.querySelector(`input[name="${qName}"]:checked`);
+                
+                // Disable all radios
+                document.querySelectorAll(`input[name="${qName}"]`).forEach(input => {
+                    input.disabled = true;
+                    input.parentElement.classList.add("disabled");
+                    input.parentElement.style.borderColor = "var(--gris-neutro)";
+                    input.parentElement.style.background = "var(--blanco-puro)";
+                });
+
+                if (selected) {
+                    if (selected.value === correctVal) {
+                        selected.parentElement.style.borderColor = "#10b981";
+                        selected.parentElement.style.background = "#d1fae5";
+                        selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-700 font-bold text-sm bg-green-200 px-2 py-0.5 rounded">✓</span>`);
+                        score++;
+                    } else {
+                        selected.parentElement.style.borderColor = "#ef4444";
+                        selected.parentElement.style.background = "#fee2e2";
+                        selected.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-red-700 font-bold text-sm bg-red-200 px-2 py-0.5 rounded">✗</span>`);
+                    }
+                }
+
+                // Highlight correct answer
+                const correctEl = document.querySelector(`input[name="${qName}"][value="${correctVal}"]`);
+                if (correctEl && (!selected || selected.value !== correctVal)) {
+                    correctEl.parentElement.style.borderColor = "#10b981";
+                    correctEl.parentElement.style.background = "#d1fae5";
+                    correctEl.parentElement.insertAdjacentHTML('beforeend', `<span class="ml-auto text-green-800 font-bold text-sm bg-green-300 px-2 py-0.5 rounded shadow-sm">✓ Correct</span>`);
+                }
+            });
+
+            // Create result banner
+            const resultHtml = `
+                <div class="mt-6 p-4 rounded-lg text-center border-2 ${score === correctAnswersArray.length ? 'bg-green-50 border-green-200 text-green-800' : 'bg-blue-50 border-blue-200 text-blue-800'}">
+                    <p class="text-xl font-bold">Section Score: <span class="${score === correctAnswersArray.length ? 'text-green-600' : 'text-[#F56E1E]'}">${score}</span> / ${correctAnswersArray.length}</p>
+                    ${score === correctAnswersArray.length ? '<p class="text-sm mt-1">Perfect! You mastered this rule.</p>' : '<p class="text-sm mt-1">Review the rules and keep practicing your pronunciation!</p>'}
+                </div>
+            `;
+            quizContainer.insertAdjacentHTML('afterend', resultHtml);
+        }
+    </script>
+</body>
+</html>
