@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Future Plans: Will vs Going To - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); }
+        h1, h2, h3, h4, .font-titulares { font-family: var(--font-titulares); }
+
+        .card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+
+        /* Tabs Navigation */
+        .filter-section {
+            background-color: var(--blanco-puro); padding: 1rem;
+            border-bottom: 2px solid var(--gris-neutro);
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: center; overflow-x: auto; white-space: nowrap;
+        }
+        .filter-container { display: flex; flex-wrap: nowrap; gap: 10px; }
+        .filter-btn {
+            background: transparent; border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 700; color: var(--azul-primario);
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
+        .filter-btn.active { background: var(--azul-primario); color: var(--blanco-puro); box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); }
+        
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Interactive Elements */
+        .lesson-box {
+            background: #f8fafc; border-left: 4px solid var(--azul-primario);
+            padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+        }
+        
+        .gap-select {
+            padding: 6px 12px; border: 2px solid var(--gris-neutro); border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 700; color: var(--azul-primario); 
+            outline: none; transition: 0.2s; background: #fff; cursor: pointer;
+        }
+        .gap-select:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 0 3px rgba(245, 110, 30, 0.1); }
+        .gap-select:disabled { background: #f3f4f6; cursor: not-allowed; }
+        .correct-field { border-color: #10b981 !important; background: #d1fae5 !important; color: #166534 !important;}
+        .wrong-field { border-color: #ef4444 !important; background: #fee2e2 !important; color: #991b1b !important; }
+
+        .oet-textarea {
+            width: 100%; height: 300px; padding: 1.5rem; border: 2px solid var(--gris-neutro);
+            border-radius: 8px; font-family: var(--font-cuerpo); font-size: 1.1rem;
+            line-height: 1.6; color: #333; resize: vertical; transition: 0.3s;
+        }
+        .oet-textarea:focus { border-color: var(--naranja-vibrante); outline: none; box-shadow: 0 0 0 4px rgba(245, 110, 30, 0.1); }
+
+        .vocab-pill {
+            background: var(--azul-claro); color: var(--azul-primario); font-weight: bold;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; display: inline-block;
+        }
+
+        .check-btn {
+            display: block; width: 100%; background: var(--naranja-vibrante); color: white;
+            padding: 15px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            font-family: var(--font-titulares); border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .check-btn:hover { background: #e05e15; transform: translateY(-2px); }
+
+        .teleprompter-box {
+            background: #fff; border: 3px dashed var(--azul-primario); border-radius: 12px;
+            padding: 2.5rem; font-size: 1.5rem; line-height: 2; color: #222; min-height: 300px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- HERO SECTION -->
+    <div class="bg-[#0A468C] text-white py-12 px-6 text-center shadow-md relative">
+        <a href="index.html" class="absolute top-6 left-6 text-white opacity-80 hover:opacity-100 hover:text-[#F56E1E] transition flex items-center gap-1 font-bold">
+            <span class="material-icons-round">arrow_back</span> HUB
+        </a>
+        <h1 class="text-4xl md:text-5xl font-extrabold font-titulares uppercase mb-3">Will vs <span class="text-[#F56E1E]">Going To</span></h1>
+        <p class="text-blue-200 text-lg font-light max-w-2xl mx-auto">Master the future tense in 3 steps: Read the theory, Write your essay, and Speak like a pro.</p>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="filter-section">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="switchTab('reading')" id="tab-reading">
+                <span class="material-icons-round text-sm">menu_book</span> Part 1: Reading
+            </button>
+            <button class="filter-btn" onclick="switchTab('writing')" id="tab-writing">
+                <span class="material-icons-round text-sm">edit_document</span> Part 2: Writing
+            </button>
+            <button class="filter-btn" onclick="switchTab('speaking')" id="tab-speaking">
+                <span class="material-icons-round text-sm">record_voice_over</span> Part 3: Speaking
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-6 w-full mt-4">
+
+        <!-- ================= PART 1: READING ================= -->
+        <div id="view-reading" class="view-section active">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">1. Understanding the Future</h2>
+                
+                <div class="lesson-box">
+                    <h3 class="font-bold text-xl mb-2 text-[#0A468C] flex items-center gap-2">
+                        <span class="material-icons-round text-[#F56E1E]">lightbulb</span> Theory Overview
+                    </h3>
+                    <p class="text-gray-700 mb-4 leading-relaxed">
+                        Understanding the future in English can be tricky. Both <strong>Will</strong> and <strong>Going to</strong> refer to the future, but we use them in different situations.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-white p-4 rounded border shadow-sm">
+                            <h4 class="font-bold text-[#F56E1E] text-lg mb-2">Going To</h4>
+                            <ul class="list-disc pl-5 text-sm text-gray-700 space-y-2">
+                                <li><strong>Prior Plans:</strong> Decisions made before the moment of speaking.<br><em>"I am going to visit Madrid next year." (I already bought the tickets).</em></li>
+                                <li><strong>Evidence:</strong> Predictions based on what we can see right now.<br><em>"Look at those dark clouds; it is going to rain."</em></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded border shadow-sm">
+                            <h4 class="font-bold text-[#F56E1E] text-lg mb-2">Will</h4>
+                            <ul class="list-disc pl-5 text-sm text-gray-700 space-y-2">
+                                <li><strong>Spontaneous Decisions:</strong> Made at the exact moment of speaking.<br><em>"I forgot the milk! I will go to the store now."</em></li>
+                                <li><strong>Promises & Offers:</strong><br><em>"I will always love you." / "I will carry that bag for you."</em></li>
+                                <li><strong>General Predictions:</strong> Based on opinion, not evidence.<br><em>"I think cars will fly in 2050."</em></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 text-[#F56E1E] uppercase tracking-wide">Practice Exercise</h3>
+                <p class="text-sm text-gray-500 mb-6">Choose the correct future form to complete the sentences based on the context.</p>
+
+                <div class="space-y-6 text-gray-800 leading-loose text-lg">
+                    <div>
+                        <strong>1.</strong> The phone is ringing! - "Don't worry, I 
+                        <select id="q1" class="gap-select mx-1">
+                            <option value="">-- Select --</option>
+                            <option value="will">will</option>
+                            <option value="am going to">am going to</option>
+                        </select> answer it."
+                    </div>
+                    <div>
+                        <strong>2.</strong> Look at that terrible traffic jam. We 
+                        <select id="q2" class="gap-select mx-1">
+                            <option value="">-- Select --</option>
+                            <option value="will">will</option>
+                            <option value="are going to">are going to</option>
+                        </select> be late for the meeting.
+                    </div>
+                    <div>
+                        <strong>3.</strong> She has already packed her bags. She 
+                        <select id="q3" class="gap-select mx-1">
+                            <option value="">-- Select --</option>
+                            <option value="will">will</option>
+                            <option value="is going to">is going to</option>
+                        </select> travel to Japan tomorrow.
+                    </div>
+                    <div>
+                        <strong>4.</strong> I promise I 
+                        <select id="q4" class="gap-select mx-1">
+                            <option value="">-- Select --</option>
+                            <option value="will">will</option>
+                            <option value="am going to">am going to</option>
+                        </select> help you with your homework after dinner.
+                    </div>
+                    <div>
+                        <strong>5.</strong> Are you ready to order? - "Yes, I 
+                        <select id="q5" class="gap-select mx-1">
+                            <option value="">-- Select --</option>
+                            <option value="will">will</option>
+                            <option value="am going to">am going to</option>
+                        </select> have the chicken salad, please."
+                    </div>
+                </div>
+
+                <div id="reading-result" class="hidden mt-6 p-4 rounded text-center border-2 bg-blue-50 border-blue-200">
+                    <p class="text-xl font-bold text-[#0A468C]">Score: <span id="reading-score" class="text-[#F56E1E]">0</span> / 5</p>
+                </div>
+
+                <button onclick="checkReading()" id="btn-reading" class="check-btn mt-8">Check Answers</button>
+            </div>
+        </div>
+
+        <!-- ================= PART 2: WRITING ================= -->
+        <div id="view-writing" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">2. Put it into Practice</h2>
+                
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded">
+                    <h3 class="font-bold text-amber-800 flex items-center gap-2 mb-2">
+                        <span class="material-icons-round">edit</span> Writing Task
+                    </h3>
+                    <p class="text-amber-900 text-sm mb-3">
+                        Write a short essay (minimum 100 words) about <strong>your plans for your next vacation</strong> AND a <strong>spontaneous decision or promise</strong> you might make during the trip. Use both <em>"Going to"</em> and <em>"Will"</em>.
+                    </p>
+                    <p class="text-sm font-bold text-[#0A468C] mb-2">Vocabulary you must use:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="vocab-pill">ticket</span>
+                        <span class="vocab-pill">hotel</span>
+                        <span class="vocab-pill">explore</span>
+                        <span class="vocab-pill">suddenly</span>
+                        <span class="vocab-pill">promise</span>
+                        <span class="vocab-pill">definitely</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <p class="text-sm text-gray-500 font-bold uppercase tracking-widest mb-2">Example:</p>
+                    <p class="italic text-gray-600 border-l-2 pl-4 text-sm">"Next summer, I am going to visit Rome. I have already bought the plane ticket and booked a nice hotel in the city center. I am going to explore the Colosseum... Suddenly, if I see a great Italian restaurant, I will stop to eat pizza. I promise I will take many photos..."</p>
+                </div>
+
+                <div class="relative">
+                    <textarea id="essay-input" class="oet-textarea" placeholder="Start typing your vacation plans here..." oninput="syncWriting()"></textarea>
+                    <div class="absolute bottom-4 right-4 bg-white px-3 py-1 rounded shadow text-sm font-bold border" id="word-counter-box">
+                        Words: <span id="word-count" class="text-[#F56E1E]">0</span> / 100
+                    </div>
+                </div>
+
+                <button onclick="goToSpeaking()" class="check-btn mt-6 flex justify-center items-center gap-2">
+                    Proceed to Speaking <span class="material-icons-round">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PART 3: SPEAKING ================= -->
+        <div id="view-speaking" class="view-section">
+            <div class="card">
+                <h2 class="text-3xl font-black text-[#0A468C] font-titulares mb-4 border-b-2 border-gray-100 pb-2">3. Speak it Out Loud</h2>
+                
+                <p class="text-gray-600 mb-6 text-lg">
+                    It is time to practice your pronunciation! Read your essay out loud using the teleprompter below. 
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 p-3 rounded border text-center">
+                        <span class="material-icons-round text-[#F56E1E] mb-1">record_voice_over</span>
+                        <p class="text-xs font-bold text-[#0A468C] uppercase">Watch the Schwa</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border text-center">
+                        <span class="material-icons-round text-[#F56E1E] mb-1">compress</span>
+                        <p class="text-xs font-bold text-[#0A468C] uppercase">Word Stress</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border text-center">
+                        <span class="material-icons-round text-[#F56E1E] mb-1">link</span>
+                        <p class="text-xs font-bold text-[#0A468C] uppercase">Connected Speech</p>
+                    </div>
+                </div>
+
+                <div class="teleprompter-box" id="speaking-text">
+                    <span class="text-gray-400 italic text-lg">Your text will appear here automatically as you write in Part 2...</span>
+                </div>
+
+                <div class="mt-8 text-center bg-green-50 p-6 border border-green-200 rounded-lg">
+                    <span class="material-icons-round text-5xl text-green-500 mb-2">verified</span>
+                    <h3 class="text-2xl font-bold text-green-700 font-titulares mb-1">Great Job!</h3>
+                    <p class="text-green-800">You have completed the Reading, Writing, and Speaking challenge.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- PART 1: READING LOGIC ---
+        const answers = {
+            q1: "will",              // Spontaneous decision
+            q2: "are going to",      // Prediction with evidence (traffic)
+            q3: "is going to",       // Prior plan (packed bags)
+            q4: "will",              // Promise
+            q5: "will"               // Spontaneous decision at restaurant
+        };
+
+        function checkReading() {
+            let score = 0;
+            for(let i=1; i<=5; i++) {
+                const select = document.getElementById(`q${i}`);
+                const val = select.value;
+                select.disabled = true;
+                select.classList.remove('correct-field', 'wrong-field');
+
+                let feedback = document.createElement('span');
+                feedback.className = "ml-2 text-sm font-bold px-2 py-1 rounded inline-block mt-1";
+
+                if(val === answers[`q${i}`]) {
+                    select.classList.add('correct-field');
+                    feedback.classList.add("bg-green-100", "text-green-700");
+                    feedback.innerText = "✓";
+                    score++;
+                } else {
+                    select.classList.add('wrong-field');
+                    feedback.classList.add("bg-red-100", "text-red-700");
+                    feedback.innerText = `✗ Key: ${answers['q'+i]}`;
+                }
+                select.parentNode.insertBefore(feedback, select.nextSibling);
+            }
+
+            document.getElementById('btn-reading').style.display = 'none';
+            document.getElementById('reading-result').classList.remove('hidden');
+            document.getElementById('reading-score').innerText = score;
+        }
+
+        // --- PART 2 & 3: WRITING & SPEAKING SYNC ---
+        function syncWriting() {
+            const textarea = document.getElementById('essay-input');
+            const text = textarea.value;
+            
+            // Update Word Count
+            const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+            const counterSpan = document.getElementById('word-count');
+            counterSpan.innerText = wordCount;
+            
+            if(wordCount >= 100) {
+                counterSpan.className = "text-green-600";
+                document.getElementById('word-counter-box').classList.add('border-green-500');
+            } else {
+                counterSpan.className = "text-[#F56E1E]";
+                document.getElementById('word-counter-box').classList.remove('border-green-500');
+            }
+
+            // Sync to Part 3 Teleprompter
+            const teleprompter = document.getElementById('speaking-text');
+            if(text.trim() === "") {
+                teleprompter.innerHTML = '<span class="text-gray-400 italic text-lg">Your text will appear here automatically as you write in Part 2...</span>';
+            } else {
+                teleprompter.innerText = text;
+            }
+        }
+
+        function goToSpeaking() {
+            const wordCount = parseInt(document.getElementById('word-count').innerText);
+            if(wordCount < 100) {
+                alert(`You only have ${wordCount} words. Try to reach at least 100 words before proceeding!`);
+            }
+            switchTab('speaking');
+        }
+    </script>
+</body>
+</html>
