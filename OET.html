@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OET 3-Month Plan - Teacher Ivan</title>
+    <title>OET 1-Month Intensive Plan - Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -33,7 +33,7 @@
         
         /* --- Hero Section --- */
         .hero {
-            padding: 3.5rem 4rem;
+            padding: 3.5rem 2rem;
             display: flex; flex-direction: column; align-items: center;
             background-image: linear-gradient(rgba(10, 70, 140, 0.9), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
             background-size: cover; background-position: center;
@@ -44,73 +44,77 @@
         .logo-img { height: 90px; width: auto; margin-bottom: 1.5rem; }
 
         .hero-title {
-            font-size: 3rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;
+            font-size: 2.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;
         }
         .hero-title span { color: var(--naranja-vibrante); }
 
         .hero-subtitle {
-            font-size: 1.2rem; max-width: 700px; margin-top: 10px; font-weight: 300; line-height: 1.6;
+            font-size: 1.1rem; max-width: 800px; margin-top: 10px; font-weight: 300; line-height: 1.6;
         }
 
         /* --- Contenedor Principal --- */
-        .content-wrapper { flex: 1; padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; }
-        .main-container { width: 100%; max-width: 1000px; }
+        .content-wrapper { flex: 1; padding: 3rem 1rem; display: flex; flex-direction: column; align-items: center; }
+        .main-container { width: 100%; max-width: 1100px; }
 
-        /* --- Sección de Metodología --- */
         .section-title {
-            font-size: 2rem; color: var(--azul-primario); text-align: center; margin-bottom: 2rem;
+            font-size: 2rem; color: var(--azul-primario); text-align: center; margin-bottom: 3rem;
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .methodology-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 4rem;
+        /* --- Estructura Semanal --- */
+        .week-card {
+            background: var(--blanco-puro); border-radius: 12px; margin-bottom: 3rem;
+            box-shadow: var(--box-shadow); overflow: hidden;
+            border: 1px solid rgba(200, 205, 210, 0.4);
         }
 
-        .method-box {
-            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
-            box-shadow: var(--box-shadow); border-top: 6px solid var(--azul-primario);
+        .week-header {
+            background: var(--azul-primario); color: var(--blanco-puro);
+            padding: 1.5rem 2rem; display: flex; align-items: center; gap: 15px;
         }
 
-        .method-box.thursday { border-color: var(--naranja-vibrante); }
-        .method-box h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
-        .thursday h3 { color: var(--naranja-vibrante); }
-        .method-box p { color: #555; line-height: 1.6; margin-bottom: 1.5rem; }
-        .method-box ul { padding-left: 20px; color: #444; line-height: 1.8; }
-        .method-box ul li { margin-bottom: 8px; }
-
-        /* --- Plan de Estudios (Syllabus List) --- */
-        .syllabus-container {
-            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
-            box-shadow: var(--box-shadow);
+        .week-badge {
+            background: var(--naranja-vibrante); color: var(--blanco-puro);
+            padding: 5px 15px; border-radius: 20px; font-weight: 800; font-size: 1rem;
+            font-family: var(--font-titulares); text-transform: uppercase;
         }
 
-        .month-block { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--gris-neutro); }
-        .month-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .week-header h3 { font-size: 1.5rem; letter-spacing: 0.5px; }
 
-        .month-header {
-            display: flex; align-items: baseline; gap: 15px; margin-bottom: 1.5rem;
+        .schedule-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
         }
-        .month-tag {
-            background: var(--azul-primario); color: white; padding: 6px 15px; 
-            border-radius: 20px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;
-        }
-        .month-title { font-size: 1.6rem; color: var(--azul-primario); }
 
-        .week-list { list-style: none; padding: 0; margin: 0; }
-        .week-item {
-            display: flex; gap: 20px; margin-bottom: 1.5rem; align-items: flex-start;
+        .schedule-box { padding: 2.5rem; }
+        
+        .live-class { background-color: var(--blanco-puro); border-right: 1px solid #eee; }
+        .assignments { background-color: #F9FCFF; }
+
+        .schedule-box h4 { 
+            font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; 
+            color: var(--azul-primario);
         }
-        .week-number {
-            font-family: var(--font-titulares); font-weight: 800; color: var(--naranja-vibrante);
-            font-size: 1.2rem; min-width: 80px; padding-top: 2px;
+        
+        .assignments h4 { color: var(--naranja-vibrante); }
+
+        .task-list { list-style: none; padding: 0; margin: 0; }
+        .task-list li {
+            position: relative; padding-left: 25px; margin-bottom: 1.2rem;
+            font-size: 0.95rem; color: #444; line-height: 1.5;
         }
-        .week-content h4 { font-size: 1.1rem; color: var(--azul-primario); margin-bottom: 5px; }
-        .week-content p { color: #555; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+        .live-class .task-list li::before {
+            content: '⏱️'; position: absolute; left: 0; top: 0; font-size: 1rem;
+        }
+        .assignments .task-list li::before {
+            content: '📝'; position: absolute; left: 0; top: 0; font-size: 1rem;
+        }
+
+        .task-list strong { color: var(--azul-primario); }
 
         /* Responsivo */
         @media (max-width: 768px) {
-            .methodology-grid { grid-template-columns: 1fr; }
-            .week-item { flex-direction: column; gap: 5px; }
+            .schedule-grid { grid-template-columns: 1fr; }
+            .live-class { border-right: none; border-bottom: 1px solid #eee; }
         }
 
         /* Footer */
@@ -125,123 +129,132 @@
 
     <section class="hero">
         <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo" class="logo-img">
-        <h1 class="hero-title">OET MASTERCLASS <span>HUB</span></h1>
-        <p class="hero-subtitle">Tu camino hacia la calificación que necesitas. Revisa nuestro plan de estudios de 3 meses, diseñado para dominar el registro clínico, la precisión y la estructura del OET.</p>
+        <h1 class="hero-title">OET INTENSIVE <span>1-MONTH PLAN</span></h1>
+        <p class="hero-subtitle">Un programa detallado de 4 semanas. Combina clases maestras en vivo (Jueves) con tareas analíticas y redacciones estructuradas durante la semana para asegurar el dominio del Clinical Register.</p>
     </section>
 
     <div class="content-wrapper">
         <div class="main-container">
             
-            <h2 class="section-title">Metodología de Trabajo</h2>
-            
-            <div class="methodology-grid">
-                <!-- Caja Jueves -->
-                <div class="method-box thursday">
-                    <h3>📅 Live Sessions (Jueves 5-7 pm)</h3>
-                    <p>Nuestra sesión principal de la semana. Nos conectamos en vivo para analizar casos reales, debatir diagnósticos y estructurar nuestras respuestas.</p>
-                    <ul>
-                        <li><strong>Análisis de Case Notes:</strong> Lectura estratégica y selección de datos clave.</li>
-                        <li><strong>Live Writing Clinic:</strong> Revisión grupal de redacciones para detectar áreas de mejora.</li>
-                        <li><strong>Speaking Practice:</strong> Simulaciones de rol (Role-plays) con feedback inmediato.</li>
-                        <li><strong>Resolución de dudas:</strong> Abordamos los retos encontrados en las tareas de la semana.</li>
-                    </ul>
-                </div>
+            <h2 class="section-title">Cronograma Detallado</h2>
 
-                <!-- Caja Resto de la Semana -->
-                <div class="method-box">
-                    <h3>💻 Asignaciones & Self-Study (Lunes a Miércoles)</h3>
-                    <p>El aprendizaje no se detiene el jueves. Durante la semana, trabajarás en nuestro repositorio para consolidar tus habilidades.</p>
-                    <ul>
-                        <li><strong>Writing Assignments:</strong> Redacción de cartas de derivación completas.</li>
-                        <li><strong>Grammar & Accuracy drills:</strong> Ejercicios para erradicar errores ortográficos penalizados en el examen.</li>
-                        <li><strong>Vocabulary Building:</strong> Transformación de lenguaje informal a registro clínico profesional.</li>
-                        <li><strong>Lectura y Análisis:</strong> Revisión de respuestas modelo (Grado A) para entender los criterios del evaluador.</li>
-                    </ul>
+            <!-- SEMANA 1 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <span class="week-badge">Semana 1</span>
+                    <h3>Foundations, Purpose & The Assessor Rubric</h3>
+                </div>
+                <div class="schedule-grid">
+                    <div class="schedule-box live-class">
+                        <h4>Clase en Vivo (Jueves 5:00 - 7:00 p.m.)</h4>
+                        <ul class="task-list">
+                            <li><strong>Análisis de la Rúbrica (30 min):</strong> Desglose detallado de los 6 criterios del OET (Purpose, Content, Conciseness, Genre, Organisation, Language).</li>
+                            <li><strong>Estrategia de Lectura (30 min):</strong> Técnica de 5 minutos para leer "Case Notes" complejas (Ej. Caso Anne Hall) e identificar inmediatamente a quién derivamos y por qué.</li>
+                            <li><strong>Writing Clinic - Párrafo 1 (45 min):</strong> Redacción guiada en vivo del párrafo introductorio. Cómo establecer la urgencia y el propósito médico de forma inconfundible.</li>
+                            <li><strong>Q&A y Set-up (15 min):</strong> Dudas generales y explicación de las asignaciones de la plataforma.</li>
+                        </ul>
+                    </div>
+                    <div class="schedule-box assignments">
+                        <h4>Asignaciones (Lunes a Miércoles)</h4>
+                        <ul class="task-list">
+                            <li><strong>Assignment 1.1 (Lectura):</strong> Leer y resaltar las "Case Notes" del paciente simulado Dr. Smith (Gastroenterología).</li>
+                            <li><strong>Assignment 1.2 (Redacción):</strong> Escribir 3 introducciones diferentes (Purpose) basadas en 3 mini-casos clínicos provistos en la plataforma.</li>
+                            <li><strong>Assignment 1.3 (Grammar Drill):</strong> Completar cuestionario interactivo sobre el uso de artículos (a/an/the) en terminología médica.</li>
+                            <li><strong>Entrega obligatoria:</strong> Subir las 3 introducciones a GitHub/Classroom antes del miércoles a las 23:59.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <h2 class="section-title">Plan de Estudios (3 Meses)</h2>
-
-            <div class="syllabus-container">
-                
-                <!-- MES 1 -->
-                <div class="month-block">
-                    <div class="month-header">
-                        <span class="month-tag">Mes 1</span>
-                        <h3 class="month-title">Foundations & Clinical Register</h3>
-                    </div>
-                    <ul class="week-list">
-                        <li class="week-item">
-                            <div class="week-number">Week 1-2</div>
-                            <div class="week-content">
-                                <h4>Understanding Purpose & Letter Structure</h4>
-                                <p>Introducción a los criterios del OET. Aprenderemos a hacer que el propósito de la derivación sea evidente desde el primer párrafo. Estructura básica de introducción, cuerpo y conclusión.</p>
-                            </div>
-                        </li>
-                        <li class="week-item">
-                            <div class="week-number">Week 3-4</div>
-                            <div class="week-content">
-                                <h4>Mastering Tone & Clinical Genre</h4>
-                                <p>Transición de un inglés general a un registro médico profesional. Eliminaremos frases informales y aprenderemos el uso correcto de la voz pasiva y terminología clínica estandarizada.</p>
-                            </div>
-                        </li>
-                    </ul>
+            <!-- SEMANA 2 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <span class="week-badge">Semana 2</span>
+                    <h3>Genre, Style & Clinical Register</h3>
                 </div>
-
-                <!-- MES 2 -->
-                <div class="month-block">
-                    <div class="month-header">
-                        <span class="month-tag">Mes 2</span>
-                        <h3 class="month-title">Conciseness, Clarity & Accuracy</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-box live-class">
+                        <h4>Clase en Vivo (Jueves 5:00 - 7:00 p.m.)</h4>
+                        <ul class="task-list">
+                            <li><strong>Revisión de Tareas (30 min):</strong> Feedback grupal sobre las introducciones entregadas. Corrección de errores comunes.</li>
+                            <li><strong>Transformación de Registro (40 min):</strong> Taller práctico para pasar de lenguaje informal (ej. "auto-prescribed", "drank coffee") a vocabulario clínico ("self-prescribed", "increased caffeine intake").</li>
+                            <li><strong>Estructura del Cuerpo (35 min):</strong> Cómo organizar lógicamente el historial médico, síntomas y medicación actual en los párrafos centrales.</li>
+                            <li><strong>Role-play Speaking (15 min):</strong> Ejercicio rápido de comunicación oral empática y profesional.</li>
+                        </ul>
                     </div>
-                    <ul class="week-list">
-                        <li class="week-item">
-                            <div class="week-number">Week 5-6</div>
-                            <div class="week-content">
-                                <h4>Selecting Relevant Information</h4>
-                                <p>Técnicas de filtrado. No todo el historial médico debe ir en la carta. Practicaremos cómo resumir historiales complejos omitiendo detalles irrelevantes que saturan al especialista lector.</p>
-                            </div>
-                        </li>
-                        <li class="week-item">
-                            <div class="week-number">Week 7-8</div>
-                            <div class="week-content">
-                                <h4>Grammar, Spelling & Punctuation</h4>
-                                <p>Enfoque intensivo en la precisión. Solucionaremos errores ortográficos comunes en el ámbito médico y puliremos la puntuación para asegurar fluidez y legibilidad máxima.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- MES 3 -->
-                <div class="month-block">
-                    <div class="month-header">
-                        <span class="month-tag">Mes 3</span>
-                        <h3 class="month-title">Advanced Practice & Mock Exams</h3>
+                    <div class="schedule-box assignments">
+                        <h4>Asignaciones (Lunes a Miércoles)</h4>
+                        <ul class="task-list">
+                            <li><strong>Assignment 2.1 (Vocabulario):</strong> Match quiz: Unir frases de pacientes (layman terms) con sus equivalentes médicos correctos.</li>
+                            <li><strong>Assignment 2.2 (Redacción):</strong> Escribir los párrafos de "Medical History" y "Current Status" para el caso de Anne Hall (100 palabras max).</li>
+                            <li><strong>Assignment 2.3 (Accuracy):</strong> Corrección de errores de deletreo (Spelling) penalizados frecuentemente (ej. appropriate, definitive, recommended).</li>
+                            <li><strong>Entrega obligatoria:</strong> Subir el avance de la carta de Anne Hall para revisión de tono clínico.</li>
+                        </ul>
                     </div>
-                    <ul class="week-list">
-                        <li class="week-item">
-                            <div class="week-number">Week 9-10</div>
-                            <div class="week-content">
-                                <h4>Complex Case Notes & Time Management</h4>
-                                <p>Enfrentaremos notas clínicas extensas y desordenadas. Desarrollaremos estrategias para planificar, redactar y revisar una carta de derivación completa dentro del límite estricto de 40 minutos.</p>
-                            </div>
-                        </li>
-                        <li class="week-item">
-                            <div class="week-number">Week 11-12</div>
-                            <div class="week-content">
-                                <h4>Full OET Mock Exams & Final Feedback</h4>
-                                <p>Simulacros reales de examen. Evaluaremos el rendimiento bajo presión utilizando los 6 criterios del Assessor Rubric, brindando una estimación de grado final y recomendaciones personalizadas.</p>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
-
             </div>
+
+            <!-- SEMANA 3 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <span class="week-badge">Semana 3</span>
+                    <h3>Conciseness, Clarity & Information Filtering</h3>
+                </div>
+                <div class="schedule-grid">
+                    <div class="schedule-box live-class">
+                        <h4>Clase en Vivo (Jueves 5:00 - 7:00 p.m.)</h4>
+                        <ul class="task-list">
+                            <li><strong>El arte de omitir (45 min):</strong> Taller interactivo: "What to keep, what to drop". Analizaremos un historial de 3 páginas y lo reduciremos a los datos vitales para el especialista.</li>
+                            <li><strong>Conectores Clínicos (30 min):</strong> Uso de palabras de transición avanzadas (Consequently, Subsequently, Regarding, Please note) para fluidez.</li>
+                            <li><strong>El párrafo de cierre (30 min):</strong> Cómo redactar peticiones claras al especialista (Requesting further investigation / endoscopy).</li>
+                            <li><strong>Feedback Express (15 min):</strong> Revisión rápida de los errores de "Spelling" de la semana 2.</li>
+                        </ul>
+                    </div>
+                    <div class="schedule-box assignments">
+                        <h4>Asignaciones (Lunes a Miércoles)</h4>
+                        <ul class="task-list">
+                            <li><strong>Assignment 3.1 (Edición):</strong> Tomar una carta de derivación sobrecargada (250 palabras) y editarla eliminando irrelevancias hasta llegar a 180 palabras.</li>
+                            <li><strong>Assignment 3.2 (Redacción):</strong> Unir introducción, cuerpo y conclusión redactando tu primera carta de derivación OET completa.</li>
+                            <li><strong>Assignment 3.3 (Peer Review):</strong> Utilizando la rúbrica oficial, evaluar y puntuar la carta de un compañero de clase.</li>
+                            <li><strong>Entrega obligatoria:</strong> Subir carta completa (Draft 1) y el formulario de evaluación de compañeros.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEMANA 4 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <span class="week-badge">Semana 4</span>
+                    <h3>Mock Exam, Time Management & Final Polish</h3>
+                </div>
+                <div class="schedule-grid">
+                    <div class="schedule-box live-class">
+                        <h4>Clase en Vivo (Jueves 5:00 - 7:00 p.m.)</h4>
+                        <ul class="task-list">
+                            <li><strong>Time Management (20 min):</strong> Estrategia final para los 40 minutos del examen oficial (5 min lectura, 30 min redacción, 5 min revisión).</li>
+                            <li><strong>Live Mock Exam (45 min):</strong> Simulación de examen en vivo. Notas clínicas sorpresa. Cronómetro en pantalla.</li>
+                            <li><strong>Peer & Teacher Assessment (40 min):</strong> Intercambio de exámenes simulados, corrección en tiempo real y estimación de banda (A-E).</li>
+                            <li><strong>Cierre del Curso (15 min):</strong> Recomendaciones personalizadas para el día del examen real.</li>
+                        </ul>
+                    </div>
+                    <div class="schedule-box assignments">
+                        <h4>Asignaciones (Post-Curso / Evaluación Final)</h4>
+                        <ul class="task-list">
+                            <li><strong>Assignment 4.1 (Revisión):</strong> Reescribir el Mock Exam basándose estrictamente en las correcciones dadas en la clase en vivo.</li>
+                            <li><strong>Assignment 4.2 (Speaking Test):</strong> Grabar un audio de 5 minutos simulando una consulta clínica y subirlo a la plataforma.</li>
+                            <li><strong>Final Feedback Report:</strong> Lectura del reporte individual entregado por el profesor detallando fortalezas y debilidades.</li>
+                            <li><strong>Graduación del Módulo:</strong> Descarga de certificado y material de repaso para el día del examen oficial.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <footer class="site-footer">
-        <p>© 2026 Teacher Ivan HUB | Repositorio Educativo OET</p>
+        <p>© 2026 Teacher Ivan HUB | OET Intensive 1-Month Program</p>
     </footer>
 
 </body>
