@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OET Preparation Plan - Teacher Ivan</title>
+    <title>OET 3-Month Plan - Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,14 +17,7 @@
             --font-titulares: 'Montserrat', sans-serif; 
             --font-cuerpo: 'Open Sans', sans-serif; 
             
-            --card-shadow: 0 10px 30px rgba(10, 70, 140, 0.08);
-
-            /* Colores por Módulo OET */
-            --color-writing: #4CAF50; /* Verde */
-            --color-reading: #2196F3; /* Azul */
-            --color-speaking: #9C27B0; /* Púrpura */
-            --color-live: #E91E63; /* Rosa/Rojo */
-            --color-extra: #FF9800; /* Naranja */
+            --box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08);
         }
 
         body {
@@ -36,11 +29,11 @@
             display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        h1, h2, h3, .logo-container, .card-tag { font-family: var(--font-titulares); margin: 0; }
+        h1, h2, h3, h4, .logo-container { font-family: var(--font-titulares); margin: 0; }
         
         /* --- Hero Section --- */
         .hero {
-            padding: 3rem 4rem;
+            padding: 3.5rem 4rem;
             display: flex; flex-direction: column; align-items: center;
             background-image: linear-gradient(rgba(10, 70, 140, 0.9), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
             background-size: cover; background-position: center;
@@ -48,7 +41,7 @@
             text-align: center;
         }
 
-        .logo-img { height: 80px; width: auto; margin-bottom: 1.5rem; }
+        .logo-img { height: 90px; width: auto; margin-bottom: 1.5rem; }
 
         .hero-title {
             font-size: 3rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;
@@ -56,97 +49,75 @@
         .hero-title span { color: var(--naranja-vibrante); }
 
         .hero-subtitle {
-            font-size: 1.2rem; max-width: 600px; margin-top: 10px; font-weight: 300;
+            font-size: 1.2rem; max-width: 700px; margin-top: 10px; font-weight: 300; line-height: 1.6;
         }
 
-        /* --- Filtros por Módulo --- */
-        .filter-section {
-            background-color: var(--blanco-puro);
-            padding: 1.5rem;
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex; justify-content: center;
+        /* --- Contenedor Principal --- */
+        .content-wrapper { flex: 1; padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; }
+        .main-container { width: 100%; max-width: 1000px; }
+
+        /* --- Sección de Metodología --- */
+        .section-title {
+            font-size: 2rem; color: var(--azul-primario); text-align: center; margin-bottom: 2rem;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .filter-container { display: flex; flex-wrap: wrap; gap: 10px; max-width: 1200px; }
-
-        .filter-btn {
-            background: transparent; border: 2px solid var(--azul-primario);
-            padding: 8px 20px; border-radius: 50px;
-            font-weight: 700; color: var(--azul-primario);
-            cursor: pointer; transition: all 0.3s;
-            text-transform: uppercase; font-size: 0.85rem;
+        .methodology-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 4rem;
         }
 
-        .filter-btn:hover { background: rgba(10, 70, 140, 0.05); }
-
-        .filter-btn.active {
-            background: var(--azul-primario); color: var(--blanco-puro);
-            box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+        .method-box {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: var(--box-shadow); border-top: 6px solid var(--azul-primario);
         }
 
-        /* --- Contenedor de Lecciones --- */
-        .content-wrapper { flex: 1; padding: 3rem 2rem; display: flex; justify-content: center; }
+        .method-box.thursday { border-color: var(--naranja-vibrante); }
+        .method-box h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .thursday h3 { color: var(--naranja-vibrante); }
+        .method-box p { color: #555; line-height: 1.6; margin-bottom: 1.5rem; }
+        .method-box ul { padding-left: 20px; color: #444; line-height: 1.8; }
+        .method-box ul li { margin-bottom: 8px; }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px; width: 100%; max-width: 1200px;
+        /* --- Plan de Estudios (Syllabus List) --- */
+        .syllabus-container {
+            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
+            box-shadow: var(--box-shadow);
         }
 
-        /* Estilo de Tarjetas */
-        .card {
-            background: var(--blanco-puro); border-radius: 10px;
-            padding: 2rem; box-shadow: var(--card-shadow);
-            display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; overflow: hidden;
-            border: 1px solid rgba(200, 205, 210, 0.2);
-            transition: transform 0.3s ease;
+        .month-block { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--gris-neutro); }
+        .month-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+        .month-header {
+            display: flex; align-items: baseline; gap: 15px; margin-bottom: 1.5rem;
         }
-
-        .card:hover { transform: translateY(-5px); }
-
-        /* Indicadores de Categoría en Tarjetas */
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
-        .mod-writing::before { background: var(--color-writing); }
-        .mod-live::before { background: var(--color-live); }
-        .mod-extra::before { background: var(--color-extra); }
-
-        .card-tag { font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 800; }
-        .mod-writing .card-tag { color: var(--color-writing); }
-        .mod-live .card-tag { color: var(--color-live); }
-        .mod-extra .card-tag { color: var(--color-extra); }
-
-        .card h3 { color: var(--azul-primario); font-size: 1.3rem; margin-bottom: 10px; }
-        .card p { color: #555; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem; }
-
-        .card-link {
-            background: var(--naranja-vibrante); color: white;
-            text-decoration: none; padding: 10px; text-align: center;
-            border-radius: 5px; font-weight: 700; font-size: 0.85rem;
-            transition: background 0.3s;
+        .month-tag {
+            background: var(--azul-primario); color: white; padding: 6px 15px; 
+            border-radius: 20px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;
         }
-        .card-link:hover { background: #e05e15; }
+        .month-title { font-size: 1.6rem; color: var(--azul-primario); }
 
-        /* Mensaje de Repositorio Vacío */
-        .empty-state {
-            grid-column: 1 / -1; text-align: center; padding: 4rem;
-            color: var(--gris-neutro); font-style: italic;
+        .week-list { list-style: none; padding: 0; margin: 0; }
+        .week-item {
+            display: flex; gap: 20px; margin-bottom: 1.5rem; align-items: flex-start;
+        }
+        .week-number {
+            font-family: var(--font-titulares); font-weight: 800; color: var(--naranja-vibrante);
+            font-size: 1.2rem; min-width: 80px; padding-top: 2px;
+        }
+        .week-content h4 { font-size: 1.1rem; color: var(--azul-primario); margin-bottom: 5px; }
+        .week-content p { color: #555; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .methodology-grid { grid-template-columns: 1fr; }
+            .week-item { flex-direction: column; gap: 5px; }
         }
 
         /* Footer */
         .site-footer {
             background: var(--azul-primario); color: white;
             text-align: center; padding: 1.5rem; border-top: 4px solid var(--naranja-vibrante);
-        }
-
-        /* Lógica de Filtrado */
-        .filter-item { display: none; }
-        .show { display: flex; animation: fadeIn 0.4s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-top: auto;
         }
     </style>
 </head>
@@ -155,95 +126,123 @@
     <section class="hero">
         <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo" class="logo-img">
         <h1 class="hero-title">OET MASTERCLASS <span>HUB</span></h1>
-        <p class="hero-subtitle">Plan de preparación intensiva para profesionales de la salud. Domina el registro clínico y asegura tu calificación.</p>
+        <p class="hero-subtitle">Tu camino hacia la calificación que necesitas. Revisa nuestro plan de estudios de 3 meses, diseñado para dominar el registro clínico, la precisión y la estructura del OET.</p>
     </section>
 
-    <div class="filter-section">
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filterSelection('all')">Ver Todo</button>
-            <button class="filter-btn" onclick="filterSelection('mod-live')">Clases en Vivo (Jueves)</button>
-            <button class="filter-btn" onclick="filterSelection('mod-writing')">Writing Clinics</button>
-            <button class="filter-btn" onclick="filterSelection('mod-extra')">Extra Practice</button>
-        </div>
-    </div>
-
     <div class="content-wrapper">
-        <div class="grid-container" id="lessonGrid">
+        <div class="main-container">
             
-            <div id="noLessons" class="empty-state">
-                <p>No hay lecciones publicadas en esta categoría todavía.</p>
+            <h2 class="section-title">Metodología de Trabajo</h2>
+            
+            <div class="methodology-grid">
+                <!-- Caja Jueves -->
+                <div class="method-box thursday">
+                    <h3>📅 Live Sessions (Jueves 5-7 pm)</h3>
+                    <p>Nuestra sesión principal de la semana. Nos conectamos en vivo para analizar casos reales, debatir diagnósticos y estructurar nuestras respuestas.</p>
+                    <ul>
+                        <li><strong>Análisis de Case Notes:</strong> Lectura estratégica y selección de datos clave.</li>
+                        <li><strong>Live Writing Clinic:</strong> Revisión grupal de redacciones para detectar áreas de mejora.</li>
+                        <li><strong>Speaking Practice:</strong> Simulaciones de rol (Role-plays) con feedback inmediato.</li>
+                        <li><strong>Resolución de dudas:</strong> Abordamos los retos encontrados en las tareas de la semana.</li>
+                    </ul>
+                </div>
+
+                <!-- Caja Resto de la Semana -->
+                <div class="method-box">
+                    <h3>💻 Asignaciones & Self-Study (Lunes a Miércoles)</h3>
+                    <p>El aprendizaje no se detiene el jueves. Durante la semana, trabajarás en nuestro repositorio para consolidar tus habilidades.</p>
+                    <ul>
+                        <li><strong>Writing Assignments:</strong> Redacción de cartas de derivación completas.</li>
+                        <li><strong>Grammar & Accuracy drills:</strong> Ejercicios para erradicar errores ortográficos penalizados en el examen.</li>
+                        <li><strong>Vocabulary Building:</strong> Transformación de lenguaje informal a registro clínico profesional.</li>
+                        <li><strong>Lectura y Análisis:</strong> Revisión de respuestas modelo (Grado A) para entender los criterios del evaluador.</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="card mod-live filter-item">
-                <span class="card-tag">Live Sessions • Jueves 5:00 - 7:00 PM</span>
-                <h3>OET Core Strategies</h3>
-                <p>Nuestra cita semanal. Analizaremos casos clínicos reales (como el de Anne Hall), debatiremos la selección de información clave y practicaremos Speaking interactivo.</p>
-                <a href="#link-a-zoom" class="card-link">Acceder a la Sala</a>
-            </div>
+            <h2 class="section-title">Plan de Estudios (3 Meses)</h2>
 
-            <div class="card mod-writing filter-item">
-                <span class="card-tag">Writing Clinic • Módulo 1</span>
-                <h3>Clinical Register & Tone</h3>
-                <p>Aprende a transformar frases informales en lenguaje médico profesional. Evita errores comunes como "auto-prescribed" y domina la terminología exacta.</p>
-                <a href="oet-writing-mod1.html" class="card-link">Iniciar Lección</a>
-            </div>
+            <div class="syllabus-container">
+                
+                <!-- MES 1 -->
+                <div class="month-block">
+                    <div class="month-header">
+                        <span class="month-tag">Mes 1</span>
+                        <h3 class="month-title">Foundations & Clinical Register</h3>
+                    </div>
+                    <ul class="week-list">
+                        <li class="week-item">
+                            <div class="week-number">Week 1-2</div>
+                            <div class="week-content">
+                                <h4>Understanding Purpose & Letter Structure</h4>
+                                <p>Introducción a los criterios del OET. Aprenderemos a hacer que el propósito de la derivación sea evidente desde el primer párrafo. Estructura básica de introducción, cuerpo y conclusión.</p>
+                            </div>
+                        </li>
+                        <li class="week-item">
+                            <div class="week-number">Week 3-4</div>
+                            <div class="week-content">
+                                <h4>Mastering Tone & Clinical Genre</h4>
+                                <p>Transición de un inglés general a un registro médico profesional. Eliminaremos frases informales y aprenderemos el uso correcto de la voz pasiva y terminología clínica estandarizada.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="card mod-writing filter-item">
-                <span class="card-tag">Writing Clinic • Módulo 2</span>
-                <h3>Conciseness & Clarity</h3>
-                <p>¿Qué incluir y qué omitir? Estrategias para resumir historiales médicos largos sin perder información vital para el especialista receptor.</p>
-                <a href="oet-writing-mod2.html" class="card-link">Iniciar Lección</a>
-            </div>
+                <!-- MES 2 -->
+                <div class="month-block">
+                    <div class="month-header">
+                        <span class="month-tag">Mes 2</span>
+                        <h3 class="month-title">Conciseness, Clarity & Accuracy</h3>
+                    </div>
+                    <ul class="week-list">
+                        <li class="week-item">
+                            <div class="week-number">Week 5-6</div>
+                            <div class="week-content">
+                                <h4>Selecting Relevant Information</h4>
+                                <p>Técnicas de filtrado. No todo el historial médico debe ir en la carta. Practicaremos cómo resumir historiales complejos omitiendo detalles irrelevantes que saturan al especialista lector.</p>
+                            </div>
+                        </li>
+                        <li class="week-item">
+                            <div class="week-number">Week 7-8</div>
+                            <div class="week-content">
+                                <h4>Grammar, Spelling & Punctuation</h4>
+                                <p>Enfoque intensivo en la precisión. Solucionaremos errores ortográficos comunes en el ámbito médico y puliremos la puntuación para asegurar fluidez y legibilidad máxima.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="card mod-extra filter-item">
-                <span class="card-tag">Self-Study • Grammar</span>
-                <h3>Accuracy: Spelling & Punctuation</h3>
-                <p>Ejercicios interactivos para erradicar errores de ortografía médica (ej. 'appropriate', 'definitive') que los evaluadores penalizan estrictamente.</p>
-                <a href="oet-extra-grammar.html" class="card-link">Practicar Ahora</a>
-            </div>
+                <!-- MES 3 -->
+                <div class="month-block">
+                    <div class="month-header">
+                        <span class="month-tag">Mes 3</span>
+                        <h3 class="month-title">Advanced Practice & Mock Exams</h3>
+                    </div>
+                    <ul class="week-list">
+                        <li class="week-item">
+                            <div class="week-number">Week 9-10</div>
+                            <div class="week-content">
+                                <h4>Complex Case Notes & Time Management</h4>
+                                <p>Enfrentaremos notas clínicas extensas y desordenadas. Desarrollaremos estrategias para planificar, redactar y revisar una carta de derivación completa dentro del límite estricto de 40 minutos.</p>
+                            </div>
+                        </li>
+                        <li class="week-item">
+                            <div class="week-number">Week 11-12</div>
+                            <div class="week-content">
+                                <h4>Full OET Mock Exams & Final Feedback</h4>
+                                <p>Simulacros reales de examen. Evaluaremos el rendimiento bajo presión utilizando los 6 criterios del Assessor Rubric, brindando una estimación de grado final y recomendaciones personalizadas.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="card mod-extra filter-item">
-                <span class="card-tag">Self-Study • Mock Test</span>
-                <h3>Full OET Writing Mock Test</h3>
-                <p>Pon a prueba lo aprendido. Redacta una carta de derivación en 40 minutos utilizando un nuevo set de Case Notes.</p>
-                <a href="oet-mock-test.html" class="card-link">Hacer Simulación</a>
             </div>
-
         </div>
     </div>
 
     <footer class="site-footer">
-        <p>© 2026 Teacher Ivan HUB | OET Preparation Repository</p>
+        <p>© 2026 Teacher Ivan HUB | Repositorio Educativo OET</p>
     </footer>
 
-    <script>
-        function filterSelection(c) {
-            var x, i, hasItems = false;
-            x = document.getElementsByClassName("filter-item");
-            if (c == "all") c = "";
-            
-            for (i = 0; i < x.length; i++) {
-                x[i].classList.remove("show");
-                if (x[i].className.indexOf(c) > -1) {
-                    x[i].classList.add("show");
-                    hasItems = true;
-                }
-            }
-
-            var btns = document.getElementsByClassName("filter-btn");
-            for (i = 0; i < btns.length; i++) {
-                btns[i].classList.remove("active");
-                if (btns[i].getAttribute("onclick").includes("'" + (c || 'all') + "'")) {
-                    btns[i].classList.add("active");
-                }
-            }
-
-            document.getElementById("noLessons").style.display = hasItems ? "none" : "block";
-        }
-
-        window.onload = function() {
-            filterSelection('all');
-        };
-    </script>
 </body>
 </html>
