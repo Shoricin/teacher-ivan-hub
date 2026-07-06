@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Week 1 - Basic Level | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6;
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-error: #dc3545;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: var(--font-titulares);
+            margin: 0; font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        header h1 span { color: var(--naranja-vibrante); }
+        header p { font-size: 1rem; margin-top: 5px; opacity: 0.9; }
+
+        /* --- Nav Tabs (Mobile Friendly - Scrollable) --- */
+        .tabs {
+            display: flex;
+            background-color: var(--blanco-puro);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px;
+            position: sticky;
+            top: 0; z-index: 100;
+            overflow-x: auto; /* Permite scroll en celulares */
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs::-webkit-scrollbar { height: 4px; }
+        .tabs::-webkit-scrollbar-thumb { background: var(--azul-claro); border-radius: 10px; }
+
+        .tab-btn {
+            background: none; border: none;
+            padding: 10px 18px; margin: 0 5px;
+            font-family: var(--font-titulares);
+            font-size: 0.9rem; color: var(--azul-primario);
+            cursor: pointer; border-radius: 50px;
+            transition: all 0.3s;
+            flex: 0 0 auto;
+        }
+
+        .tab-btn:hover { background-color: rgba(10, 70, 140, 0.1); }
+        .tab-btn.active {
+            background-color: var(--naranja-vibrante);
+            color: var(--blanco-puro);
+            box-shadow: 0 4px 8px rgba(245, 110, 30, 0.3);
+        }
+
+        /* --- Content Sections --- */
+        .day-content {
+            display: none;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .day-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Lesson Cards --- */
+        .lesson-card, .worksheet-card {
+            background: var(--blanco-puro);
+            border-radius: 15px; padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-card { border-top: 5px solid var(--azul-primario); }
+        .worksheet-card { border-top: 5px solid var(--naranja-vibrante); }
+
+        .lesson-card h2, .worksheet-card h3 {
+            font-family: var(--font-titulares);
+            margin-top: 0; 
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .lesson-card h2 { color: var(--azul-primario); font-size: 1.5rem; }
+        .worksheet-card h3 { color: var(--naranja-vibrante); font-size: 1.4rem; border-bottom: none; }
+
+        .vocab-box {
+            background: rgba(150, 200, 230, 0.15);
+            padding: 15px; border-radius: 10px;
+            margin: 15px 0; border-left: 5px solid var(--azul-primario);
+            font-size: 0.95rem; line-height: 1.6;
+        }
+
+        .tip-box {
+            background: rgba(245, 110, 30, 0.1);
+            padding: 15px; border-radius: 10px;
+            margin: 15px 0; border-left: 5px solid var(--naranja-vibrante);
+            font-size: 0.95rem; font-style: italic;
+        }
+
+        /* --- Worksheets Interactive Elements --- */
+        .question { margin-bottom: 1.2rem; font-size: 1rem; line-height: 1.8; }
+        
+        .worksheet-input, .worksheet-select {
+            border: 2px solid var(--azul-primario);
+            border-radius: 8px; padding: 6px 10px;
+            font-family: var(--font-cuerpo); font-size: 0.95rem;
+            font-weight: 600; color: var(--azul-primario);
+            text-align: center; outline: none; transition: 0.3s;
+            max-width: 130px; display: inline-block;
+        }
+
+        .worksheet-select { max-width: 150px; cursor: pointer; background: white; }
+        .worksheet-input:focus, .worksheet-select:focus { border-color: var(--naranja-vibrante); }
+
+        .check-btn {
+            background-color: var(--azul-primario);
+            color: white; border: none;
+            padding: 12px 20px; font-size: 1rem;
+            font-family: var(--font-titulares);
+            border-radius: 50px; cursor: pointer;
+            width: 100%; margin-top: 1rem;
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+        }
+
+        .check-btn:hover { background-color: #08356a; transform: translateY(-2px); }
+
+        .result-msg {
+            text-align: center; font-weight: bold;
+            font-size: 1.1rem; margin-top: 15px;
+            min-height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teacher Ivan <span>HUB</span></h1>
+        <p>❄️ Winter Camp: Basic Level (Week 1) ❄️</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openDay(event, 'monday')">Lunes</button>
+        <button class="tab-btn" onclick="openDay(event, 'tuesday')">Martes</button>
+        <button class="tab-btn" onclick="openDay(event, 'wednesday')">Miércoles</button>
+        <button class="tab-btn" onclick="openDay(event, 'thursday')">Jueves</button>
+        <button class="tab-btn" onclick="openDay(event, 'friday')">Viernes</button>
+    </div>
+
+    <!-- ================== LUNES ================== -->
+    <div id="monday" class="day-content active">
+        <div class="lesson-card">
+            <h2>🕵️ Lunes: The Secret Agent</h2>
+            <p>¡Bienvenido al campamento! Hoy aprenderemos a saludar y a presentarnos usando el poderoso <strong>Verbo To Be</strong>.</p>
+            
+            <div class="vocab-box">
+                <strong>📝 Vocabulario Clave:</strong><br>
+                😎 <strong>I am</strong> = Yo soy<br>
+                👉 <strong>You are</strong> = Tú eres<br>
+                👦 <strong>He is</strong> = Él es / 👧 <strong>She is</strong> = Ella es<br>
+                👋 <strong>Greetings:</strong> Hello (Hola), Good morning (Buenos días).
+            </div>
+
+            <div class="tip-box">
+                <strong>🐈 Tip del Michi:</strong> En inglés, la "H" de "Hello" suena casi como una "J" suave. ¡Inténtalo: "Jelou"!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Crea tu identidad</h3>
+            <p>Escribe la respuesta correcta o elige la opción del menú.</p>
+            
+            <div class="question">
+                1. I <input type="text" class="worksheet-input" data-answer="am" placeholder="am/is/are"> a secret agent.
+            </div>
+            <div class="question">
+                2. ¡Hola! ¿Cómo se dice "Buenos días"? <br>
+                Good <select class="worksheet-select" data-answer="morning">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="apple">apple</option>
+                    <option value="morning">morning</option>
+                    <option value="night">night</option>
+                </select>
+            </div>
+            <div class="question">
+                3. Teacher Ivan <input type="text" class="worksheet-input" data-answer="is" placeholder="am/is/are"> very happy today!
+            </div>
+            <div class="question">
+                4. <select class="worksheet-select" data-answer="she">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="he">He</option>
+                    <option value="she">She</option>
+                    <option value="it">It</option>
+                </select> is my sister, Laura.
+            </div>
+            <div class="question">
+                5. You <input type="text" class="worksheet-input" data-answer="are" placeholder="am/is/are"> ready for the mission!
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('monday')">Revisar Misión</button>
+            <div id="result-monday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== MARTES ================== -->
+    <div id="tuesday" class="day-content">
+        <div class="lesson-card">
+            <h2>🛟 Martes: The Rescue Kit</h2>
+            <p>Si no sabes una palabra o no escuchaste bien, ¡no entres en pánico! Usa tu kit de rescate y vocabulario escolar.</p>
+            
+            <div class="vocab-box">
+                <strong>🆘 Frases de Rescate:</strong><br>
+                ❓ <strong>How do you say...?</strong> = ¿Cómo se dice...?<br>
+                🔁 <strong>Can you repeat?</strong> = ¿Puedes repetir?<br>
+                🤷‍♂️ <strong>I don't understand.</strong> = No entiendo.<br>
+                <strong>🎒 Objetos:</strong> Pen (Bolígrafo), Book (Libro), Notebook (Cuaderno).
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Recurso Extra:</strong> Siempre que pidas ayuda, termina tu oración con la palabra mágica: <strong>Please</strong> (Por favor).
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: ¡Pide ayuda!</h3>
+            
+            <div class="question">
+                1. ¿Cómo se dice 'perro'? <br>
+                <input type="text" class="worksheet-input" data-answer="how" placeholder="???"> do you say 'perro'?
+            </div>
+            <div class="question">
+                2. No escuchaste bien a Teacher Ivan. <br>
+                Can you <select class="worksheet-select" data-answer="repeat">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="run">run</option>
+                    <option value="repeat">repeat</option>
+                    <option value="jump">jump</option>
+                </select>, please?
+            </div>
+            <div class="question">
+                3. Necesito escribir. Do you have a <select class="worksheet-select" data-answer="pen">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="pen">pen</option>
+                    <option value="apple">apple</option>
+                </select>?
+            </div>
+            <div class="question">
+                4. Esto es muy difícil para mí. <br>
+                I don't <input type="text" class="worksheet-input" data-answer="understand" placeholder="entender">.
+            </div>
+            <div class="question">
+                5. ¿Cómo se dice 'cuaderno' en inglés? <br>
+                It is a <input type="text" class="worksheet-input" data-answer="notebook" placeholder="cuaderno">.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('tuesday')">Revisar Misión</button>
+            <div id="result-tuesday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== MIÉRCOLES ================== -->
+    <div id="wednesday" class="day-content">
+        <div class="lesson-card">
+            <h2>🍔 Miércoles: The QR Bistro</h2>
+            <p>¡Hora de comer! Aprendamos a pedir comida de forma súper educada en el restaurante del campamento.</p>
+            
+            <div class="vocab-box">
+                <strong>🍽️ Para pedir comida:</strong><br>
+                👉 <strong>I would like...</strong> = Me gustaría...<br>
+                🥤 <strong>Can I have...?</strong> = ¿Me puedes dar...?<br>
+                <strong>🍎 Comida:</strong> Burger (Hamburguesa), Water (Agua), Fish (Pescado), Chicken (Pollo), Juice (Jugo).
+            </div>
+
+            <div class="tip-box">
+                <strong>🐈 Menú Secreto del Michi:</strong> Al Michi le encanta pedir "Fish" (Pescado). ¡Asegúrate de pedirlo para él!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Alimenta a tus amigos</h3>
+            
+            <div class="question">
+                1. El Michi quiere su plato favorito. <br>
+                I would <input type="text" class="worksheet-input" data-answer="like" placeholder="gustaría"> some fish, please.
+            </div>
+            <div class="question">
+                2. Tienes sed. ¿Qué pides? <br>
+                Can I have some <select class="worksheet-select" data-answer="water">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="burger">burger</option>
+                    <option value="water">water</option>
+                    <option value="chicken">chicken</option>
+                </select>?
+            </div>
+            <div class="question">
+                3. Teacher Ivan tiene mucha hambre. <br>
+                He would like a <input type="text" class="worksheet-input" data-answer="burger" placeholder="hamburguesa">.
+            </div>
+            <div class="question">
+                4. <select class="worksheet-select" data-answer="can">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="do">Do</option>
+                    <option value="is">Is</option>
+                    <option value="can">Can</option>
+                </select> I have some orange juice, please?
+            </div>
+            <div class="question">
+                5. I don't want fish, I want <input type="text" class="worksheet-input" data-answer="chicken" placeholder="pollo">.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('wednesday')">Revisar Misión</button>
+            <div id="result-wednesday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== JUEVES ================== -->
+    <div id="thursday" class="day-content">
+        <div class="lesson-card">
+            <h2>🏷️ Jueves: Winter Fair</h2>
+            <p>Vamos de compras a la feria de invierno. ¡Es hora de usar los números y los colores para comprar cosas geniales!</p>
+            
+            <div class="vocab-box">
+                <strong>💰 Dinero y Precios:</strong><br>
+                ❓ <strong>How much is this?</strong> = ¿Cuánto cuesta esto?<br>
+                💵 <strong>It is...</strong> = Cuesta...<br>
+                <strong>🔢 Números:</strong> 10 (Ten), 20 (Twenty), 50 (Fifty), 100 (One hundred).<br>
+                <strong>🎨 Colores:</strong> Red (Rojo), Blue (Azul), Green (Verde).
+            </div>
+
+            <div class="tip-box">
+                <strong>⏱️ Reto Rápido:</strong> Intenta contar del 1 al 10 en inglés en menos de 5 segundos. ¡Go, go, go!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: La Calculadora Humana</h3>
+            
+            <div class="question">
+                1. Quieres saber el precio de un juguete. <br>
+                How <input type="text" class="worksheet-input" data-answer="much" placeholder="???"> is this?
+            </div>
+            <div class="question">
+                2. El peluche cuesta 20 Bs. <br>
+                It is <input type="text" class="worksheet-input" data-answer="twenty" placeholder="20 en inglés"> Bs.
+            </div>
+            <div class="question">
+                3. Me gusta esa chaqueta de color rojo. <br>
+                I like that <select class="worksheet-select" data-answer="red">
+                    <option value="" disabled selected>Elige color...</option>
+                    <option value="blue">blue</option>
+                    <option value="red">red</option>
+                    <option value="green">green</option>
+                </select> jacket.
+            </div>
+            <div class="question">
+                4. ¡Una mochila súper cara de 100 Bs! <br>
+                It is one <input type="text" class="worksheet-input" data-answer="hundred" placeholder="100 en inglés">.
+            </div>
+            <div class="question">
+                5. <select class="worksheet-select" data-answer="it">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="he">He</option>
+                    <option value="it">It</option>
+                    <option value="they">They</option>
+                </select> is fifty Bolivianos.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('thursday')">Revisar Misión</button>
+            <div id="result-thursday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== VIERNES ================== -->
+    <div id="friday" class="day-content">
+        <div class="lesson-card">
+            <h2>🗺️ Viernes: The Voice GPS</h2>
+            <p>Aprende a dar direcciones para no perderte por la ciudad y llegar al lugar correcto.</p>
+            
+            <div class="vocab-box">
+                <strong>📍 Direcciones:</strong><br>
+                ⬆️ <strong>Go straight</strong> = Ve recto.<br>
+                ⬅️ <strong>Turn left</strong> = Gira a la izquierda.<br>
+                ➡️ <strong>Turn right</strong> = Gira a la derecha.<br>
+                <strong>🏙️ Lugares:</strong> Park (Parque), School (Escuela), Hospital (Hospital).
+            </div>
+
+            <div class="tip-box">
+                <strong>🗺️ Mapa Mental:</strong> Haz una "L" con tu mano izquierda (pulgar e índice). ¡Esa es tu "Left" (Izquierda)!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: El Navegador del Campamento</h3>
+            
+            <div class="question">
+                1. Para ir al parque, sigue derecho. <br>
+                <input type="text" class="worksheet-input" data-answer="go" placeholder="Ir"> straight.
+            </div>
+            <div class="question">
+                2. El Michi no encuentra su cama. Dile que gire a la derecha. <br>
+                Turn <select class="worksheet-select" data-answer="right">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="left">left</option>
+                    <option value="right">right</option>
+                    <option value="straight">straight</option>
+                </select>.
+            </div>
+            <div class="question">
+                3. Vamos a estudiar a la escuela. <br>
+                Let's go to the <input type="text" class="worksheet-input" data-answer="school" placeholder="escuela">.
+            </div>
+            <div class="question">
+                4. Para llegar, ve recto y gira a la izquierda. <br>
+                Go straight and <select class="worksheet-select" data-answer="turn">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="run">run</option>
+                    <option value="turn">turn</option>
+                    <option value="jump">jump</option>
+                </select> left.
+            </div>
+            <div class="question">
+                5. The <input type="text" class="worksheet-input" data-answer="park" placeholder="parque"> is very beautiful today.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('friday')">Revisar Misión</button>
+            <div id="result-friday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- --- Funciones Interactivas JavaScript --- -->
+    <script>
+        // Función para cambiar de pestaña de día
+        function openDay(evt, dayId) {
+            var contents = document.getElementsByClassName("day-content");
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+
+            var tabs = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            document.getElementById(dayId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Función para revisar las respuestas (Inputs y Selects)
+        function checkAnswers(dayId) {
+            // Selecciona tanto los inputs de texto como los menús desplegables
+            const elements = document.querySelectorAll(`#${dayId} .worksheet-input, #${dayId} .worksheet-select`);
+            let allCorrect = true;
+
+            elements.forEach(el => {
+                const correctAnswer = el.getAttribute('data-answer').toLowerCase();
+                const userAnswer = el.value.trim().toLowerCase();
+
+                // Validar que no esté vacío y coincida
+                if(userAnswer === correctAnswer && userAnswer !== "") {
+                    el.style.backgroundColor = '#d4edda';
+                    el.style.borderColor = 'var(--verde-exito)';
+                    el.style.color = 'var(--verde-exito)';
+                } else {
+                    el.style.backgroundColor = '#f8d7da';
+                    el.style.borderColor = 'var(--rojo-error)';
+                    el.style.color = 'var(--rojo-error)';
+                    allCorrect = false;
+                }
+            });
+
+            const resultDiv = document.getElementById('result-' + dayId);
+            if(allCorrect) {
+                resultDiv.innerHTML = "🎉 ¡Excelente trabajo! Misión completada. 🌟";
+                resultDiv.style.color = "var(--verde-exito)";
+            } else {
+                resultDiv.innerHTML = "👀 ¡Casi! Revisa las casillas rojas e intenta de nuevo.";
+                resultDiv.style.color = "var(--rojo-error)";
+            }
+        }
+    </script>
+</body>
+</html>
