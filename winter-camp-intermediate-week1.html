@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Week 1 - Intermediate Level | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6;
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-error: #dc3545;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: var(--font-titulares);
+            margin: 0; font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        header h1 span { color: var(--naranja-vibrante); }
+        header p { font-size: 1rem; margin-top: 5px; opacity: 0.9; }
+
+        /* --- Nav Tabs (Mobile Friendly) --- */
+        .tabs {
+            display: flex;
+            background-color: var(--blanco-puro);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px;
+            position: sticky;
+            top: 0; z-index: 100;
+            overflow-x: auto; 
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs::-webkit-scrollbar { height: 4px; }
+        .tabs::-webkit-scrollbar-thumb { background: var(--azul-claro); border-radius: 10px; }
+
+        .tab-btn {
+            background: none; border: none;
+            padding: 10px 18px; margin: 0 5px;
+            font-family: var(--font-titulares);
+            font-size: 0.9rem; color: var(--azul-primario);
+            cursor: pointer; border-radius: 50px;
+            transition: all 0.3s;
+            flex: 0 0 auto;
+        }
+
+        .tab-btn:hover { background-color: rgba(10, 70, 140, 0.1); }
+        .tab-btn.active {
+            background-color: var(--naranja-vibrante);
+            color: var(--blanco-puro);
+            box-shadow: 0 4px 8px rgba(245, 110, 30, 0.3);
+        }
+
+        /* --- Content Sections --- */
+        .day-content {
+            display: none;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .day-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Lesson Cards --- */
+        .lesson-card, .worksheet-card {
+            background: var(--blanco-puro);
+            border-radius: 15px; padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-card { border-top: 5px solid var(--azul-primario); }
+        .worksheet-card { border-top: 5px solid var(--naranja-vibrante); }
+
+        .lesson-card h2, .worksheet-card h3 {
+            font-family: var(--font-titulares);
+            margin-top: 0; 
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .lesson-card h2 { color: var(--azul-primario); font-size: 1.5rem; }
+        .worksheet-card h3 { color: var(--naranja-vibrante); font-size: 1.4rem; border-bottom: none; }
+
+        .vocab-box {
+            background: rgba(150, 200, 230, 0.15);
+            padding: 15px; border-radius: 10px;
+            margin: 15px 0; border-left: 5px solid var(--azul-primario);
+            font-size: 0.95rem; line-height: 1.6;
+        }
+
+        .tip-box {
+            background: rgba(245, 110, 30, 0.1);
+            padding: 15px; border-radius: 10px;
+            margin: 15px 0; border-left: 5px solid var(--naranja-vibrante);
+            font-size: 0.95rem; font-style: italic;
+        }
+
+        /* --- Worksheets Interactive Elements --- */
+        .question { margin-bottom: 1.2rem; font-size: 1rem; line-height: 1.8; }
+        
+        .worksheet-input, .worksheet-select {
+            border: 2px solid var(--azul-primario);
+            border-radius: 8px; padding: 6px 10px;
+            font-family: var(--font-cuerpo); font-size: 0.95rem;
+            font-weight: 600; color: var(--azul-primario);
+            text-align: center; outline: none; transition: 0.3s;
+            max-width: 140px; display: inline-block;
+        }
+
+        .worksheet-select { max-width: 160px; cursor: pointer; background: white; }
+        .worksheet-input:focus, .worksheet-select:focus { border-color: var(--naranja-vibrante); }
+
+        .check-btn {
+            background-color: var(--azul-primario);
+            color: white; border: none;
+            padding: 12px 20px; font-size: 1rem;
+            font-family: var(--font-titulares);
+            border-radius: 50px; cursor: pointer;
+            width: 100%; margin-top: 1rem;
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+        }
+
+        .check-btn:hover { background-color: #08356a; transform: translateY(-2px); }
+
+        .result-msg {
+            text-align: center; font-weight: bold;
+            font-size: 1.1rem; margin-top: 15px;
+            min-height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teacher Ivan <span>HUB</span></h1>
+        <p>❄️ Winter Camp: Intermediate Level (B1) ❄️</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openDay(event, 'monday')">Lunes</button>
+        <button class="tab-btn" onclick="openDay(event, 'tuesday')">Martes</button>
+        <button class="tab-btn" onclick="openDay(event, 'wednesday')">Miércoles</button>
+        <button class="tab-btn" onclick="openDay(event, 'thursday')">Jueves</button>
+        <button class="tab-btn" onclick="openDay(event, 'friday')">Viernes</button>
+    </div>
+
+    <!-- ================== LUNES ================== -->
+    <div id="monday" class="day-content active">
+        <div class="lesson-card">
+            <h2>🗣️ Lunes: Connectors & Fillers</h2>
+            <p>¡Bienvenido al Nivel Intermedio! El secreto de la fluidez no es hablar rápido, sino saber qué decir mientras piensas. Hoy aprenderemos a usar <strong>Fillers</strong> (muletillas nativas).</p>
+            
+            <div class="vocab-box">
+                <strong>📝 Vocabulario Clave:</strong><br>
+                🤔 <strong>Well...</strong> = Bueno... (Para iniciar una idea)<br>
+                🤫 <strong>To be honest...</strong> = Para ser honesto...<br>
+                🧠 <strong>As far as I know...</strong> = Por lo que sé...<br>
+                🗣️ <strong>Actually...</strong> = De hecho...
+            </div>
+
+            <div class="tip-box">
+                <strong>🎙️ Tip de Fluidez:</strong> Cambia el clásico "Ehhh..." por un "Well...". Automáticamente sonarás mucho más natural y nativo.
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Suena como un nativo</h3>
+            <p>Completa las oraciones usando los conectores correctos.</p>
+            
+            <div class="question">
+                1. ¿Te gustó la película? <br>
+                <input type="text" class="worksheet-input" data-answer="well" placeholder="Bueno...">, it was a bit boring.
+            </div>
+            <div class="question">
+                2. Para ser honesto, no tengo mucho dinero. <br>
+                To be <select class="worksheet-select" data-answer="honest">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="happy">happy</option>
+                    <option value="honest">honest</option>
+                    <option value="sad">sad</option>
+                </select>, I don't have much money.
+            </div>
+            <div class="question">
+                3. Pensé que Teacher Ivan era de Canadá, pero... <br>
+                <input type="text" class="worksheet-input" data-answer="actually" placeholder="De hecho...">, he is from Bolivia.
+            </div>
+            <div class="question">
+                4. Por lo que sé, el examen es mañana. <br>
+                As <select class="worksheet-select" data-answer="far">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="near">near</option>
+                    <option value="far">far</option>
+                    <option value="much">much</option>
+                </select> as I know, the exam is tomorrow.
+            </div>
+            <div class="question">
+                5. ¿Quieres ir al cine? <br>
+                Well, I am <input type="text" class="worksheet-input" data-answer="actually" placeholder="De hecho..."> very tired today.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('monday')">Revisar Misión</button>
+            <div id="result-monday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== MARTES ================== -->
+    <div id="tuesday" class="day-content">
+        <div class="lesson-card">
+            <h2>🤝 Martes: The Art of Negotiation</h2>
+            <p>Es hora de convencer a otros. Para debatir y contrastar ideas, necesitamos conectores avanzados. Olvídate del simple "But".</p>
+            
+            <div class="vocab-box">
+                <strong>⚖️ Conectores de Contraste:</strong><br>
+                🔄 <strong>However,</strong> = Sin embargo,<br>
+                ⚖️ <strong>Although</strong> = Aunque<br>
+                ✋ <strong>On the other hand,</strong> = Por otro lado,<br>
+                🎯 <strong>Therefore,</strong> = Por lo tanto,
+            </div>
+
+            <div class="tip-box">
+                <strong>✍️ Regla de oro:</strong> "However" y "Therefore" casi siempre van seguidos de una coma (,) al inicio de una oración.
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: El Debate</h3>
+            
+            <div class="question">
+                1. Me encanta el invierno. Sin embargo, hace mucho frío. <br>
+                I love winter. <input type="text" class="worksheet-input" data-answer="however" placeholder="Sin embargo">, it is very cold.
+            </div>
+            <div class="question">
+                2. <select class="worksheet-select" data-answer="although">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="however">However</option>
+                    <option value="although">Although</option>
+                    <option value="but">But</option>
+                </select> it was raining, we went to the park. (Aunque...)
+            </div>
+            <div class="question">
+                3. Los celulares son útiles. Por otro lado, pueden ser una distracción. <br>
+                Smartphones are useful. On the <input type="text" class="worksheet-input" data-answer="other" placeholder="otro"> hand, they can be a distraction.
+            </div>
+            <div class="question">
+                4. Estudié mucho. Por lo tanto, aprobé el examen. <br>
+                I studied a lot. <select class="worksheet-select" data-answer="therefore">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="therefore">Therefore,</option>
+                    <option value="although">Although,</option>
+                </select> I passed the test.
+            </div>
+            <div class="question">
+                5. I want to buy a new car. <input type="text" class="worksheet-input" data-answer="however" placeholder="Sin embargo">, it is too expensive.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('tuesday')">Revisar Misión</button>
+            <div id="result-tuesday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== MIÉRCOLES ================== -->
+    <div id="wednesday" class="day-content">
+        <div class="lesson-card">
+            <h2>✈️ Miércoles: Phrasal Verbs in Action</h2>
+            <p>Si quieres entender una película o a un hablante nativo, ¡debes dominar los Phrasal Verbs! Hoy veremos los enfocados en viajes y situaciones sociales.</p>
+            
+            <div class="vocab-box">
+                <strong>🌍 Phrasal Verbs de Viaje:</strong><br>
+                🚗 <strong>Pick up</strong> = Recoger a alguien (en auto).<br>
+                🛫 <strong>Take off</strong> = Despegar (un avión).<br>
+                😊 <strong>Look forward to</strong> = Estar emocionado por algo futuro.<br>
+                ⛽ <strong>Run out of</strong> = Quedarse sin algo (ej. tiempo, gasolina).
+            </div>
+
+            <div class="tip-box">
+                <strong>🐈 Aventura del Michi:</strong> "El Michi is *looking forward to* eating his fish". ¡Nota que después de 'look forward to' el verbo lleva '-ing'!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Resuelve la crisis de viaje</h3>
+            
+            <div class="question">
+                1. ¿Me puedes recoger del aeropuerto a las 8 PM? <br>
+                Can you <input type="text" class="worksheet-input" data-answer="pick" placeholder="???"> me up at 8 PM?
+            </div>
+            <div class="question">
+                2. El avión despegará en 10 minutos. <br>
+                The plane will <select class="worksheet-select" data-answer="take">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="make">make</option>
+                    <option value="take">take</option>
+                    <option value="fly">fly</option>
+                </select> off in 10 minutes.
+            </div>
+            <div class="question">
+                3. Estoy emocionado por las vacaciones de invierno. <br>
+                I am looking <input type="text" class="worksheet-input" data-answer="forward" placeholder="???"> to the winter holidays.
+            </div>
+            <div class="question">
+                4. ¡Oh no! Nos quedamos sin gasolina. <br>
+                We <select class="worksheet-select" data-answer="run">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="run">run</option>
+                    <option value="walk">walk</option>
+                    <option value="drive">drive</option>
+                </select> out of gas.
+            </div>
+            <div class="question">
+                5. I can't wait! I am <input type="text" class="worksheet-input" data-answer="looking" placeholder="mirando"> forward to seeing you.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('wednesday')">Revisar Misión</button>
+            <div id="result-wednesday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== JUEVES ================== -->
+    <div id="thursday" class="day-content">
+        <div class="lesson-card">
+            <h2>🧟 Jueves: Zombie Apocalypse (Conditionals)</h2>
+            <p>Usamos el <strong>Segundo Condicional</strong> para hablar de situaciones hipotéticas o imaginarias en el presente/futuro. ¡Ideal para sobrevivir a un apocalipsis!</p>
+            
+            <div class="vocab-box">
+                <strong>🧩 Estructura (Second Conditional):</strong><br>
+                <strong>If + Pasado Simple, + Would + Verbo</strong><br>
+                🏃‍♂️ <em>If I saw a zombie, I would run.</em> (Si viera un zombi, correría).<br>
+                💰 <em>If I had a million dollars, I would buy a mansion.</em> (Si tuviera...)
+            </div>
+
+            <div class="tip-box">
+                <strong>⚠️ Cuidado con el verbo To Be:</strong> En el segundo condicional, se usa "were" para todas las personas. <em>"If I were you..."</em> (Si yo fuera tú...).
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Escenarios Hipotéticos</h3>
+            
+            <div class="question">
+                1. Si tuviera más tiempo, viajaría a Japón. <br>
+                If I <input type="text" class="worksheet-input" data-answer="had" placeholder="(have) en pasado"> more time, I would travel to Japan.
+            </div>
+            <div class="question">
+                2. Si yo fuera tú, estudiaría más. <br>
+                If I <select class="worksheet-select" data-answer="were">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="was">was</option>
+                    <option value="am">am</option>
+                    <option value="were">were</option>
+                </select> you, I would study more.
+            </div>
+            <div class="question">
+                3. Si ganara la lotería, compraría un auto nuevo. <br>
+                If I won the lottery, I <input type="text" class="worksheet-input" data-answer="would" placeholder="terminación -ría"> buy a new car.
+            </div>
+            <div class="question">
+                4. What <select class="worksheet-select" data-answer="would">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="will">will</option>
+                    <option value="would">would</option>
+                    <option value="do">do</option>
+                </select> you do if you saw an alien?
+            </div>
+            <div class="question">
+                5. If Michi <input type="text" class="worksheet-input" data-answer="could" placeholder="(can) en pasado"> speak, he would ask for more fish!
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('thursday')">Revisar Misión</button>
+            <div id="result-thursday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- ================== VIERNES ================== -->
+    <div id="friday" class="day-content">
+        <div class="lesson-card">
+            <h2>🤫 Viernes: The Secret Leak (Reported Speech)</h2>
+            <p>El *Reported Speech* es la herramienta perfecta para "pasar el chisme" o reportar lo que alguien más dijo en el pasado.</p>
+            
+            <div class="vocab-box">
+                <strong>🗣️ Cambiando el tiempo verbal:</strong><br>
+                Cuando reportamos, damos "un paso atrás" en el tiempo.<br>
+                ➡️ <em>Directo:</em> "I <strong>am</strong> tired," said Laura.<br>
+                ⬅️ <em>Reportado:</em> Laura <strong>said (that)</strong> she <strong>was</strong> tired.<br>
+                🗣️ <em>Uso:</em> <strong>Say</strong> (decir algo) vs <strong>Tell</strong> (decirle a alguien).
+            </div>
+
+            <div class="tip-box">
+                <strong>📝 Tip clave:</strong> Recuerda: <em>"He said that..."</em> pero <em>"He told ME that..."</em>. ¡Tell siempre necesita un objeto (me, you, him)!
+            </div>
+        </div>
+
+        <div class="worksheet-card">
+            <h3>📝 Misión: Reportando las Noticias</h3>
+            
+            <div class="question">
+                1. "I need a coffee," said Teacher Ivan. <br>
+                Teacher Ivan said that he <input type="text" class="worksheet-input" data-answer="needed" placeholder="pasado de need"> a coffee.
+            </div>
+            <div class="question">
+                2. Ella me dijo que el examen era fácil. <br>
+                She <select class="worksheet-select" data-answer="told">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="said">said</option>
+                    <option value="told">told</option>
+                    <option value="spoke">spoke</option>
+                </select> me that the exam was easy.
+            </div>
+            <div class="question">
+                3. "I am studying," he said. <br>
+                He said that he <input type="text" class="worksheet-input" data-answer="was" placeholder="pasado de am/is"> studying.
+            </div>
+            <div class="question">
+                4. Laura <select class="worksheet-select" data-answer="said">
+                    <option value="" disabled selected>Elige...</option>
+                    <option value="said">said</option>
+                    <option value="told">told</option>
+                </select> that she loved the winter camp.
+            </div>
+            <div class="question">
+                5. "I will go to the party," said Mark. <br>
+                Mark said that he <input type="text" class="worksheet-input" data-answer="would" placeholder="pasado de will"> go to the party.
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers('friday')">Revisar Misión</button>
+            <div id="result-friday" class="result-msg"></div>
+        </div>
+    </div>
+
+    <!-- --- Funciones Interactivas JavaScript --- -->
+    <script>
+        // Función para cambiar de pestaña de día
+        function openDay(evt, dayId) {
+            var contents = document.getElementsByClassName("day-content");
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+
+            var tabs = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            document.getElementById(dayId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Función universal para revisar inputs y selects
+        function checkAnswers(dayId) {
+            const elements = document.querySelectorAll(`#${dayId} .worksheet-input, #${dayId} .worksheet-select`);
+            let allCorrect = true;
+
+            elements.forEach(el => {
+                const correctAnswer = el.getAttribute('data-answer').toLowerCase();
+                const userAnswer = el.value.trim().toLowerCase();
+
+                if(userAnswer === correctAnswer && userAnswer !== "") {
+                    el.style.backgroundColor = '#d4edda';
+                    el.style.borderColor = 'var(--verde-exito)';
+                    el.style.color = 'var(--verde-exito)';
+                } else {
+                    el.style.backgroundColor = '#f8d7da';
+                    el.style.borderColor = 'var(--rojo-error)';
+                    el.style.color = 'var(--rojo-error)';
+                    allCorrect = false;
+                }
+            });
+
+            const resultDiv = document.getElementById('result-' + dayId);
+            if(allCorrect) {
+                resultDiv.innerHTML = "🎉 ¡Nivel Intermedio superado! Misión completada. 🔥";
+                resultDiv.style.color = "var(--verde-exito)";
+            } else {
+                resultDiv.innerHTML = "👀 ¡Casi! Revisa las casillas rojas y corrige los detalles.";
+                resultDiv.style.color = "var(--rojo-error)";
+            }
+        }
+    </script>
+</body>
+</html>
