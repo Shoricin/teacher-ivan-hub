@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Practice | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6;
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: var(--font-titulares);
+            margin: 0; font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        header h1 span { color: var(--naranja-vibrante); }
+        header p { font-size: 1rem; margin-top: 5px; opacity: 0.9; }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: var(--blanco-puro);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px;
+            position: sticky;
+            top: 0; z-index: 100;
+        }
+
+        .tab-btn {
+            background: none; border: none;
+            padding: 12px 24px; margin: 0 5px;
+            font-family: var(--font-titulares);
+            font-size: 0.95rem; color: var(--azul-primario);
+            cursor: pointer; border-radius: 50px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover { background-color: rgba(10, 70, 140, 0.1); }
+        .tab-btn.active {
+            background-color: var(--naranja-vibrante);
+            color: var(--blanco-puro);
+            box-shadow: 0 4px 8px rgba(245, 110, 30, 0.3);
+        }
+
+        /* --- Content --- */
+        .practice-content {
+            display: none;
+            max-width: 650px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .practice-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--blanco-puro);
+            border-radius: 15px; padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-top: 5px solid var(--azul-primario);
+        }
+
+        .card.inter { border-top-color: var(--naranja-vibrante); }
+
+        .card h2 {
+            font-family: var(--font-titulares);
+            color: var(--azul-primario);
+            margin-top: 0; font-size: 1.4rem;
+        }
+        
+        .card.inter h2 { color: var(--naranja-vibrante); }
+
+        .guide-box {
+            background: rgba(150, 200, 230, 0.15);
+            padding: 12px; border-radius: 10px;
+            margin-bottom: 15px; font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* --- Textarea & Inputs --- */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block; font-weight: 600;
+            margin-bottom: 5px; font-size: 0.9rem;
+        }
+
+        .text-input {
+            width: 100%; border: 2px solid var(--azul-primario);
+            border-radius: 8px; padding: 10px;
+            font-family: var(--font-cuerpo); font-size: 1rem;
+            outline: none; box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        .text-input:focus { border-color: var(--naranja-vibrante); }
+
+        textarea.text-input {
+            resize: vertical; min-height: 120px;
+        }
+
+        .submit-btn {
+            background-color: var(--azul-primario);
+            color: white; border: none;
+            padding: 12px 20px; font-size: 1rem;
+            font-family: var(--font-titulares);
+            border-radius: 50px; cursor: pointer;
+            width: 100%; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+        }
+
+        .card.inter .submit-btn { background-color: var(--naranja-vibrante); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.2); }
+        .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* --- Live Preview --- */
+        .preview-box {
+            background: #f8f9fa; border: 2px dashed var(--gris-neutro);
+            border-radius: 10px; padding: 15px;
+            margin-top: 15px; display: none;
+        }
+
+        .preview-box h4 { margin: 0 0 10px 0; font-family: var(--font-titulares); color: #555; }
+        .preview-text { font-size: 1rem; line-height: 1.6; white-space: pre-line; color: #222; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teacher Ivan <span>HUB</span></h1>
+        <p>📝 Daily Writing Practice 📝</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openLevel(event, 'basic-lvl')">Básico (A1-A2)</button>
+        <button class="tab-btn" onclick="openLevel(event, 'inter-lvl')">Intermedio (B1)</button>
+    </div>
+
+    <!-- ================== PESTAÑA BÁSICO ================== -->
+    <div id="basic-lvl" class="practice-content active">
+        <div class="card">
+            <h2>🕵️ Mission: Secret Agent Introduction</h2>
+            <div class="guide-box">
+                <strong>Guía de Escritura:</strong> Completa los campos para armar tu presentación formal de agente secreto en inglés. Usa el vocabulario visto en clase.
+            </div>
+
+            <div class="input-group">
+                <label for="b-name">1. Your Name / Agent Name:</label>
+                <input type="text" id="b-name" class="text-input" placeholder="e.g., Agent James">
+            </div>
+
+            <div class="input-group">
+                <label for="b-age">2. Your Age (en letras):</label>
+                <input type="text" id="b-age" class="text-input" placeholder="e.g., eleven, twelve, twenty">
+            </div>
+
+            <div class="input-group">
+                <label for="b-mood">3. How do you feel today? (Mood):</label>
+                <input type="text" id="b-mood" class="text-input" placeholder="e.g., happy, excited, tired">
+            </div>
+
+            <button class="submit-btn" onclick="generateBasicPreview()">Generar Presentación</button>
+
+            <div id="preview-basic" class="preview-box">
+                <h4>📜 Your Profile Description:</h4>
+                <div id="text-basic" class="preview-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== PESTAÑA INTERMEDIO ================== -->
+    <div id="inter-lvl" class="practice-content">
+        <div class="card inter">
+            <h2>🔄 Mission: Daily Routine & Consequences</h2>
+            <div class="guide-box">
+                <strong>Guía de Escritura:</strong> Escribe un párrafo describiendo tu rutina diaria de invierno. <br><br>
+                <strong>Requisitos obligatorios:</strong><br>
+                ✅ Usa verbos en Presente Simple (<em>wake up, study, go</em>).<br>
+                ✅ Usa adverbios o conectores de consecuencia/resultado (<em>therefore, as a result, consequently</em>).
+            </div>
+
+            <div class="input-group">
+                <label for="i-routine">Write your paragraph here:</label>
+                <textarea id="i-routine" class="text-input" placeholder="e.g., I usually wake up early during winter holidays. However, it is very cold outside; therefore, I always drink hot coffee before my online English class..."></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="generateInterPreview()">Publicar Texto</button>
+
+            <div id="preview-inter" class="preview-box">
+                <h4>📰 Published Paragraph:</h4>
+                <div id="text-inter" class="preview-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de cambio de pestañas
+        function openLevel(evt, levelId) {
+            var contents = document.getElementsByClassName("practice-content");
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+
+            var tabs = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            document.getElementById(levelId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Procesar nivel básico
+        function generateBasicPreview() {
+            const name = document.getElementById("b-name").value.trim();
+            const age = document.getElementById("b-age").value.trim();
+            const mood = document.getElementById("b-mood").value.trim();
+
+            if (!name || !age || !mood) {
+                alert("Please fill all the fields first! 🕵️");
+                return;
+            }
+
+            const output = `Hello everyone! 
+            My name is ${name}. I am a secret agent.
+            I am ${age} years old. 
+            Today, I am feeling very ${mood} and ready to learn English!`;
+
+            document.getElementById("text-basic").textContent = output;
+            document.getElementById("preview-basic").style.display = "block";
+        }
+
+        // Procesar nivel intermedio
+        function generateInterPreview() {
+            const paragraph = document.getElementById("i-routine").value.trim();
+
+            if (!paragraph) {
+                alert("Please write your paragraph before submitting! 🔄");
+                return;
+            }
+
+            document.getElementById("text-inter").textContent = paragraph;
+            document.getElementById("preview-inter").style.display = "block";
+        }
+    </script>
+</body>
+</html>
