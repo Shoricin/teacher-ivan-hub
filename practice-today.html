@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Daily Practice | Teacher Ivan HUB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>Daily Practice (July 7) | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --azul-primario: #0A468C; 
@@ -13,6 +13,7 @@
             --blanco-nieve: #FAFAF0; 
             --blanco-puro: #FFFFFF;
             --verde-exito: #28a745;
+            --gris-borde: #C8CDD2;
             --font-titulares: 'Montserrat', sans-serif; 
             --font-cuerpo: 'Open Sans', sans-serif; 
         }
@@ -25,257 +26,313 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* --- Header --- */
         header {
             background-color: var(--azul-primario);
             color: var(--blanco-puro);
             text-align: center;
-            padding: 1.5rem 1rem;
+            padding: 1.2rem 1rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         header h1 {
             font-family: var(--font-titulares);
-            margin: 0; font-size: 1.8rem;
+            margin: 0; font-size: 1.6rem;
             text-transform: uppercase;
         }
 
         header h1 span { color: var(--naranja-vibrante); }
-        header p { font-size: 1rem; margin-top: 5px; opacity: 0.9; }
+        header p { font-size: 0.9rem; margin-top: 5px; opacity: 0.9; font-weight: bold; }
 
-        /* --- Tabs --- */
+        /* --- Selector de Pestañas (Niveles) --- */
         .tabs {
             display: flex;
-            justify-content: center;
             background-color: var(--blanco-puro);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            padding: 10px;
-            position: sticky;
-            top: 0; z-index: 100;
+            padding: 8px;
+            position: sticky; top: 0; z-index: 100;
         }
 
         .tab-btn {
+            flex: 1;
             background: none; border: none;
-            padding: 12px 24px; margin: 0 5px;
+            padding: 12px 5px;
             font-family: var(--font-titulares);
             font-size: 0.95rem; color: var(--azul-primario);
-            cursor: pointer; border-radius: 50px;
+            cursor: pointer; border-radius: 10px;
             transition: all 0.3s;
-            font-weight: 600;
+            text-align: center;
+            font-weight: bold;
         }
 
-        .tab-btn:hover { background-color: rgba(10, 70, 140, 0.1); }
         .tab-btn.active {
-            background-color: var(--naranja-vibrante);
+            background-color: var(--azul-primario);
             color: var(--blanco-puro);
-            box-shadow: 0 4px 8px rgba(245, 110, 30, 0.3);
+            box-shadow: 0 4px 10px rgba(10, 70, 140, 0.15);
         }
 
-        /* --- Content --- */
-        .practice-content {
+        .tab-btn:nth-child(2).active {
+            background-color: var(--naranja-vibrante);
+            box-shadow: 0 4px 10px rgba(245, 110, 30, 0.2);
+        }
+
+        /* --- Contenedores de Contenido --- */
+        .practice-container {
             display: none;
             max-width: 650px;
             margin: 1.5rem auto;
             padding: 0 1rem;
-            animation: fadeIn 0.4s ease-in-out;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
-        .practice-content.active { display: block; }
+        .practice-container.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- Tarjetas de Ejercicios --- */
         .card {
             background: var(--blanco-puro);
             border-radius: 15px; padding: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
             margin-bottom: 1.5rem;
-            border-top: 5px solid var(--azul-primario);
+            border: 1px solid rgba(200, 205, 210, 0.3);
         }
-
-        .card.inter { border-top-color: var(--naranja-vibrante); }
 
         .card h2 {
             font-family: var(--font-titulares);
             color: var(--azul-primario);
-            margin-top: 0; font-size: 1.4rem;
+            font-size: 1.3rem; margin-top: 0;
+            display: flex; align-items: center; gap: 8px;
         }
-        
-        .card.inter h2 { color: var(--naranja-vibrante); }
 
-        .guide-box {
+        .card p.instructions {
+            font-size: 0.95rem; color: #555;
+            line-height: 1.5; margin-bottom: 1.5rem;
             background: rgba(150, 200, 230, 0.15);
-            padding: 12px; border-radius: 10px;
-            margin-bottom: 15px; font-size: 0.9rem;
-            line-height: 1.5;
+            padding: 10px 12px; border-radius: 8px;
         }
 
-        /* --- Textarea & Inputs --- */
-        .input-group {
-            margin-bottom: 1rem;
+        /* --- Elementos de Entrada del Alumno --- */
+        .guided-paragraph {
+            font-size: 1.1rem; line-height: 2.2;
+            color: #333;
         }
 
-        .input-group label {
-            display: block; font-weight: 600;
-            margin-bottom: 5px; font-size: 0.9rem;
-        }
-
-        .text-input {
-            width: 100%; border: 2px solid var(--azul-primario);
-            border-radius: 8px; padding: 10px;
+        .input-inline {
+            border: none; border-bottom: 2px solid var(--azul-primario);
             font-family: var(--font-cuerpo); font-size: 1rem;
-            outline: none; box-sizing: border-box;
-            transition: 0.3s;
+            font-weight: 700; color: var(--naranja-vibrante);
+            padding: 2px 5px; width: 130px; text-align: center;
+            outline: none; background: transparent;
+            transition: border-color 0.3s;
         }
 
-        .text-input:focus { border-color: var(--naranja-vibrante); }
+        .input-inline:focus { border-bottom-color: var(--naranja-vibrante); }
 
-        textarea.text-input {
-            resize: vertical; min-height: 120px;
+        .textarea-routine {
+            width: 100%; height: 150px;
+            border: 2px solid var(--gris-borde); border-radius: 10px;
+            padding: 12px; box-sizing: border-box;
+            font-family: var(--font-cuerpo); font-size: 1rem;
+            line-height: 1.6; outline: none; resize: none;
+            transition: border-color 0.3s;
         }
 
-        .submit-btn {
+        .textarea-routine:focus { border-color: var(--naranja-vibrante); }
+
+        /* --- Lista de Objetivos (Tracker) --- */
+        .tracker-title {
+            font-family: var(--font-titulares); font-size: 0.9rem;
+            text-transform: uppercase; color: #666; margin-bottom: 8px;
+            display: block; letter-spacing: 0.5px;
+        }
+
+        .checklist { list-style: none; padding: 0; margin: 0 0 1.5rem 0; }
+        .checklist li {
+            font-size: 0.9rem; padding: 6px 0;
+            color: #777; display: flex; align-items: center; gap: 8px;
+            font-weight: 600;
+        }
+
+        .checklist li.completed { color: var(--verde-exito); }
+        .checklist li::before { content: "⚪"; font-size: 0.8rem; }
+        .checklist li.completed::before { content: "✅"; }
+
+        /* --- Botón de Envío --- */
+        .action-btn {
             background-color: var(--azul-primario);
             color: white; border: none;
-            padding: 12px 20px; font-size: 1rem;
-            font-family: var(--font-titulares);
-            border-radius: 50px; cursor: pointer;
-            width: 100%; transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2);
+            padding: 14px 20px; font-size: 1rem;
+            font-family: var(--font-titulares); font-weight: bold;
+            border-radius: 50px; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 8px rgba(10, 70, 140, 0.15);
+            transition: all 0.2s;
         }
 
-        .card.inter .submit-btn { background-color: var(--naranja-vibrante); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.2); }
-        .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .tab-int-active .action-btn { background-color: var(--naranja-vibrante); box-shadow: 0 4px 8px rgba(245, 110, 30, 0.15); }
+        .action-btn:active { transform: scale(0.98); }
 
-        /* --- Live Preview --- */
-        .preview-box {
-            background: #f8f9fa; border: 2px dashed var(--gris-neutro);
-            border-radius: 10px; padding: 15px;
-            margin-top: 15px; display: none;
+        /* --- Mensajes de Feedback --- */
+        .feedback-box {
+            margin-top: 15px; padding: 12px; border-radius: 8px;
+            display: none; text-align: center; font-weight: bold;
+            font-size: 0.95rem; line-height: 1.4;
         }
 
-        .preview-box h4 { margin: 0 0 10px 0; font-family: var(--font-titulares); color: #555; }
-        .preview-text { font-size: 1rem; line-height: 1.6; white-space: pre-line; color: #222; }
+        .feedback-box.success { background: #d4edda; color: var(--verde-exito); display: block; }
+        .feedback-box.error { background: #f8d7da; color: #dc3545; display: block; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Teacher Ivan <span>HUB</span></h1>
-        <p>📝 Daily Writing Practice 📝</p>
+        <h1>Practice <span>HUB</span></h1>
+        <p>❄️ Winter Camp: Martes 7 de Julio ❄️</p>
     </header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openLevel(event, 'basic-lvl')">Básico (A1-A2)</button>
-        <button class="tab-btn" onclick="openLevel(event, 'inter-lvl')">Intermedio (B1)</button>
+    <div class="tabs" id="tabGroup">
+        <button class="tab-btn active" onclick="switchTab(0)">Básico (16:00)</button>
+        <button class="tab-btn" onclick="switchTab(1)">Intermedio (17:00)</button>
     </div>
 
-    <!-- ================== PESTAÑA BÁSICO ================== -->
-    <div id="basic-lvl" class="practice-content active">
+    <!-- ==================== PESTAÑA 1: NIVEL BÁSICO ==================== -->
+    <div id="panel-basic" class="practice-container active">
         <div class="card">
-            <h2>🕵️ Mission: Secret Agent Introduction</h2>
-            <div class="guide-box">
-                <strong>Guía de Escritura:</strong> Completa los campos para armar tu presentación formal de agente secreto en inglés. Usa el vocabulario visto en clase.
-            </div>
+            <h2>🕵️‍♂️ Mission: My First Identity</h2>
+            <p class="instructions">
+                <strong>Instrucciones:</strong> Completa los espacios vacíos para armar tu presentación oficial en inglés en el HUB. ¡Verifica bien tu información!
+            </p>
 
-            <div class="input-group">
-                <label for="b-name">1. Your Name / Agent Name:</label>
-                <input type="text" id="b-name" class="text-input" placeholder="e.g., Agent James">
-            </div>
-
-            <div class="input-group">
-                <label for="b-age">2. Your Age (en letras):</label>
-                <input type="text" id="b-age" class="text-input" placeholder="e.g., eleven, twelve, twenty">
-            </div>
-
-            <div class="input-group">
-                <label for="b-mood">3. How do you feel today? (Mood):</label>
-                <input type="text" id="b-mood" class="text-input" placeholder="e.g., happy, excited, tired">
-            </div>
-
-            <button class="submit-btn" onclick="generateBasicPreview()">Generar Presentación</button>
-
-            <div id="preview-basic" class="preview-box">
-                <h4>📜 Your Profile Description:</h4>
-                <div id="text-basic" class="preview-text"></div>
+            <div class="guided-paragraph">
+                Hello everyone! 👋 <br>
+                My name is <input type="text" id="b-name" class="input-inline" placeholder="tu nombre" autocomplete="off">. <br>
+                I am <input type="number" id="b-age" class="input-inline" style="width: 70px;" placeholder="edad" autocomplete="off"> years old. <br>
+                I am from <input type="text" id="b-city" class="input-inline" placeholder="tu ciudad" autocomplete="off">. <br>
+                Right now, I <input type="text" id="b-verb" class="input-inline" style="width: 60px;" placeholder="am / is" autocomplete="off"> a student at Teacher Ivan Winter Camp! ✨
             </div>
         </div>
+
+        <button class="action-btn" onclick="validateBasic()">Enviar Presentación</button>
+        <div id="fb-basic" class="feedback-box"></div>
     </div>
 
-    <!-- ================== PESTAÑA INTERMEDIO ================== -->
-    <div id="inter-lvl" class="practice-content">
-        <div class="card inter">
-            <h2>🔄 Mission: Daily Routine & Consequences</h2>
-            <div class="guide-box">
-                <strong>Guía de Escritura:</strong> Escribe un párrafo describiendo tu rutina diaria de invierno. <br><br>
-                <strong>Requisitos obligatorios:</strong><br>
-                ✅ Usa verbos en Presente Simple (<em>wake up, study, go</em>).<br>
-                ✅ Usa adverbios o conectores de consecuencia/resultado (<em>therefore, as a result, consequently</em>).
-            </div>
+    <!-- ==================== PESTAÑA 2: NIVEL INTERMEDIO ==================== -->
+    <div id="panel-intermediate" class="practice-container">
+        <div class="card">
+            <h2>📅 Mission: My Winter Routine</h2>
+            <p class="instructions">
+                <strong>Instrucciones:</strong> Escribe un párrafo en inglés describiendo tu rutina diaria durante estas vacaciones de invierno.
+            </p>
 
-            <div class="input-group">
-                <label for="i-routine">Write your paragraph here:</label>
-                <textarea id="i-routine" class="text-input" placeholder="e.g., I usually wake up early during winter holidays. However, it is very cold outside; therefore, I always drink hot coffee before my online English class..."></textarea>
-            </div>
+            <span class="tracker-title">Objetivos de la misión:</span>
+            <ul class="checklist">
+                <li id="obj-length">Escribir al menos 120 caracteres.</li>
+                <li id="obj-always">Usar el adverbio "always".</li>
+                <li id="obj-usually">Usar el adverbio "usually" o "sometimes".</li>
+                <li id="obj-connector">Usar un conector secuencial ("then" o "after that").</li>
+            </ul>
 
-            <button class="submit-btn" onclick="generateInterPreview()">Publicar Texto</button>
-
-            <div id="preview-inter" class="preview-box">
-                <h4>📰 Published Paragraph:</h4>
-                <div id="text-inter" class="preview-text"></div>
-            </div>
+            <textarea id="int-routine" class="textarea-routine" oninput="trackRoutine()" placeholder="Escribe tu rutina aquí... (Ej: I usually wake up at 8 AM. Then, I have breakfast...)"></textarea>
         </div>
+
+        <button class="action-btn" onclick="validateIntermediate()">Enviar Rutina</button>
+        <div id="fb-intermediate" class="feedback-box"></div>
     </div>
 
     <script>
-        // Lógica de cambio de pestañas
-        function openLevel(evt, levelId) {
-            var contents = document.getElementsByClassName("practice-content");
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
+        // --- Cambios de Pestaña de Forma Fluida ---
+        function switchTab(index) {
+            const basicPanel = document.getElementById("panel-basic");
+            const intPanel = document.getElementById("panel-intermediate");
+            const buttons = document.querySelectorAll(".tab-btn");
+            const body = document.body;
 
-            var tabs = document.getElementsByClassName("tab-btn");
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove("active");
-            }
+            buttons.forEach(btn => btn.classList.remove("active"));
+            buttons[index].classList.add("active");
 
-            document.getElementById(levelId).classList.add("active");
-            evt.currentTarget.classList.add("active");
+            if (index === 0) {
+                basicPanel.classList.add("active");
+                intPanel.classList.remove("active");
+                body.classList.remove("tab-int-active");
+            } else {
+                basicPanel.classList.remove("active");
+                intPanel.classList.add("active");
+                body.classList.add("tab-int-active");
+            }
         }
 
-        // Procesar nivel básico
-        function generateBasicPreview() {
+        // --- Lógica del Nivel Básico ---
+        function validateBasic() {
             const name = document.getElementById("b-name").value.trim();
             const age = document.getElementById("b-age").value.trim();
-            const mood = document.getElementById("b-mood").value.trim();
+            const city = document.getElementById("b-city").value.trim();
+            const verb = document.getElementById("b-verb").value.trim().toLowerCase();
+            const fb = document.getElementById("fb-basic");
 
-            if (!name || !age || !mood) {
-                alert("Please fill all the fields first! 🕵️");
+            if (!name || !age || !city || !verb) {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "❌ ¡Oh no! No dejes espacios en blanco en tu pasaporte de misión.";
                 return;
             }
 
-            const output = `Hello everyone! 
-            My name is ${name}. I am a secret agent.
-            I am ${age} years old. 
-            Today, I am feeling very ${mood} and ready to learn English!`;
+            if (verb !== "am") {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "👀 Revisa el verbo con 'I'. Recuerda el uso correcto del verbo To Be aprendido ayer.";
+                return;
+            }
 
-            document.getElementById("text-basic").textContent = output;
-            document.getElementById("preview-basic").style.display = "block";
+            fb.className = "feedback-box success";
+            fb.innerHTML = `🎉 ¡Identidad Confirmada! Ficha guardada con éxito en el HUB. <br> <em>"Hello! My name is ${name}, I am ${age} years old and I am from ${city}."</em>`;
         }
 
-        // Procesar nivel intermedio
-        function generateInterPreview() {
-            const paragraph = document.getElementById("i-routine").value.trim();
+        // --- Lógica y Rastreador del Nivel Intermedio ---
+        function trackRoutine() {
+            const text = document.getElementById("int-routine").value.toLowerCase();
+            
+            // Evaluar longitud
+            const objLength = document.getElementById("obj-length");
+            if (text.length >= 120) objLength.classList.add("completed");
+            else objLength.classList.remove("completed");
 
-            if (!paragraph) {
-                alert("Please write your paragraph before submitting! 🔄");
+            // Evaluar "always"
+            const objAlways = document.getElementById("obj-always");
+            if (text.includes("always")) objAlways.classList.add("completed");
+            else objAlways.classList.remove("completed");
+
+            // Evaluar "usually" o "sometimes"
+            const objUsually = document.getElementById("obj-usually");
+            if (text.includes("usually") || text.includes("sometimes")) objUsually.classList.add("completed");
+            else objUsually.classList.remove("completed");
+
+            // Evaluar conectores
+            const objConnector = document.getElementById("obj-connector");
+            if (text.includes("then") || text.includes("after that")) objConnector.classList.add("completed");
+            else objConnector.classList.remove("completed");
+        }
+
+        function validateIntermediate() {
+            const text = document.getElementById("int-routine").value.trim();
+            const fb = document.getElementById("fb-intermediate");
+            const totalObjectives = document.querySelectorAll(".checklist li.completed").length;
+
+            if (!text) {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "❌ El espacio de redacción está vacío. ¡Escribe tu rutina de invierno!";
                 return;
             }
 
-            document.getElementById("text-inter").textContent = paragraph;
-            document.getElementById("preview-inter").style.display = "block";
+            if (totalObjectives < 4) {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "👀 Falta completar algunos objetivos de la lista. ¡Revisa tu texto y agrega los adverbios o conectores!";
+                return;
+            }
+
+            fb.className = "feedback-box success";
+            fb.innerHTML = "🎉 ¡Misión completada! Párrafo de rutina analizado y enviado con éxito a tu portafolio de Teacher Ivan HUB.";
         }
     </script>
 </body>
