@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reading Activity (July 8) | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6;
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-error: #dc3545;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: var(--font-titulares);
+            margin: 0; font-size: 1.6rem;
+            text-transform: uppercase;
+        }
+
+        header h1 span { color: var(--naranja-vibrante); }
+        header p { font-size: 0.95rem; margin-top: 5px; opacity: 0.9; font-weight: bold; }
+
+        /* --- Tabs de Niveles --- */
+        .tabs {
+            display: flex;
+            background-color: var(--blanco-puro);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 8px;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none; border: none;
+            padding: 12px 5px;
+            font-family: var(--font-titulares);
+            font-size: 0.95rem; color: var(--azul-primario);
+            cursor: pointer; border-radius: 10px;
+            transition: all 0.3s;
+            text-align: center; font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+        }
+
+        .tab-btn:nth-child(2).active {
+            background-color: var(--naranja-vibrante);
+        }
+
+        /* --- Contenedores Principales --- */
+        .main-container {
+            display: none;
+            max-width: 750px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .main-container.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Estilo del Bloque de Lectura --- */
+        .reading-box {
+            background: var(--blanco-puro);
+            border-radius: 15px; padding: 1.8rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--azul-primario);
+        }
+
+        #panel-intermediate .reading-box { border-left-color: var(--naranja-vibrante); }
+
+        .reading-box h2 {
+            font-family: var(--font-titulares);
+            color: var(--azul-primario);
+            font-size: 1.4rem; margin-top: 0; margin-bottom: 1rem;
+        }
+        
+        #panel-intermediate .reading-box h2 { color: var(--naranja-vibrante); }
+
+        .reading-text {
+            font-size: 1.1rem; line-height: 1.7;
+            color: #3f3f3f; text-align: justify;
+        }
+
+        /* --- Tarjeta de Ejercicios --- */
+        .exercises-box {
+            background: var(--blanco-puro);
+            border-radius: 15px; padding: 1.5rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            margin-bottom: 1.5rem;
+        }
+
+        .exercises-box h3 {
+            font-family: var(--font-titulares);
+            color: #444; font-size: 1.2rem; margin-top: 0;
+            margin-bottom: 1.2rem; border-bottom: 2px dashed #eee;
+            padding-bottom: 8px;
+        }
+
+        .question {
+            margin-bottom: 1.4rem; font-size: 1rem;
+            line-height: 1.8; color: #333;
+        }
+
+        /* --- Inputs y Selects Modificados --- */
+        .input-text, .select-option {
+            border: 2px solid var(--azul-primario);
+            border-radius: 8px; padding: 6px 10px;
+            font-family: var(--font-cuerpo); font-size: 0.95rem;
+            font-weight: 700; color: var(--azul-primario);
+            outline: none; transition: 0.3s;
+            margin: 2px 4px; display: inline-block;
+            box-sizing: border-box;
+        }
+        
+        .input-text { width: 140px; text-align: center; }
+        .select-option { width: 150px; background: white; cursor: pointer; }
+        
+        .input-text:focus, .select-option:focus { border-color: var(--naranja-vibrante); }
+
+        /* --- Botones --- */
+        .action-btn {
+            background-color: var(--azul-primario);
+            color: white; border: none;
+            padding: 14px 20px; font-size: 1rem;
+            font-family: var(--font-titulares); font-weight: bold;
+            border-radius: 50px; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 8px rgba(10, 70, 140, 0.15);
+            transition: all 0.2s;
+        }
+
+        .tab-int-active .action-btn { background-color: var(--naranja-vibrante); box-shadow: 0 4px 8px rgba(245, 110, 30, 0.15); }
+        .action-btn:active { transform: scale(0.98); }
+
+        /* --- Feedback --- */
+        .feedback-box {
+            margin-top: 15px; padding: 12px; border-radius: 8px;
+            display: none; text-align: center; font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .feedback-box.success { background: #d4edda; color: var(--verde-exito); display: block; }
+        .feedback-box.error { background: #f8d7da; color: var(--rojo-error); display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Reading <span>HUB</span></h1>
+        <p>❄️ Winter Camp: Miércoles 8 de Julio ❄️</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(0)">Básico (16:00)</button>
+        <button class="tab-btn" onclick="switchTab(1)">Intermedio (17:00)</button>
+    </div>
+
+    <!-- ==================== PESTAÑA 1: NIVEL BÁSICO ==================== -->
+    <div id="panel-basic" class="main-container active">
+        <div class="reading-box">
+            <h2>🐕 Max and Snow's Winter Day</h2>
+            <div class="reading-text">
+                Max is a big brown dog, and Snow is a small white cat. They live with Teacher Ivan in a beautiful house. Today is a cold winter day. Max looks out the window. He sees white snow everywhere. He is happy. He wants to play outside. Snow the cat does not like the cold weather. She prefers to sleep near the warm fireplace.
+                <br><br>
+                At 8:00 AM, Ivan gives them breakfast. Max eats his delicious meat quickly. Snow eats her favorite fish slowly. After breakfast, Ivan puts on his red jacket and a blue scarf. He opens the door. "Let's go to the park, Max!" Ivan says. Max runs out fast. He loves to chase balls in the park.
+                <br><br>
+                At the park, Max runs and jumps. He meets other dogs. They are happy. Meanwhile, Snow is home. She wakes up from her nap. She walks to the kitchen. She sees a little toy mouse on the floor. She plays with it for twenty minutes.
+                <br><br>
+                At 12:00 PM, Ivan and Max return home. Max is tired but very happy. His paws are wet. Ivan cleans Max with a yellow towel. Snow looks at them from the sofa. Ivan prepares hot chocolate for himself and brings a small bowl of milk for Snow. Now, everyone is in the living room. Ivan reads a book, Max sleeps on the floor, and Snow sleeps on Ivan's lap. It is a perfect winter day for the family.
+            </div>
+        </div>
+
+        <div class="exercises-box">
+            <h3>🧩 Comprehension Exercises</h3>
+            
+            <div class="question">
+                1. Max is a big brown <input type="text" class="input-text" data-answer="dog" placeholder="animal">.
+            </div>
+            <div class="question">
+                2. What color is Snow the cat? <br> She is <select class="select-option" data-answer="white"><option value="">Elige...</option><option value="black">Black</option><option value="white">White</option></select>.
+            </div>
+            <div class="question">
+                3. Today is a hot summer day. <br> Is this true? <select class="select-option" data-answer="no"><option value="">Elige...</option><option value="yes">Yes, it is</option><option value="no">No, it isn't</option></select>.
+            </div>
+            <div class="question">
+                4. Snow wants to sleep near the warm <input type="text" class="input-text" data-answer="fireplace" placeholder="objeto">.
+            </div>
+            <div class="question">
+                5. Ivan gives them breakfast at <input type="text" class="input-text" data-answer="8:00" placeholder="00:00"> AM.
+            </div>
+            <div class="question">
+                6. What color is Ivan's jacket? <br> It is <select class="select-option" data-answer="red"><option value="">Elige...</option><option value="red">Red</option><option value="blue">Blue</option></select>.
+            </div>
+            <div class="question">
+                7. Max loves to chase <input type="text" class="input-text" data-answer="balls" placeholder="objeto (plural)"> in the park.
+            </div>
+            <div class="question">
+                8. At home, Snow plays with a toy <input type="text" class="input-text" data-answer="mouse" placeholder="animalito">.
+            </div>
+            <div class="question">
+                9. Ivan cleans Max's wet paws with a yellow <input type="text" class="input-text" data-answer="towel" placeholder="objeto">.
+            </div>
+            <div class="question">
+                10. At the end, Snow sleeps on Ivan's <select class="select-option" data-answer="lap"><option value="">Elige...</option><option value="head">Head</option><option value="lap">Lap (regazo)</option></select>.
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="validateWorkbook('panel-basic', 'fb-basic')">Verificar Respuestas</button>
+        <div id="fb-basic" class="feedback-box"></div>
+    </div>
+
+    <!-- ==================== PESTAÑA 2: NIVEL INTERMEDIO ==================== -->
+    <div id="panel-intermediate" class="main-container">
+        <div class="reading-box">
+            <h2>📅 Carlos's Winter Routine</h2>
+            <div class="reading-text">
+                During the winter vacation, Carlos changes his regular school routine to enjoy his free time, although he always tries to stay productive. He usually wakes up at 8:30 AM, which is much later than his usual 6:00 AM alarm. First, he stretches and stays in bed for a few minutes. Then, he logs into the Teacher Ivan HUB on his tablet to review his daily English challenges. He finds this digital method very engaging because it has zero traditional textbooks.
+                <br><br>
+                At 9:15 AM, Carlos goes downstairs to have breakfast. He usually prepares eggs, toast, and hot chocolate to fight the cold winter mornings. After that, he cleans his room and helps his parents with some household chores. Around 11:00 AM, his friend Liam usually picks him up in his car, and they go to the local library or a coffee shop to study together. They look forward to these meetings because they practice speaking English.
+                <br><br>
+                Carlos returns home at 1:30 PM for lunch. In the afternoon, he usually relaxes. He sometimes plays video games or watches a streaming series with English subtitles to improve his listening skills. However, he never forgets to check his assignments. At 4:00 PM sharp, he attends his presential Intermediate English Bootcamp. He loves the interactive role-plays and debates with his classmates. By 8:00 PM, he has dinner with his family, and they talk about their day. Finally, he goes to bed at 10:30 PM, feeling ready for the next winter adventure.
+            </div>
+        </div>
+
+        <div class="exercises-box">
+            <h3>🧩 Comprehension Exercises</h3>
+            
+            <div class="question">
+                1. Carlos wakes up at 8:30 AM during his winter vacation. <br> <select class="select-option" data-answer="true"><option value="">Select...</option><option value="true">True</option><option value="false">False</option></select>
+            </div>
+            <div class="question">
+                2. He reviews his daily English challenges on his <input type="text" class="input-text" data-answer="tablet" placeholder="device">.
+            </div>
+            <div class="question">
+                3. Carlos likes the HUB method because it has a lot of textbooks. <br> <select class="select-option" data-answer="false"><option value="">Select...</option><option value="true">True</option><option value="false">False</option></select>
+            </div>
+            <div class="question">
+                4. To fight the cold morning, Carlos drinks hot <input type="text" class="input-text" data-answer="chocolate" placeholder="drink">.
+            </div>
+            <div class="question">
+                5. His friend Liam <select class="select-option" data-answer="picks him up"><option value="">Select phrasal...</option><option value="picks him up">picks him up</option><option value="looks for him">looks for him</option></select> in his car at 11:00 AM.
+            </div>
+            <div class="question">
+                6. Carlos and Liam go to the library to practice <input type="text" class="input-text" data-answer="speaking" placeholder="skill"> English.
+            </div>
+            <div class="question">
+                7. In the afternoon, he watches streaming series with English <input type="text" class="input-text" data-answer="subtitles" placeholder="text on screen">.
+            </div>
+            <div class="question">
+                8. At what time does his Intermediate Bootcamp start? <br> At <select class="select-option" data-answer="4:00 pm"><option value="">Select time...</option><option value="3:00 pm">3:00 PM</option><option value="4:00 pm">4:00 PM</option></select>.
+            </div>
+            <div class="question">
+                9. He has dinner with his family at <input type="text" class="input-text" data-answer="8:00" placeholder="00:00"> PM.
+            </div>
+            <div class="question">
+                10. Carlos goes to bed at <input type="text" class="input-text" data-answer="10:30" placeholder="00:00"> PM.
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="validateWorkbook('panel-intermediate', 'fb-intermediate')">Check Answers</button>
+        <div id="fb-intermediate" class="feedback-box"></div>
+    </div>
+
+    <script>
+        // --- Cambiador de Pestañas Fluido ---
+        function switchTab(index) {
+            const basicPanel = document.getElementById("panel-basic");
+            const intPanel = document.getElementById("panel-intermediate");
+            const buttons = document.querySelectorAll(".tab-btn");
+            const body = document.body;
+
+            buttons.forEach(btn => btn.classList.remove("active"));
+            buttons[index].classList.add("active");
+
+            if (index === 0) {
+                basicPanel.classList.add("active");
+                intPanel.classList.remove("active");
+                body.classList.remove("tab-int-active");
+            } else {
+                basicPanel.classList.remove("active");
+                intPanel.classList.add("active");
+                body.classList.add("tab-int-active");
+            }
+        }
+
+        // --- Sistema de Validación de Ejercicios ---
+        function validateWorkbook(panelId, feedbackId) {
+            const elements = document.querySelectorAll(`#${panelId} .input-text, #${panelId} .select-option`);
+            let allCorrect = true;
+            let missingField = false;
+
+            elements.forEach(el => {
+                const correctAnswer = el.getAttribute('data-answer').toLowerCase().trim();
+                const userAnswer = el.value.toLowerCase().trim();
+
+                if (userAnswer === "") {
+                    missingField = true;
+                    el.style.backgroundColor = '#fff3cd';
+                    el.style.borderColor = '#ffc107';
+                } else if (userAnswer === correctAnswer) {
+                    el.style.backgroundColor = '#d4edda';
+                    el.style.borderColor = 'var(--verde-exito)';
+                    el.style.color = 'var(--verde-exito)';
+                } else {
+                    el.style.backgroundColor = '#f8d7da';
+                    el.style.borderColor = 'var(--rojo-error)';
+                    el.style.color = 'var(--rojo-error)';
+                    allCorrect = false;
+                }
+            });
+
+            const fb = document.getElementById(feedbackId);
+            
+            if (missingField) {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "⚠️ ¡Por favor completa todas las casillas antes de verificar!";
+                return;
+            }
+
+            if (allCorrect) {
+                fb.className = "feedback-box success";
+                fb.innerHTML = panelId === "panel-basic" 
+                    ? "🎉 ¡Felicidades! Completaste la lectura de Max & Snow perfectamente." 
+                    : "🎉 Amazing job! You fully mastered Carlos's reading challenge. Badge Unlocked!";
+            } else {
+                fb.className = "feedback-box error";
+                fb.innerHTML = "👀 Algunas respuestas son incorrectas. ¡Revisa los bloques rojos e inténtalo de nuevo!";
+            }
+        }
+    </script>
+</body>
+</html>
