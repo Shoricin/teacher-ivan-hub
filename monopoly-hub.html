@@ -229,12 +229,29 @@
             setTimeout(() => { notif.classList.remove('show'); }, 3000);
         }
 
-        function updateBalance(amount) {
-            currentBalance += amount;
-            if (currentBalance < 0) currentBalance = 0; // Prevenir saldos negativos extremos
-            document.getElementById('balanceDisplay').textContent = currentBalance;
+        // Configuración de la API
+const API_URL = "https://script.google.com/macros/s/AKfycbynFDCGHDtv5gZQAcV_b2wRqwx-ldhUFAap3kdVeFaoq1Ycca1_B0eGK07cI9uhNfg8Aw/exec"; 
+const PLAYER_ID = "P001"; // Esto se puede hacer dinámico más adelante con un login
 
-            // Verificar victoria
+// Actualizar el saldo usando la base de datos real
+async function updateBalanceInDatabase(amount) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'updateBalance',
+                playerId: PLAYER_ID,
+                amount: amount
+            })
+        });
+        
+        const data = await response.json();
+        
+        if(data.status === "success") {
+            currentBalance = data.newBalance;
+            document.getElementById('balanceDisplay').textContent = currentBalance;
+            
+            // Lógica de victoria intacta
             if (currentBalance >= GOAL) {
                 clearInterval(timerInterval);
                 document.getElementById('diceBtn').style.display = 'none';
@@ -247,6 +264,11 @@
                 document.getElementById('tileCard').style.display = 'block';
             }
         }
+    } catch (error) {
+        showNotification("Error de conexión con el HUB.", true);
+        console.error("Fetch error:", error);
+    }
+}
 
         // Simula lanzar el dado y obtener una casilla de Google Sheets
         function rollDice() {
@@ -308,24 +330,20 @@
         }
 
         function applyTimePenalty() {
-            updateBalance(-PENALTY);
-            showNotification(`⏰ Time out! Penalty applied: -${PENALTY} Bs.`, true);
-            resetTurn();
+        updateBalanceInDatabase(-PENALTY);
+        showNotification(`⏰ Time out! Penalty applied: -${PENALTY} Bs.`, true);
+        resetTurn();
         }
 
         // Botón accionado por el alumno tras validar oralmente con el profesor/compañero
         function completeChallenge() {
-            clearInterval(timerInterval);
-            
-            // Recompensa simulada por dominar la casilla
-            let reward = currentTileData.cost > 0 ? currentTileData.cost : 50; 
-            updateBalance(reward);
-            
-            showNotification(`✅ Challenge Complete! Earned ${reward} Bs.`);
-            
-            // Aquí iría el fetch() a Google Sheets para actualizar Current_Balance y Properties_Owned
-            
-            resetTurn();
+        clearInterval(timerInterval);
+    
+        let reward = currentTileData.cost > 0 ? currentTileData.cost : 50; 
+        updateBalanceInDatabase(reward);
+    
+        showNotification(`✅ Challenge Complete! Earned ${reward} Bs.`);
+        resetTurn();
         }
 
         function resetTurn() {
