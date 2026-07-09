@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Global Village Monopoly | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6;
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* --- Encabezado --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        header h1 {
+            font-family: var(--font-titulares);
+            margin: 0; font-size: 1.5rem; text-transform: uppercase;
+        }
+        header h1 span { color: var(--naranja-vibrante); }
+
+        /* --- Panel del Jugador --- */
+        .player-dashboard {
+            background: var(--blanco-puro);
+            padding: 1rem; margin: 1rem; border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 5px solid var(--naranja-vibrante);
+        }
+
+        .balance-box { text-align: left; }
+        .balance-title { font-size: 0.8rem; text-transform: uppercase; color: #666; font-weight: bold; }
+        .balance-amount { font-family: var(--font-titulares); font-size: 1.8rem; color: var(--azul-primario); }
+        .goal-text { font-size: 0.75rem; color: #888; }
+
+        .player-info { text-align: right; }
+        .player-name { font-weight: bold; font-size: 1rem; color: var(--azul-primario); }
+        .player-school { font-size: 0.8rem; color: #666; }
+
+        /* --- Área Principal de Juego --- */
+        .game-area {
+            flex: 1; padding: 1rem; display: flex;
+            flex-direction: column; align-items: center;
+            justify-content: center;
+        }
+
+        /* Botón de Lanzar Dados */
+        .dice-btn {
+            background-color: var(--naranja-vibrante);
+            color: var(--blanco-puro); border: none;
+            padding: 20px 40px; font-size: 1.5rem;
+            font-family: var(--font-titulares); font-weight: bold;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 6px 15px rgba(245, 110, 30, 0.3);
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 2rem;
+            width: 100%; max-width: 300px;
+        }
+        .dice-btn:active { transform: scale(0.95); }
+        .dice-btn:disabled { background-color: #ccc; box-shadow: none; cursor: not-allowed; transform: none; }
+
+        /* --- Tarjeta de Casilla (Tile Card) --- */
+        .tile-card {
+            background: var(--blanco-puro);
+            width: 100%; max-width: 350px;
+            border-radius: 15px; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: none; /* Se muestra al lanzar los dados */
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            border: 2px solid var(--azul-primario);
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .tile-header {
+            background: var(--azul-primario); color: white;
+            padding: 15px; font-family: var(--font-titulares);
+            font-size: 1.3rem;
+        }
+        
+        .tile-category { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; display: block; margin-bottom: 5px; }
+
+        .tile-body { padding: 20px; }
+        .challenge-text { font-size: 1.1rem; line-height: 1.5; font-weight: 600; color: #333; margin-bottom: 15px; }
+        
+        .cost-info { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
+        .cost-info span { font-weight: bold; color: var(--azul-primario); }
+
+        /* --- Temporizador --- */
+        .timer-box {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--rojo-alerta);
+            padding: 10px; border-radius: 10px;
+            font-family: var(--font-titulares);
+            font-size: 1.5rem; margin-bottom: 20px;
+            border: 2px solid var(--rojo-alerta);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+
+        /* --- Botón de Acción del Reto --- */
+        .action-btn {
+            background-color: var(--verde-exito);
+            color: white; border: none;
+            padding: 15px 20px; font-size: 1.1rem;
+            font-family: var(--font-titulares); font-weight: bold;
+            border-radius: 50px; cursor: pointer; width: 100%;
+            transition: 0.2s;
+        }
+        .action-btn:active { transform: scale(0.95); }
+
+        /* --- Notificaciones --- */
+        .notification {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: #333; color: white;
+            padding: 12px 25px; border-radius: 50px;
+            font-weight: bold; font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0; transition: opacity 0.3s;
+            pointer-events: none; z-index: 1000;
+        }
+        .notification.show { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Global Village <span>Monopoly</span></h1>
+    </header>
+
+    <div class="player-dashboard">
+        <div class="balance-box">
+            <div class="balance-title">Tokens (Bs)</div>
+            <div class="balance-amount" id="balanceDisplay">0</div>
+            <div class="goal-text">Goal: 2000 Bs</div>
+        </div>
+        <div class="player-info">
+            <div class="player-name">Student Avatar</div>
+            <div class="player-school">Fielding School Module</div>
+        </div>
+    </div>
+
+    <div class="game-area">
+        <button class="dice-btn" id="diceBtn" onclick="rollDice()">🎲 ROLL DICE</button>
+
+        <!-- Tarjeta de la Casilla Activa -->
+        <div class="tile-card" id="tileCard">
+            <div class="tile-header" id="tileHeader">
+                <span class="tile-category" id="tileCategory">Category</span>
+                <span id="tileName">Tile Name</span>
+            </div>
+            <div class="tile-body">
+                <div class="timer-box" id="timerBox">
+                    ⏱️ <span id="timeDisplay">20.0</span>s
+                </div>
+                <div class="challenge-text" id="challengeText">
+                    Here goes the English challenge prompt!
+                </div>
+                <div class="cost-info" id="costInfo">
+                    Cost: <span id="tileCost">0</span> | Rent: <span id="tileRent">0</span>
+                </div>
+                <button class="action-btn" id="actionBtn" onclick="completeChallenge()">Complete & Claim</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notificationBox">Message</div>
+
+    <script>
+        // ==========================================
+        // CONFIGURACIÓN Y SIMULACIÓN DE BASE DE DATOS
+        // ==========================================
+        const GOAL = 2000;
+        const TIME_LIMIT = 20; // segundos
+        const PENALTY = 50; 
+        
+        let currentBalance = 0;
+        let timerInterval;
+        let timeRemaining;
+        let currentTileData = null;
+
+        // Simulando los datos que vendrían de Google Sheets (Board_Properties)
+        const boardTiles = [
+            { id: 2, name: "The Airport", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a flight ticket to London." },
+            { id: 3, name: "The QR Bistro", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a burger and water politely." },
+            { id: 6, name: "The Bedroom", category: "Daily Routine", color: "#96C8E6", cost: 100, rent: 30, challenge: "Describe 3 objects in your bedroom using prepositions." },
+            { id: 10, name: "The Silent Zone", category: "Jail", color: "#dc3545", cost: 0, rent: 0, challenge: "You are trapped! Spell 'ENVIRONMENT' in 10 seconds to escape." },
+            { id: 11, name: "The Tech Startup", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Use a conditional to pitch a crazy app idea." },
+            { id: 13, name: "The PR Crisis Room", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Apologize formally for a late delivery." }
+        ];
+
+        // ==========================================
+        // FUNCIONES DEL JUEGO
+        // ==========================================
+
+        function showNotification(msg, isError = false) {
+            const notif = document.getElementById('notificationBox');
+            notif.textContent = msg;
+            notif.style.backgroundColor = isError ? "var(--rojo-alerta)" : "#333";
+            notif.classList.add('show');
+            setTimeout(() => { notif.classList.remove('show'); }, 3000);
+        }
+
+        function updateBalance(amount) {
+            currentBalance += amount;
+            if (currentBalance < 0) currentBalance = 0; // Prevenir saldos negativos extremos
+            document.getElementById('balanceDisplay').textContent = currentBalance;
+
+            // Verificar victoria
+            if (currentBalance >= GOAL) {
+                clearInterval(timerInterval);
+                document.getElementById('diceBtn').style.display = 'none';
+                document.getElementById('tileCard').innerHTML = `
+                    <div style="padding: 30px;">
+                        <h1 style="color: var(--verde-exito); font-size: 3rem; margin: 0;">🏆</h1>
+                        <h2 style="color: var(--azul-primario);">¡YOU WIN!</h2>
+                        <p>Has alcanzado los ${GOAL} Tokens de fluidez.</p>
+                    </div>`;
+                document.getElementById('tileCard').style.display = 'block';
+            }
+        }
+
+        // Simula lanzar el dado y obtener una casilla de Google Sheets
+        function rollDice() {
+            // Aquí iría el fetch() hacia Google Apps Script para registrar la posición real.
+            // Para la interfaz, seleccionamos una casilla aleatoria simulada.
+            
+            const randomIndex = Math.floor(Math.random() * boardTiles.length);
+            currentTileData = boardTiles[randomIndex];
+
+            renderTile(currentTileData);
+            document.getElementById('diceBtn').disabled = true; // Deshabilitar dado durante el reto
+        }
+
+        function renderTile(tile) {
+            const card = document.getElementById('tileCard');
+            document.getElementById('tileCategory').textContent = tile.category;
+            document.getElementById('tileName').textContent = tile.name;
+            document.getElementById('tileHeader').style.backgroundColor = tile.color;
+            document.getElementById('challengeText').textContent = tile.challenge;
+            
+            if (tile.cost > 0) {
+                document.getElementById('costInfo').innerHTML = `Cost: <span>${tile.cost} Bs</span> | Rent: <span>${tile.rent} Bs</span>`;
+                document.getElementById('actionBtn').textContent = "Complete & Buy";
+            } else {
+                document.getElementById('costInfo').innerHTML = `Penalty Zone / Action Tile`;
+                document.getElementById('actionBtn').textContent = "Complete Challenge";
+            }
+
+            card.style.display = 'block';
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            // Si es la cárcel ("Silent Zone"), forzamos a 10 segundos según la regla
+            timeRemaining = currentTileData.category === "Jail" ? 10 : TIME_LIMIT; 
+            
+            const timeDisplay = document.getElementById('timeDisplay');
+            const timerBox = document.getElementById('timerBox');
+            
+            timerBox.style.borderColor = "var(--azul-primario)";
+            timerBox.style.color = "var(--azul-primario)";
+
+            timerInterval = setInterval(() => {
+                timeRemaining -= 0.1;
+                timeDisplay.textContent = timeRemaining.toFixed(1);
+
+                if (timeRemaining <= 5) {
+                    timerBox.style.borderColor = "var(--rojo-alerta)";
+                    timerBox.style.color = "var(--rojo-alerta)";
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timeDisplay.textContent = "0.0";
+                    applyTimePenalty();
+                }
+            }, 100);
+        }
+
+        function applyTimePenalty() {
+            updateBalance(-PENALTY);
+            showNotification(`⏰ Time out! Penalty applied: -${PENALTY} Bs.`, true);
+            resetTurn();
+        }
+
+        // Botón accionado por el alumno tras validar oralmente con el profesor/compañero
+        function completeChallenge() {
+            clearInterval(timerInterval);
+            
+            // Recompensa simulada por dominar la casilla
+            let reward = currentTileData.cost > 0 ? currentTileData.cost : 50; 
+            updateBalance(reward);
+            
+            showNotification(`✅ Challenge Complete! Earned ${reward} Bs.`);
+            
+            // Aquí iría el fetch() a Google Sheets para actualizar Current_Balance y Properties_Owned
+            
+            resetTurn();
+        }
+
+        function resetTurn() {
+            setTimeout(() => {
+                document.getElementById('tileCard').style.display = 'none';
+                document.getElementById('diceBtn').disabled = false;
+                currentTileData = null;
+            }, 1500); // Pequeña pausa para que lean la notificación antes de ocultar
+        }
+    </script>
+</body>
+</html>
