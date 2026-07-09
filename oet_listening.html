@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Listening Live Lab - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+            
+            --box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-titulares); margin: 0; }
+        
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem;
+            background-image: linear-gradient(rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
+            background-size: cover; background-position: center;
+            color: var(--blanco-nieve);
+            text-align: center;
+        }
+        .hero-title { font-size: 2.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .hero-title span { color: var(--naranja-vibrante); }
+        .hero-subtitle { font-size: 1.1rem; font-weight: 300; }
+
+        /* Contenedor Principal */
+        .container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+
+        /* Secciones */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: var(--box-shadow); margin-bottom: 3rem;
+            border-top: 5px solid var(--azul-primario);
+        }
+        .section-card.orange-top { border-top-color: var(--naranja-vibrante); }
+
+        .section-title { font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .section-title span { background: var(--naranja-vibrante); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1rem; }
+
+        /* Video Contenedor */
+        .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+            border-radius: 8px; margin-bottom: 1.5rem; background: #000;
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+
+        /* Botones y Controles */
+        .btn-group { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .btn {
+            background: var(--azul-primario); color: white; border: none;
+            padding: 10px 20px; border-radius: 5px; font-family: var(--font-titulares);
+            cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
+        }
+        .btn:hover { background: #08366b; }
+        .btn-outline {
+            background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario);
+        }
+        .btn-outline:hover { background: var(--azul-claro); color: var(--azul-primario); }
+
+        /* Formularios y Note-taking */
+        .note-taking-area textarea {
+            width: 100%; height: 120px; padding: 15px; border: 1px solid var(--gris-neutro);
+            border-radius: 8px; font-family: var(--font-cuerpo); resize: vertical;
+            margin-bottom: 1rem;
+        }
+        
+        .answer-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;
+            margin-bottom: 2rem;
+        }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 0.85rem; font-weight: 700; color: var(--azul-primario); margin-bottom: 5px; }
+        .input-group input, .input-group select {
+            padding: 10px; border: 1px solid var(--gris-neutro); border-radius: 5px;
+        }
+
+        /* Secciones Ocultas (Transcripts y Respuestas) */
+        .hidden-content {
+            display: none; background: #F9FCFF; padding: 20px; border-radius: 8px;
+            border-left: 4px solid var(--naranja-vibrante); margin-top: 1rem;
+            font-size: 0.9rem; max-height: 400px; overflow-y: auto;
+        }
+        .hidden-content.active { display: block; }
+        .answer-key { font-weight: bold; color: #d32f2f; }
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1 class="hero-title">OET Listening <span>Live Lab</span></h1>
+        <p class="hero-subtitle">Sesión Interactiva (Jueves). Diagnóstico, note-taking y simulacro oficial.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- PARTE 1: DIAGNÓSTICO -->
+        <section class="section-card">
+            <h2 class="section-title"><span>Warm-Up</span> The Professional Ear</h2>
+            <p><strong>Instrucciones:</strong> Observa la siguiente consulta simulada. Toma notas clínicas detalladas como si estuvieras elaborando el historial de la paciente. Presta atención a las fechas, síntomas exactos y el historial familiar.</p>
+            
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/S4wWClQhZaA" allowfullscreen></iframe>
+            </div>
+
+            <div class="note-taking-area">
+                <label><strong>Patient Notes (Chief Complaint, Hx, Social/Family):</strong></label>
+                <textarea placeholder="Ej: Pt presents with 10/10 headache started 3 days ago..."></textarea>
+            </div>
+
+            <button class="btn btn-outline" onclick="toggleVisibility('transcript1')">Mostrar/Ocultar Transcripción (Análisis)</button>
+            
+            <div id="transcript1" class="hidden-content">
+                <h4>Transcript Oficial: Pat Bellamy</h4>
+                <p>...it started about 3 days ago and nothing has helped it. It's just laid me flat. I haven't been able to go to work... it's really bad when I move so I'm trying not to move too much and the light is bothering me a lot...</p>
+                <p><strong>Medical Hx:</strong> Diagnosed with high blood pressure about three years ago... controlled with diet changes.</p>
+                <p><strong>Family Hx:</strong> Mom used to get migraines in her 20s and 30s. Dad has high blood pressure.</p>
+                <p><strong>Social Hx:</strong> Smokes about half a pack a day. Doesn't drink.</p>
+                <p><strong>Recent Events:</strong> Visited North Carolina a week ago for a family reunion, exposed to a sick 4-year-old.</p>
+            </div>
+        </section>
+
+        <!-- PARTE 2: DEEP DIVE OET EXAM -->
+        <section class="section-card orange-top">
+            <h2 class="section-title"><span>Deep Dive</span> Official OET Listening Practice</h2>
+            <p><strong>Instrucciones:</strong> Reproduce el audio. Utiliza los botones para saltar a la sección correspondiente del examen. Llena la hoja de respuestas digital (Answer Sheet) mientras escuchas.</p>
+            
+            <div class="video-container">
+                <iframe id="oet-audio" src="https://www.youtube.com/embed/Vdv7JBmocjU?enablejsapi=1" allowfullscreen></iframe>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="seekVideo(65)">Part A (1:05)</button>
+                <button class="btn" onclick="seekVideo(668)">Part B (11:08)</button>
+                <button class="btn" onclick="seekVideo(1214)">Part C (20:14)</button>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--gris-neutro); margin: 2rem 0;">
+
+            <!-- DIGITAL ANSWER SHEET -->
+            <h3>Interactive Answer Sheet</h3>
+            
+            <h4>Part A (Extract 1: Patient Emi)</h4>
+            <div class="answer-grid">
+                <div class="input-group"><label>1. over the ____ month</label><input type="text" id="q1"></div>
+                <div class="input-group"><label>2. changes in ____</label><input type="text" id="q2"></div>
+                <div class="input-group"><label>3. afraid to ____</label><input type="text" id="q3"></div>
+                <div class="input-group"><label>4. condition: ____</label><input type="text" id="q4"></div>
+                <div class="input-group"><label>5. new ____ ago</label><input type="text" id="q5"></div>
+                <div class="input-group"><label>6. alopecia ____</label><input type="text" id="q6"></div>
+                <div class="input-group"><label>7. bald ____</label><input type="text" id="q7"></div>
+                <div class="input-group"><label>8. called ____</label><input type="text" id="q8"></div>
+                <div class="input-group"><label>9. iron and ____</label><input type="text" id="q9"></div>
+                <div class="input-group"><label>10. fond of ____</label><input type="text" id="q10"></div>
+                <div class="input-group"><label>11. check for ____</label><input type="text" id="q11"></div>
+                <div class="input-group"><label>12. Possibility of ____</label><input type="text" id="q12"></div>
+            </div>
+
+            <h4>Part B & C (Multiple Choice)</h4>
+            <div class="answer-grid">
+                <div class="input-group">
+                    <label>Q25.</label>
+                    <select><option>-</option><option>A</option><option>B</option><option>C</option></select>
+                </div>
+                <div class="input-group">
+                    <label>Q26.</label>
+                    <select><option>-</option><option>A</option><option>B</option><option>C</option></select>
+                </div>
+                <div class="input-group">
+                    <label>Q31.</label>
+                    <select><option>-</option><option>A</option><option>B</option><option>C</option></select>
+                </div>
+                <div class="input-group">
+                    <label>Q37.</label>
+                    <select><option>-</option><option>A</option><option>B</option><option>C</option></select>
+                </div>
+            </div>
+
+            <button class="btn btn-outline" style="margin-top: 1rem;" onclick="toggleVisibility('answerKey')">Teacher's Key (Mostrar Respuestas)</button>
+
+            <div id="answerKey" class="hidden-content">
+                <h4>Official Answer Key</h4>
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                    <div>
+                        <strong>Part A (Ext 1)</strong><br>
+                        1. 1 month<br>2. stressful<br>3. new school<br>4. alopecia areata<br>
+                        5. patchy<br>6. fungal infection<br>7. redness<br>8. nutritional deficiencies<br>
+                        9. picky eater<br>10. iron deficiency<br>11. genetic factors<br>12. anxiety
+                    </div>
+                    <div>
+                        <strong>Part A (Ext 2)</strong><br>
+                        13. 2 weeks<br>14. headaches<br>15. sweating<br>16. muscles<br>
+                        17. chills<br>18. appetite<br>19. malaria prophylaxis<br>
+                        20. malaria parasite test<br>21. 24 hours<br>22. antimalarial drugs<br>
+                        23. outpatients<br>24. organ failure
+                    </div>
+                    <div>
+                        <strong>Part B</strong><br>
+                        25. B<br>26. C<br>27. A<br>28. B<br>29. C<br>30. A
+                    </div>
+                    <div>
+                        <strong>Part C (Ext 1 & 2)</strong><br>
+                        31. C | 32. B | 33. A<br>34. C | 35. B | 36. A<br>
+                        37. C | 38. A | 39. B<br>40. C | 41. A | 42. B
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | OET Interactive Modules</p>
+    </footer>
+
+    <script>
+        // Función para mostrar/ocultar contenedores
+        function toggleVisibility(id) {
+            var element = document.getElementById(id);
+            element.classList.toggle("active");
+        }
+
+        // Función para saltar al tiempo específico en el video principal
+        function seekVideo(seconds) {
+            var iframe = document.getElementById('oet-audio');
+            // Recargamos el src agregando el parametro start
+            iframe.src = "https://www.youtube.com/embed/Vdv7JBmocjU?autoplay=1&start=" + seconds;
+        }
+    </script>
+</body>
+</html>
