@@ -33,7 +33,7 @@
             display: flex; align-items: center; justify-content: center;
             font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800;
             z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            letter-spacing: 2px;
+            letter-spacing: 2px; transition: background 0.3s;
         }
 
         h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
@@ -76,39 +76,62 @@
         /* Video / Audio Contenedores */
         .video-container {
             position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-            border-radius: 8px; margin-bottom: 1.5rem; background: #000;
+            border-radius: 12px; margin-bottom: 1.5rem; background: #000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* AUDIO OVERLAY (Ocultar Video) */
+        /* AUDIO OVERLAY MEJORADO */
         .audio-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 50px);
-            background: var(--azul-primario); z-index: 10; display: flex; flex-direction: column;
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            z-index: 10; display: flex; flex-direction: column;
             align-items: center; justify-content: center; color: white; text-align: center;
-            pointer-events: none; /* Permite que los clicks pasen al iframe inferior si es necesario */
+            pointer-events: none; border-radius: 12px 12px 0 0;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
         }
-        .audio-overlay h3 { font-size: 2rem; color: var(--naranja-vibrante); margin-bottom: 10px; }
-        .audio-overlay p { font-family: var(--font-cuerpo); font-size: 1.1rem; }
+        .audio-overlay h3 { font-size: 2.2rem; color: var(--naranja-vibrante); margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .audio-overlay p { font-family: var(--font-cuerpo); font-size: 1.1rem; opacity: 0.9; }
+        
+        .pulse-icon { font-size: 3.5rem; margin-bottom: 10px; animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
 
-        /* Botones Generales y Controles Extras */
-        .btn-group { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .playback-controls { display: flex; gap: 10px; justify-content: center; margin-top: -10px; margin-bottom: 1.5rem; }
-        .btn {
-            background: var(--azul-primario); color: white; border: none; padding: 10px 20px;
-            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+        /* BOTONES DE REPRODUCCIÓN PREMIUM */
+        .playback-controls { 
+            display: flex; gap: 15px; justify-content: center; margin-top: -10px; margin-bottom: 1.5rem;
+            background: #f8fafc; padding: 15px; border-radius: 50px; border: 1px solid #e2e8f0;
         }
+        .btn-play, .btn-pause {
+            display: flex; align-items: center; gap: 8px; padding: 12px 30px; border-radius: 50px;
+            font-family: var(--font-titulares); font-weight: 800; font-size: 1rem; border: none;
+            cursor: pointer; transition: all 0.3s; color: white; text-transform: uppercase;
+        }
+        .btn-play { background: #4CAF50; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2); }
+        .btn-play:hover { background: #388E3C; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4); }
+        .btn-pause { background: #d32f2f; box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2); }
+        .btn-pause:hover { background: #b71c1c; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); }
+        
+        .jump-btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+        .btn-jump {
+            background: var(--blanco-puro); color: var(--azul-primario); border: 2px solid var(--azul-primario);
+            padding: 8px 20px; border-radius: 20px; font-family: var(--font-titulares); font-weight: 700;
+            cursor: pointer; transition: all 0.3s; font-size: 0.9rem;
+        }
+        .btn-jump:hover { background: var(--azul-primario); color: white; box-shadow: 0 4px 10px rgba(10, 70, 140, 0.2); transform: translateY(-1px); }
+
+        .btn { background: var(--azul-primario); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; }
         .btn:hover { background: #08366b; }
-        .btn-play { background: #4CAF50; font-size: 1.1rem; }
-        .btn-play:hover { background: #388E3C; }
-        .btn-pause { background: #d32f2f; font-size: 1.1rem; }
-        .btn-pause:hover { background: #b71c1c; }
         .btn-outline { background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario); }
         .btn-outline:hover { background: var(--azul-claro); color: var(--azul-primario); }
 
         /* Ejercicios y Formularios */
         .guided-notes { background: #F9FCFF; padding: 20px; border-radius: 8px; border-left: 4px solid var(--naranja-vibrante); margin-bottom: 1.5rem; }
-        .guided-notes input { border: none; border-bottom: 2px solid var(--azul-primario); background: transparent; padding: 5px; font-family: var(--font-cuerpo); font-weight: bold; color: var(--azul-primario); width: 150px; }
-        .note-taking-area textarea { width: 100%; height: 100px; padding: 15px; border: 1px solid var(--gris-neutro); border-radius: 8px; font-family: var(--font-cuerpo); resize: vertical; }
+        .guided-notes input { border: none; border-bottom: 2px solid var(--azul-primario); background: transparent; padding: 5px; font-family: var(--font-cuerpo); font-weight: bold; color: var(--azul-primario); width: 150px; outline: none;}
+        .note-taking-area textarea { width: 100%; height: 100px; padding: 15px; border: 1px solid var(--gris-neutro); border-radius: 8px; font-family: var(--font-cuerpo); resize: vertical; outline: none;}
 
         /* Estilos OET Test */
         .oet-part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 2rem 0 1rem 0; }
@@ -118,7 +141,8 @@
         @media (max-width: 768px) { .part-a-grid { grid-template-columns: 1fr; } }
         
         .question-line { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
-        .oet-input { border: 1px solid var(--gris-neutro); padding: 5px 10px; border-radius: 4px; width: 180px; margin: 0 5px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); transition: all 0.3s; }
+        .oet-input { border: 1px solid var(--gris-neutro); padding: 5px 10px; border-radius: 4px; width: 180px; margin: 0 5px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); transition: all 0.3s; outline: none;}
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
         
         .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; transition: all 0.3s; }
         .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
@@ -198,24 +222,25 @@
                 
                 <!-- AUDIO ONLY PLAYER -->
                 <div class="video-container">
-                    <!-- OVERLAY QUE TAPA EL VIDEO -->
+                    <!-- OVERLAY QUE TAPA EL VIDEO (NUEVO DISEÑO) -->
                     <div class="audio-overlay">
-                        <h3>🎧 AUDIO ONLY MODE</h3>
+                        <div class="pulse-icon">🎧</div>
+                        <h3>AUDIO ONLY MODE</h3>
                         <p>Focus strictly on listening. No visual cues.</p>
                     </div>
                     <iframe id="oet-audio" src="https://www.youtube.com/embed/Vdv7JBmocjU?enablejsapi=1" allowfullscreen></iframe>
                 </div>
 
-                <!-- CONTROLES EXTRA DE REPRODUCCIÓN -->
+                <!-- CONTROLES EXTRA DE REPRODUCCIÓN (NUEVO DISEÑO) -->
                 <div class="playback-controls">
-                    <button class="btn btn-play" onclick="playAudio()">▶ PLAY AUDIO</button>
-                    <button class="btn btn-pause" onclick="pauseAudio()">⏸ PAUSE AUDIO</button>
+                    <button class="btn-play" onclick="playAudio()">▶ PLAY AUDIO</button>
+                    <button class="btn-pause" onclick="pauseAudio()">⏸ PAUSE AUDIO</button>
                 </div>
 
-                <div class="btn-group">
-                    <button class="btn" onclick="seekVideo(65)">⏭ Jump to Part A (1:05)</button>
-                    <button class="btn" onclick="seekVideo(668)">⏭ Jump to Part B (11:08)</button>
-                    <button class="btn" onclick="seekVideo(1214)">⏭ Jump to Part C (20:14)</button>
+                <div class="jump-btn-group">
+                    <button class="btn-jump" onclick="seekVideo(65)">⏭ Jump to Part A (1:05)</button>
+                    <button class="btn-jump" onclick="seekVideo(668)">⏭ Jump to Part B (11:08)</button>
+                    <button class="btn-jump" onclick="seekVideo(1214)">⏭ Jump to Part C (20:14)</button>
                 </div>
 
                 <!-- ================== PART A ================== -->
@@ -394,7 +419,7 @@
                 </div>
 
                 <!-- BOTON DE AUTOCORRECCION -->
-                <button class="btn btn-play" style="width: 100%; padding: 15px; font-size: 1.3rem; margin-top: 2rem;" onclick="checkAnswers()">✔️ Terminar y Corregir Examen</button>
+                <button class="btn-play" style="width: 100%; padding: 18px; font-size: 1.2rem; margin-top: 2rem; justify-content: center; box-shadow: 0 4px 15px rgba(76,175,80,0.3);" onclick="checkAnswers()">✔️ TERMINAR Y CORREGIR EXAMEN</button>
 
             </section>
         </div>
@@ -406,24 +431,31 @@
     </footer>
 
     <script>
-        // --- TIMER LÓGICA ---
-        let totalTime = 90 * 60; // 60 minutos en segundos
+        // --- TIMER LÓGICA (ACTUALIZADA) ---
+        let totalTime = 60 * 60; // 60 minutos en segundos
         let timerDisplay = document.getElementById('timer-display');
-        
-        setInterval(() => {
-            if (totalTime > 0) {
-                totalTime--;
-                let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
-                let seconds = (totalTime % 60).toString().padStart(2, '0');
-                timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
-                
-                if (totalTime < 300) { // Menos de 5 minutos, se pone rojo
-                    timerDisplay.style.background = "#d32f2f";
+        let timerInterval = null;
+        let timerStarted = false;
+
+        function startTimer() {
+            if (timerStarted) return; // Evita que se duplique el intervalo si cambian de pestaña varias veces
+            timerStarted = true;
+            timerInterval = setInterval(() => {
+                if (totalTime > 0) {
+                    totalTime--;
+                    let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+                    let seconds = (totalTime % 60).toString().padStart(2, '0');
+                    timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
+                    
+                    if (totalTime < 300) { // Menos de 5 minutos, se pone rojo
+                        timerDisplay.style.background = "#d32f2f";
+                    }
+                } else {
+                    timerDisplay.innerText = "⏱️ TIME'S UP!";
+                    clearInterval(timerInterval);
                 }
-            } else {
-                timerDisplay.innerText = "⏱️ TIME'S UP!";
-            }
-        }, 1000);
+            }, 1000);
+        }
 
         // --- TABS LÓGICA ---
         function openTab(evt, tabName) {
@@ -440,6 +472,11 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
+
+            // INICIAR EL TIMER SOLO AL ABRIR LA PESTAÑA 2
+            if (tabName === 'tab2') {
+                startTimer();
+            }
         }
 
         // --- YOUTUBE CONTROLS LÓGICA ---
@@ -479,7 +516,6 @@
                 let userVal = inputEl.value.trim().toLowerCase();
                 let correctVal = answersA['q' + i].toLowerCase();
 
-                // Evitar span duplicado si presionan el botón 2 veces
                 let existingSpan = inputEl.parentNode.querySelector('.correction-span');
                 if (existingSpan) existingSpan.remove();
 
@@ -492,7 +528,6 @@
                     inputEl.style.backgroundColor = "#ffebee";
                     inputEl.style.color = "#d32f2f";
                     
-                    // Crear span con respuesta correcta
                     let span = document.createElement('span');
                     span.className = 'correction-span';
                     span.innerText = `Correct: ${answersA['q' + i]}`;
@@ -535,7 +570,7 @@
                 }
             }
             
-            // Subir la pantalla suavemente para ver los resultados
+            // Subir la pantalla suavemente para ver los resultados desde arriba
             document.getElementById('tab2').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
