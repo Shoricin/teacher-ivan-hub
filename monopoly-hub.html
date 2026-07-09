@@ -26,134 +26,205 @@
             color: #333;
             -webkit-font-smoothing: antialiased;
             display: flex; flex-direction: column; min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* --- Encabezado Teacher Ivan HUB --- */
-        header {
+        /* --- Pantalla de Login --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
             background-size: cover; background-position: center;
+            z-index: 2000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
+        .login-box {
+            background: var(--blanco-puro);
+            padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center; width: 85%; max-width: 320px;
+        }
+
+        .login-box img { height: 80px; margin-bottom: 10px; }
+        .login-box h2 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0; text-transform: uppercase;}
+        
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            border: 2px solid var(--gris-neutro); border-radius: 10px;
+            font-family: var(--font-cuerpo); font-size: 1rem;
+            box-sizing: border-box; text-align: center;
+            outline: none; transition: 0.3s;
+        }
+        .login-input:focus { border-color: var(--naranja-vibrante); }
+
+        .login-btn {
+            background: var(--naranja-vibrante); color: white;
+            border: none; padding: 15px; width: 100%;
+            border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.1rem; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4); transition: 0.2s;
+        }
+        .login-btn:active { transform: scale(0.95); }
+
+        /* --- Encabezado --- */
+        header {
+            background-color: var(--azul-primario);
             color: var(--blanco-puro);
-            text-align: center;
-            padding: 1.5rem 1rem;
+            text-align: center; padding: 1rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: sticky; top: 0; z-index: 100;
-            display: flex; flex-direction: column; align-items: center;
         }
 
-        .logo-img { height: 60px; width: auto; margin-bottom: 10px; }
-
-        header h1 {
-            font-family: var(--font-titulares);
-            margin: 0; font-size: 1.6rem; text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.2rem; text-transform: uppercase;}
         header h1 span { color: var(--naranja-vibrante); }
 
         /* --- Panel del Jugador --- */
         .player-dashboard {
             background: var(--blanco-puro);
-            padding: 1rem 1.5rem; margin: 1.5rem 1rem; border-radius: 15px;
+            padding: 1rem 1.5rem; margin: 1rem; border-radius: 15px;
             box-shadow: 0 8px 20px rgba(10, 70, 140, 0.08);
             display: flex; justify-content: space-between; align-items: center;
             border-left: 6px solid var(--naranja-vibrante);
         }
 
         .balance-box { text-align: left; }
-        .balance-title { font-size: 0.85rem; text-transform: uppercase; color: #666; font-weight: bold; letter-spacing: 0.5px;}
-        .balance-amount { font-family: var(--font-titulares); font-size: 2rem; color: var(--azul-primario); margin: 5px 0;}
-        .goal-text { font-size: 0.8rem; color: #888; font-weight: 600;}
+        .balance-title { font-size: 0.8rem; text-transform: uppercase; color: #666; font-weight: bold; }
+        .balance-amount { font-family: var(--font-titulares); font-size: 1.8rem; color: var(--azul-primario); margin: 2px 0;}
+        .goal-text { font-size: 0.75rem; color: #888; font-weight: 600;}
 
         .player-info { text-align: right; }
-        .player-name { font-weight: 800; font-size: 1.1rem; color: var(--azul-primario); }
-        .player-school { font-size: 0.85rem; color: #666; margin-top: 3px;}
+        .player-name { font-weight: 800; font-size: 1rem; color: var(--azul-primario); }
+        .player-id { font-size: 0.8rem; color: #666; margin-top: 3px; }
 
-        /* --- Área Principal de Juego --- */
-        .game-area {
-            flex: 1; padding: 1rem; display: flex;
-            flex-direction: column; align-items: center;
-            justify-content: center;
+        /* --- Tablero Visual --- */
+        .board-container {
+            margin: 0 auto;
+            width: 320px; height: 320px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 8px; padding: 10px;
         }
 
-        /* Botón de Lanzar Dados */
+        .board-tile {
+            background: white; border-radius: 10px;
+            border: 2px solid #ccc;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            font-size: 0.7rem; font-weight: bold; text-align: center;
+            position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .tile-color-bar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+            border-top-left-radius: 8px; border-top-right-radius: 8px;
+        }
+
+        /* Posicionamiento en cuadrícula 3x3 para formar el circuito */
+        #b-tile-0 { grid-column: 1; grid-row: 1; border-color: var(--gris-neutro); }
+        #b-tile-1 { grid-column: 2; grid-row: 1; }
+        #b-tile-2 { grid-column: 3; grid-row: 1; }
+        #b-tile-3 { grid-column: 3; grid-row: 2; }
+        #b-tile-4 { grid-column: 3; grid-row: 3; border-color: var(--rojo-alerta); }
+        #b-tile-5 { grid-column: 2; grid-row: 3; }
+        #b-tile-6 { grid-column: 1; grid-row: 3; }
+        #b-tile-7 { grid-column: 1; grid-row: 2; border-color: var(--naranja-vibrante); }
+
+        /* Centro del tablero para el Dado */
+        .board-center {
+            grid-column: 2; grid-row: 2;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
+        .avatar {
+            font-size: 1.5rem; position: absolute; z-index: 10;
+            animation: bounceIn 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0) translateY(-20px); opacity: 0;}
+            50% { transform: scale(1.2) translateY(5px); opacity: 1;}
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        /* --- Animación de Dados --- */
         .dice-btn {
-            background-color: var(--naranja-vibrante);
-            color: var(--blanco-puro); border: none;
-            padding: 20px 40px; font-size: 1.5rem;
-            font-family: var(--font-titulares); font-weight: bold;
-            border-radius: 50px; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(245, 110, 30, 0.4);
-            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-            margin-bottom: 2rem;
-            width: 100%; max-width: 320px;
-            text-transform: uppercase; letter-spacing: 1px;
+            background: transparent; border: none; cursor: pointer; outline: none;
+            display: flex; flex-direction: column; align-items: center;
         }
-        .dice-btn:active { transform: scale(0.95); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.4); }
-        .dice-btn:disabled { background-color: var(--gris-neutro); box-shadow: none; cursor: not-allowed; transform: none; color: #888;}
+        
+        .dice-icon {
+            font-size: 4rem; line-height: 1; color: var(--azul-primario);
+            transition: 0.3s; text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .dice-text {
+            font-family: var(--font-titulares); font-size: 0.7rem;
+            color: var(--naranja-vibrante); margin-top: 5px; text-transform: uppercase;
+        }
 
-        /* --- Tarjeta de Casilla (Tile Card) --- */
+        .dice-rolling {
+            animation: rollDiceAnim 0.6s linear infinite;
+            color: var(--naranja-vibrante);
+        }
+
+        @keyframes rollDiceAnim {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* --- Modal Tarjeta de Reto --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
+        }
+
         .tile-card {
-            background: var(--blanco-puro);
-            width: 100%; max-width: 350px;
+            background: var(--blanco-puro); width: 100%; max-width: 350px;
             border-radius: 20px; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.15);
-            display: none; 
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center;
-            border: 3px solid var(--azul-primario);
-        }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center; border: 4px solid var(--azul-primario);
         }
 
         .tile-header {
             background: var(--azul-primario); color: white;
-            padding: 18px; font-family: var(--font-titulares);
-            font-size: 1.4rem;
+            padding: 18px; font-family: var(--font-titulares); font-size: 1.4rem;
         }
         
         .tile-category { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.9; display: block; margin-bottom: 8px; }
-
         .tile-body { padding: 25px; }
         .challenge-text { font-size: 1.15rem; line-height: 1.6; font-weight: 600; color: #333; margin-bottom: 20px; }
         
         .cost-info { font-size: 0.95rem; color: #666; margin-bottom: 20px; background: rgba(150, 200, 230, 0.2); padding: 10px; border-radius: 8px;}
         .cost-info span { font-weight: 800; color: var(--azul-primario); }
 
-        /* --- Temporizador --- */
         .timer-box {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--rojo-alerta);
-            padding: 12px; border-radius: 12px;
-            font-family: var(--font-titulares);
-            font-size: 1.8rem; margin-bottom: 20px;
-            border: 2px solid var(--rojo-alerta);
+            background: rgba(220, 53, 69, 0.1); color: var(--rojo-alerta);
+            padding: 12px; border-radius: 12px; font-family: var(--font-titulares);
+            font-size: 1.8rem; margin-bottom: 20px; border: 2px solid var(--rojo-alerta);
             display: flex; justify-content: center; align-items: center; gap: 10px;
         }
 
-        /* --- Botón de Acción del Reto --- */
         .action-btn {
-            background-color: var(--verde-exito);
-            color: white; border: none;
-            padding: 16px 20px; font-size: 1.1rem;
-            font-family: var(--font-titulares); font-weight: bold;
-            border-radius: 50px; cursor: pointer; width: 100%;
-            transition: 0.2s; text-transform: uppercase;
+            background-color: var(--verde-exito); color: white; border: none;
+            padding: 16px 20px; font-size: 1.1rem; font-family: var(--font-titulares);
+            border-radius: 50px; cursor: pointer; width: 100%; transition: 0.2s; text-transform: uppercase;
         }
-        .action-btn:hover { background-color: #218838; }
         .action-btn:active { transform: scale(0.95); }
 
         /* --- Notificaciones --- */
         .notification {
-            position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: var(--azul-primario); color: white;
-            padding: 15px 30px; border-radius: 50px;
-            font-weight: bold; font-size: 1rem;
+            padding: 15px 30px; border-radius: 50px; font-weight: bold; font-size: 1rem;
             box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-            opacity: 0; transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none; z-index: 1000;
+            opacity: 0; transition: 0.3s; pointer-events: none; z-index: 1500;
             text-align: center; width: 80%; max-width: 400px;
         }
         .notification.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
@@ -161,11 +232,23 @@
 </head>
 <body>
 
+    <!-- PANTALLA DE LOGIN -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo">
+            <h2>Welcome to HUB</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Ingresa tus datos para comenzar a jugar.</p>
+            <input type="text" id="inputName" class="login-input" placeholder="Tu Nombre (Ej. Leonardo)" autocomplete="off">
+            <input type="text" id="inputId" class="login-input" placeholder="Player ID (Ej. P001)" autocomplete="off">
+            <button class="login-btn" onclick="loginGame()">Join Game</button>
+        </div>
+    </div>
+
     <header>
-        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo" class="logo-img">
         <h1>Global Village <span>Monopoly</span></h1>
     </header>
 
+    <!-- DASHBOARD DEL JUGADOR -->
     <div class="player-dashboard">
         <div class="balance-box">
             <div class="balance-title">Tokens (Bs)</div>
@@ -173,15 +256,32 @@
             <div class="goal-text">Goal: 2000 Bs</div>
         </div>
         <div class="player-info">
-            <div class="player-name">Student Avatar</div>
-            <div class="player-school">Fielding School Module</div>
+            <div class="player-name" id="displayPlayerName">Player</div>
+            <div class="player-id" id="displayPlayerId">ID: --</div>
         </div>
     </div>
 
-    <div class="game-area">
-        <button class="dice-btn" id="diceBtn" onclick="rollDice()">🎲 Roll Dice</button>
+    <!-- TABLERO VISUAL Y DADO -->
+    <div class="board-container" id="boardArea">
+        <div class="board-tile" id="b-tile-0">START<div id="playerAvatar" class="avatar">👦</div></div>
+        <div class="board-tile" id="b-tile-1"><div class="tile-color-bar" style="background:#8B4513;"></div>Airport</div>
+        <div class="board-tile" id="b-tile-2"><div class="tile-color-bar" style="background:#8B4513;"></div>Bistro</div>
+        <div class="board-tile" id="b-tile-3"><div class="tile-color-bar" style="background:#96C8E6;"></div>Bedroom</div>
+        <div class="board-tile" id="b-tile-4"><div class="tile-color-bar" style="background:#dc3545;"></div>Silent Zone</div>
+        <div class="board-tile" id="b-tile-5"><div class="tile-color-bar" style="background:#E91E63;"></div>Startup</div>
+        <div class="board-tile" id="b-tile-6"><div class="tile-color-bar" style="background:#E91E63;"></div>PR Crisis</div>
+        <div class="board-tile" id="b-tile-7"><div class="tile-color-bar" style="background:#F56E1E;"></div>Chance</div>
+        
+        <div class="board-center">
+            <button class="dice-btn" id="diceBtn" onclick="rollDice()">
+                <div class="dice-icon" id="diceIcon">🎲</div>
+                <div class="dice-text">Roll Dice</div>
+            </button>
+        </div>
+    </div>
 
-        <!-- Tarjeta de la Casilla Activa -->
+    <!-- MODAL TARJETA DE RETO -->
+    <div class="modal-overlay" id="modalOverlay">
         <div class="tile-card" id="tileCard">
             <div class="tile-header" id="tileHeader">
                 <span class="tile-category" id="tileCategory">Category</span>
@@ -206,29 +306,56 @@
 
     <script>
         // ==========================================
-        // CONFIGURACIÓN Y SIMULACIÓN DE BASE DE DATOS
+        // CONFIGURACIÓN, BASE DE DATOS Y ESTADO
         // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbynFDCGHDtv5gZQAcV_b2wRqwx-ldhUFAap3kdVeFaoq1Ycca1_B0eGK07cI9uhNfg8Aw/exec"; 
+        
         const GOAL = 2000;
-        const TIME_LIMIT = 20; // segundos
+        const TIME_LIMIT = 20; 
         const PENALTY = 50; 
         
+        let currentPlayerId = "";
         let currentBalance = 0;
+        let currentPosition = 0; // Posición actual en el array del tablero (0 a 7)
         let timerInterval;
         let timeRemaining;
         let currentTileData = null;
 
-        const boardTiles = [
-            { id: 2, name: "The Airport", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a flight ticket to London." },
-            { id: 3, name: "The QR Bistro", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a burger and water politely." },
-            { id: 6, name: "The Bedroom", category: "Daily Routine", color: "#96C8E6", cost: 100, rent: 30, challenge: "Describe 3 objects in your bedroom using prepositions." },
-            { id: 10, name: "The Silent Zone", category: "Jail", color: "#dc3545", cost: 0, rent: 0, challenge: "You are trapped! Spell 'ENVIRONMENT' in 10 seconds to escape." },
-            { id: 11, name: "The Tech Startup", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Use a conditional to pitch a crazy app idea." },
-            { id: 13, name: "The PR Crisis Room", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Apologize formally for a late delivery." }
+        const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+        // Arreglo del tablero ordenado (8 casillas en total formando el circuito)
+        const orderedBoard = [
+            { name: "Start (GO)", category: "System", color: "#C8CDD2", cost: 0, rent: 0, challenge: "Take a deep breath. Next turn you move!" },
+            { name: "The Airport", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a flight ticket to London." },
+            { name: "The QR Bistro", category: "Survival", color: "#8B4513", cost: 60, rent: 10, challenge: "Order a burger and water politely." },
+            { name: "The Bedroom", category: "Daily Routine", color: "#96C8E6", cost: 100, rent: 30, challenge: "Describe 3 objects in your bedroom using prepositions." },
+            { name: "The Silent Zone", category: "Jail", color: "#dc3545", cost: 0, rent: 0, challenge: "You are trapped! Spell 'ENVIRONMENT' in 10 seconds to escape." },
+            { name: "The Tech Startup", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Use a conditional to pitch a crazy app idea." },
+            { name: "The PR Crisis Room", category: "Professional", color: "#E91E63", cost: 140, rent: 50, challenge: "Apologize formally for a late delivery." },
+            { name: "Chance", category: "Luck", color: "#F56E1E", cost: 0, rent: 0, challenge: "Fluency Boost! Say a tongue twister to win 100 Bs." }
         ];
 
         // ==========================================
-        // FUNCIONES DEL JUEGO Y CONEXIÓN API
+        // LÓGICA DE JUEGO Y UI
         // ==========================================
+
+        function loginGame() {
+            const name = document.getElementById('inputName').value.trim();
+            const pid = document.getElementById('inputId').value.trim();
+            
+            if(!name || !pid) {
+                alert("Por favor, ingresa tu Nombre y tu Player ID.");
+                return;
+            }
+
+            currentPlayerId = pid;
+            document.getElementById('displayPlayerName').textContent = name;
+            document.getElementById('displayPlayerId').textContent = "ID: " + pid;
+            
+            // Ocultar pantalla de login
+            document.getElementById('loginOverlay').style.display = 'none';
+            showNotification(`¡Welcome, ${name}!`);
+        }
 
         function showNotification(msg, isError = false) {
             const notif = document.getElementById('notificationBox');
@@ -238,21 +365,14 @@
             setTimeout(() => { notif.classList.remove('show'); }, 3000);
         }
 
-        // Configuración de la API proporcionada
-        const API_URL = "https://script.google.com/macros/s/AKfycbynFDCGHDtv5gZQAcV_b2wRqwx-ldhUFAap3kdVeFaoq1Ycca1_B0eGK07cI9uhNfg8Aw/exec"; 
-        const PLAYER_ID = "P001"; 
-
-        // Actualizar el saldo usando la base de datos real con prevención CORS
         async function updateBalanceInDatabase(amount) {
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'updateBalance',
-                        playerId: PLAYER_ID,
+                        playerId: currentPlayerId,
                         amount: amount
                     })
                 });
@@ -264,32 +384,61 @@
                     document.getElementById('balanceDisplay').textContent = currentBalance;
                     
                     if (currentBalance >= GOAL) {
-                        clearInterval(timerInterval);
-                        document.getElementById('diceBtn').style.display = 'none';
+                        document.getElementById('modalOverlay').style.display = 'flex';
                         document.getElementById('tileCard').innerHTML = `
                             <div style="padding: 30px;">
                                 <h1 style="color: var(--verde-exito); font-size: 4rem; margin: 0;">🏆</h1>
                                 <h2 style="color: var(--azul-primario); font-family: var(--font-titulares); font-size: 2rem;">¡YOU WIN!</h2>
                                 <p style="font-size: 1.1rem; color: #555;">Has alcanzado los <strong>${GOAL} Tokens</strong> de fluidez.</p>
                             </div>`;
-                        document.getElementById('tileCard').style.display = 'block';
                     }
                 }
             } catch (error) {
-                showNotification("Error de conexión con el HUB.", true);
-                console.error("Fetch error:", error);
+                showNotification("Error de conexión con el HUB. Jugando offline.", true);
+                // Respaldo Offline
+                currentBalance += amount;
+                if(currentBalance < 0) currentBalance = 0;
+                document.getElementById('balanceDisplay').textContent = currentBalance;
             }
         }
 
         function rollDice() {
-            const randomIndex = Math.floor(Math.random() * boardTiles.length);
-            currentTileData = boardTiles[randomIndex];
+            const diceBtn = document.getElementById('diceBtn');
+            const diceIcon = document.getElementById('diceIcon');
+            
+            diceBtn.disabled = true;
+            diceIcon.classList.add('dice-rolling');
+            
+            // Simular tiempo de giro del dado (800ms)
+            setTimeout(() => {
+                diceIcon.classList.remove('dice-rolling');
+                
+                // Número aleatorio de 1 a 6
+                const steps = Math.floor(Math.random() * 6) + 1;
+                diceIcon.textContent = diceFaces[steps - 1]; // Mostrar cara del dado
+                
+                // Mover Avatar
+                moveAvatar(steps);
 
-            renderTile(currentTileData);
-            document.getElementById('diceBtn').disabled = true; 
+            }, 800);
         }
 
-        function renderTile(tile) {
+        function moveAvatar(steps) {
+            currentPosition = (currentPosition + steps) % orderedBoard.length;
+            const targetTile = document.getElementById('b-tile-' + currentPosition);
+            const avatar = document.getElementById('playerAvatar');
+            
+            // Re-adjuntar el avatar al nuevo div de la casilla
+            targetTile.appendChild(avatar);
+
+            // Cargar datos de la casilla y mostrar tarjeta (ligera pausa)
+            setTimeout(() => {
+                currentTileData = orderedBoard[currentPosition];
+                openChallengeModal(currentTileData);
+            }, 600);
+        }
+
+        function openChallengeModal(tile) {
             const card = document.getElementById('tileCard');
             document.getElementById('tileCategory').textContent = tile.category;
             document.getElementById('tileName').textContent = tile.name;
@@ -305,7 +454,7 @@
                 document.getElementById('actionBtn').textContent = "Complete Challenge";
             }
 
-            card.style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'flex';
             startTimer();
         }
 
@@ -341,25 +490,29 @@
         function applyTimePenalty() {
             updateBalanceInDatabase(-PENALTY);
             showNotification(`⏰ Time out! Penalty applied: -${PENALTY} Bs.`, true);
-            resetTurn();
+            closeModalAndReset();
         }
 
         function completeChallenge() {
             clearInterval(timerInterval);
             
-            let reward = currentTileData.cost > 0 ? currentTileData.cost : 50; 
-            updateBalanceInDatabase(reward);
+            // Lógica de recompensa: Si es casilla de inicio, no da recompensa directa en el reto, 
+            // pero las demás sí. 'Chance' da 100 fijos.
+            let reward = 0;
+            if(currentTileData.cost > 0) reward = currentTileData.cost;
+            else if(currentTileData.category === "Luck") reward = 100;
+            else if(currentTileData.category === "System") reward = 200; // Pasar por salida
             
+            updateBalanceInDatabase(reward);
             showNotification(`✅ Challenge Complete! Earned ${reward} Bs.`);
-            resetTurn();
+            
+            closeModalAndReset();
         }
 
-        function resetTurn() {
-            setTimeout(() => {
-                document.getElementById('tileCard').style.display = 'none';
-                document.getElementById('diceBtn').disabled = false;
-                currentTileData = null;
-            }, 1500); 
+        function closeModalAndReset() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('diceIcon').textContent = '🎲'; // Resetear ícono del dado
+            document.getElementById('diceBtn').disabled = false;
         }
     </script>
 </body>
