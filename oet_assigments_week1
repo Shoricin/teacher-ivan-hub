@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Weekly Assignments - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-nieve); text-align: center; position: relative;
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
+        .hero-title span { color: var(--naranja-vibrante); }
+        
+        .teacher-override {
+            position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2);
+            border: 1px solid white; color: white; padding: 5px 10px; border-radius: 5px;
+            cursor: pointer; font-size: 0.8rem; transition: 0.3s;
+        }
+        .teacher-override:hover { background: var(--naranja-vibrante); border-color: var(--naranja-vibrante); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* Tabs System */
+        .tab-container { display: flex; flex-wrap: wrap; border-bottom: 3px solid var(--gris-neutro); margin-bottom: 2rem; }
+        .tab-btn {
+            background: transparent; border: none; padding: 15px 25px; font-family: var(--font-titulares);
+            font-size: 1rem; color: var(--gris-neutro); cursor: pointer; transition: all 0.3s;
+            font-weight: 700; border-bottom: 4px solid transparent; margin-bottom: -3px;
+        }
+        .tab-btn.active { color: var(--azul-primario); border-bottom: 4px solid var(--naranja-vibrante); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards & Forms */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+        .locked-overlay {
+            text-align: center; padding: 4rem 2rem; background: #f8fafc; border-radius: 8px;
+            border: 2px dashed var(--gris-neutro);
+        }
+        .locked-overlay h3 { color: var(--gris-neutro); font-size: 1.8rem; margin-bottom: 10px; }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        .audio-player-container {
+            background: #eef2f6; padding: 15px; border-radius: 8px; margin-bottom: 1.5rem;
+            display: flex; flex-direction: column; align-items: center; border: 1px solid var(--gris-neutro);
+        }
+        audio { width: 100%; outline: none; }
+
+        .btn {
+            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+            font-size: 1rem; text-transform: uppercase;
+        }
+        .btn:hover { background: #08366b; }
+        .btn-pdf { background: #4CAF50; width: 100%; margin-top: 2rem; font-size: 1.2rem; }
+        .btn-pdf:hover { background: #388E3C; }
+
+        /* OET Specific Styles */
+        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; }
+        .oet-input { border: none; border-bottom: 2px solid var(--gris-neutro); padding: 5px; width: 150px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); outline: none; background: transparent; }
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
+        
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
+        .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+
+        /* Estilos de Impresión para el PDF */
+        @media print {
+            body { padding: 0; background: white; }
+            .hero, .tab-container, .audio-player-container, .video-container, .btn, .teacher-override { display: none !important; }
+            .tab-content { display: block !important; opacity: 1 !important; }
+            .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
+            .mcq-block { border: none; background: transparent; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <button class="teacher-override" onclick="unlockAll()">🔓 Teacher Override</button>
+        <h1 class="hero-title">OET Listening <span>Assignments</span></h1>
+        <p>Julio 12 - Julio 15. Completa tus tareas diarias para desbloquear el reporte final.</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'domingo', '2026-07-12')">Dom 12: Warm-Up</button>
+            <button class="tab-btn" onclick="openTab(event, 'lunes', '2026-07-13')">Lun 13: Part A</button>
+            <button class="tab-btn" onclick="openTab(event, 'martes', '2026-07-14')">Mar 14: Part B</button>
+            <button class="tab-btn" onclick="openTab(event, 'miercoles', '2026-07-15')">Mié 15: Part C & PDF</button>
+        </div>
+
+        <!-- ================= DOMINGO 12 ================= -->
+        <div id="domingo" class="tab-content active" data-date="2026-07-12">
+            <div class="locked-message locked-overlay" style="display: none;">
+                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Domingo 12 de Julio.</p>
+            </div>
+            <section class="section-card task-content">
+                <h2>Diagnostic & Medical Vocabulary</h2>
+                <p>Escucha el siguiente podcast de BBC CrowdScience sobre la conexión entre la salud intestinal y mental. Tu tarea es extraer vocabulario médico real en uso.</p>
+                
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/WNGAQxVQPQE" allowfullscreen></iframe>
+                </div>
+
+                <h4>Vocabulary Extraction:</h4>
+                <p>Identifica y define 5 términos clínicos o anatómicos mencionados en el audio:</p>
+                <div class="question-line">1. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">2. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">3. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">4. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">5. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+            </section>
+        </div>
+
+        <!-- REPRODUCTOR GLOBAL PARA LUNES, MARTES Y MIÉRCOLES -->
+        <!-- Se mostrará dinámicamente según la pestaña -->
+        <div id="global-audio-container" class="audio-player-container" style="display: none;">
+            <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Audio Track</h4>
+            <!-- Cortará automáticamente en el minuto 36:36 (2196 segundos) -->
+            <audio id="oet-audio-player" controls controlsList="nodownload">
+                <source src="teacher-ivan-hub/audios/OET LISTENING TEST 16.03.2026 #oet #oetexam #oetnursing #oetlisteningtest - OET Answers Official (128k)_compressed.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+            <p style="font-size: 0.8rem; margin-top: 5px; color: #666;">Note: The audio will automatically stop before the answers section.</p>
+        </div>
+
+        <!-- ================= LUNES 13 ================= -->
+        <div id="lunes" class="tab-content" data-date="2026-07-13">
+            <div class="locked-message locked-overlay">
+                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Lunes 13 de Julio.</p>
+            </div>
+            <section class="section-card task-content" style="display: none;">
+                <h2>Part A: Consultation Extracts (Starts at 1:05)</h2>
+                <p>Reproduce el audio de arriba. Escucharás dos extractos. Completa las notas con una palabra o frase corta[cite: 6].</p>
+                <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(65)">⏭ Jump to Part A</button>
+
+                <h4 style="color: var(--naranja-vibrante);">Extract 1: Patient Jacob Shaw</h4>
+                <div class="question-line">• Diagnosed with scoliosis at the age of (1) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Works as a involves (2) <input type="text" class="oet-input"> and lifting.[cite: 6]</div>
+                <div class="question-line">• Noticed his shoulders are now (3) <input type="text" class="oet-input"> indicating a postural change.[cite: 6]</div>
+                <div class="question-line">• Experiences discomfort, especially in his (4) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Used a (5) <input type="text" class="oet-input"> for about a year after diagnosis.[cite: 6]</div>
+                <div class="question-line">• His curvature was initially measured at (6) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Feels a dull ache between (7) <input type="text" class="oet-input"> when standing for long periods.[cite: 6]</div>
+                <div class="question-line">• So far only used (8) <input type="text" class="oet-input"> analgesics to manage his pain.[cite: 6]</div>
+                <div class="question-line">• Interested in trying (9) <input type="text" class="oet-input"> therapy to alleviate discomfort.[cite: 6]</div>
+                <div class="question-line">• Surgery is only considered for cases if the (10) <input type="text" class="oet-input"> worsens rapidly.[cite: 6]</div>
+                <div class="question-line">• Physical therapy focused on (11) <input type="text" class="oet-input"> strengthening.[cite: 6]</div>
+                <div class="question-line">• Suggested to use posture-correcting tools, like (12) <input type="text" class="oet-input"> or lumbar supports while working.[cite: 6]</div>
+
+                <h4 style="color: var(--naranja-vibrante); margin-top: 1.5rem;">Extract 2: Patient Mr. Furie</h4>
+                <div class="question-line">• Experiencing sharp headaches triggered by consuming (13) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Headaches have been occurring for approximately (14) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Duration of the headache is usually around (15) <input type="text" class="oet-input"> sec max.[cite: 6]</div>
+                <div class="question-line">• Pain is sharp, localized to the (16) <input type="text" class="oet-input"> do not radiate to (17) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• No additional symptoms, such as (18) <input type="text" class="oet-input"> or dizziness, accompany the headaches.[cite: 6]</div>
+                <div class="question-line">• Frequency of headaches is per week (19) <input type="text" class="oet-input">[cite: 6]</div>
+                <div class="question-line">• Has no history of migraines or (20) <input type="text" class="oet-input"> headaches.[cite: 6]</div>
+                <div class="question-line">• Previous headache relief attempts included taking (21) <input type="text" class="oet-input"> occasionally.[cite: 6]</div>
+                <div class="question-line">• Tried pressing his (22) <input type="text" class="oet-input"> to the roof to relieve the pain.[cite: 6]</div>
+                <div class="question-line">• Suggests that the pain might be a case of (23) <input type="text" class="oet-input"> also known as ice cream headache.[cite: 6]</div>
+                <div class="question-line">• Warming the roof of the mouth may help reduce the duration of the headache, as well as eating or drinking cold items (24) <input type="text" class="oet-input"> to prevent the trigger.[cite: 6]</div>
+            </section>
+        </div>
+
+        <!-- ================= MARTES 14 ================= -->
+        <div id="martes" class="tab-content" data-date="2026-07-14">
+            <div class="locked-message locked-overlay">
+                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Martes 14 de Julio.</p>
+            </div>
+            <section class="section-card task-content" style="display: none;">
+                <h2>Part B: Workplace Communication (Starts at 12:35)</h2>
+                <p>Escucha los 6 extractos cortos y selecciona la respuesta (A, B o C) que mejor se adapte a lo que escuchas[cite: 6].</p>
+                <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(755)">⏭ Jump to Part B</button>
+
+                <div class="mcq-block">
+                    <div class="mcq-question">25. How does the intern decide on the diagnosis?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q25"> (a) By analyzing the patient's dietary intake</label>
+                    <label class="mcq-option"><input type="radio" name="q25"> (b) By observing the patient's clinical symptoms</label>
+                    <label class="mcq-option"><input type="radio" name="q25"> (c) By interpreting the laboratory results showing elevated blood alcohol levels</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">26. The senior doctor explains to the intern:[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q26"> (a) A series of reasons why beta blockers were suitable for use</label>
+                    <label class="mcq-option"><input type="radio" name="q26"> (b) A list of issues the patient is facing with the treatment</label>
+                    <label class="mcq-option"><input type="radio" name="q26"> (c) A variety of reactions that a patient may show to treatment</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">27. What is the pediatric dietitian doing?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q27"> (a) Clarifying the parent's misunderstanding about the causes of childhood obesity.</label>
+                    <label class="mcq-option"><input type="radio" name="q27"> (b) Addressing the relationship between childhood obesity and broader lifestyle factors.</label>
+                    <label class="mcq-option"><input type="radio" name="q27"> (c) Explaining the role of both food and physical activity in combating childhood obesity.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">28. What does the doctor explain about the treatment's side effects?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q28"> (a) Increased risk of infection, emotional changes, and weight fluctuations</label>
+                    <label class="mcq-option"><input type="radio" name="q28"> (b) Mood disturbances, gradual tapering, and heightened infection risk</label>
+                    <label class="mcq-option"><input type="radio" name="q28"> (c) Weight gain, psychological shifts, and immune system suppression</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">29. What is the surgeon primarily focused on?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q29"> (a) Clarifying the procedure's goal and addressing technical aspects thoroughly</label>
+                    <label class="mcq-option"><input type="radio" name="q29"> (b) Explaining medical advancements and technical details to ease apprehension</label>
+                    <label class="mcq-option"><input type="radio" name="q29"> (c) Responding to specific anxieties and providing reassurance for the concerns</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">30. What does the female doctor describe?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q30"> (a) An X-ray revealing a minimally displaced tibial fracture</label>
+                    <label class="mcq-option"><input type="radio" name="q30"> (b) An image showing a clearly separated bone fracture</label>
+                    <label class="mcq-option"><input type="radio" name="q30"> (c) A scan showing partial misalignment of the tibial bone fragments</label>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= MIÉRCOLES 15 ================= -->
+        <div id="miercoles" class="tab-content" data-date="2026-07-15">
+            <div class="locked-message locked-overlay">
+                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Miércoles 15 de Julio.</p>
+            </div>
+            <section class="section-card task-content" style="display: none;">
+                <h2>Part C: Presentations and Interviews (Starts at 21:07)</h2>
+                <p>Escucha los 2 extractos largos y elige la mejor respuesta para cada pregunta[cite: 6].</p>
+                <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(1267)">⏭ Jump to Part C</button>
+
+                <h4 style="color: var(--naranja-vibrante);">Extract 1: Sarah Thompson[cite: 6]</h4>
+                <div class="mcq-block">
+                    <div class="mcq-question">31. Why does Sarah Thompson explain traditional drug delivery methods?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q31"> (a) To illustrate how drug therapy has improved through recent advances.</label>
+                    <label class="mcq-option"><input type="radio" name="q31"> (b) To highlight the limitations that nanotechnology aims to overcome.</label>
+                    <label class="mcq-option"><input type="radio" name="q31"> (c) To emphasize the drawbacks of current medical treatment approaches.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">32. How does nanotechnology improve drug delivery?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q32"> (a) It focuses medication on diseased cells, minimizing adverse reactions</label>
+                    <label class="mcq-option"><input type="radio" name="q32"> (b) It delivers treatments directly to cells, decreasing harmful side outcomes</label>
+                    <label class="mcq-option"><input type="radio" name="q32"> (c) It precisely targets affected areas, limiting unintended effects</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">33. What are some of the challenges facing nanotechnology in medicine?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q33"> (a) Ensuring long-term safety and maintaining treatments' affordability</label>
+                    <label class="mcq-option"><input type="radio" name="q33"> (b) Sustaining safety in the future while balancing economic accessibility.</label>
+                    <label class="mcq-option"><input type="radio" name="q33"> (c) Guaranteeing safety over time and keeping therapies cost-effective.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">34. According to Sarah Thompson, how could nanotechnology impact cancer treatments?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q34"> (a) It might minimize the risk of treatment-related negative consequences</label>
+                    <label class="mcq-option"><input type="radio" name="q34"> (b) It may reduce the likelihood of experiencing adverse health effects.</label>
+                    <label class="mcq-option"><input type="radio" name="q34"> (c) It could lower the frequency of severe side effects in patients.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">35. How might nanotechnology change the patient experience in the future?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q35"> (a) Patients might undergo therapy remotely using non-intrusive administration options.</label>
+                    <label class="mcq-option"><input type="radio" name="q35"> (b) Individuals may receive treatment from home through less invasive approaches.</label>
+                    <label class="mcq-option"><input type="radio" name="q35"> (c) Patients could self-administer drugs at home via alternative methods.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">36. Why does Sarah Thompson believe international collaboration is important?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q36"> (a) It speeds up the development and availability of medical treatments.</label>
+                    <label class="mcq-option"><input type="radio" name="q36"> (b) It facilitates faster progress and wider adoption of new medical innovations.</label>
+                    <label class="mcq-option"><input type="radio" name="q36"> (c) It helps quicken research and broadens access to advanced therapies.</label>
+                </div>
+
+                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">Extract 2: Dr. Brookfield[cite: 6]</h4>
+                <div class="mcq-block">
+                    <div class="mcq-question">37. Why did Emma and Luke decide to see Dr. Brookfield?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q37"> (a) They experienced ongoing difficulties conceiving naturally after over a year.</label>
+                    <label class="mcq-option"><input type="radio" name="q37"> (b) Their previous physician directed them to an IVF specialist immediately.</label>
+                    <label class="mcq-option"><input type="radio" name="q37"> (c) They were advised by another doctor after consistent unsuccessful attempts.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">38. What were the results of Emma and Luke's diagnostic tests?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q38"> (a) Luke showed suboptimal sperm numbers, while Emma had reduced egg reserve</label>
+                    <label class="mcq-option"><input type="radio" name="q38"> (b) Emma's ovarian reserve was low, and Luke's sperm count was below normal.</label>
+                    <label class="mcq-option"><input type="radio" name="q38"> (c) Emma had hormonal issues, and Luke had slightly impaired sperm motility.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">39. How did Emma feel about moving forward with IVF?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q39"> (a) She had mixed feelings because of concerns about the process and stigma.</label>
+                    <label class="mcq-option"><input type="radio" name="q39"> (b) She felt hesitant because of misconceptions and potential mental stress.</label>
+                    <label class="mcq-option"><input type="radio" name="q39"> (c) She was unsure due to societal pressures and the emotional burden.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">40. What does the doctor explain about the IVF process?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q40"> (a) It involves hormone therapy, egg retrieval, and sperm-egg fusion in the lab</label>
+                    <label class="mcq-option"><input type="radio" name="q40"> (b) It starts with egg stimulation, followed by collection and embryo creation.</label>
+                    <label class="mcq-option"><input type="radio" name="q40"> (c) It includes ovarian stimulation, egg collection, and embryo fertilization.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">41. How does Luke describe the emotional impact of infertility?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q41"> (a) It's hard emotionally and can cause feelings of separation from others.</label>
+                    <label class="mcq-option"><input type="radio" name="q41"> (b) It's emotionally exhausting, often leading to isolation from loved ones</label>
+                    <label class="mcq-option"><input type="radio" name="q41"> (c) It's mentally draining and can create distance from social connections.</label>
+                </div>
+                <div class="mcq-block">
+                    <div class="mcq-question">42. What advice does the doctor give for emotional support during fertility treatments?[cite: 6]</div>
+                    <label class="mcq-option"><input type="radio" name="q42"> (a) Emotional health can be supported by seeking professional or peer guidance.</label>
+                    <label class="mcq-option"><input type="radio" name="q42"> (b) Patients are encouraged to pursue therapy and seek group counseling.</label>
+                    <label class="mcq-option"><input type="radio" name="q42"> (c) Couples should think about counseling and community-based support groups.</label>
+                </div>
+
+                <!-- BOTÓN PARA GENERAR EL REPORTE PDF -->
+                <button class="btn btn-pdf" onclick="generatePDF()">📥 Generar y Descargar Reporte PDF</button>
+
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE FECHA ACTUAL
+        // Utilizamos la fecha simulada proveída en el sistema: 10 de Julio de 2026
+        const currentDate = new Date('2026-07-10T10:50:23');
+        let overrideActive = false;
+
+        function checkDateLocks() {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                const unlockDateStr = tab.getAttribute('data-date');
+                if (!unlockDateStr) return;
+                
+                const unlockDate = new Date(unlockDateStr + 'T00:00:00');
+                const lockedMsg = tab.querySelector('.locked-message');
+                const taskContent = tab.querySelector('.task-content');
+
+                if (currentDate >= unlockDate || overrideActive) {
+                    lockedMsg.style.display = 'none';
+                    taskContent.style.display = 'block';
+                } else {
+                    lockedMsg.style.display = 'block';
+                    taskContent.style.display = 'none';
+                }
+            });
+        }
+
+        // LÓGICA DE TABS Y MOSTRAR AUDIO GLOBAL
+        function openTab(evt, tabName, requiredDate) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            // Mostrar el reproductor de audio global SOLO en Lunes, Martes y Miércoles
+            const globalAudio = document.getElementById('global-audio-container');
+            const unlockDate = new Date(requiredDate + 'T00:00:00');
+            
+            if ((tabName === 'lunes' || tabName === 'martes' || tabName === 'miercoles') && (currentDate >= unlockDate || overrideActive)) {
+                globalAudio.style.display = 'flex';
+            } else {
+                globalAudio.style.display = 'none';
+                document.getElementById('oet-audio-player').pause();
+            }
+        }
+
+        // CONTROL DE REPRODUCCIÓN (Evitar que escuchen las respuestas)
+        const audioEl = document.getElementById('oet-audio-player');
+        audioEl.addEventListener('timeupdate', function() {
+            // El prompt pide cortar las respuestas que inician en 36:36 (2196 segundos)
+            if (this.currentTime >= 2196) {
+                this.pause();
+                this.currentTime = 2195;
+                alert("⚠️ Has alcanzado el final de la prueba. El audio se ha detenido antes de las respuestas.");
+            }
+        });
+
+        function jumpAudio(seconds) {
+            audioEl.currentTime = seconds;
+            audioEl.play();
+        }
+
+        // FUNCIÓN TEACHER OVERRIDE
+        function unlockAll() {
+            overrideActive = true;
+            checkDateLocks();
+            alert("🔓 Modo Profesor Activado: Todas las asignaciones han sido desbloqueadas para su revisión.");
+            // Refrescar visibilidad de audio si estamos en una pestaña requerida
+            const activeTab = document.querySelector('.tab-btn.active').getAttribute('onclick');
+            if (activeTab.includes('lunes') || activeTab.includes('martes') || activeTab.includes('miercoles')) {
+                document.getElementById('global-audio-container').style.display = 'flex';
+            }
+        }
+
+        // GENERACIÓN DEL PDF
+        function generatePDF() {
+            alert("Preparando documento... Su navegador abrirá el cuadro de diálogo de impresión. Guarde el archivo como PDF.");
+            // Utilizamos el motor de impresión del navegador junto con CSS @media print
+            // para ocultar la UI y dejar solo las respuestas
+            window.print();
+        }
+
+        // Inicializar bloqueos al cargar
+        checkDateLocks();
+    </script>
+</body>
+</html>
