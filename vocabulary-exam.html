@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Final Exam | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --gris-claro: #e9ecef;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve);
+            color: #333; height: 100vh;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            text-align: center; padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.5rem; text-transform: uppercase;}
+        header h1 span { color: var(--naranja-vibrante); }
+
+        /* --- Contenedores de Pantallas --- */
+        .screen {
+            flex: 1; display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 20px; width: 100%; box-sizing: border-box;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Pantalla de Login --- */
+        .login-box {
+            background: var(--blanco-puro); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+            width: 100%; max-width: 400px; border-top: 6px solid var(--naranja-vibrante);
+        }
+        .login-box img { height: 80px; margin-bottom: 20px; }
+        .login-box h2 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0;}
+        .login-input {
+            width: 100%; padding: 15px; margin-bottom: 20px;
+            border: 2px solid #ccc; border-radius: 10px;
+            font-family: var(--font-cuerpo); font-size: 1.1rem;
+            box-sizing: border-box; text-align: center; outline: none; transition: 0.3s;
+        }
+        .login-input:focus { border-color: var(--naranja-vibrante); }
+        .btn-primary {
+            background: var(--naranja-vibrante); color: white; border: none;
+            padding: 15px; width: 100%; border-radius: 50px;
+            font-family: var(--font-titulares); font-size: 1.2rem; cursor: pointer;
+            text-transform: uppercase; box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4);
+            transition: 0.2s;
+        }
+        .btn-primary:active { transform: scale(0.95); }
+
+        /* --- Pantalla del Examen --- */
+        .exam-container {
+            background: var(--blanco-puro); width: 100%; max-width: 500px;
+            border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center; display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .progress-bar-container {
+            width: 100%; background: var(--gris-claro); border-radius: 50px;
+            height: 12px; margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: var(--verde-exito); width: 0%; transition: width 0.3s;
+        }
+        .progress-text { font-weight: bold; color: #666; margin-bottom: 20px; font-size: 0.9rem;}
+
+        .emoji-display {
+            font-size: 6rem; margin-bottom: 20px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .question-text { font-family: var(--font-titulares); font-size: 1.4rem; color: var(--azul-primario); margin-bottom: 30px; }
+
+        .options-grid {
+            display: flex; flex-direction: column; gap: 15px; width: 100%;
+        }
+        .option-btn {
+            background: var(--blanco-nieve); border: 2px solid var(--azul-primario);
+            color: var(--azul-primario); padding: 15px; border-radius: 12px;
+            font-family: var(--font-cuerpo); font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; transition: 0.2s; text-transform: capitalize;
+        }
+        .option-btn:hover { background: rgba(10, 70, 140, 0.05); }
+        .option-btn.correct { background: var(--verde-exito); color: white; border-color: var(--verde-exito); }
+        .option-btn.wrong { background: var(--rojo-alerta); color: white; border-color: var(--rojo-alerta); }
+
+        /* --- Pantalla de Resultados --- */
+        .result-box {
+            background: var(--blanco-puro); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; width: 100%; max-width: 450px;
+        }
+        .result-emoji { font-size: 5rem; margin-bottom: 10px; }
+        .result-title { font-family: var(--font-titulares); font-size: 2rem; color: var(--azul-primario); margin: 0 0 10px 0;}
+        .result-score { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 20px; }
+        
+        .grading-box {
+            background: #f8f9fa; border: 2px dashed var(--azul-primario);
+            padding: 20px; border-radius: 15px; margin-bottom: 30px;
+        }
+        .grading-title { font-size: 1rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: bold;}
+        .grading-score { font-family: var(--font-titulares); font-size: 2.5rem; color: var(--naranja-vibrante); margin: 0;}
+        .grading-max { font-size: 1rem; color: #888; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Vocabulary <span>Exam</span></h1>
+    </header>
+
+    <!-- PANTALLA 1: LOGIN -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h2>Basic Level Test</h2>
+            <p style="color: #666; margin-bottom: 25px;">Ingresa tu nombre para comenzar la evaluación de 100 palabras.</p>
+            <input type="text" id="studentName" class="login-input" placeholder="Tu Nombre y Apellido" autocomplete="off">
+            <button class="btn-primary" onclick="startExam()">Start Exam</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: EXAMEN -->
+    <div id="examScreen" class="screen">
+        <div class="exam-container">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 1 / 100</div>
+            
+            <div class="emoji-display" id="emojiDisplay">🍎</div>
+            <div class="question-text">What is this?</div>
+            
+            <div class="options-grid" id="optionsGrid">
+                <!-- Botones generados en JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: RESULTADOS -->
+    <div id="resultScreen" class="screen">
+        <div class="result-box">
+            <div class="result-emoji" id="resultEmoji">🎉</div>
+            <h2 class="result-title" id="resultMessage">Great Job!</h2>
+            <div class="result-score" id="finalScoreText">100 / 100 Correct</div>
+            
+            <div class="grading-box">
+                <div class="grading-title">Registro Pedagógico: Dimensión del Saber</div>
+                <div class="grading-score" id="saberScore">45</div>
+                <div class="grading-max">/ 45 Pts.</div>
+            </div>
+            
+            <button class="btn-primary" onclick="location.reload()">Finish & Exit</button>
+        </div>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS: 100 PREGUNTAS (10 Categorías x 10 Palabras) ---
+        const rawVocab = [
+            // Animals (1-10)
+            {e:'🐶', a:'dog', w:['cat','cow']}, {e:'🐱', a:'cat', w:['pig','mouse']}, {e:'🐭', a:'mouse', w:['horse','bird']},
+            {e:'🐦', a:'bird', w:['fish','dog']}, {e:'🐟', a:'fish', w:['cow','monkey']}, {e:'🐴', a:'horse', w:['pig','cat']},
+            {e:'🐮', a:'cow', w:['elephant','mouse']}, {e:'🐷', a:'pig', w:['horse','bird']}, {e:'🐒', a:'monkey', w:['dog','fish']},
+            {e:'🐘', a:'elephant', w:['cow','cat']},
+            // Food (11-20)
+            {e:'🍎', a:'apple', w:['banana','orange']}, {e:'🍌', a:'banana', w:['bread','water']}, {e:'🍊', a:'orange', w:['apple','pizza']},
+            {e:'🍞', a:'bread', w:['milk','cheese']}, {e:'🥛', a:'milk', w:['water','egg']}, {e:'💧', a:'water', w:['milk','burger']},
+            {e:'🍕', a:'pizza', w:['apple','cheese']}, {e:'🍔', a:'burger', w:['bread','pizza']}, {e:'🧀', a:'cheese', w:['egg','banana']},
+            {e:'🥚', a:'egg', w:['water','orange']},
+            // Colors (21-30)
+            {e:'🔴', a:'red', w:['blue','green']}, {e:'🔵', a:'blue', w:['yellow','black']}, {e:'🟢', a:'green', w:['red','white']},
+            {e:'🟡', a:'yellow', w:['pink','blue']}, {e:'⚫', a:'black', w:['white','brown']}, {e:'⚪', a:'white', w:['black','purple']},
+            {e:'🎀', a:'pink', w:['yellow','orange']}, {e:'🟣', a:'purple', w:['green','pink']}, {e:'🟠', a:'orange', w:['red','brown']},
+            {e:'🟤', a:'brown', w:['black','white']},
+            // Numbers (31-40)
+            {e:'1️⃣', a:'one', w:['two','three']}, {e:'2️⃣', a:'two', w:['four','one']}, {e:'3️⃣', a:'three', w:['five','two']},
+            {e:'4️⃣', a:'four', w:['three','six']}, {e:'5️⃣', a:'five', w:['seven','four']}, {e:'6️⃣', a:'six', w:['five','eight']},
+            {e:'7️⃣', a:'seven', w:['nine','six']}, {e:'8️⃣', a:'eight', w:['ten','seven']}, {e:'9️⃣', a:'nine', w:['eight','one']},
+            {e:'🔟', a:'ten', w:['nine','two']},
+            // Body Parts (41-50)
+            {e:'👁️', a:'eye', w:['ear','nose']}, {e:'👂', a:'ear', w:['mouth','eye']}, {e:'👃', a:'nose', w:['hand','ear']},
+            {e:'👄', a:'mouth', w:['foot','nose']}, {e:'✋', a:'hand', w:['leg','arm']}, {e:'🦶', a:'foot', w:['head','hand']},
+            {e:'🦵', a:'leg', w:['arm','foot']}, {e:'💪', a:'arm', w:['leg','hair']}, {e:'👤', a:'head', w:['eye','mouth']},
+            {e:'💇', a:'hair', w:['head','ear']},
+            // Clothes (51-60)
+            {e:'👕', a:'shirt', w:['pants','dress']}, {e:'👖', a:'pants', w:['shoes','hat']}, {e:'👗', a:'dress', w:['skirt','shirt']},
+            {e:'👞', a:'shoes', w:['socks','jacket']}, {e:'🎩', a:'hat', w:['coat','shoes']}, {e:'🧦', a:'socks', w:['pants','glasses']},
+            {e:'🧥', a:'jacket', w:['shirt','skirt']}, {e:'👚', a:'blouse', w:['dress','hat']}, {e:'🧣', a:'scarf', w:['socks','coat']},
+            {e:'👓', a:'glasses', w:['shoes','jacket']},
+            // Nature (61-70)
+            {e:'☀️', a:'sun', w:['moon','star']}, {e:'🌙', a:'moon', w:['sun','cloud']}, {e:'⭐', a:'star', w:['rain','moon']},
+            {e:'🌲', a:'tree', w:['flower','fire']}, {e:'🌸', a:'flower', w:['tree','water']}, {e:'☁️', a:'cloud', w:['snow','sun']},
+            {e:'🌧️', a:'rain', w:['star','cloud']}, {e:'❄️', a:'snow', w:['fire','rain']}, {e:'🔥', a:'fire', w:['water','snow']},
+            {e:'🌊', a:'ocean', w:['tree','flower']},
+            // Objects/School (71-80)
+            {e:'📖', a:'book', w:['pen','chair']}, {e:'🖊️', a:'pen', w:['pencil','paper']}, {e:'✏️', a:'pencil', w:['bag','clock']},
+            {e:'🪑', a:'chair', w:['desk','book']}, {e:'🎒', a:'bag', w:['ruler','pen']}, {e:'⏰', a:'clock', w:['computer','pencil']},
+            {e:'📄', a:'paper', w:['bag','chair']}, {e:'📏', a:'ruler', w:['clock','desk']}, {e:'💻', a:'computer', w:['paper','book']},
+            {e:'🔑', a:'key', w:['ruler','bag']},
+            // Vehicles (81-90)
+            {e:'🚗', a:'car', w:['bus','train']}, {e:'🚌', a:'bus', w:['plane','bike']}, {e:'🚂', a:'train', w:['car','boat']},
+            {e:'✈️', a:'plane', w:['ship','bus']}, {e:'🚲', a:'bike', w:['truck','train']}, {e:'⛵', a:'boat', w:['helicopter','car']},
+            {e:'🚢', a:'ship', w:['plane','bike']}, {e:'🚚', a:'truck', w:['rocket','boat']}, {e:'🚁', a:'helicopter', w:['ship','truck']},
+            {e:'🚀', a:'rocket', w:['helicopter','plane']},
+            // People/Professions (91-100)
+            {e:'👦', a:'boy', w:['girl','man']}, {e:'👧', a:'girl', w:['woman','baby']}, {e:'👨', a:'man', w:['boy','doctor']},
+            {e:'👩', a:'woman', w:['girl','teacher']}, {e:'👶', a:'baby', w:['cop','man']}, {e:'🧑‍🏫', a:'teacher', w:['king','woman']},
+            {e:'🧑‍⚕️', a:'doctor', w:['queen','baby']}, {e:'👮', a:'police', w:['teacher','boy']}, {e:'👑', a:'king', w:['doctor','girl']},
+            {e:'👸', a:'queen', w:['police','king']}
+        ];
+
+        // --- VARIABLES DE ESTADO ---
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let studentName = "";
+        let isAnswering = false;
+
+        // --- FUNCIONES CORE ---
+
+        // Mezclar el arreglo (Fisher-Yates) para que el examen sea diferente cada vez
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startExam() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if (!nameInput) {
+                alert("Por favor, ingresa tu nombre para comenzar.");
+                return;
+            }
+            studentName = nameInput;
+            
+            // Preparar las preguntas
+            questions = [...rawVocab];
+            shuffleArray(questions);
+            
+            // Cambiar de pantalla
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('examScreen').classList.add('active');
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswering = false;
+            const q = questions[currentQuestionIndex];
+            
+            // Actualizar UI
+            document.getElementById('progressText').textContent = `Question ${currentQuestionIndex + 1} / 100`;
+            document.getElementById('progressBar').style.width = `${((currentQuestionIndex) / 100) * 100}%`;
+            
+            // Re-aplicar animación de entrada al emoji
+            const emojiDiv = document.getElementById('emojiDisplay');
+            emojiDiv.style.animation = 'none';
+            emojiDiv.offsetHeight; // Trigger reflow
+            emojiDiv.style.animation = null;
+            emojiDiv.textContent = q.e;
+
+            // Preparar y mezclar opciones
+            let options = [q.a, q.w[0], q.w[1]];
+            shuffleArray(options);
+
+            // Generar botones
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(btn, opt, q.a);
+                grid.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(btnElement, selectedWord, correctWord) {
+            if (isAnswering) return; // Prevenir múltiples clics
+            isAnswering = true;
+
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            // Deshabilitar botones y mostrar colores
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correctWord) {
+                    btn.classList.add('correct');
+                } else if (btn === btnElement) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            // Sumar puntaje si es correcto
+            if (selectedWord === correctWord) {
+                score++;
+            }
+
+            // Avanzar a la siguiente o terminar
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 600); // Pequeña pausa para ver el resultado visual
+        }
+
+        function finishExam() {
+            document.getElementById('examScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+
+            // Cálculos
+            const percentage = (score / 100) * 100;
+            // Cálculo exacto para la dimensión "Saber" (Valorada sobre 45 puntos)
+            const saberPoints = Math.round((score / 100) * 45);
+
+            // UI Mensajes
+            document.getElementById('finalScoreText').textContent = `${score} / 100 Correct`;
+            document.getElementById('saberScore').textContent = saberPoints;
+
+            const msgDiv = document.getElementById('resultMessage');
+            const emojiDiv = document.getElementById('resultEmoji');
+
+            if (percentage >= 90) {
+                msgDiv.textContent = `Excellent, ${studentName}!`;
+                emojiDiv.textContent = '🏆';
+            } else if (percentage >= 70) {
+                msgDiv.textContent = `Good Job, ${studentName}!`;
+                emojiDiv.textContent = '🌟';
+            } else if (percentage >= 51) {
+                msgDiv.textContent = `You Passed, ${studentName}!`;
+                emojiDiv.textContent = '👍';
+            } else {
+                msgDiv.textContent = `Keep Trying, ${studentName}!`;
+                msgDiv.style.color = "var(--rojo-alerta)";
+                emojiDiv.textContent = '📚';
+            }
+        }
+    </script>
+</body>
+</html>
