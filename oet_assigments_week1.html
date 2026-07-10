@@ -100,10 +100,13 @@
         .correction-span { color: #d32f2f; font-weight: bold; margin-left: 10px; font-size: 0.85rem; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
         .correction-mcq { color: #d32f2f; font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
 
+        /* Indicador de Autoguardado */
+        .save-indicator { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+
         /* Estilos de Impresión para el PDF */
         @media print {
             body { padding: 0; background: white; }
-            .hero, .tab-container, .audio-player-container, .video-container, .btn, .teacher-override { display: none !important; }
+            .hero, .tab-container, .audio-player-container, .video-container, .btn, .teacher-override, .save-indicator { display: none !important; }
             .tab-content { display: block !important; opacity: 1 !important; }
             .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
             .mcq-block { border: none; background: transparent; padding: 0; }
@@ -117,6 +120,8 @@
         <h1 class="hero-title">OET Listening <span>Assignments</span></h1>
         <p>Julio 12 - Julio 15. Completa tus tareas diarias para desbloquear el reporte final.</p>
     </header>
+
+    <div class="save-indicator" id="save-indicator">💾 Respuestas guardadas</div>
 
     <div class="container">
         
@@ -142,11 +147,11 @@
 
                 <h4>Vocabulary Extraction:</h4>
                 <p>Identifica y define 5 términos clínicos o anatómicos mencionados en el audio:</p>
-                <div class="question-line">1. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">2. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">3. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">4. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">5. Term: <input type="text" class="oet-input"> Def: <input type="text" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">1. Term: <input type="text" id="sun_t1" class="oet-input"> Def: <input type="text" id="sun_d1" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">2. Term: <input type="text" id="sun_t2" class="oet-input"> Def: <input type="text" id="sun_d2" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">3. Term: <input type="text" id="sun_t3" class="oet-input"> Def: <input type="text" id="sun_d3" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">4. Term: <input type="text" id="sun_t4" class="oet-input"> Def: <input type="text" id="sun_d4" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">5. Term: <input type="text" id="sun_t5" class="oet-input"> Def: <input type="text" id="sun_d5" class="oet-input" style="width: 300px;"></div>
             </section>
         </div>
 
@@ -155,7 +160,8 @@
             <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Audio Track</h4>
             <!-- Cortará automáticamente en el minuto 36:36 (2196 segundos) -->
             <audio id="oet-audio-player" controls controlsList="nodownload">
-                <source src="audios/OET_week1_audio.mp3" type="audio/mpeg">
+                <!-- Se cambió a la ruta RAW de GitHub para asegurar la reproducción -->
+                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/OET_week1_audio.mp3" type="audio/mpeg">
                 Tu navegador no soporta el elemento de audio.
             </audio>
             <p style="font-size: 0.8rem; margin-top: 5px; color: #666;">Note: The audio will automatically stop before the answers section.</p>
@@ -428,13 +434,51 @@
             }
         }
 
+        // SISTEMA DE MINICACHE (LOCAL STORAGE)
+        function saveProgress() {
+            const data = {};
+            // Guardar inputs de texto
+            document.querySelectorAll('input[type="text"]').forEach(el => {
+                if(el.id) data[el.id] = el.value;
+            });
+            // Guardar radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(el => {
+                if(el.checked) data[el.name] = el.value;
+            });
+            
+            localStorage.setItem('oet_assignments_progress', JSON.stringify(data));
+            
+            // Mostrar indicador visual de guardado
+            const indicator = document.getElementById('save-indicator');
+            indicator.style.opacity = '1';
+            setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('oet_assignments_progress');
+            if(saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('input[type="text"]').forEach(el => {
+                    if(el.id && data[el.id]) el.value = data[el.id];
+                });
+                document.querySelectorAll('input[type="radio"]').forEach(el => {
+                    if(data[el.name] && el.value === data[el.name]) el.checked = true;
+                });
+            }
+        }
+
+        // Listeners para el autoguardado
+        document.addEventListener('input', saveProgress);
+        document.addEventListener('change', saveProgress);
+        document.addEventListener('DOMContentLoaded', loadProgress);
+
         // SISTEMA DE AUTOCORRECCIÓN
         function checkPartA() {
             const answersA = {
-                q1: "14", q2: "heavy lifting", q3: "uneven", q4: "lower back", q5: "brace", q6: "25 degrees",
-                q7: "shoulder blades", q8: "over-the-counter", q9: "physical", q10: "curvature", q11: "core", q12: "ergonomic chairs",
-                q13: "cold food", q14: "2 years", q15: "30", q16: "forehead", q17: "neck", q18: "nausea",
-                q19: "1 to 2", q20: "cluster", q21: "paracetamol", q22: "tongue", q23: "ice cream", q24: "slowly"
+                q1: "15", q2: "bending", q3: "uneven", q4: "feet", q5: "brace", q6: "25 degrees",
+                q7: "shoulder blades", q8: "over-the-counter", q9: "heat", q10: "curvature", q11: "core", q12: "ergonomic chairs",
+                q13: "cold", q14: "two months", q15: "30", q16: "forehead", q17: "temples", q18: "nausea",
+                q19: "once or twice", q20: "tension", q21: "ibuprofen", q22: "tongue", q23: "cold stimulus headache", q24: "more slowly"
             };
 
             for(let i = 1; i <= 24; i++) {
