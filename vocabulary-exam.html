@@ -123,15 +123,15 @@
         }
         .result-emoji { font-size: 5rem; margin-bottom: 10px; }
         .result-title { font-family: var(--font-titulares); font-size: 2rem; color: var(--azul-primario); margin: 0 0 10px 0;}
-        .result-score { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 20px; }
+        .result-score { font-size: 1.2rem; font-weight: 600; color: #555; margin-bottom: 25px; }
         
         .grading-box {
-            background: #f8f9fa; border: 2px dashed var(--azul-primario);
-            padding: 20px; border-radius: 15px; margin-bottom: 30px;
+            background: #f8f9fa; border: 2px solid var(--azul-primario);
+            padding: 25px; border-radius: 15px; margin-bottom: 30px;
         }
-        .grading-title { font-size: 1rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: bold;}
-        .grading-score { font-family: var(--font-titulares); font-size: 2.5rem; color: var(--naranja-vibrante); margin: 0;}
-        .grading-max { font-size: 1rem; color: #888; }
+        .grading-title { font-size: 1.1rem; color: var(--azul-primario); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold;}
+        .grading-score { font-family: var(--font-titulares); font-size: 3.5rem; color: var(--naranja-vibrante); margin: 0; line-height: 1;}
+        .grading-max { font-size: 1.1rem; color: #888; margin-top: 5px; font-weight: bold;}
 
     </style>
 </head>
@@ -174,12 +174,12 @@
         <div class="result-box">
             <div class="result-emoji" id="resultEmoji">🎉</div>
             <h2 class="result-title" id="resultMessage">Great Job!</h2>
-            <div class="result-score" id="finalScoreText">100 / 100 Correct</div>
+            <div class="result-score" id="finalScoreText">100 Correct Answers</div>
             
             <div class="grading-box">
-                <div class="grading-title">Registro Pedagógico: Dimensión del Saber</div>
-                <div class="grading-score" id="saberScore">45</div>
-                <div class="grading-max">/ 45 Pts.</div>
+                <div class="grading-title">Puntaje Final</div>
+                <div class="grading-score" id="hundredScore">100</div>
+                <div class="grading-max">/ 100 Pts.</div>
             </div>
             
             <button class="btn-primary" onclick="location.reload()">Finish & Exit</button>
@@ -347,12 +347,10 @@
 
             // Cálculos
             const percentage = (score / 100) * 100;
-            // Cálculo exacto para la dimensión "Saber" (Valorada sobre 45 puntos)
-            const saberPoints = Math.round((score / 100) * 45);
 
             // UI Mensajes
-            document.getElementById('finalScoreText').textContent = `${score} / 100 Correct`;
-            document.getElementById('saberScore').textContent = saberPoints;
+            document.getElementById('finalScoreText').textContent = `${score} Correct Answers`;
+            document.getElementById('hundredScore').textContent = score;
 
             const msgDiv = document.getElementById('resultMessage');
             const emojiDiv = document.getElementById('resultEmoji');
