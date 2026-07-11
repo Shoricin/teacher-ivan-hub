@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 Final Exam | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Librería para exportar a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --gris-fondo: #e9ecef;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--gris-fondo);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Encabezado Fijo --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            padding: 15px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.5rem; text-transform: uppercase;}
+        header h1 span { color: var(--naranja-vibrante); }
+        
+        .timer-display {
+            background: var(--blanco-puro); color: var(--azul-primario);
+            padding: 8px 15px; border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.2rem; display: none; align-items: center; gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .timer-display.warning { background: var(--rojo-alerta); color: white; }
+
+        /* --- Contenedores Principales --- */
+        .screen { display: none; max-width: 900px; margin: 40px auto; padding: 0 20px; animation: fadeIn 0.4s ease; }
+        .screen.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- LOGIN & TIPS --- */
+        .login-box {
+            background: var(--blanco-puro); padding: 40px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--naranja-vibrante);
+            text-align: center;
+        }
+        .login-box img { height: 70px; margin-bottom: 20px; }
+        .login-box h2 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0; font-size: 2rem;}
+        
+        .tips-container {
+            background: #f8f9fa; border-left: 4px solid var(--azul-primario);
+            padding: 20px; text-align: left; margin: 20px 0; border-radius: 0 10px 10px 0;
+        }
+        .tips-container h3 { margin-top: 0; color: var(--azul-primario); font-family: var(--font-titulares);}
+        .tips-container ul { padding-left: 20px; line-height: 1.6; color: #555;}
+        
+        .login-input {
+            width: 100%; max-width: 400px; padding: 15px; margin: 20px auto;
+            border: 2px solid #ccc; border-radius: 10px; font-family: var(--font-cuerpo);
+            font-size: 1.1rem; text-align: center; outline: none; transition: 0.3s; display: block;
+        }
+        .login-input:focus { border-color: var(--naranja-vibrante); }
+
+        .btn-primary {
+            background: var(--naranja-vibrante); color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4); transition: 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-primary:active { transform: scale(0.95); }
+
+        /* --- EXAMEN UI --- */
+        .exam-section {
+            background: var(--blanco-puro); padding: 40px; border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 30px;
+        }
+        .section-title {
+            font-family: var(--font-titulares); color: var(--azul-primario);
+            border-bottom: 3px solid var(--naranja-vibrante); padding-bottom: 10px; margin-top: 0;
+        }
+        
+        .reading-text {
+            font-size: 1.05rem; line-height: 1.8; color: #444; text-align: justify;
+            background: #fdfdfd; padding: 25px; border: 1px solid #eee; border-radius: 10px;
+            height: 400px; overflow-y: auto; margin-bottom: 30px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .question-block { margin-bottom: 25px; }
+        .question-text { font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; color: #222;}
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .options-list li { margin-bottom: 8px; }
+        .options-list label {
+            display: flex; align-items: center; cursor: pointer; padding: 10px 15px;
+            background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; transition: 0.2s;
+        }
+        .options-list label:hover { background: #eef2f5; border-color: var(--azul-primario); }
+        .options-list input[type="radio"] { margin-right: 15px; transform: scale(1.2); }
+        .options-list input[type="radio"]:checked + span { font-weight: bold; color: var(--azul-primario); }
+
+        .textarea-box {
+            width: 100%; height: 180px; padding: 15px; border: 2px solid #ccc;
+            border-radius: 10px; font-family: var(--font-cuerpo); font-size: 1rem;
+            line-height: 1.5; resize: vertical; outline: none; box-sizing: border-box; transition: 0.3s;
+        }
+        .textarea-box:focus { border-color: var(--naranja-vibrante); }
+        .word-count { text-align: right; font-size: 0.85rem; color: #888; margin-top: 5px; font-weight: bold;}
+
+        /* --- RESULTADOS --- */
+        .result-container { text-align: center; }
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            background: white; border: 8px solid var(--verde-exito);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            margin: 0 auto 20px auto; box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
+        }
+        .score-circle.low { border-color: var(--rojo-alerta); box-shadow: 0 10px 20px rgba(220, 53, 69, 0.2); }
+        .score-number { font-family: var(--font-titulares); font-size: 3rem; color: #333; line-height: 1;}
+        .score-total { font-size: 1rem; color: #888; }
+
+        .breakdown-table { width: 100%; max-width: 500px; margin: 0 auto 30px auto; border-collapse: collapse; }
+        .breakdown-table th, .breakdown-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+        .breakdown-table th { color: var(--azul-primario); font-family: var(--font-titulares); }
+        .breakdown-table td.points { text-align: right; font-weight: bold; color: var(--naranja-vibrante); }
+
+        /* Vista para el PDF exportado */
+        #pdf-content { background: white; padding: 40px; display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teacher Ivan <span>HUB</span></h1>
+        <div class="timer-display" id="timerDisplay">⏱️ <span id="timeText">40:00</span></div>
+    </header>
+
+    <!-- PANTALLA 1: LOGIN -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h2>B1 Final Assessment</h2>
+            
+            <div class="tips-container">
+                <h3>📌 Important Instructions:</h3>
+                <ul>
+                    <li>You have exactly <strong>40 minutes</strong> to complete all 3 sections.</li>
+                    <li><strong>Part 1:</strong> Reading Comprehension (1100 words approx, 15 Questions).</li>
+                    <li><strong>Part 2:</strong> Writing Task (Write 100 words about a past event).</li>
+                    <li><strong>Part 3:</strong> Speaking Prep (Write your speech outline based on the reading).</li>
+                    <li>Do not refresh the page. The exam will submit automatically when time is up.</li>
+                </ul>
+            </div>
+
+            <input type="text" id="studentName" class="login-input" placeholder="Enter your full name" autocomplete="off">
+            <button class="btn-primary" onclick="startExam()">Begin Exam</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: EXAMEN -->
+    <div id="examScreen" class="screen">
+        
+        <!-- SECTION 1: READING -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 1: Reading Comprehension (60 Pts)</h2>
+            <p style="color:#555;">Read the text carefully and answer the 15 questions below.</p>
+            
+            <div class="reading-text">
+                <h3>The Great Andean Adventure: A Journey Through Time</h3>
+                <p>Two years ago, a young university student named Carlos decided to embark on a journey that would change his perspective on history and language forever. He had always been fascinated by ancient civilizations, especially those that existed in South America before the arrival of the Europeans. After saving money from his part-time job as a waiter, he bought a bus ticket to La Paz, the bustling, high-altitude city in the heart of the Andes. Carlos felt extremely excited because he had never traveled alone before. </p>
+                <p>When he arrived in La Paz, the thin air immediately hit him. He was breathing heavily just walking up the steep streets. However, the vibrant colors of the markets and the majestic view of the Illimani mountain took his breath away in a completely different sense. He spent his first two days exploring the Witches' Market, where he saw strange ingredients and ancient amulets. While he was drinking coca tea in a small café, he met an old historian named Don Hector. Don Hector told him stories about an ancient empire that was older and more mysterious than the Incas: the Tiwanaku civilization.</p>
+                <p>Fascinated by the story, Carlos woke up at 5:00 AM the next morning and took a bumpy minibus ride to the ruins of Tiwanaku. As the sun was rising over the flat, cold plains of the Altiplano, the massive stone structures emerged from the fog. Carlos was amazed. He walked towards the famous Gate of the Sun (Puerta del Sol). He had read about it in textbooks, but seeing the intricate carvings carved directly into a single massive block of stone was unbelievable. The guide explained that this civilization had developed advanced agricultural techniques and precise astronomical calendars thousands of years ago.</p>
+                <p>While Carlos was taking photographs, he noticed a small, semi-buried stone near the Kalasasaya temple. It had strange symbols on it. He didn't touch it, but he took a clear picture. That night, back in his hostel, he tried to translate the symbols using the internet, but he couldn't find anything. He realized that to understand the modern research about these ruins, he needed to improve his English, as most of the new archaeological papers published by international universities were written in that language.</p>
+                <p>The adventure didn't stop there. The following week, Carlos traveled south to the Uyuni Salt Flats. It was the rainy season, and the giant salt desert had transformed into the world's largest mirror. The sky and the earth merged into one infinite blue horizon. He took a 4x4 jeep tour with a group of tourists from England, Australia, and Germany. Because his English was still basic, he struggled to communicate deeply with them, but they shared food, laughed at jokes, and helped each other take perspective photos with plastic dinosaurs. This experience confirmed his desire to master the English language.</p>
+                <p>On the final day of the tour, the jeep broke down in the middle of nowhere. It was getting dark and extremely cold. The driver didn't know what to do, but one of the German tourists, an engineer, managed to fix the engine using some wire and tape. Carlos realized that language was not just for reading history books; it was a tool for survival and connection. </p>
+                <p>After three weeks of traveling through Potosí and Sucre, Carlos finally returned home. He was exhausted but deeply inspired. He immediately enrolled in an intensive English bootcamp. He knew that the world was massive, full of history and incredible people, and he wanted to be ready for his next adventure. Today, Carlos speaks English fluently and works as an international tour guide, sharing the mysteries of the Sun Gate with people from all over the world.</p>
+            </div>
+
+            <!-- Questions -->
+            <div id="readingQuestions"></div>
+        </div>
+
+        <!-- SECTION 2: WRITING -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 2: Writing Task (20 Pts)</h2>
+            <p style="color:#555;"><strong>Instructions:</strong> Write a paragraph (approximately 100 words) describing a memorable trip or event you experienced in the past. Use the Past Simple and Past Continuous tenses.</p>
+            <textarea class="textarea-box" id="writingTask" placeholder="Start writing your story here..."></textarea>
+            <div class="word-count">Word count: <span id="writeCount">0</span></div>
+        </div>
+
+        <!-- SECTION 3: SPEAKING PREP -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 3: Speech Preparation (20 Pts)</h2>
+            <p style="color:#555;"><strong>Instructions:</strong> Prepare a 1-minute speech summarizing Carlos's adventure from Part 1. Write the outline or the full text of your speech below (minimum 50 words).</p>
+            <textarea class="textarea-box" id="speechTask" placeholder="Hello everyone! Today I want to tell you about Carlos..."></textarea>
+            <div class="word-count">Word count: <span id="speechCount">0</span></div>
+        </div>
+
+        <button class="btn-primary" style="width:100%; font-size:1.5rem;" onclick="submitExam()">Submit Final Exam</button>
+
+    </div>
+
+    <!-- PANTALLA 3: RESULTADOS -->
+    <div id="resultScreen" class="screen">
+        <div class="login-box" style="max-width: 600px; margin: 0 auto;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Exam Completed!</h2>
+            <p id="resultName" style="font-size: 1.2rem; color: #555; margin-bottom: 30px;">Student Name</p>
+            
+            <div class="score-circle" id="scoreCircle">
+                <div class="score-number" id="finalScoreDisplay">0</div>
+                <div class="score-total">/ 100 Pts</div>
+            </div>
+
+            <table class="breakdown-table">
+                <tr>
+                    <th>Part 1: Reading</th>
+                    <td class="points"><span id="readScore">0</span> / 60</td>
+                </tr>
+                <tr>
+                    <th>Part 2: Writing</th>
+                    <td class="points"><span id="writeScoreDisplay">0</span> / 20</td>
+                </tr>
+                <tr>
+                    <th>Part 3: Speech Prep</th>
+                    <td class="points"><span id="speechScoreDisplay">0</span> / 20</td>
+                </tr>
+            </table>
+
+            <button class="btn-primary" onclick="downloadPDF()">Download PDF Report</button>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR OCULTO PARA EL PDF -->
+    <div id="pdf-content">
+        <div style="text-align:center; border-bottom: 3px solid #0A468C; padding-bottom: 20px; margin-bottom: 30px;">
+            <h1 style="color: #0A468C; font-family: sans-serif; margin: 0;">TEACHER IVAN HUB</h1>
+            <h2 style="color: #F56E1E; font-family: sans-serif; margin: 5px 0;">B1 English Final Assessment</h2>
+        </div>
+        
+        <h3 style="font-family: sans-serif;">Student: <span id="pdfName" style="font-weight: normal;"></span></h3>
+        <h3 style="font-family: sans-serif;">Date: <span id="pdfDate" style="font-weight: normal;"></span></h3>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-left: 5px solid #28a745; margin: 30px 0;">
+            <h2 style="margin: 0; font-family: sans-serif;">Final Score: <span id="pdfScore" style="color: #28a745;">0</span> / 100</h2>
+        </div>
+
+        <h3 style="font-family: sans-serif; color: #0A468C;">Part 2: Writing Submission</h3>
+        <p id="pdfWriting" style="font-family: sans-serif; line-height: 1.6; background: #fff; border: 1px solid #ccc; padding: 15px;"></p>
+
+        <h3 style="font-family: sans-serif; color: #0A468C;">Part 3: Speech Preparation</h3>
+        <p id="pdfSpeech" style="font-family: sans-serif; line-height: 1.6; background: #fff; border: 1px solid #ccc; padding: 15px;"></p>
+        
+        <p style="text-align: center; margin-top: 50px; font-size: 0.9rem; color: #888; font-family: sans-serif;">Generated by Teacher Ivan HUB System</p>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS DE PREGUNTAS (READING) ---
+        const readingQuestions = [
+            { q: "1. What did Carlos do to pay for his trip?", a: "He worked part-time as a waiter.", opts: ["He asked his parents for money.", "He worked part-time as a waiter.", "He won a scholarship.", "He sold his car."] },
+            { q: "2. Why was Carlos heavily breathing when he arrived in La Paz?", a: "Because of the high altitude and thin air.", opts: ["Because he ran to the hostel.", "Because of the high altitude and thin air.", "Because he was scared.", "Because the bus broke down."] },
+            { q: "3. Who did Carlos meet at the cafe in La Paz?", a: "An old historian named Don Hector.", opts: ["A tour guide from England.", "An old historian named Don Hector.", "A university professor.", "A German engineer."] },
+            { q: "4. What civilization did Don Hector talk about?", a: "The Tiwanaku civilization.", opts: ["The Aztec civilization.", "The Tiwanaku civilization.", "The Inca civilization.", "The Mayan civilization."] },
+            { q: "5. How did Carlos travel to the Tiwanaku ruins?", a: "He took a bumpy minibus ride.", opts: ["He flew in an airplane.", "He walked for two days.", "He took a bumpy minibus ride.", "He rented a 4x4 jeep."] },
+            { q: "6. What is the 'Puerta del Sol' made of?", a: "A single massive block of stone.", opts: ["Many small bricks.", "Wood and gold.", "A single massive block of stone.", "Salt from the Uyuni flats."] },
+            { q: "7. What did the guide explain about the ancient civilization?", a: "They had advanced agricultural techniques.", opts: ["They spoke English fluently.", "They built the first jeeps.", "They had advanced agricultural techniques.", "They never looked at the stars."] },
+            { q: "8. What did Carlos find near the Kalasasaya temple?", a: "A semi-buried stone with strange symbols.", opts: ["A lost plastic dinosaur.", "A book written in English.", "A semi-buried stone with strange symbols.", "A piece of gold."] },
+            { q: "9. Why did Carlos realize he needed to improve his English?", a: "To read modern archaeological papers.", opts: ["To read modern archaeological papers.", "To talk to Don Hector.", "To buy bus tickets.", "To order food in La Paz."] },
+            { q: "10. What did the Uyuni Salt Flats look like during the rainy season?", a: "The world's largest mirror.", opts: ["A dry white desert.", "A green forest.", "The world's largest mirror.", "A busy city."] },
+            { q: "11. Where were the other tourists in the jeep from?", a: "England, Australia, and Germany.", opts: ["Brazil, Peru, and Chile.", "England, Australia, and Germany.", "USA, Canada, and Mexico.", "Spain, Italy, and France."] },
+            { q: "12. What happened on the final day of the salt flats tour?", a: "The jeep's engine broke down.", opts: ["They lost their cameras.", "The jeep's engine broke down.", "It started snowing heavily.", "Carlos lost his passport."] },
+            { q: "13. How did the German tourist fix the engine?", a: "Using wire and tape.", opts: ["Using a new battery.", "Using wire and tape.", "Using strange symbols.", "He called a mechanic."] },
+            { q: "14. After his trip, what did Carlos immediately do?", a: "He enrolled in an intensive English bootcamp.", opts: ["He enrolled in an intensive English bootcamp.", "He became a historian.", "He moved to Germany.", "He bought a new jeep."] },
+            { q: "15. What does Carlos do for a living now?", a: "He works as an international tour guide.", opts: ["He writes history books.", "He is an engineer.", "He works as an international tour guide.", "He is a waiter in Sucre."] }
+        ];
+
+        // --- VARIABLES GLOBALES ---
+        let studentName = "";
+        let timerInterval;
+        let timeLeft = 40 * 60; // 40 minutos en segundos
+
+        // --- INICIALIZAR LECTURA ---
+        function renderReadingQuestions() {
+            const container = document.getElementById('readingQuestions');
+            let html = "";
+            
+            readingQuestions.forEach((item, index) => {
+                html += `<div class="question-block">
+                            <div class="question-text">${item.q}</div>
+                            <ul class="options-list">`;
+                
+                // Shuffle options
+                let options = [...item.opts];
+                options.sort(() => Math.random() - 0.5);
+
+                options.forEach(opt => {
+                    html += `<li>
+                                <label>
+                                    <input type="radio" name="q${index}" value="${opt}">
+                                    <span>${opt}</span>
+                                </label>
+                            </li>`;
+                });
+                html += `</ul></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- CONTADORES DE PALABRAS ---
+        document.getElementById('writingTask').addEventListener('input', function() {
+            let words = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('writeCount').textContent = words;
+        });
+
+        document.getElementById('speechTask').addEventListener('input', function() {
+            let words = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('speechCount').textContent = words;
+        });
+
+        // --- LÓGICA DEL EXAMEN ---
+        function startExam() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if (!nameInput) {
+                alert("Please enter your name to begin.");
+                return;
+            }
+            studentName = nameInput;
+            
+            renderReadingQuestions();
+
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('examScreen').classList.add('active');
+            document.getElementById('timerDisplay').style.display = 'flex';
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                // Formato 00:00
+                if(minutes < 10) minutes = '0' + minutes;
+                if(seconds < 10) seconds = '0' + seconds;
+                
+                document.getElementById('timeText').textContent = `${minutes}:${seconds}`;
+
+                // Advertencia a los 5 minutos
+                if(timeLeft <= 300) {
+                    document.getElementById('timerDisplay').classList.add('warning');
+                }
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Submitting exam automatically.");
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            document.getElementById('timerDisplay').style.display = 'none';
+
+            // 1. Calificar Reading (Cada pregunta vale 4 puntos = 60 max)
+            let readingScore = 0;
+            readingQuestions.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if(selected && selected.value === item.a) {
+                    readingScore += 4;
+                }
+            });
+
+            // 2. Calificar Writing (Lógica automática básica: >80 palabras = 20 pts)
+            let writingText = document.getElementById('writingTask').value.trim();
+            let writeWords = writingText.split(/\s+/).filter(w => w.length > 0).length;
+            let writingScore = 0;
+            if(writeWords >= 80) writingScore = 20;
+            else if(writeWords >= 50) writingScore = 15;
+            else if(writeWords > 0) writingScore = 5;
+
+            // 3. Calificar Speech (Lógica automática básica: >40 palabras = 20 pts)
+            let speechText = document.getElementById('speechTask').value.trim();
+            let speechWords = speechText.split(/\s+/).filter(w => w.length > 0).length;
+            let speechScore = 0;
+            if(speechWords >= 40) speechScore = 20;
+            else if(speechWords >= 20) speechScore = 15;
+            else if(speechWords > 0) speechScore = 5;
+
+            let totalScore = readingScore + writingScore + speechScore;
+
+            // Mostrar Pantalla Resultados
+            document.getElementById('examScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+
+            document.getElementById('resultName').textContent = studentName;
+            document.getElementById('finalScoreDisplay').textContent = totalScore;
+            document.getElementById('readScore').textContent = readingScore;
+            document.getElementById('writeScoreDisplay').textContent = writingScore;
+            document.getElementById('speechScoreDisplay').textContent = speechScore;
+
+            const circle = document.getElementById('scoreCircle');
+            if(totalScore < 51) circle.classList.add('low');
+
+            // Preparar data para el PDF
+            document.getElementById('pdfName').textContent = studentName;
+            let today = new Date();
+            document.getElementById('pdfDate').textContent = today.toLocaleDateString();
+            document.getElementById('pdfScore').textContent = totalScore;
+            document.getElementById('pdfWriting').textContent = writingText || "No response provided.";
+            document.getElementById('pdfSpeech').textContent = speechText || "No response provided.";
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            element.style.display = 'block'; // Mostrar temporalmente para renderizar
+
+            let opt = {
+                margin:       1,
+                filename:     `Final_Exam_${studentName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none'; // Ocultar después de descargar
+            });
+        }
+    </script>
+</body>
+</html>
