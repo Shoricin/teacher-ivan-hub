@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Routine Exam | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --gris-fondo: #e9ecef;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--gris-fondo);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            padding: 15px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header-logo { display: flex; align-items: center; gap: 15px; }
+        .header-logo img { height: 50px; }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.5rem; text-transform: uppercase;}
+        header h1 span { color: var(--naranja-vibrante); }
+
+        /* --- Main Container --- */
+        .container {
+            max-width: 900px; margin: 40px auto; padding: 0 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Secciones del Examen --- */
+        .exam-section {
+            background: var(--blanco-puro); padding: 35px; border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 30px;
+            border-top: 5px solid var(--azul-primario);
+        }
+        
+        .section-title {
+            font-family: var(--font-titulares); color: var(--azul-primario);
+            border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-top: 0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .section-points { font-size: 1rem; color: var(--naranja-vibrante); background: #fff5ee; padding: 5px 10px; border-radius: 8px;}
+        .instruction { color: #555; font-size: 1rem; margin-bottom: 25px; line-height: 1.5;}
+
+        /* --- PART 1: Vocab Grid --- */
+        .vocab-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;
+        }
+        .vocab-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8f9fa; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd;
+        }
+        .vocab-word { font-weight: bold; color: #444; font-size: 0.9rem;}
+        .vocab-input {
+            width: 100px; padding: 5px; border: 2px solid var(--gris-neutro);
+            border-radius: 5px; font-family: var(--font-cuerpo); text-align: center;
+            outline: none; transition: 0.3s;
+        }
+        .vocab-input:focus { border-color: var(--naranja-vibrante); }
+
+        /* --- PART 2: Structuring --- */
+        .structure-box { background: rgba(150, 200, 230, 0.15); padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+        .sentence-line { font-size: 1.1rem; line-height: 2; color: #333; margin-bottom: 15px; }
+        .connector-select {
+            padding: 5px 10px; border: 2px solid var(--azul-primario); border-radius: 5px;
+            font-family: var(--font-titulares); color: var(--azul-primario); font-size: 1rem;
+            outline: none; cursor: pointer; background: white;
+        }
+
+        /* --- PART 3: Reading --- */
+        .reading-text {
+            font-size: 1.05rem; line-height: 1.8; color: #444; text-align: justify;
+            background: #fdfdfd; padding: 25px; border: 1px solid #eee; border-radius: 10px;
+            margin-bottom: 25px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .question-block { margin-bottom: 20px; }
+        .question-text { font-weight: bold; margin-bottom: 10px; color: #222; }
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .options-list li { margin-bottom: 8px; }
+        .options-list label {
+            display: flex; align-items: center; cursor: pointer; padding: 10px 15px;
+            background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; transition: 0.2s;
+        }
+        .options-list label:hover { background: #eef2f5; border-color: var(--azul-primario); }
+        .options-list input[type="radio"] { margin-right: 15px; transform: scale(1.2); }
+
+        /* --- PART 4: Essay --- */
+        .textarea-box {
+            width: 100%; height: 250px; padding: 15px; border: 2px solid #ccc;
+            border-radius: 10px; font-family: var(--font-cuerpo); font-size: 1.05rem;
+            line-height: 1.6; resize: vertical; outline: none; box-sizing: border-box; transition: 0.3s;
+        }
+        .textarea-box:focus { border-color: var(--naranja-vibrante); }
+        .word-count { text-align: right; font-size: 0.95rem; color: #666; margin-top: 10px; font-weight: bold;}
+        .word-count span { color: var(--azul-primario); font-size: 1.1rem;}
+        .word-count.success span { color: var(--verde-exito); }
+
+        /* --- Buttons --- */
+        .submit-btn {
+            background: var(--naranja-vibrante); color: white; border: none;
+            padding: 20px; border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.4rem; cursor: pointer; text-transform: uppercase; width: 100%;
+            box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4); transition: 0.2s; margin-bottom: 40px;
+        }
+        .submit-btn:hover { transform: translateY(-2px); }
+        .submit-btn:active { transform: scale(0.95); }
+
+        /* --- Feedback Modal --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 2000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .result-card {
+            background: white; width: 90%; max-width: 500px; border-radius: 20px;
+            padding: 40px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border-top: 8px solid var(--azul-primario);
+        }
+        .result-card h2 { font-family: var(--font-titulares); color: var(--azul-primario); font-size: 2rem; margin-top: 0;}
+        .score-display { font-size: 4rem; font-family: var(--font-titulares); color: var(--naranja-vibrante); line-height: 1;}
+        .score-detail { font-size: 1.1rem; color: #555; margin: 20px 0; line-height: 1.8; text-align: left; background: #f8f9fa; padding: 15px; border-radius: 10px;}
+        .score-detail span { font-weight: bold; color: var(--azul-primario); float: right;}
+
+        /* Utilities */
+        .correct { background-color: #d4edda !important; border-color: var(--verde-exito) !important; color: var(--verde-exito); font-weight: bold;}
+        .incorrect { background-color: #f8d7da !important; border-color: var(--rojo-alerta) !important; color: var(--rojo-alerta); font-weight: bold;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h1>Essay <span>Creation Exam</span></h1>
+        </div>
+        <div style="font-family: var(--font-titulares); font-size: 1.2rem;">Basic Level A1-A2</div>
+    </header>
+
+    <div class="container">
+        <p style="text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 30px;">
+            <strong>Student:</strong> <input type="text" id="studentName" placeholder="Your Name" style="padding:8px; border: 2px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 1rem; width: 250px; outline:none;">
+        </p>
+
+        <!-- ================= PART 1: VOCABULARY ================= -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 1: Daily Vocabulary <span class="section-points">40 Pts</span></h2>
+            <p class="instruction">Translate the following 40 words into English. Check your spelling!</p>
+            
+            <div class="vocab-grid" id="vocabGrid">
+                <!-- Generado por JS para mantener el HTML limpio -->
+            </div>
+        </div>
+
+        <!-- ================= PART 2: SENTENCE STRUCTURING ================= -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 2: Connectors & Structure <span class="section-points">10 Pts</span></h2>
+            <p class="instruction">Choose the correct connector to give logical order to this daily routine.</p>
+            
+            <div class="structure-box">
+                <div class="sentence-line">
+                    1. <select class="connector-select" data-answer="first"><option value="">Select...</option><option value="finally">Finally</option><option value="first">First</option><option value="then">Then</option></select>, I wake up at 7:00 AM and turn off my alarm.
+                </div>
+                <div class="sentence-line">
+                    2. <select class="connector-select" data-answer="then"><option value="">Select...</option><option value="then">Then</option><option value="first">First</option><option value="never">Never</option></select>, I take a shower and get dressed for school.
+                </div>
+                <div class="sentence-line">
+                    3. <select class="connector-select" data-answer="after that"><option value="">Select...</option><option value="always">Always</option><option value="after that">After that</option><option value="first">First</option></select>, I have a delicious breakfast with my family.
+                </div>
+                <div class="sentence-line">
+                    4. I <select class="connector-select" data-answer="usually"><option value="">Select...</option><option value="usually">usually</option><option value="after that">after that</option><option value="then">then</option></select> take the bus, but sometimes I walk to school.
+                </div>
+                <div class="sentence-line">
+                    5. <select class="connector-select" data-answer="finally"><option value="">Select...</option><option value="first">First</option><option value="then">Then</option><option value="finally">Finally</option></select>, I do my homework, have dinner, and go to bed at 10 PM.
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PART 3: READING ================= -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 3: Reading Comprehension <span class="section-points">20 Pts</span></h2>
+            <p class="instruction">Read the text about Sofia's routine and answer the questions below.</p>
+            
+            <div class="reading-text">
+                <strong>Sofia's Busy Day</strong><br><br>
+                My name is Sofia and I am a student in Bolivia. My daily routine is very busy but organized. I always wake up early, at 6:30 AM. First, I get up and take a quick shower. Then, I get dressed in my uniform and brush my teeth. At 7:00 AM, I have a healthy breakfast with my parents and my little brother. We usually eat bread, eggs, and drink hot chocolate. 
+                <br><br>
+                After that, I take the bus to school. My classes start at 8:00 AM and finish at 1:00 PM. I study many subjects, but my favorite is English because I want to travel. I always have lunch at 1:30 PM at home. In the afternoon, I do my homework and study for my exams in the living room. 
+                <br><br>
+                Sometimes, I play video games or watch TV for one hour to relax. I never go to bed late because I need energy for the next day. Finally, I have dinner at 7:30 PM, read a book, and go to sleep at 9:30 PM. During the weekend, my routine changes. I wake up late and play volleyball with my friends in the park.
+            </div>
+
+            <div id="readingQuestions">
+                <!-- Q1 -->
+                <div class="question-block">
+                    <div class="question-text">1. What time does Sofia wake up on weekdays?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq1" value="7:00 AM"> <span>7:00 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="6:30 AM" data-correct="true"> <span>6:30 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="8:00 AM"> <span>8:00 AM</span></label></li>
+                    </ul>
+                </div>
+                <!-- Q2 -->
+                <div class="question-block">
+                    <div class="question-text">2. What does she usually eat for breakfast?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq2" value="Cereal and milk"> <span>Cereal and milk</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Bread, eggs, and hot chocolate" data-correct="true"> <span>Bread, eggs, and hot chocolate</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Only hot chocolate"> <span>Only hot chocolate</span></label></li>
+                    </ul>
+                </div>
+                <!-- Q3 -->
+                <div class="question-block">
+                    <div class="question-text">3. Why is English her favorite subject?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq3" value="Because it is easy"> <span>Because it is easy</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="Because the teacher is fun"> <span>Because the teacher is fun</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="Because she wants to travel" data-correct="true"> <span>Because she wants to travel</span></label></li>
+                    </ul>
+                </div>
+                <!-- Q4 -->
+                <div class="question-block">
+                    <div class="question-text">4. What does she do in the afternoon?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq4" value="She takes a nap"> <span>She takes a nap</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="She goes to school"> <span>She goes to school</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="She does homework and studies" data-correct="true"> <span>She does homework and studies</span></label></li>
+                    </ul>
+                </div>
+                <!-- Q5 -->
+                <div class="question-block">
+                    <div class="question-text">5. What does she do on the weekend?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq5" value="Wakes up late and plays volleyball" data-correct="true"> <span>Wakes up late and plays volleyball</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="Goes to school"> <span>Goes to school</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="Wakes up early and reads a book"> <span>Wakes up early and reads a book</span></label></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PART 4: ESSAY ================= -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 4: Essay Creation <span class="section-points">30 Pts</span></h2>
+            <p class="instruction">Write an essay about <strong>Your Daily Routine</strong>. Use the vocabulary from Part 1 and the connectors from Part 2 (First, Then, Finally, Always, Sometimes). <br><strong>Requirement: Minimum 100 words.</strong></p>
+            
+            <textarea class="textarea-box" id="essayText" placeholder="My name is... and my daily routine is..."></textarea>
+            <div class="word-count" id="wordCountDisplay">Words: <span id="essayWordCount">0</span> / 100</div>
+        </div>
+
+        <button class="submit-btn" onclick="gradeExam()">Submit Final Exam</button>
+    </div>
+
+    <!-- ================= MODAL DE RESULTADOS ================= -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="result-card">
+            <h2>Exam Results</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 20px;">Student: <strong id="resName">---</strong></p>
+            
+            <div class="score-display"><span id="totalScore">0</span>/100</div>
+            
+            <div class="score-detail">
+                Part 1: Vocabulary (40 words) <span id="sPart1">0/40</span><br>
+                Part 2: Connectors (5 items) <span id="sPart2">0/10</span><br>
+                Part 3: Reading (5 questions) <span id="sPart3">0/20</span><br>
+                Part 4: Essay (Min 100 words) <span id="sPart4">0/30</span>
+            </div>
+
+            <p id="teacherFeedback" style="font-weight: bold; color: var(--naranja-vibrante); font-size: 1.2rem;"></p>
+
+            <button class="submit-btn" style="padding: 15px; font-size: 1.2rem; margin-bottom: 0; margin-top: 20px;" onclick="location.reload()">Finish & Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA PARA PART 1 (40 Palabras) ---
+        const vocabWords = [
+            { es: "Despertar", en: "wake up" }, { es: "Levantar", en: "get up" }, { es: "Duchar", en: "take a shower" }, { es: "Cepillar", en: "brush" },
+            { es: "Dientes", en: "teeth" }, { es: "Vestirse", en: "get dressed" }, { es: "Desayunar", en: "have breakfast" }, { es: "Ir", en: "go" },
+            { es: "Escuela", en: "school" }, { es: "Estudiar", en: "study" }, { es: "Almorzar", en: "have lunch" }, { es: "Hacer", en: "do" },
+            { es: "Tarea", en: "homework" }, { es: "Ver", en: "watch" }, { es: "Cenar", en: "have dinner" }, { es: "Dormir", en: "sleep" },
+            { es: "Cama", en: "bed" }, { es: "Mañana", en: "morning" }, { es: "Tarde (12-6pm)", en: "afternoon" }, { es: "Noche", en: "night" },
+            { es: "Siempre", en: "always" }, { es: "Usualmente", en: "usually" }, { es: "A veces", en: "sometimes" }, { es: "Nunca", en: "never" },
+            { es: "Temprano", en: "early" }, { es: "Tarde (Hora)", en: "late" }, { es: "Cada día", en: "everyday" }, { es: "Lunes", en: "monday" },
+            { es: "Martes", en: "tuesday" }, { es: "Miércoles", en: "wednesday" }, { es: "Jueves", en: "thursday" }, { es: "Viernes", en: "friday" },
+            { es: "Cara", en: "face" }, { es: "Manos", en: "hands" }, { es: "Ropa", en: "clothes" }, { es: "Autobús", en: "bus" },
+            { es: "Caminar", en: "walk" }, { es: "Leer", en: "read" }, { es: "Jugar", en: "play" }, { es: "Escuchar", en: "listen" }
+        ];
+
+        // Renderizar Grid de Vocabulario
+        const grid = document.getElementById('vocabGrid');
+        vocabWords.forEach((word, index) => {
+            grid.innerHTML += `
+                <div class="vocab-item">
+                    <span class="vocab-word">${index + 1}. ${word.es}</span>
+                    <input type="text" class="vocab-input vocab-check" data-answer="${word.en}" autocomplete="off">
+                </div>
+            `;
+        });
+
+        // --- LÓGICA DEL CONTADOR DEL ENSAYO ---
+        const essayInput = document.getElementById('essayText');
+        const countDisplay = document.getElementById('essayWordCount');
+        const countContainer = document.getElementById('wordCountDisplay');
+
+        essayInput.addEventListener('input', function() {
+            let text = this.value.trim();
+            let words = text === "" ? 0 : text.split(/\s+/).length;
+            countDisplay.textContent = words;
+            
+            if(words >= 100) {
+                countContainer.classList.add('success');
+            } else {
+                countContainer.classList.remove('success');
+            }
+        });
+
+        // --- LÓGICA DE CALIFICACIÓN ---
+        function gradeExam() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if(!studentName) {
+                alert("Please enter your name at the top before submitting.");
+                window.scrollTo(0, 0);
+                return;
+            }
+
+            let scoreP1 = 0; // 40 pts max
+            let scoreP2 = 0; // 10 pts max
+            let scoreP3 = 0; // 20 pts max
+            let scoreP4 = 0; // 30 pts max
+
+            // Calificar Part 1 (Vocabulario)
+            document.querySelectorAll('.vocab-check').forEach(input => {
+                let userAnswer = input.value.trim().toLowerCase();
+                let correctAnswer = input.getAttribute('data-answer');
+                
+                if(userAnswer === correctAnswer) {
+                    scoreP1 += 1;
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('incorrect');
+                    input.value = correctAnswer; // Muestra la correcta
+                }
+                input.disabled = true;
+            });
+
+            // Calificar Part 2 (Estructura - 2 pts c/u)
+            document.querySelectorAll('.connector-select').forEach(select => {
+                let userAnswer = select.value;
+                let correctAnswer = select.getAttribute('data-answer');
+                
+                if(userAnswer === correctAnswer) {
+                    scoreP2 += 2;
+                    select.classList.add('correct');
+                } else {
+                    select.classList.add('incorrect');
+                }
+                select.disabled = true;
+            });
+
+            // Calificar Part 3 (Reading - 4 pts c/u)
+            for(let i=1; i<=5; i++) {
+                const selected = document.querySelector(`input[name="rq${i}"]:checked`);
+                if(selected && selected.hasAttribute('data-correct')) {
+                    scoreP3 += 4;
+                }
+            }
+
+            // Calificar Part 4 (Ensayo - Lógica automática por conteo de palabras)
+            let essayText = essayInput.value.trim();
+            let essayWords = essayText === "" ? 0 : essayText.split(/\s+/).length;
+            
+            if(essayWords >= 100) scoreP4 = 30;
+            else if(essayWords >= 75) scoreP4 = 20;
+            else if(essayWords >= 50) scoreP4 = 10;
+            else if(essayWords > 0) scoreP4 = 5;
+
+            // Total
+            let total = scoreP1 + scoreP2 + scoreP3 + scoreP4;
+
+            // Mostrar Resultados
+            document.getElementById('resName').textContent = studentName;
+            document.getElementById('totalScore').textContent = total;
+            document.getElementById('sPart1').textContent = `${scoreP1}/40`;
+            document.getElementById('sPart2').textContent = `${scoreP2}/10`;
+            document.getElementById('sPart3').textContent = `${scoreP3}/20`;
+            document.getElementById('sPart4').textContent = `${scoreP4}/30`;
+
+            const feedback = document.getElementById('teacherFeedback');
+            if(total >= 90) feedback.textContent = "Excellent work! You mastered the Daily Routine.";
+            else if(total >= 70) feedback.textContent = "Good job! You have a solid basic foundation.";
+            else if(total >= 51) feedback.textContent = "You passed, but keep practicing your vocabulary.";
+            else feedback.textContent = "Keep trying! Review the vocabulary and connectors.";
+
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
