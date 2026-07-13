@@ -61,11 +61,6 @@
             box-shadow: 0 10px 30px rgba(10, 70, 140, 0.08); border-top: 5px solid var(--naranja-vibrante);
             margin-bottom: 2rem;
         }
-        .locked-overlay {
-            text-align: center; padding: 4rem 2rem; background: #f8fafc; border-radius: 8px;
-            border: 2px dashed var(--gris-neutro);
-        }
-        .locked-overlay h3 { color: var(--gris-neutro); font-size: 1.8rem; margin-bottom: 10px; }
         
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
@@ -116,9 +111,9 @@
 <body>
 
     <header class="hero">
-        <button class="teacher-override" onclick="unlockAll()">🔓 Teacher Override</button>
+        <button class="teacher-override" onclick="alert('Sistema desbloqueado permanentemente por defecto.')">🔓 Sistema Abierto</button>
         <h1 class="hero-title">OET Listening <span>Assignments</span></h1>
-        <p>Julio 12 - Julio 15. Completa tus tareas diarias para desbloquear el reporte final.</p>
+        <p>Julio 13 - Julio 16. Completa tus tareas diarias (Progreso guardado automáticamente).</p>
     </header>
 
     <div class="save-indicator" id="save-indicator">💾 Respuestas guardadas</div>
@@ -126,17 +121,14 @@
     <div class="container">
         
         <div class="tab-container">
-            <button class="tab-btn active" onclick="openTab(event, 'domingo', '2026-07-12')">Dom 12: Warm-Up</button>
-            <button class="tab-btn" onclick="openTab(event, 'lunes', '2026-07-13')">Lun 13: Part A</button>
-            <button class="tab-btn" onclick="openTab(event, 'martes', '2026-07-14')">Mar 14: Part B</button>
-            <button class="tab-btn" onclick="openTab(event, 'miercoles', '2026-07-15')">Mié 15: Part C & PDF</button>
+            <button class="tab-btn active" onclick="openTab(event, 'lunes')">Lun 13: Warm-Up</button>
+            <button class="tab-btn" onclick="openTab(event, 'martes')">Mar 14: Part A</button>
+            <button class="tab-btn" onclick="openTab(event, 'miercoles')">Mié 15: Part B</button>
+            <button class="tab-btn" onclick="openTab(event, 'jueves')">Jue 16: Part C & PDF</button>
         </div>
 
-        <!-- ================= DOMINGO 12 ================= -->
-        <div id="domingo" class="tab-content active" data-date="2026-07-12">
-            <div class="locked-message locked-overlay" style="display: none;">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Domingo 12 de Julio.</p>
-            </div>
+        <!-- ================= LUNES 13 (Warm-Up) ================= -->
+        <div id="lunes" class="tab-content active">
             <section class="section-card task-content">
                 <h2>Diagnostic & Medical Vocabulary</h2>
                 <p>Escucha el siguiente podcast de BBC CrowdScience sobre la conexión entre la salud intestinal y mental. Tu tarea es extraer vocabulario médico real en uso.</p>
@@ -147,32 +139,29 @@
 
                 <h4>Vocabulary Extraction:</h4>
                 <p>Identifica y define 5 términos clínicos o anatómicos mencionados en el audio:</p>
-                <div class="question-line">1. Term: <input type="text" id="sun_t1" class="oet-input"> Def: <input type="text" id="sun_d1" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">2. Term: <input type="text" id="sun_t2" class="oet-input"> Def: <input type="text" id="sun_d2" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">3. Term: <input type="text" id="sun_t3" class="oet-input"> Def: <input type="text" id="sun_d3" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">4. Term: <input type="text" id="sun_t4" class="oet-input"> Def: <input type="text" id="sun_d4" class="oet-input" style="width: 300px;"></div>
-                <div class="question-line">5. Term: <input type="text" id="sun_t5" class="oet-input"> Def: <input type="text" id="sun_d5" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">1. Term: <input type="text" id="warmup_t1" class="oet-input"> Def: <input type="text" id="warmup_d1" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">2. Term: <input type="text" id="warmup_t2" class="oet-input"> Def: <input type="text" id="warmup_d2" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">3. Term: <input type="text" id="warmup_t3" class="oet-input"> Def: <input type="text" id="warmup_d3" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">4. Term: <input type="text" id="warmup_t4" class="oet-input"> Def: <input type="text" id="warmup_d4" class="oet-input" style="width: 300px;"></div>
+                <div class="question-line">5. Term: <input type="text" id="warmup_t5" class="oet-input"> Def: <input type="text" id="warmup_d5" class="oet-input" style="width: 300px;"></div>
             </section>
         </div>
 
-        <!-- REPRODUCTOR GLOBAL PARA LUNES, MARTES Y MIÉRCOLES -->
+        <!-- REPRODUCTOR GLOBAL PARA MARTES, MIÉRCOLES Y JUEVES -->
         <div id="global-audio-container" class="audio-player-container" style="display: none;">
             <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Audio Track</h4>
             <!-- Cortará automáticamente en el minuto 36:36 (2196 segundos) -->
+            <!-- La URL ha sido codificada para que el navegador no se corte en el símbolo de hashtag (#) -->
             <audio id="oet-audio-player" controls controlsList="nodownload">
-                <!-- Se cambió a la ruta RAW de GitHub para asegurar la reproducción -->
-                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/OET_week1_audio.mp3" type="audio/mpeg">
+                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/OET%20LISTENING%20TEST%2016.03.2026%20%20%20%23oet%20%23oetexam%20%23oetnursing%20%23oetlisteningtest_compressed%20(1).m4a" type="audio/mp4">
                 Tu navegador no soporta el elemento de audio.
             </audio>
             <p style="font-size: 0.8rem; margin-top: 5px; color: #666;">Note: The audio will automatically stop before the answers section.</p>
         </div>
 
-        <!-- ================= LUNES 13 ================= -->
-        <div id="lunes" class="tab-content" data-date="2026-07-13">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Lunes 13 de Julio.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
+        <!-- ================= MARTES 14 (Part A) ================= -->
+        <div id="martes" class="tab-content">
+            <section class="section-card task-content">
                 <h2>Part A: Consultation Extracts (Starts at 1:05)</h2>
                 <p>Reproduce el audio de arriba. Escucharás dos extractos. Completa las notas con una palabra o frase corta.</p>
                 <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(65)">⏭ Jump to Part A</button>
@@ -208,12 +197,9 @@
             </section>
         </div>
 
-        <!-- ================= MARTES 14 ================= -->
-        <div id="martes" class="tab-content" data-date="2026-07-14">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Martes 14 de Julio.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
+        <!-- ================= MIÉRCOLES 15 (Part B) ================= -->
+        <div id="miercoles" class="tab-content">
+            <section class="section-card task-content">
                 <h2>Part B: Workplace Communication (Starts at 12:35)</h2>
                 <p>Escucha los 6 extractos cortos y selecciona la respuesta (A, B o C) que mejor se adapte a lo que escuchas.</p>
                 <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(755)">⏭ Jump to Part B</button>
@@ -259,12 +245,9 @@
             </section>
         </div>
 
-        <!-- ================= MIÉRCOLES 15 ================= -->
-        <div id="miercoles" class="tab-content" data-date="2026-07-15">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Miércoles 15 de Julio.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
+        <!-- ================= JUEVES 16 (Part C & PDF) ================= -->
+        <div id="jueves" class="tab-content">
+            <section class="section-card task-content">
                 <h2>Part C: Presentations and Interviews (Starts at 21:07)</h2>
                 <p>Escucha los 2 extractos largos y elige la mejor respuesta para cada pregunta.</p>
                 <button class="btn" style="margin-bottom: 1rem; padding: 5px 15px; font-size: 0.8rem;" onclick="jumpAudio(1267)">⏭ Jump to Part C</button>
@@ -356,32 +339,8 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN DE FECHA ACTUAL
-        const currentDate = new Date('2026-07-10T10:50:23');
-        let overrideActive = false;
-
-        function checkDateLocks() {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => {
-                const unlockDateStr = tab.getAttribute('data-date');
-                if (!unlockDateStr) return;
-                
-                const unlockDate = new Date(unlockDateStr + 'T00:00:00');
-                const lockedMsg = tab.querySelector('.locked-message');
-                const taskContent = tab.querySelector('.task-content');
-
-                if (currentDate >= unlockDate || overrideActive) {
-                    lockedMsg.style.display = 'none';
-                    taskContent.style.display = 'block';
-                } else {
-                    lockedMsg.style.display = 'block';
-                    taskContent.style.display = 'none';
-                }
-            });
-        }
-
         // LÓGICA DE TABS Y MOSTRAR AUDIO GLOBAL
-        function openTab(evt, tabName, requiredDate) {
+        function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
@@ -396,11 +355,10 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            // Mostrar el reproductor de audio global SOLO en Lunes, Martes y Miércoles
+            // Mostrar el reproductor de audio global SOLO en Martes, Miércoles y Jueves
             const globalAudio = document.getElementById('global-audio-container');
-            const unlockDate = new Date(requiredDate + 'T00:00:00');
             
-            if ((tabName === 'lunes' || tabName === 'martes' || tabName === 'miercoles') && (currentDate >= unlockDate || overrideActive)) {
+            if (tabName === 'martes' || tabName === 'miercoles' || tabName === 'jueves') {
                 globalAudio.style.display = 'flex';
             } else {
                 globalAudio.style.display = 'none';
@@ -421,17 +379,6 @@
         function jumpAudio(seconds) {
             audioEl.currentTime = seconds;
             audioEl.play();
-        }
-
-        // FUNCIÓN TEACHER OVERRIDE
-        function unlockAll() {
-            overrideActive = true;
-            checkDateLocks();
-            alert("🔓 Modo Profesor Activado: Todas las asignaciones han sido desbloqueadas para su revisión.");
-            const activeTab = document.querySelector('.tab-btn.active').getAttribute('onclick');
-            if (activeTab.includes('lunes') || activeTab.includes('martes') || activeTab.includes('miercoles')) {
-                document.getElementById('global-audio-container').style.display = 'flex';
-            }
         }
 
         // SISTEMA DE MINICACHE (LOCAL STORAGE)
@@ -552,9 +499,6 @@
             alert("Preparando documento... Su navegador abrirá el cuadro de diálogo de impresión. Guarde el archivo como PDF.");
             window.print();
         }
-
-        // Inicializar bloqueos al cargar
-        checkDateLocks();
     </script>
 </body>
 </html>
