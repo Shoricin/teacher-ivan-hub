@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Song Analyzer | Teacher Ivan</title>
+    <title>Song Analyzer 2.0 | Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
@@ -140,12 +140,13 @@
     <header>
         <a href="#" class="back-link">← Volver al HUB</a>
         <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
-        <h1><span class="material-icons-round">queue_music</span> Song Analyzer</h1>
-        <div class="subtitle">Spanish Listening Practice</div>
+        <h1><span class="material-icons-round">queue_music</span> Song Analyzer 2.0</h1>
+        <div class="subtitle">15 Canciones - Spanish Listening Practice</div>
     </header>
 
     <div class="container">
         
+        <!-- Pestañas navegables (Scroll horizontal) -->
         <div class="song-selector" id="song-tabs">
             <!-- Tabs generados dinámicamente -->
         </div>
@@ -182,7 +183,7 @@
     </div>
 
     <script>
-        // BASE DE DATOS DE CANCIONES EN ESPAÑOL
+        // BASE DE DATOS DE CANCIONES (15 Canciones en Total)
         // Formato: Usa [palabra] para crear un espacio en blanco.
         const songDatabase = [
             {
@@ -198,9 +199,7 @@
                         A veces solo una [gota]<br>
                         Puede vencer la [sequía]<br><br>
                         Y para qué llorar, pa' qué<br>
-                        Si duele una [pena], se olvida<br>
-                        Y para qué sufrir, pa' qué<br>
-                        Si así es la [vida], hay que vivirla`
+                        Si duele una [pena], se olvida`
             },
             {
                 title: "Despacito",
@@ -213,9 +212,7 @@
                         Tú, tú eres el imán y yo soy el [metal]<br>
                         Me voy acercando y voy armando el [plan]<br>
                         Solo con pensarlo se acelera el [pulso]<br><br>
-                        Ya, ya me está gustando más de lo [normal]<br>
-                        Todos mis sentidos van pidiendo [más]<br>
-                        Esto hay que tomarlo sin ningún [apuro]`
+                        Ya, ya me está gustando más de lo [normal]`
             },
             {
                 title: "Limón y Sal",
@@ -228,9 +225,7 @@
                         No dices nada [romántico]<br>
                         Cuando llega el [atardecer]<br>
                         Te pones de un humor [extraño]<br>
-                        Con cada luna llena al [mes]<br><br>
-                        Pero a todo lo malo, le veo lo [bueno]<br>
-                        Me haces [sentir] como nadie más`
+                        Con cada luna llena al [mes]`
             },
             {
                 title: "La Camisa Negra",
@@ -243,9 +238,7 @@
                         Hoy sé que tú ya no me [quieres]<br>
                         Y eso es lo que más me [hiere]<br>
                         Que tengo la camisa negra<br>
-                        Y una pena que me [duele]<br><br>
-                        Mal parece que solo me quedé<br>
-                        Y fue pura [mentira] lo tuyo`
+                        Y una pena que me [duele]`
             },
             {
                 title: "Me Gustas Tú",
@@ -258,9 +251,131 @@
                         Me gusta [soñar], me gustas tú<br>
                         Me gusta la mar, me gustas tú<br>
                         Me gusta la [moto], me gustas tú<br>
-                        Me gusta correr, me gustas [tú]<br><br>
-                        ¿Qué voy a [hacer]?, je ne sais pas<br>
-                        ¿Qué voy a hacer?, je ne sais [plus]`
+                        Me gusta correr, me gustas [tú]`
+            },
+            {
+                title: "Bailando",
+                artist: "Enrique Iglesias",
+                youtubeId: "b8I-7Wk_Vbc",
+                lyrics: `Yo quiero estar [contigo], vivir contigo<br>
+                        Bailar contigo, tener [contigo]<br>
+                        Una noche [loca], con tremenda loca<br><br>
+                        Te miro y se me corta la [respiración]<br>
+                        Cuando tú me miras se me sube el [corazón]<br>
+                        Me palpita lento el [corazón]<br>
+                        Y en un [silencio] tu mirada dice mil palabras`
+            },
+            {
+                title: "Rayando El Sol",
+                artist: "Maná",
+                youtubeId: "_Tf1sK86uEM",
+                lyrics: `Rayando el [sol], desesperación<br>
+                        Es más fácil llegar al [sol] que a tu corazón<br>
+                        Me muero por [ti], viviendo sin ti<br>
+                        Y no aguanto, me duele tanto estar [así]<br><br>
+                        A tu casa yo fui, y no te [encontré]<br>
+                        En el parque, en la [plaza], en el cine yo te busqué<br>
+                        Te tengo atrapada entre mi [piel] y mi alma`
+            },
+            {
+                title: "Sofía",
+                artist: "Alvaro Soler",
+                youtubeId: "qaZ0oAh4evU",
+                lyrics: `Sueño cuando era [pequeño]<br>
+                        Sin [preocupación] en el corazón<br>
+                        Sigo viendo aquel [momento]<br>
+                        Se desvaneció, [desapareció]<br><br>
+                        Ya no te creo, ya no te [deseo], eh oh<br>
+                        Solo te dejo, solo te [deseo], eh oh<br><br>
+                        Mira, Sofía<br>
+                        Sin tu [mirada], sigo sin tu mirada`
+            },
+            {
+                title: "La Bicicleta",
+                artist: "Carlos Vives, Shakira",
+                youtubeId: "-UV0QGLmYys",
+                lyrics: `Lleva, llévame en tu [bicicleta]<br>
+                        Óyeme, Carlos, llévame en tu [bicicleta]<br>
+                        Quiero que [recorramos] juntos esa zona<br>
+                        Desde Santa Marta hasta La [Heroica]<br><br>
+                        A mi manera, despelucado<br>
+                        En una [bici] que te lleve a todos lados<br>
+                        Un [vallenato] desesperado<br>
+                        Una cartica que yo guardo donde te [escribí]`
+            },
+            {
+                title: "A Dios Le Pido",
+                artist: "Juanes",
+                youtubeId: "kMiJaZk-qGg",
+                lyrics: `Que mis [ojos] se despierten con la luz de tu [mirada] yo<br>
+                        A Dios le [pido]<br>
+                        Que mi madre no se [muera] y que mi padre me recuerde<br>
+                        A Dios le [pido]<br><br>
+                        Que te [quedes] a mi lado y que más nunca te me [vayas] mi vida<br>
+                        A Dios le [pido]<br>
+                        Que mi alma no descanse cuando de amarte se [trate] mi cielo`
+            },
+            {
+                title: "Robarte Un Beso",
+                artist: "Carlos Vives, Yatra",
+                youtubeId: "MtaTegO0B3A",
+                lyrics: `Son muchos [años] que pasaron sin decir te [quiero]<br>
+                        Y en verdad te [quiero]<br>
+                        Pero encuentro formas de engañar mi [corazón]<br><br>
+                        Son muchos años que pasaron sin [robarte] un beso<br>
+                        Solo quiero un [beso]<br>
+                        Y por esa boca no me importa ser [ladrón]<br><br>
+                        Déjame robarte un beso que me llegue hasta el [alma]`
+            },
+            {
+                title: "Eres",
+                artist: "Café Tacvba",
+                youtubeId: "98Akpf1phE8",
+                lyrics: `Eres, lo que más [quiero] en este mundo, eso eres<br>
+                        Mi pensamiento más [profundo] también eres<br>
+                        Tan sólo dime lo que es, que aquí me [tienes]<br><br>
+                        Eres, cuando [despierto] lo primero, eso eres<br>
+                        Lo que a mi día le hace [falta] si no vienes<br>
+                        Lo único [precioso] que en mi mente habita hoy`
+            },
+            {
+                title: "Échame La Culpa",
+                artist: "Luis Fonsi, Demi Lovato",
+                youtubeId: "TyHvyGVs42U",
+                lyrics: `No eres [tú], no eres tú, no eres tú, soy yo (soy yo)<br>
+                        No te quiero hacer [sufrir]<br>
+                        Es mejor [olvidar] y dejarlo así (así)<br>
+                        Échame la [culpa]<br><br>
+                        No eres tú, no eres [tú], no eres tú, soy yo (soy yo)<br>
+                        No te quiero hacer [sufrir]<br>
+                        Es mejor olvidar y dejarlo [así] (así)<br>
+                        Échame la [culpa]`
+            },
+            {
+                title: "Me Enamoré",
+                artist: "Shakira",
+                youtubeId: "sPTn0QEhxds",
+                lyrics: `La vida me empezó a [cambiar]<br>
+                        La noche que te [conocí]<br>
+                        Tenía poco que [perder]<br>
+                        Y la cosa siguió [así]<br><br>
+                        Yo con mi sostén a [rayas]<br>
+                        Y mi pelo a medio [hacer]<br>
+                        Pensé, este todavía es un [niño]<br>
+                        Pero, ¿qué le voy a [hacer]?`
+            },
+            {
+                title: "Danza Kuduro",
+                artist: "Don Omar, Lucenzo",
+                youtubeId: "7zp1TbLFPp8",
+                lyrics: `La mano [arriba], cintura sola<br>
+                        Da media [vuelta], danza kuduro<br>
+                        No te [canses] ahora, que esto solo empieza<br>
+                        Mueve la [cabeza], danza kuduro<br><br>
+                        La mano [arriba], cintura sola<br>
+                        Da media [vuelta], danza kuduro<br>
+                        No te [canses] ahora, que esto solo empieza<br>
+                        Mueve la [cabeza], danza kuduro`
             }
         ];
 
@@ -270,16 +385,18 @@
         function initApp() {
             const tabsContainer = document.getElementById('song-tabs');
             
-            // Generar los botones (Tabs)
+            // Generar los botones (Tabs) para las 15 canciones
             songDatabase.forEach((song, index) => {
                 const btn = document.createElement('button');
                 btn.className = `song-btn ${index === 0 ? 'active' : ''}`;
-                btn.innerHTML = `<span class="material-icons-round" style="font-size: 1.2rem;">music_note</span> ${song.title}`;
+                // Si el título es muy largo, lo acortamos en el botón
+                let shortTitle = song.title.length > 15 ? song.title.substring(0, 15) + "..." : song.title;
+                btn.innerHTML = `<span class="material-icons-round" style="font-size: 1.2rem;">music_note</span> ${shortTitle}`;
                 btn.onclick = (e) => loadSong(index, e.currentTarget);
                 tabsContainer.appendChild(btn);
             });
 
-            // Cargar la primera canción
+            // Cargar la primera canción por defecto
             loadSong(0, tabsContainer.firstChild);
         }
 
@@ -292,7 +409,7 @@
             document.querySelectorAll('.song-btn').forEach(btn => btn.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
 
-            // Actualizar Video e Info
+            // Actualizar Video e Info (Añadido ?rel=0 para evitar sugerencias fuera del canal al final)
             document.getElementById('yt-player').src = `https://www.youtube.com/embed/${song.youtubeId}?rel=0`;
             document.getElementById('display-title').innerText = song.title;
             document.getElementById('display-artist').innerText = song.artist;
@@ -331,13 +448,19 @@
 
             inputs.forEach(input => {
                 const correctAnswer = input.getAttribute('data-ans');
-                // Ignorar mayúsculas y acentos extraños al comparar (opcional, pero ayuda)
-                const studentAnswer = input.value.trim().toLowerCase();
+                // Convertir a minúsculas y limpiar espacios
+                let studentAnswer = input.value.trim().toLowerCase();
+                
+                // Limpieza opcional de acentos para mayor flexibilidad si el alumno tiene teclado en inglés
+                const cleanStudent = studentAnswer.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const cleanCorrect = correctAnswer.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
                 input.classList.remove('correct', 'wrong');
 
-                if (studentAnswer === correctAnswer) {
+                if (cleanStudent === cleanCorrect) {
                     input.classList.add('correct');
+                    // Rellenar con la palabra correcta (con acento) si el estudiante no lo puso pero acertó
+                    input.value = correctAnswer;
                     score++;
                 } else {
                     input.classList.add('wrong');
