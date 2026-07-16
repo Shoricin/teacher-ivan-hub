@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Guide - OET Listening</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section Privado */
+        .hero-teacher {
+            padding: 3rem 2rem; background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: var(--blanco-puro); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero-teacher h1 { font-size: 2.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .badge-private { 
+            display: inline-block; background: #000; color: #FFD700; padding: 5px 15px; 
+            border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+        /* Tarjetas de Estrategia */
+        .strategy-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 2.5rem;
+            border-left: 8px solid var(--azul-primario); position: relative;
+        }
+        .strategy-card.part-a { border-left-color: var(--naranja-vibrante); }
+        .strategy-card.part-b { border-left-color: var(--verde-exito); }
+        .strategy-card.part-c { border-left-color: var(--rojo-alerta); }
+        
+        .strategy-card h2 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--azul-primario); display: flex; align-items: center; gap: 10px;}
+        .strategy-card h3 { font-size: 1.2rem; color: #555; margin-bottom: 1.5rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
+
+        /* Listas y Consejos */
+        .tip-list { list-style: none; padding: 0; margin: 0; }
+        .tip-list li { 
+            position: relative; padding-left: 35px; margin-bottom: 1.2rem; font-size: 1rem; color: #444; 
+        }
+        .tip-list li::before {
+            content: '💡'; position: absolute; left: 0; top: 0; font-size: 1.2rem;
+        }
+        .tip-list strong { color: var(--azul-primario); }
+
+        /* Bloques de Acción para el Profesor */
+        .action-block {
+            background: #eef2f6; padding: 20px; border-radius: 8px; margin-top: 1.5rem;
+            border: 1px solid var(--azul-claro);
+        }
+        .action-block h4 { color: var(--naranja-vibrante); margin-bottom: 10px; font-size: 1.1rem; }
+        
+        /* Cajas de Error Común */
+        .error-box {
+            background: #ffebee; border-left: 4px solid var(--rojo-alerta); padding: 15px;
+            margin: 15px 0; border-radius: 0 8px 8px 0; font-size: 0.95rem;
+        }
+        .error-box strong { color: var(--rojo-alerta); }
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+
+    <header class="hero-teacher">
+        <span class="badge-private">FOR TEACHER IVAN ONLY</span>
+        <!-- Placeholder para tu Chibi Mascot -->
+        <div><img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Chibi" style="height: 100px; margin-bottom: 15px;"></div>
+        <h1>Methodology & Analysis Guide</h1>
+        <p>Cómo guiar, corregir y destrozar el OET Listening paso a paso con tus estudiantes.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- INTRODUCCIÓN METODOLÓGICA -->
+        <section class="strategy-card">
+            <h2>🧠 La Filosofía de Enseñanza (El Rol del Profesor)</h2>
+            <p>Tus estudiantes son profesionales de la salud. Ya tienen el conocimiento clínico; tu trabajo es enseñarles a <strong>hackear el formato del examen</strong>. No los evalúes solo por si tienen la respuesta correcta o incorrecta; evalúalos por <em>cómo</em> llegaron a esa respuesta.</p>
+            
+            <div class="action-block">
+                <h4>▶️ Rutina de Análisis "Post-Audio" (The Autopsy)</h4>
+                <p>Nunca des las respuestas e inmediatamente pases al siguiente ejercicio. Después de cada práctica, realiza esta autopsia:</p>
+                <ul style="padding-left: 20px; color: #444;">
+                    <li><strong>Pide justificación:</strong> "Nataly, ¿por qué elegiste la B? ¿Qué palabra exacta en el audio te hizo descartar la A?"</li>
+                    <li><strong>Analiza los distractores:</strong> El OET SIEMPRE mencionará palabras de las opciones incorrectas para confundir. Enséñales a escuchar el "pero" (however, but, actually).</li>
+                    <li><strong>Revisa el Transcript:</strong> Usa el documento PDF de transcripción que tienes. Oblígalos a leer dónde estaba escondida la respuesta.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PART A STRATEGY -->
+        <section class="strategy-card part-a">
+            <h2>📝 PART A: Consultation Extracts</h2>
+            <h3>Objetivo: Note-taking, Precisión y Gramática del Hueco</h3>
+            <p>En esta parte, el paciente habla mucho y el profesional de la salud guía la consulta. El mayor enemigo aquí es perder el hilo conductor de la historia.</p>
+            
+            <ul class="tip-list">
+                <li><strong>El tiempo de lectura (30 segundos):</strong> Enséñales a usar esos 30 segundos no solo para leer, sino para <em>predecir</em>. Si el hueco dice "Diagnosed with scoliosis at the age of (1) ___", la respuesta DEBE ser un número. Si dice "Condition could be fungal infection called (8) ___", deben esperar un término médico (sustantivo).</li>
+                <li><strong>Literalidad absoluta:</strong> Los estudiantes deben escribir <strong>exactamente</strong> lo que escuchan. No pueden parafrasear. Si el audio dice "heat therapy", no pueden escribir "hot therapy".</li>
+                <li><strong>El terror del Spelling:</strong> El OET penaliza errores de ortografía SI cambian el significado de la palabra (ej. escribir "hyperthyroidism" en lugar de "hypothyroidism"). Si la palabra es fonéticamente reconocible y no cambia el diagnóstico clínico, el evaluador podría aceptarla, pero exige a tus alumnos perfección en tu clase.</li>
+            </ul>
+
+            <div class="error-box">
+                <strong>⚠️ Error Común en Part A:</strong> Escribir demasiadas palabras. El límite suele ser "a word or short phrase" (máximo 3 palabras). Acostúmbralos a escribir solo el núcleo de la respuesta.
+            </div>
+        </section>
+
+        <!-- PART B STRATEGY -->
+        <section class="strategy-card part-b">
+            <h2>💬 PART B: Workplace Communication</h2>
+            <h3>Objetivo: Identificar el Contexto, Intención o Gist</h3>
+            <p>Son 6 audios cortos independientes. Pueden ser interacciones entre dos enfermeras, un doctor y un paciente, o un *briefing* matutino. Evalúa la capacidad de entender el propósito de la comunicación.</p>
+            
+            <ul class="tip-list">
+                <li><strong>La técnica de la Pregunta:</strong> Enséñales a tapar las opciones (A, B, C) con la mano y leer SOLO la pregunta. ¿Qué se les está preguntando? ¿El *problema*, la *solución* o la *razón*?</li>
+                <li><strong>Identificar los roles:</strong> Antes de que empiece a hablar, la voz en off dice el contexto (Ej. "You hear a surgeon briefing his team"). Deben visualizar la escena inmediatamente.</li>
+                <li><strong>Cuidado con la trampa de la "palabra repetida":</strong> Si un estudiante escucha la palabra exacta de la opción A en el audio, <em>probablemente la A es incorrecta</em>. Las respuestas correctas en la Parte B casi siempre están parafraseadas (usando sinónimos).</li>
+            </ul>
+
+            <div class="action-block">
+                <h4>▶️ Cómo enseñarles a descartar:</h4>
+                <p>En clase, haz el ejercicio de eliminar opciones. "Chicos, el audio menciona que hay problemas de recursos (opción C), pero ¿es ese el <em>problema principal del departamento</em> que pregunta el enunciado, o es solo un detalle de fondo?"</p>
+            </div>
+        </section>
+
+        <!-- PART C STRATEGY -->
+        <section class="strategy-card part-c">
+            <h2>🎙️ PART C: Presentations and Interviews</h2>
+            <h3>Objetivo: Comprensión Profunda y Actitud del Hablante</h3>
+            <p>Esta es la sección más difícil. Son dos audios de 5 minutos (entrevistas o presentaciones) sobre temas médicos de interés general. No es una consulta.</p>
+            
+            <ul class="tip-list">
+                <li><strong>Signposting (Señales de tráfico):</strong> El presentador/entrevistador les dará las pautas de cuándo pasar a la siguiente pregunta. Cuando el entrevistador hace una nueva pregunta, el estudiante debe mover sus ojos a la siguiente MCQ inmediatamente. Si se pierden, deben soltar esa pregunta y saltar a la siguiente.</li>
+                <li><strong>Focus on Opinion vs. Fact:</strong> Muchas preguntas dirán "What does Dr. Lewis <em>believe</em> about...". No buscan un hecho científico general, buscan la opinión subjetiva del hablante.</li>
+                <li><strong>Lectura rápida bajo presión:</strong> Tienen 90 segundos para leer las 6 preguntas antes de que empiece el audio. Enséñales a subrayar (mentalmente o en papel) solo las palabras clave de la pregunta (sujeto y verbo principal), ignorando el "relleno".</li>
+            </ul>
+
+            <div class="error-box">
+                <strong>⚠️ Error Común en Part C:</strong> El efecto "bola de nieve". Un estudiante se frustra por no entender la pregunta 31, se queda pensando en ella, y pierde las respuestas de la 32 y 33. ¡Enséñales a dejar ir!
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | Instructor's Private Methodology Manual</p>
+    </footer>
+
+</body>
+</html>
