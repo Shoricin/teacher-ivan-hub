@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Listening Mock Test - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6; padding-top: 60px;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* --- STICKY TIMER --- */
+        .sticky-timer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--gris-neutro); color: #333;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800;
+            z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            letter-spacing: 2px; transition: background 0.3s, color 0.3s;
+        }
+        .timer-active { background: var(--naranja-vibrante); color: white; }
+        .timer-warning { background: #d32f2f; color: white; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-nieve); text-align: center;
+        }
+        .hero img { height: 90px; margin-bottom: 10px; }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* Contenedor Principal (Blur effect before start) */
+        #exam-content { filter: blur(5px); pointer-events: none; transition: filter 0.5s; }
+        #exam-content.active { filter: none; pointer-events: auto; }
+
+        /* Start Overlay */
+        .start-overlay {
+            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
+            text-align: center; box-shadow: 0 10px 30px rgba(10, 70, 140, 0.15);
+            margin-bottom: 2rem; border-top: 5px solid var(--naranja-vibrante);
+        }
+        
+        .btn {
+            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+            font-size: 1.1rem; text-transform: uppercase; font-weight: 700;
+        }
+        .btn:hover { background: #08366b; transform: translateY(-2px); }
+        .btn-start { background: var(--naranja-vibrante); font-size: 1.3rem; padding: 15px 40px; }
+        .btn-start:hover { background: #e05e15; }
+
+        /* Cards & Audio */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem;
+            border: 1px solid rgba(200, 205, 210, 0.4);
+        }
+        
+        .audio-player-container {
+            background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; border: 2px solid var(--azul-claro);
+            position: sticky; top: 70px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        audio { width: 100%; outline: none; margin-bottom: 10px; }
+        
+        .jump-btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .btn-jump { background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario); padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.85rem;}
+        .btn-jump:hover { background: var(--azul-primario); color: white; }
+
+        /* OET Format Styles */
+        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 2rem 0 1rem 0; }
+        .extract-title { color: var(--naranja-vibrante); margin-bottom: 1rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
+        
+        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
+        .oet-input { border: none; border-bottom: 2px solid var(--gris-neutro); padding: 5px; width: 180px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); outline: none; background: transparent; transition: all 0.3s; margin: 0 5px;}
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
+        
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
+        .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+
+        /* Corrección Styles */
+        .correction-span { color: #d32f2f; font-weight: bold; margin-left: 10px; font-size: 0.85rem; background: #ffebee; padding: 3px 8px; border-radius: 4px; }
+        .correction-mcq { color: #d32f2f; font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
+        
+        /* Dashboard de Resultados */
+        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--naranja-vibrante); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1rem auto; box-shadow: 0 4px 15px rgba(245, 110, 30, 0.4); }
+        .grade-text { font-size: 1.5rem; font-weight: 700; color: var(--azul-primario); margin-bottom: 10px; }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .hero, .sticky-timer, .audio-player-container, .btn, .start-overlay { display: none !important; }
+            #exam-content { filter: none; pointer-events: auto; }
+            .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
+            #results-dashboard { display: block !important; border: 1px solid #ccc; background: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TIMER SUPERIOR -->
+    <div class="sticky-timer" id="timer-display">⏱️ 45:00</div>
+
+    <header class="hero">
+        <!-- Chibi Mascot Placeholder -->
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Mascot">
+        <h1 class="hero-title">OET Listening <span>Mock Test</span></h1>
+        <p>Evaluación Oficial | Repositorio Clínico</p>
+    </header>
+
+    <div class="container">
+
+        <div class="start-overlay" id="start-overlay">
+            <h2>Instrucciones del Simulacro</h2>
+            <p>Este examen tiene una duración aproximada de 45 minutos. El audio se detendrá automáticamente antes de revelar las respuestas. Asegúrate de tener un entorno silencioso.</p>
+            <button class="btn btn-start" onclick="startExam()">▶ Iniciar Simulacro</button>
+        </div>
+        
+        <div id="exam-content">
+            
+            <!-- REPRODUCTOR -->
+            <div class="audio-player-container">
+                <audio id="oet-audio-player" controls controlsList="nodownload">
+                    <!-- URL Encodificada para evitar cortes por el hashtag -->
+                    <source src="audios/OET%20LISTENING%20TEST%2018.02.2026%20%23oet%20%23oetexam%20%23oetnursing%20%23oetlisteningtest_compressed.m4a" type="audio/mp4">
+                    Tu navegador no soporta el audio.
+                </audio>
+                <div class="jump-btn-group">
+                    <button class="btn-jump" onclick="jumpAudio(0)">00:00 Intro</button>
+                    <button class="btn-jump" onclick="jumpAudio(15)">00:15 Instructions</button>
+                    <button class="btn-jump" onclick="jumpAudio(65)">01:05 Part A</button>
+                    <button class="btn-jump" onclick="jumpAudio(716)">11:56 Part B</button>
+                    <button class="btn-jump" onclick="jumpAudio(1221)">20:21 Part C</button>
+                </div>
+            </div>
+
+            <!-- DASHBOARD DE RESULTADOS (Oculto inicialmente) -->
+            <div id="results-dashboard">
+                <h2>Reporte Oficial OET</h2>
+                <div class="score-circle" id="final-score">0/42</div>
+                <div class="grade-text" id="final-grade">Grade: -</div>
+                <p id="feedback-text">Revisa las respuestas marcadas en rojo a continuación.</p>
+                <button class="btn" style="background: #4CAF50;" onclick="window.print()">📥 Descargar PDF</button>
+            </div>
+
+            <!-- ================= PART A ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART A: NOTE COMPLETION</h3>
+                <p><em>Complete the following notes with a word or short phrase based on the audio extracts.</em>[cite: 7]</p>
+
+                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Benjamin Halls</h4>
+                <h5>Patient Description of Condition:</h5>
+                <div class="question-line">• Symptoms (1) <input type="text" id="q1" class="oet-input"> for 02 months ago[cite: 7]</div>
+                <div class="question-line">• Accompanied by a (2) <input type="text" id="q2" class="oet-input"> during urination[cite: 7]</div>
+                <div class="question-line">• Condition known as (3) <input type="text" id="q3" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Has experienced discomfort in (4) <input type="text" id="q4" class="oet-input">[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Urologist's Explanation:</h5>
+                <div class="question-line">• Concerned about potential (5) <input type="text" id="q5" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Tests include cystoscopy and urine cytology[cite: 7]</div>
+                <div class="question-line">• Cystoscopy uses a (6) <input type="text" id="q6" class="oet-input"> with a camera to examine the bladder[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Patient's Concern:</h5>
+                <div class="question-line">• Cystoscopy involves under (7) <input type="text" id="q7" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Typically, procedure duration is less than (8) <input type="text" id="q8" class="oet-input"> minutes[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Potential Diagnosis and Treatment:</h5>
+                <div class="question-line">• Early-stage treatment may include tumor removal followed by (9) <input type="text" id="q9" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• More advanced treatments might involve surgery, chemotherapy, or (10) <input type="text" id="q10" class="oet-input">[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Risk Factors & Recurrence:</h5>
+                <div class="question-line">• Main risk factor: (11) <input type="text" id="q11" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Non-invasive bladder cancer has a recurrence rate of (12) <input type="text" id="q12" class="oet-input">[cite: 7]</div>
+
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Emily Rodriguez</h4>
+                <h5>Background:</h5>
+                <div class="question-line">• Concern regarding (13) <input type="text" id="q13" class="oet-input"> veins[cite: 7]</div>
+                <div class="question-line">• Main symptoms: aching and (14) <input type="text" id="q14" class="oet-input"> in legs[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Symptom Progression / Initial Diagnosis:</h5>
+                <div class="question-line">• Symptoms worse at the (15) <input type="text" id="q15" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Possible diagnosis: (16) <input type="text" id="q16" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Skin changes: itching and (17) <input type="text" id="q17" class="oet-input"> around the veins[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">GP's Treatment Suggestions:</h5>
+                <div class="question-line">• Recommended wearing (18) <input type="text" id="q18" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Advised elevating legs and staying (19) <input type="text" id="q19" class="oet-input">[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Treatment Options:</h5>
+                <div class="question-line">• Minimally invasive options include (20) <input type="text" id="q20" class="oet-input"> and laser treatment[cite: 7]</div>
+                <div class="question-line">• Larger veins might need (21) <input type="text" id="q21" class="oet-input"> therapy or vein stripping[cite: 7]</div>
+                
+                <h5 style="margin-top:10px;">Follow-up Plan:</h5>
+                <div class="question-line">• Outpatient procedures have a (22) <input type="text" id="q22" class="oet-input"> recovery time[cite: 7]</div>
+                <div class="question-line">• Treatments are generally successful, but veins might (23) <input type="text" id="q23" class="oet-input">[cite: 7]</div>
+                <div class="question-line">• Monitor symptoms and adjust (24) <input type="text" id="q24" class="oet-input">[cite: 7]</div>
+            </section>
+
+            <!-- ================= PART B ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART B: MULTIPLE CHOICE QUESTIONS (25-30)</h3>
+                <p><em>Choose the best option (A, B, or C) that answers each question based on the audio recordings.</em>[cite: 7]</p>
+
+                <div class="mcq-block" id="block-q25">
+                    <div class="mcq-question">25. How does the senior doctor address the intern's concern?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q25" value="A"> (a) By helping her reevaluate the patient's symptoms in more depth[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="B"> (b) By assisting her in reconsidering the key symptoms of the patient[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="C"> (c) By guiding her to reflect on the important signs of rheumatoid arthritis[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q26">
+                    <div class="mcq-question">26. What is the primary aim of the new initiative being implemented?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q26" value="A"> (a) To strengthen coordination among healthcare professionals across different roles[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="B"> (b) To improve communication between medical staff from various specialties[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="C"> (c) To enhance collaboration and communication across multidisciplinary teams[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q27">
+                    <div class="mcq-question">27. What is the officer primarily discussing?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q27" value="A"> (a) Describing how the seating position influenced the injury[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="B"> (b) Detailing how the accident resulted in the passenger's injuries[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="C"> (c) Explaining how the passenger's leg became injured during the crash[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q28">
+                    <div class="mcq-question">28. How does the endocrinologist respond to the GP's plan?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q28" value="A"> (a) By supporting the GP's decision to move forward with insulin therapy[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="B"> (b) By agreeing with the GP's recommendation to shift to insulin treatment[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="C"> (c) By endorsing the GP's suggestion to begin insulin for better control[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q29">
+                    <div class="mcq-question">29. What does the endocrinologist highlight as the likely cause of the child's delayed growth?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q29" value="A"> (a) The child's hereditary factors[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="B"> (b) The child's recent nutritional habits[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="C"> (c) The child's mild skeletal delay[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q30">
+                    <div class="mcq-question">30. What is the patient's main concern?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q30" value="A"> (a) The pain and discomfort when walking on uneven surfaces[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="B"> (b) The pain and difficulty in walking up slopes[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="C"> (c) The instability and strain while climbing stairs[cite: 7]</label>
+                </div>
+            </section>
+
+            <!-- ================= PART C ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42)</h3>
+                <p><em>Choose the best option (A, B, or C) based on the presentations or interviews.</em>[cite: 7]</p>
+
+                <h4 class="extract-title">Extract 01: Questions 31-36</h4>
+                <div class="mcq-block" id="block-q31">
+                    <div class="mcq-question">31. The interviewee says podiatrists are crucial in diabetic care because they...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q31" value="A"> (a) Support the management of severe issues like wounds and limb loss.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="B"> (b) Play a key role in avoiding serious diabetic complications.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="C"> (c) Primarily prevent minor infections from worsening in diabetic patients.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q32">
+                    <div class="mcq-question">32. According to the interviewee, how has the role of podiatrists evolved recently?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q32" value="A"> (a) They now cooperate more closely with multidisciplinary healthcare teams.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="B"> (b) They have started overseeing the overall care of diabetic patients.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="C"> (c) They frequently manage routine foot care without medical team involvement.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q33">
+                    <div class="mcq-question">33. What has contributed to podiatrists assuming more responsibilities in diabetic care?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q33" value="A"> (a) A rise in diabetes cases, increasing the demand for expert care.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="B"> (b) A significant need for specialists due to a growing diabetic population.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="C"> (c) Increased healthcare challenges prompting podiatrists to broaden their scope.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q34">
+                    <div class="mcq-question">34. Why does the interviewee mention a specific patient's case?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q34" value="A"> (a) To illustrate how podiatrists reduce risks of critical foot conditions.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="B"> (b) To demonstrate the successful role of podiatric care in complex cases.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="C"> (c) To show the importance of preventing diabetic complications with early interventions.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q35">
+                    <div class="mcq-question">35. What is the objective of the "Five Essential Steps in Diabetic Foot Care"?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q35" value="A"> (a) To establish guidelines for effective diabetic foot complication management.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="B"> (b) To ensure a standardized approach to diabetic foot health treatment.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="C"> (c) To formalize protocols for early identification of diabetic foot problems.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q36">
+                    <div class="mcq-question">36. According to the interviewee, what is one of the primary obstacles for podiatrists today?[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q36" value="A"> (a) Inadequate support for podiatric services in the diabetic care setting.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="B"> (b) Insufficient resources and funding for advanced podiatric treatments.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) Limited financial investment in podiatric services for diabetic patients.[cite: 7]</label>
+                </div>
+
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42</h4>
+                <div class="mcq-block" id="block-q37">
+                    <div class="mcq-question">37. Dr. Thompson states that Lassa fever is...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) Mostly spread through contact with infected insects.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="B"> (b) Caused by contact with contaminated materials and food items.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="C"> (c) Primarily found in underdeveloped rural regions of the world.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q38">
+                    <div class="mcq-question">38. Dr. Thompson suggests that a major challenge in managing Lassa fever is...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q38" value="A"> (a) High expenses related to acquiring antiviral medications.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) Delays in identifying cases due to vague, common symptoms.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="C"> (c) Insufficient numbers of adequately trained healthcare providers.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q39">
+                    <div class="mcq-question">39. Dr. Thompson uses data to show that early treatment with ribavirin...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q39" value="A"> (a) Shows no significant difference in survival rates of patients.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="B"> (b) Is mostly helpful in patients with severe cases of infection.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="C"> (c) Greatly decreases the fatality rate when administered promptly.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q40">
+                    <div class="mcq-question">40. Dr. Thompson notes that the management of Lassa fever...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) Frequently faces issues due to limited medical infrastructure.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) Is fairly uncomplicated and does not demand specialized treatment.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) Primarily depends on antiviral drugs for effective care management.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q41">
+                    <div class="mcq-question">41. Dr. Thompson emphasizes that healthcare workers...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q41" value="A"> (a) Face minimal risk of exposure to Lassa fever infections.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="B"> (b) Require strict adherence to infection control protocols and PPE use.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="C"> (c) Can best protect themselves through universal vaccination programs.[cite: 7]</label>
+                </div>
+                <div class="mcq-block" id="block-q42">
+                    <div class="mcq-question">42. Dr. Thompson concludes by stressing that improving outcomes for Lassa fever relies on...[cite: 7]</div>
+                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) Advancing vaccines and developing more efficient treatment options.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) Lowering the costs associated with administering ribavirin therapy.[cite: 7]</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) Keeping all patients isolated in highly specialized healthcare centers.[cite: 7]</label>
+                </div>
+            </section>
+
+            <button class="btn" style="width: 100%; padding: 20px; font-size: 1.5rem; background: var(--naranja-vibrante);" onclick="finishExam()">Finalizar Examen y Evaluar</button>
+
+        </div>
+    </div>
+
+    <script>
+        // --- TIMER LOGIC ---
+        let totalTime = 45 * 60; // 45 minutos
+        let timerInterval = null;
+        const timerDisplay = document.getElementById('timer-display');
+        const examContent = document.getElementById('exam-content');
+        const startOverlay = document.getElementById('start-overlay');
+        const audioEl = document.getElementById('oet-audio-player');
+
+        function startExam() {
+            startOverlay.style.display = 'none';
+            examContent.classList.add('active');
+            timerDisplay.classList.add('timer-active');
+            
+            // Iniciar Audio
+            audioEl.play().catch(e => console.log("User must interact to play audio"));
+
+            timerInterval = setInterval(() => {
+                if (totalTime > 0) {
+                    totalTime--;
+                    let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+                    let seconds = (totalTime % 60).toString().padStart(2, '0');
+                    timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
+                    
+                    if (totalTime < 300) { // < 5 mins
+                        timerDisplay.classList.add('timer-warning');
+                    }
+                } else {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerText = "⏱️ TIME'S UP!";
+                    finishExam();
+                }
+            }, 1000);
+        }
+
+        // --- AUDIO CUTOFF LOGIC ---
+        // Detener audio en el minuto 35:11 (2111 segundos) para no revelar respuestas
+        audioEl.addEventListener('timeupdate', function() {
+            if (this.currentTime >= 2111) {
+                this.pause();
+                this.currentTime = 2110;
+                alert("⚠️ Fin del material de evaluación. El audio se detuvo para no revelar las respuestas oficiales.");
+            }
+        });
+
+        function jumpAudio(seconds) {
+            audioEl.currentTime = seconds;
+            audioEl.play();
+        }
+
+        // --- GRADING LOGIC ---
+        function finishExam() {
+            clearInterval(timerInterval);
+            audioEl.pause();
+            let score = 0;
+
+            // Respuestas Oficiales (Flexibilidad añadida con toLowerCase y trim en la validación)
+            const answersA = {
+                q1: "on and off", q2: "burning sensation", q3: "hematuria", q4: "lower back",
+                q5: "bladder cancer", q6: "flexible tube", q7: "local anesthesia", q8: "10 minutes",
+                q9: "intravesical therapy", q10: "immunotherapy", q11: "smoking", q12: "50-70%",
+                q13: "bulging", q14: "heavy", q15: "end of the day", q16: "varicose veins",
+                q17: "discoloration", q18: "compression stockings", q19: "active", q20: "sclerotherapy",
+                q21: "endovenous laser", q22: "quick", q23: "recur", q24: "lifestyle"
+            };
+
+            const answersBC = {
+                q25: "B", q26: "C", q27: "A", q28: "A", q29: "B", q30: "B",
+                q31: "B", q32: "A", q33: "A", q34: "B", q35: "A", q36: "B",
+                q37: "B", q38: "B", q39: "C", q40: "A", q41: "B", q42: "A"
+            };
+
+            // Validar Part A
+            for (let i = 1; i <= 24; i++) {
+                let inputEl = document.getElementById('q' + i);
+                if (!inputEl) continue;
+                
+                let userVal = inputEl.value.trim().toLowerCase();
+                let correctVal = answersA['q' + i].toLowerCase();
+
+                let existingSpan = inputEl.parentNode.querySelector('.correction-span');
+                if (existingSpan) existingSpan.remove();
+
+                if (userVal === correctVal && userVal !== "") {
+                    inputEl.style.borderColor = "#4CAF50";
+                    inputEl.style.backgroundColor = "#e8f5e9";
+                    inputEl.style.color = "#2E7D32";
+                    score++;
+                } else {
+                    inputEl.style.borderColor = "#d32f2f";
+                    inputEl.style.backgroundColor = "#ffebee";
+                    inputEl.style.color = "#d32f2f";
+                    
+                    let span = document.createElement('span');
+                    span.className = 'correction-span';
+                    span.innerText = `Respuesta Correcta: ${answersA['q' + i]}`;
+                    inputEl.parentNode.appendChild(span);
+                }
+            }
+
+            // Validar Part B & C
+            for (let i = 25; i <= 42; i++) {
+                let radios = document.getElementsByName('q' + i);
+                let selectedVal = "";
+                for (let r of radios) {
+                    if (r.checked) selectedVal = r.value;
+                }
+                
+                let blockEl = document.getElementById('block-q' + i);
+                let correctVal = answersBC['q' + i];
+
+                let existingMsg = blockEl.querySelector('.correction-mcq');
+                if (existingMsg) existingMsg.remove();
+
+                if (selectedVal === correctVal) {
+                    blockEl.style.border = "2px solid #4CAF50";
+                    blockEl.style.backgroundColor = "#e8f5e9";
+                    score++;
+                } else {
+                    blockEl.style.border = "2px solid #d32f2f";
+                    blockEl.style.backgroundColor = "#ffebee";
+                    
+                    let p = document.createElement('p');
+                    p.className = 'correction-mcq';
+                    p.innerText = `❌ Incorrecto. La respuesta correcta era: (${correctVal.toLowerCase()})`;
+                    blockEl.appendChild(p);
+                }
+            }
+
+            // Calcular Banda OET
+            let grade = "E";
+            if (score >= 35) grade = "A";
+            else if (score >= 30) grade = "B";
+            else if (score >= 25) grade = "C+";
+            else if (score >= 20) grade = "C";
+            else if (score >= 10) grade = "D";
+
+            // Mostrar Dashboard
+            const dashboard = document.getElementById('results-dashboard');
+            document.getElementById('final-score').innerText = `${score}/42`;
+            document.getElementById('final-grade').innerText = `OET Grade Estimada: ${grade}`;
+            
+            dashboard.style.display = "block";
+            window.scrollTo({ top: dashboard.offsetTop - 80, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
