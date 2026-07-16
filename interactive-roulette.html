@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Interactive English Roulette | Teacher Ivan HUB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1 English Roulette | Teacher Ivan HUB</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,6 +12,8 @@
             --blanco-nieve: #FAFAF0; 
             --blanco-puro: #FFFFFF;
             --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --gris-neutro: #C8CDD2;
             --font-titulares: 'Montserrat', sans-serif; 
             --font-cuerpo: 'Open Sans', sans-serif; 
         }
@@ -20,280 +22,384 @@
             margin: 0; padding: 0;
             font-family: var(--font-cuerpo);
             background-color: var(--blanco-nieve);
-            color: #333;
+            color: #333; height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
-            min-height: 100vh; overflow-x: hidden;
         }
 
-        /* --- Header --- */
-        header {
+        /* --- LOBBY MULTIJUGADOR --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
             background-size: cover; background-position: center;
-            color: var(--blanco-puro);
-            text-align: center; padding: 1.5rem 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: sticky; top: 0; z-index: 100;
-            display: flex; flex-direction: column; align-items: center;
+            z-index: 2000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
         }
 
-        .logo-img { height: 60px; width: auto; margin-bottom: 10px; }
-        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px;}
+        .lobby-box {
+            background: var(--blanco-puro); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center;
+            width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+        }
+
+        .lobby-box img { height: 70px; margin-bottom: 10px; }
+        .lobby-box h2 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0; text-transform: uppercase;}
+        
+        /* Selector de Avatares */
+        .avatar-selector {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px;
+            background: #f0f4f8; padding: 10px; border-radius: 12px;
+        }
+        .avatar-option {
+            font-size: 1.8rem; cursor: pointer; padding: 5px; border-radius: 50%;
+            border: 2px solid transparent; transition: 0.2s; user-select: none;
+        }
+        .avatar-option:hover { transform: scale(1.15); }
+        .avatar-option.selected { border-color: var(--naranja-vibrante); background: #fff5ee; transform: scale(1.15);}
+
+        .add-player-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .login-input {
+            flex: 1; padding: 12px; border: 2px solid var(--gris-neutro); border-radius: 10px;
+            font-family: var(--font-cuerpo); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .login-input:focus { border-color: var(--naranja-vibrante); }
+        
+        .add-btn {
+            background: var(--azul-primario); color: white; border: none; padding: 12px 20px;
+            border-radius: 10px; font-family: var(--font-titulares); font-size: 1rem; cursor: pointer;
+        }
+        .add-btn:hover { background: #08356a; }
+
+        .player-list-setup { list-style: none; padding: 0; margin-bottom: 20px; text-align: left; }
+        .player-list-setup li {
+            background: #f0f4f8; padding: 10px 15px; border-radius: 8px;
+            margin-bottom: 8px; font-weight: bold; color: var(--azul-primario); display: flex; align-items: center;
+        }
+        .setup-avatar-display { font-size: 1.5rem; margin-right: 10px; }
+
+        .start-btn {
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px; width: 100%;
+            border-radius: 50px; font-family: var(--font-titulares); font-size: 1.2rem; cursor: pointer;
+            text-transform: uppercase; box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4); transition: 0.2s;
+        }
+        .start-btn:disabled { background: var(--gris-neutro); cursor: not-allowed; box-shadow: none; }
+        .start-btn:active:not(:disabled) { transform: scale(0.95); }
+
+        /* --- ENCABEZADO --- */
+        header {
+            background-color: var(--azul-primario); color: var(--blanco-puro);
+            text-align: center; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 100; flex-shrink: 0; display: flex; justify-content: center; align-items: center; gap: 15px;
+        }
+        .logo-img { height: 40px; }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.4rem; letter-spacing: 1px;}
         header h1 span { color: var(--naranja-vibrante); }
 
-        /* --- Layout Principal --- */
-        .main-container {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; padding: 2rem 1rem;
-            max-width: 1000px; margin: 0 auto; width: 100%;
-            box-sizing: border-box;
+        /* --- ESTRUCTURA PRINCIPAL --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; background: #e6ebf0;}
+
+        /* --- PANEL LATERAL MULTIJUGADOR --- */
+        .sidebar {
+            width: 320px; background: var(--blanco-puro); box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; padding: 20px; z-index: 10;
+        }
+        .sidebar h3 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0; text-align: center; border-bottom: 2px dashed #eee; padding-bottom:10px; }
+
+        .players-container { flex: 1; overflow-y: auto; margin-bottom: 20px; }
+        
+        .player-card {
+            background: #f8f9fa; border: 2px solid transparent; border-radius: 12px;
+            padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;
+            transition: 0.3s;
+        }
+        .player-card.active-turn {
+            border-color: var(--naranja-vibrante); background: #fff5ee;
+            box-shadow: 0 4px 10px rgba(245, 110, 30, 0.15); transform: scale(1.02);
         }
 
-        .intro-text {
-            text-align: center; margin-bottom: 2rem; font-size: 1.1rem; color: #555;
-        }
+        .p-avatar { font-size: 2rem; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .p-info { flex: 1; }
+        .p-name { font-weight: 800; color: var(--azul-primario); font-size: 1.1rem; margin-bottom: 2px;}
+        .p-score { font-family: var(--font-titulares); font-size: 1.2rem; color: var(--verde-exito); }
 
-        /* --- Ruleta y Controles --- */
+        /* --- ÁREA DE LA RULETA --- */
         .roulette-wrapper {
-            position: relative;
-            display: flex; flex-direction: column; align-items: center;
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; padding: 20px;
         }
 
         .canvas-container {
-            position: relative;
-            width: 350px; height: 350px;
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 8px solid var(--blanco-puro);
-            background-color: var(--blanco-puro);
+            position: relative; width: 450px; height: 450px;
+            border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 10px solid var(--blanco-puro); background-color: var(--blanco-puro);
         }
 
         canvas { width: 100%; height: 100%; border-radius: 50%; }
 
         .pointer {
-            position: absolute;
-            top: -20px; left: 50%;
-            transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid var(--naranja-vibrante);
-            z-index: 10;
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent;
+            border-top: 50px solid var(--naranja-vibrante); z-index: 10;
             filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));
         }
 
         .spin-btn {
             background-color: var(--naranja-vibrante); color: var(--blanco-puro);
-            border: none; padding: 15px 50px; font-size: 1.5rem;
-            font-family: var(--font-titulares); font-weight: bold;
-            border-radius: 50px; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 8px 20px rgba(245, 110, 30, 0.4);
-            margin-top: 2rem; transition: 0.2s; letter-spacing: 2px;
+            border: none; padding: 15px 50px; font-size: 1.5rem; font-family: var(--font-titulares);
+            font-weight: bold; border-radius: 50px; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(245, 110, 30, 0.4); margin-top: 2rem; transition: 0.2s;
         }
+        .spin-btn:active:not(:disabled) { transform: scale(0.95); }
+        .spin-btn:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; }
 
-        .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(245, 110, 30, 0.5); }
-        .spin-btn:active { transform: scale(0.95); }
-        .spin-btn:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
-
-        /* --- Modal de Reto --- */
+        /* --- MODAL DE RETO --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000;
-            display: none; justify-content: center; align-items: center;
-            padding: 20px; box-sizing: border-box;
+            background: rgba(0,0,0,0.85); z-index: 3000; display: none;
+            justify-content: center; align-items: center; padding: 20px;
         }
 
         .challenge-card {
-            background: var(--blanco-puro); width: 100%; max-width: 450px;
-            border-radius: 20px; overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--blanco-puro); width: 100%; max-width: 500px;
+            border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center; border: 5px solid var(--azul-primario);
         }
 
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
         .card-header {
-            background: var(--azul-primario); color: white;
-            padding: 20px; font-family: var(--font-titulares);
+            background: var(--azul-primario); color: white; padding: 20px; font-family: var(--font-titulares);
         }
         
         .number-badge {
-            background: var(--naranja-vibrante); color: white;
-            font-size: 2rem; font-weight: bold; padding: 10px 20px;
-            border-radius: 50px; display: inline-block; margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: var(--naranja-vibrante); color: white; font-size: 1.5rem; font-weight: bold;
+            padding: 8px 20px; border-radius: 50px; display: inline-block; margin-bottom: 10px;
         }
 
         .card-body { padding: 30px; }
-        
-        .challenge-text {
-            font-size: 1.4rem; line-height: 1.6; font-weight: 700;
-            color: #333; margin-bottom: 25px; font-family: var(--font-titulares);
-        }
+        .challenge-text { font-size: 1.5rem; line-height: 1.5; font-weight: 700; color: #333; margin-bottom: 25px; }
 
+        .btn-group { display: flex; gap: 15px; justify-content: center; }
         .action-btn {
-            background-color: var(--verde-exito); color: white; border: none;
-            padding: 15px 30px; font-size: 1.1rem; font-family: var(--font-titulares);
-            font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%;
-            transition: 0.2s; text-transform: uppercase;
+            color: white; border: none; padding: 15px 25px; font-size: 1.1rem;
+            font-family: var(--font-titulares); font-weight: bold; border-radius: 50px;
+            cursor: pointer; flex: 1; transition: 0.2s; text-transform: uppercase;
         }
-        .action-btn:hover { background-color: #218838; }
+        .btn-success { background-color: var(--verde-exito); }
+        .btn-fail { background-color: var(--rojo-alerta); }
+        .action-btn:active { transform: scale(0.95); }
 
-        /* Media Queries para Pantallas más grandes */
-        @media (min-width: 768px) {
-            .canvas-container { width: 500px; height: 500px; }
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo" class="logo-img">
-        <h1>Interactive <span>Roulette</span></h1>
-    </header>
-
-    <div class="main-container">
-        <div class="intro-text">
-            <strong>Spin the wheel!</strong> Completa el reto en inglés de la casilla que te toque. ¡Buena suerte!
-        </div>
-
-        <div class="roulette-wrapper">
-            <div class="pointer"></div>
-            <div class="canvas-container">
-                <canvas id="wheelCanvas" width="500" height="500"></canvas>
+    <!-- PANTALLA DE LOBBY / LOGIN -->
+    <div id="loginOverlay">
+        <div class="lobby-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo">
+            <h2>A1 Roulette Lobby</h2>
+            <p style="color:#666; margin-bottom:20px;">Añade a los estudiantes para comenzar el juego.</p>
+            
+            <div class="avatar-selector" id="avatarSelector">
+                <div class="avatar-option selected" onclick="selectAvatar(this, '👦')">👦</div>
+                <div class="avatar-option" onclick="selectAvatar(this, '👧')">👧</div>
+                <div class="avatar-option" onclick="selectAvatar(this, '🦊')">🦊</div>
+                <div class="avatar-option" onclick="selectAvatar(this, '🐼')">🐼</div>
+                <div class="avatar-option" onclick="selectAvatar(this, '🐶')">🐶</div>
+                <div class="avatar-option" onclick="selectAvatar(this, '👽')">👽</div>
             </div>
-            <button class="spin-btn" id="spinBtn" onclick="spinWheel()">SPIN!</button>
+
+            <div class="add-player-row">
+                <input type="text" id="inputName" class="login-input" placeholder="Nombre (Ej. Leonardo)" autocomplete="off">
+                <button class="add-btn" onclick="addPlayer()">Añadir</button>
+            </div>
+            
+            <ul class="player-list-setup" id="setupPlayerList"></ul>
+
+            <button class="start-btn" id="startBtn" onclick="startGame()" disabled>Start Game!</button>
         </div>
     </div>
 
-    <!-- Modal del Reto -->
+    <header>
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Logo" class="logo-img">
+        <h1>Teacher Ivan <span>HUB</span></h1>
+    </header>
+
+    <div class="main-layout">
+        
+        <!-- PANEL LATERAL (SCOREBOARD) -->
+        <div class="sidebar">
+            <h3>Scoreboard</h3>
+            <div class="players-container" id="playersDashboardList">
+                <!-- Generado por JS -->
+            </div>
+        </div>
+
+        <!-- ÁREA DE LA RULETA -->
+        <div class="roulette-wrapper">
+            <div class="canvas-container">
+                <div class="pointer"></div>
+                <canvas id="wheelCanvas" width="500" height="500"></canvas>
+            </div>
+            <button class="spin-btn" id="spinBtn" onclick="spinWheel()">SPIN ROUTINE!</button>
+        </div>
+
+    </div>
+
+    <!-- MODAL DE RETO -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="challenge-card">
             <div class="card-header">
-                <div class="number-badge" id="displayNumber">#1</div>
-                <h2 style="margin: 0; font-size: 1.2rem; letter-spacing: 1px;">CHALLENGE TIME</h2>
+                <h3 id="modalPlayerTurn" style="margin:0 0 10px 0; color:#fff; font-size:1.1rem;">Turno de: <span></span></h3>
+                <div class="number-badge" id="displayNumber">Reto #1</div>
             </div>
             <div class="card-body">
-                <div class="challenge-text" id="challengeText">Here goes the challenge!</div>
-                <button class="action-btn" onclick="closeModal()">Challenge Completed!</button>
+                <div class="challenge-text" id="challengeText">Prompt</div>
+                <div class="btn-group">
+                    <button class="action-btn btn-fail" onclick="completeChallenge(false)">Try Again (0 Pts)</button>
+                    <button class="action-btn btn-success" onclick="completeChallenge(true)">Success (+10 Pts)</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // BASE DE DATOS DE 50 RETOS EN INGLÉS
+        // BASE DE DATOS: 50 RETOS NIVEL A1
         // ==========================================
-        const challenges = [
-            "Introduce yourself in English (Name, Age, City).",
-            "Name 5 colors in English in 10 seconds.",
-            "Spell your full name in English.",
-            "Sing the chorus of your favorite English song!",
-            "Tongue Twister: 'She sells seashells by the seashore.'",
-            "Name 5 wild animals in English.",
-            "Say the days of the week backwards!",
-            "Write on the board a sentence dictated by the teacher.",
-            "Name 3 things you can find in a kitchen.",
-            "Tell us your favorite food and explain why you like it.",
-            "Name 5 irregular verbs in the past tense.",
-            "Pretend you are a waiter and take an order.",
-            "Count from 20 to 1 backwards.",
-            "Tongue Twister: 'I scream, you scream, we all scream for ice cream.'",
-            "Name 4 different professions in English.",
-            "Describe exactly what you are wearing right now.",
-            "Ask the teacher a polite question using 'Could I...'.",
-            "Name 3 objects in the classroom that are blue.",
-            "Say a sentence using the adverb 'ALWAYS'.",
-            "Spell the word 'ENVIRONMENT'.",
-            "Read a short paragraph provided by the teacher.",
-            "Name 4 members of the extended family.",
-            "What did you do yesterday? (Use Past Simple).",
-            "Name 5 fruits in English.",
-            "Tongue Twister: 'Peter Piper picked a peck of pickled peppers.'",
-            "Say 3 things you like to do in your free time.",
-            "Name 3 types of weather conditions.",
-            "Describe your bedroom using prepositions (in, on, under).",
-            "Say a sentence using the Second Conditional (If I had...).",
-            "Spell the word 'BEAUTIFUL'.",
-            "Name 3 forms of public transportation.",
-            "Pretend you are at the airport and order a flight ticket.",
-            "Say the 12 months of the year in English.",
-            "What are you going to do tomorrow? (Use 'going to').",
-            "Name 5 parts of the human body.",
-            "Give directions to the nearest hospital from here.",
-            "Tongue Twister: 'How much wood would a woodchuck chuck...'",
-            "Name 3 things you NEVER do.",
-            "Ask a classmate a question about their daily routine.",
-            "Spell the word 'KNOWLEDGE'.",
-            "Make a polite request using 'May I...'.",
-            "Name 4 articles of winter clothing.",
-            "Describe your favorite movie in just 2 sentences.",
-            "Say a sentence using a contrast connector (However/Although).",
-            "Pretend you have a headache and talk to a doctor.",
-            "Name 3 sports that require a ball.",
-            "Say 3 adjectives to describe a dog.",
-            "Spell the word 'COMFORTABLE'.",
-            "Tell the class about a place you want to travel to.",
-            "Teacher's Choice! The teacher gives you a secret challenge."
+        const rawChallenges = [
+            "Say 'Hello' and 'Goodbye' in English.", "Count from 1 to 10.", "Name 3 colors in English.",
+            "Spell the word 'CAT'.", "Say 3 animals in English.", "Say your name: 'My name is...'",
+            "Name 2 fruits in English.", "What color is an apple?", "Spell the word 'DOG'.",
+            "Say 3 days of the week.", "Say your age: 'I am...'", "Name 2 school objects.",
+            "Touch your head and say 'Head'.", "Spell the word 'RED'.", "Name 3 numbers from 11 to 20.",
+            "Say 'Please' and 'Thank you'.", "What color is the sky?", "Name 2 family members (e.g., Mother).",
+            "Spell the word 'BOOK'.", "Say 'I like apples'.", "Name 2 parts of the body.",
+            "Jump 3 times and count in English.", "What animal says 'Meow'?", "Spell the word 'BLUE'.",
+            "Say 'Good morning'.", "Name 1 hot food.", "Spell the word 'SUN'.",
+            "What color is a banana?", "Name 2 toys.", "Say 'I am happy'.",
+            "Spell the word 'PEN'.", "What animal says 'Woof'?", "Name 2 clothes (e.g., shirt).",
+            "Spell the word 'BOY'.", "Say 'Good night'.", "Touch your nose and say 'Nose'.",
+            "Name 1 cold food (e.g., ice cream).", "Spell the word 'GIRL'.", "What is 2 + 2? (Say it in English).",
+            "Say 'I have a pen'.", "Spell the word 'CAR'.", "Name 1 big animal.",
+            "What color is milk?", "Spell the word 'MILK'.", "Say 'How are you?'.",
+            "Name 1 small animal.", "Spell the word 'FISH'.", "What is 5 + 5? (Say it in English).",
+            "Touch your ears and say 'Ears'.", "Say 'See you later!'"
         ];
 
+        // Convertir a array de objetos para poder rastrear IDs originales al eliminar
+        let activeChallenges = rawChallenges.map((text, index) => {
+            return { id: index + 1, text: text };
+        });
+
         // ==========================================
-        // MOTOR DE LA RULETA (CANVAS)
+        // LOBBY Y JUGADORES
+        // ==========================================
+        let selectedAvatar = '👦';
+        let players = [];
+        let currentTurnIndex = 0;
+
+        function selectAvatar(element, icon) {
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAvatar = icon;
+        }
+
+        function addPlayer() {
+            const name = document.getElementById('inputName').value.trim();
+            if(!name) { alert("Ingresa un nombre."); return; }
+            if(players.length >= 8) { alert("Máximo 8 jugadores."); return; }
+            
+            players.push({ name: name, score: 0, avatar: selectedAvatar });
+            
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="setup-avatar-display">${selectedAvatar}</span> <span>${name}</span>`;
+            document.getElementById('setupPlayerList').appendChild(li);
+            
+            document.getElementById('inputName').value = '';
+            document.getElementById('startBtn').disabled = false;
+        }
+
+        function startGame() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            renderScoreboard();
+            drawWheel(); // Dibujar ruleta inicial
+        }
+
+        function renderScoreboard() {
+            const container = document.getElementById('playersDashboardList');
+            container.innerHTML = '';
+            players.forEach((p, i) => {
+                container.innerHTML += `
+                    <div class="player-card ${i === currentTurnIndex ? 'active-turn' : ''}" id="pcard-${i}">
+                        <div class="p-avatar">${p.avatar}</div>
+                        <div class="p-info">
+                            <div class="p-name">${p.name}</div>
+                            <div class="p-score" id="pscore-${i}">${p.score} Pts</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ==========================================
+        // MOTOR DE LA RULETA (CANVAS DINÁMICO)
         // ==========================================
         const canvas = document.getElementById("wheelCanvas");
         const ctx = canvas.getContext("2d");
         const spinBtn = document.getElementById("spinBtn");
-        
-        const numSlices = 50;
-        const sliceAngle = (2 * Math.PI) / numSlices;
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = centerX;
-
-        // Colores de la marca (Alternados)
         const colors = ["#0A468C", "#F56E1E"];
 
         let currentAngle = 0;
         let spinVelocity = 0;
         let isSpinning = false;
         let animationFrame;
+        let winningChallengeObj = null;
+        let winningChallengeIndex = -1;
 
-        // Función para dibujar la ruleta
         function drawWheel() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const numSlices = activeChallenges.length;
             
+            if(numSlices === 0) {
+                // Mensaje de Fin de Juego si se acaban los retos
+                ctx.fillStyle = "#333";
+                ctx.font = "bold 30px 'Montserrat', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("GAME OVER", canvas.width/2, canvas.height/2);
+                spinBtn.disabled = true;
+                return;
+            }
+
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = centerX;
+
             for (let i = 0; i < numSlices; i++) {
                 const startAngle = currentAngle + i * sliceAngle;
                 const endAngle = startAngle + sliceAngle;
 
-                // Dibujar la porción (slice)
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.arc(centerX, centerY, radius, startAngle, endAngle);
                 ctx.closePath();
-                ctx.fillStyle = colors[i % 2];
+                ctx.fillStyle = colors[i % 2]; // Alterna colores
                 ctx.fill();
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = "#FFFFFF";
                 ctx.stroke();
 
-                // Dibujar el texto (Número)
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(startAngle + sliceAngle / 2);
                 ctx.textAlign = "right";
                 ctx.fillStyle = "#FFFFFF";
-                ctx.font = "bold 14px 'Montserrat', sans-serif";
+                ctx.font = "bold 16px 'Montserrat', sans-serif";
                 
-                // Ajustar posición del texto cerca del borde exterior
-                ctx.fillText((i + 1).toString(), radius - 15, 5);
+                // Dibujar el ID original del reto
+                ctx.fillText(activeChallenges[i].id.toString(), radius - 20, 6);
                 ctx.restore();
             }
             
-            // Círculo central decorativo
             ctx.beginPath();
             ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
             ctx.fillStyle = "#FFFFFF";
@@ -303,77 +409,82 @@
             ctx.stroke();
         }
 
-        // Lógica de Giro
         function spinWheel() {
-            if (isSpinning) return;
+            if (isSpinning || activeChallenges.length === 0) return;
             isSpinning = true;
             spinBtn.disabled = true;
             spinBtn.textContent = "SPINNING...";
-
-            // Velocidad inicial aleatoria para resultados distintos
             spinVelocity = Math.random() * 0.2 + 0.4; 
             animateSpin();
         }
 
         function animateSpin() {
             currentAngle += spinVelocity;
-            
-            // Fricción para frenar gradualmente
             spinVelocity *= 0.992; 
-
             drawWheel();
 
             if (spinVelocity > 0.002) {
                 animationFrame = requestAnimationFrame(animateSpin);
             } else {
-                // El giro ha terminado
                 isSpinning = false;
-                spinBtn.disabled = false;
-                spinBtn.textContent = "SPIN!";
                 determineWinner();
             }
         }
 
         function determineWinner() {
-            // El puntero está fijo en la parte superior (270 grados o 1.5 * PI)
-            // Calculamos qué ángulo quedó en esa posición
+            const numSlices = activeChallenges.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            
             const normalizedAngle = currentAngle % (2 * Math.PI);
             const pointerAngle = (1.5 * Math.PI); 
             
             let relativeAngle = pointerAngle - normalizedAngle;
-            if (relativeAngle < 0) {
-                relativeAngle += 2 * Math.PI;
-            }
+            if (relativeAngle < 0) relativeAngle += 2 * Math.PI;
 
-            // Encontrar el índice del slice
-            const winningIndex = Math.floor(relativeAngle / sliceAngle);
-            const winningNumber = winningIndex + 1;
+            winningChallengeIndex = Math.floor(relativeAngle / sliceAngle);
+            winningChallengeObj = activeChallenges[winningChallengeIndex];
 
-            showChallenge(winningNumber);
+            showChallengeModal();
         }
 
         // ==========================================
-        // UI DEL MODAL
+        // GESTIÓN DEL MODAL Y PUNTAJE
         // ==========================================
-        function showChallenge(number) {
+        function showChallengeModal() {
             const modal = document.getElementById("modalOverlay");
-            const numberBadge = document.getElementById("displayNumber");
-            const textDisplay = document.getElementById("challengeText");
-
-            numberBadge.textContent = "#" + number;
-            // El índice en el array es number - 1
-            textDisplay.textContent = challenges[number - 1];
-
+            document.getElementById("modalPlayerTurn").innerHTML = `Turno de: <span>${players[currentTurnIndex].name} ${players[currentTurnIndex].avatar}</span>`;
+            document.getElementById("displayNumber").textContent = "Reto #" + winningChallengeObj.id;
+            document.getElementById("challengeText").textContent = winningChallengeObj.text;
+            
             modal.style.display = "flex";
         }
 
-        function closeModal() {
+        function completeChallenge(isSuccess) {
             document.getElementById("modalOverlay").style.display = "none";
+            
+            if (isSuccess) {
+                // Sumar puntos al jugador
+                players[currentTurnIndex].score += 10;
+                
+                // ELIMINAR EL RETO DE LA RULETA (No vuelve a suceder)
+                activeChallenges.splice(winningChallengeIndex, 1);
+            }
+            
+            // Re-dibujar la ruleta con los retos restantes (o en su misma posición si falló)
+            drawWheel();
+
+            // Pasar turno
+            currentTurnIndex = (currentTurnIndex + 1) % players.length;
+            renderScoreboard();
+            
+            // Restaurar botón si aún hay retos
+            if(activeChallenges.length > 0) {
+                spinBtn.disabled = false;
+                spinBtn.textContent = "SPIN ROUTINE!";
+            } else {
+                spinBtn.textContent = "FINISHED";
+            }
         }
-
-        // Dibujar la ruleta al cargar la página
-        drawWheel();
-
     </script>
 </body>
 </html>
