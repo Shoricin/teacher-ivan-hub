@@ -154,24 +154,66 @@
         .result-screen { display: none; }
         .score-display { font-size: 5rem; font-family: var(--font-titulares); color: var(--naranja-vibrante); line-height: 1;}
         
-        /* Contenedor Oculto para Generar PDF */
-        #pdf-certificate {
-            width: 800px; height: 600px; background: white; padding: 40px; box-sizing: border-box;
-            position: relative; display: none; border: 15px solid #0A468C; font-family: 'Open Sans', sans-serif;
-            text-align: center; margin: 0 auto;
+        /* Contenedor Oculto para Generar BADGE en PDF (Formato Letter) */
+        #pdf-badge-container {
+            width: 816px; /* 8.5 inches at 96 dpi */
+            height: 1056px; /* 11 inches at 96 dpi */
+            background: #ffffff;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+            padding: 40px;
         }
-        .cert-header { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px;}
-        .cert-header img { height: 80px; }
-        .cert-title { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: #0A468C; margin: 0; text-transform: uppercase;}
-        .cert-subtitle { font-size: 1.2rem; color: #F56E1E; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
-        .cert-body { margin-top: 50px; }
-        .cert-text { font-size: 1.3rem; color: #555; }
-        .cert-name { font-family: 'Montserrat', sans-serif; font-size: 3rem; color: #333; margin: 20px 0; border-bottom: 2px solid #ccc; display: inline-block; padding: 0 50px; }
-        .cert-score-box { background: #f8f9fa; border: 3px solid #28a745; padding: 20px; border-radius: 15px; display: inline-block; margin-top: 30px; }
-        .cert-score-text { font-size: 1.2rem; color: #28a745; font-weight: bold; margin: 0;}
-        .cert-score-number { font-family: 'Montserrat', sans-serif; font-size: 4rem; color: #28a745; margin: 0; line-height: 1;}
-        .cert-footer { position: absolute; bottom: 40px; width: 100%; left: 0; display: flex; justify-content: space-around; align-items: flex-end;}
-        .signature-line { border-top: 2px solid #333; width: 200px; padding-top: 10px; font-weight: bold; font-size: 1rem; color: #333;}
+        
+        .badge-design {
+            background: radial-gradient(circle, #0A468C 0%, #062b59 100%);
+            border: 15px solid var(--naranja-vibrante);
+            border-radius: 50%;
+            width: 550px;
+            height: 550px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Cintas decorativas del Badge */
+        .badge-design::before {
+            content: ''; position: absolute; bottom: -80px; left: 100px;
+            border-left: 50px solid transparent; border-right: 50px solid transparent;
+            border-top: 120px solid var(--naranja-vibrante); z-index: -1; transform: rotate(15deg);
+        }
+        .badge-design::after {
+            content: ''; position: absolute; bottom: -80px; right: 100px;
+            border-left: 50px solid transparent; border-right: 50px solid transparent;
+            border-top: 120px solid var(--naranja-vibrante); z-index: -1; transform: rotate(-15deg);
+        }
+
+        .badge-logo { height: 100px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .badge-hub-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;}
+        .badge-sub { font-family: 'Open Sans', sans-serif; font-size: 1.2rem; color: #ffebd6; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .badge-score-box {
+            background: white; border-radius: 15px; padding: 15px 40px; margin-bottom: 20px;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .badge-score-number { font-family: 'Montserrat', sans-serif; font-size: 5rem; color: var(--azul-primario); margin: 0; line-height: 1;}
+        .badge-score-text { font-family: 'Open Sans', sans-serif; font-size: 1.2rem; color: #666; margin: 5px 0 0 0; font-weight: bold;}
+        
+        .badge-student { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: white; margin: 10px 0;}
+        .badge-date { font-family: 'Open Sans', sans-serif; font-size: 1rem; color: #ccc; margin-top: 10px;}
+        
+        .pdf-footer {
+            position: absolute; bottom: 50px; text-align: center; width: 100%;
+            font-family: 'Open Sans', sans-serif; color: #888; font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -210,66 +252,66 @@
             <h2 class="section-title">Part 2: Connectors & Structure <span class="section-points">10 Pts</span></h2>
             <p class="instruction">Choose the correct connector to give logical order to this daily routine.</p>
             <div class="structure-box">
-                <div class="sentence-line">1. <select class="connector-select" data-answer="first"><option value="">Select...</option><option value="finally">Finally</option><option value="first">First</option><option value="then">Then</option></select>, I wake up at 7:00 AM and turn off my alarm.</div>
-                <div class="sentence-line">2. <select class="connector-select" data-answer="then"><option value="">Select...</option><option value="then">Then</option><option value="first">First</option><option value="never">Never</option></select>, I take a shower and get dressed for school.</div>
-                <div class="sentence-line">3. <select class="connector-select" data-answer="after that"><option value="">Select...</option><option value="always">Always</option><option value="after that">After that</option><option value="first">First</option></select>, I have a delicious breakfast with my family.</div>
-                <div class="sentence-line">4. I <select class="connector-select" data-answer="usually"><option value="">Select...</option><option value="usually">usually</option><option value="after that">after that</option><option value="then">then</option></select> take the bus, but sometimes I walk to school.</div>
-                <div class="sentence-line">5. <select class="connector-select" data-answer="finally"><option value="">Select...</option><option value="first">First</option><option value="then">Then</option><option value="finally">Finally</option></select>, I do my homework, have dinner, and go to bed at 10 PM.</div>
+                <div class="sentence-line">1. <select class="connector-select" data-answer="first"><option value="">Select...</option><option value="finally">Finally</option><option value="first">First</option><option value="then">Then</option></select>, I finish my classes at 1:00 PM and walk home.</div>
+                <div class="sentence-line">2. <select class="connector-select" data-answer="then"><option value="">Select...</option><option value="after that">After that</option><option value="then">Then</option><option value="always">Always</option></select>, I have lunch with my brother and we talk about our day.</div>
+                <div class="sentence-line">3. <select class="connector-select" data-answer="after that"><option value="">Select...</option><option value="sometimes">Sometimes</option><option value="first">First</option><option value="after that">After that</option></select>, I clean my room and organize my backpack.</div>
+                <div class="sentence-line">4. I <select class="connector-select" data-answer="usually"><option value="">Select...</option><option value="finally">finally</option><option value="usually">usually</option><option value="then">then</option></select> do my English homework in the afternoon.</div>
+                <div class="sentence-line">5. <select class="connector-select" data-answer="finally"><option value="">Select...</option><option value="first">First</option><option value="then">Then</option><option value="finally">Finally</option></select>, I watch my favorite cartoon and go to sleep.</div>
             </div>
         </div>
 
         <!-- PART 3: READING -->
         <div class="exam-section">
             <h2 class="section-title">Part 3: Reading Comprehension <span class="section-points">20 Pts</span></h2>
-            <p class="instruction">Read the text about Sofia's routine and answer the questions below.</p>
+            <p class="instruction">Read the text about Leonardo's routine and answer the questions below.</p>
             <div class="reading-text">
-                <strong>Sofia's Busy Day</strong><br><br>
-                My name is Sofia and I am a student in Bolivia. My daily routine is very busy but organized. I always wake up early, at 6:30 AM. First, I get up and take a quick shower. Then, I get dressed in my uniform and brush my teeth. At 7:00 AM, I have a healthy breakfast with my parents and my little brother. We usually eat bread, eggs, and drink hot chocolate. 
+                <strong>Leonardo's Weekend</strong><br><br>
+                My name is Leonardo and I love the weekend. On Saturdays, I don't wake up early. I usually get up at 9:00 AM. First, I make my bed and take a shower. Then, I have a big breakfast. I always eat eggs, fruit, and drink orange juice. 
                 <br><br>
-                After that, I take the bus to school. My classes start at 8:00 AM and finish at 1:00 PM. I study many subjects, but my favorite is English because I want to travel. I always have lunch at 1:30 PM at home. In the afternoon, I do my homework and study for my exams in the living room. 
+                In the afternoon, I meet my friends at the park. We sometimes play soccer or ride our bicycles. At 2:00 PM, I go back home to have lunch with my family. My mother cooks delicious traditional Bolivian food. 
                 <br><br>
-                Sometimes, I play video games or watch TV for one hour to relax. I never go to bed late because I need energy for the next day. Finally, I have dinner at 7:30 PM, read a book, and go to sleep at 9:30 PM. During the weekend, my routine changes. I wake up late and play volleyball with my friends in the park.
+                After lunch, I relax in my bedroom. I usually listen to music or play video games for two hours. I never do homework on Saturdays; I prefer to do it on Sunday evening. Finally, at night, my family and I watch a movie together. I go to bed at 10:30 PM, very happy and tired.
             </div>
 
             <div id="readingQuestions">
                 <div class="question-block">
-                    <div class="question-text">1. What time does Sofia wake up on weekdays?</div>
+                    <div class="question-text">1. What time does Leonardo get up on Saturdays?</div>
                     <ul class="options-list">
                         <li><label><input type="radio" name="rq1" value="7:00 AM"> <span>7:00 AM</span></label></li>
-                        <li><label><input type="radio" name="rq1" value="6:30 AM" data-correct="true"> <span>6:30 AM</span></label></li>
-                        <li><label><input type="radio" name="rq1" value="8:00 AM"> <span>8:00 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="9:00 AM" data-correct="true"> <span>9:00 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="10:30 PM"> <span>10:30 PM</span></label></li>
                     </ul>
                 </div>
                 <div class="question-block">
-                    <div class="question-text">2. What does she usually eat for breakfast?</div>
+                    <div class="question-text">2. What does he always drink for breakfast?</div>
                     <ul class="options-list">
-                        <li><label><input type="radio" name="rq2" value="Cereal and milk"> <span>Cereal and milk</span></label></li>
-                        <li><label><input type="radio" name="rq2" value="Bread, eggs, and hot chocolate" data-correct="true"> <span>Bread, eggs, and hot chocolate</span></label></li>
-                        <li><label><input type="radio" name="rq2" value="Only hot chocolate"> <span>Only hot chocolate</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Milk"> <span>Milk</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Hot chocolate"> <span>Hot chocolate</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Orange juice" data-correct="true"> <span>Orange juice</span></label></li>
                     </ul>
                 </div>
                 <div class="question-block">
-                    <div class="question-text">3. Why is English her favorite subject?</div>
+                    <div class="question-text">3. What does he do in the afternoon?</div>
                     <ul class="options-list">
-                        <li><label><input type="radio" name="rq3" value="Because it is easy"> <span>Because it is easy</span></label></li>
-                        <li><label><input type="radio" name="rq3" value="Because the teacher is fun"> <span>Because the teacher is fun</span></label></li>
-                        <li><label><input type="radio" name="rq3" value="Because she wants to travel" data-correct="true"> <span>Because she wants to travel</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="He meets his friends at the park" data-correct="true"> <span>He meets his friends at the park</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="He goes to school"> <span>He goes to school</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="He cooks traditional food"> <span>He cooks traditional food</span></label></li>
                     </ul>
                 </div>
                 <div class="question-block">
-                    <div class="question-text">4. What does she do in the afternoon?</div>
+                    <div class="question-text">4. When does he do his homework?</div>
                     <ul class="options-list">
-                        <li><label><input type="radio" name="rq4" value="She takes a nap"> <span>She takes a nap</span></label></li>
-                        <li><label><input type="radio" name="rq4" value="She goes to school"> <span>She goes to school</span></label></li>
-                        <li><label><input type="radio" name="rq4" value="She does homework and studies" data-correct="true"> <span>She does homework and studies</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="On Saturday morning"> <span>On Saturday morning</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="On Sunday evening" data-correct="true"> <span>On Sunday evening</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="He never does homework"> <span>He never does homework</span></label></li>
                     </ul>
                 </div>
                 <div class="question-block">
-                    <div class="question-text">5. What does she do on the weekend?</div>
+                    <div class="question-text">5. What time does he go to bed on Saturdays?</div>
                     <ul class="options-list">
-                        <li><label><input type="radio" name="rq5" value="Wakes up late and plays volleyball" data-correct="true"> <span>Wakes up late and plays volleyball</span></label></li>
-                        <li><label><input type="radio" name="rq5" value="Goes to school"> <span>Goes to school</span></label></li>
-                        <li><label><input type="radio" name="rq5" value="Wakes up early and reads a book"> <span>Wakes up early and reads a book</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="10:30 PM" data-correct="true"> <span>10:30 PM</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="9:00 AM"> <span>9:00 AM</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="2:00 PM"> <span>2:00 PM</span></label></li>
                     </ul>
                 </div>
             </div>
@@ -296,42 +338,31 @@
             
             <p id="teacherFeedback" style="font-weight: bold; color: var(--naranja-vibrante); font-size: 1.2rem; margin: 20px 0;"></p>
 
-            <button class="btn-primary" onclick="generatePDF()">Download Certificate</button>
+            <button class="btn-primary" onclick="generatePDF()">Download Badge</button>
         </div>
     </div>
 
-    <!-- CERTIFICADO OCULTO PARA EXPORTAR A PDF -->
-    <div id="pdf-certificate">
-        <div class="cert-header">
-            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo">
-            <div>
-                <h1 class="cert-title">Teacher Ivan HUB</h1>
-                <div class="cert-subtitle">Winter Camp English Program</div>
-            </div>
-        </div>
+    <!-- BADGE OCULTO PARA EXPORTAR A PDF (TAMAÑO LETTER) -->
+    <div id="pdf-badge-container">
         
-        <div class="cert-body">
-            <div class="cert-text">This certifies that</div>
-            <div class="cert-name" id="certStudentName">Student Name</div>
-            <div class="cert-text">has successfully completed the</div>
-            <h2 style="font-family: 'Montserrat', sans-serif; color: #0A468C; margin: 15px 0;">Final Level Assessment</h2>
+        <div class="badge-design">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo" class="badge-logo">
+            <h1 class="badge-hub-title">Teacher Ivan HUB</h1>
+            <div class="badge-sub">Level A1-A2 Mastery</div>
             
-            <div class="cert-score-box">
-                <p class="cert-score-text">FINAL SCORE</p>
-                <p class="cert-score-number"><span id="certScore">0</span> / 100</p>
+            <div class="badge-score-box">
+                <p class="badge-score-number"><span id="badgeScore">0</span></p>
+                <p class="badge-score-text">OUT OF 100 POINTS</p>
             </div>
+            
+            <div class="badge-student" id="badgeStudentName">Student Name</div>
+            <div class="badge-date" id="badgeDate">Date</div>
         </div>
 
-        <div class="cert-footer">
-            <div style="text-align: center;">
-                <div class="signature-line" id="certDate">Date</div>
-                <div style="font-size: 0.9rem; color: #555; margin-top: 5px;">Date of Completion</div>
-            </div>
-            <div style="text-align: center;">
-                <div class="signature-line" style="font-family: 'Montserrat', sans-serif; font-style: italic; font-size: 1.2rem;">Teacher Ivan</div>
-                <div style="font-size: 0.9rem; color: #555; margin-top: 5px;">Lead Educator</div>
-            </div>
+        <div class="pdf-footer">
+            Generated automatically by Teacher Ivan HUB - Winter Camp Final Assessment
         </div>
+
     </div>
 
     <script>
@@ -462,24 +493,24 @@
             else if(finalScore >= 51) feedback.textContent = "You Passed! Keep practicing. 👍";
             else feedback.textContent = "Keep trying! Review the material. 📚";
 
-            // Preparar el PDF
-            document.getElementById('certStudentName').textContent = studentName;
-            document.getElementById('certScore').textContent = finalScore;
+            // Preparar el PDF Badge
+            document.getElementById('badgeStudentName').textContent = studentName;
+            document.getElementById('badgeScore').textContent = finalScore;
             
             let today = new Date();
-            document.getElementById('certDate').textContent = today.toLocaleDateString();
+            document.getElementById('badgeDate').textContent = today.toLocaleDateString();
         }
 
         function generatePDF() {
-            const element = document.getElementById('pdf-certificate');
-            element.style.display = 'block';
+            const element = document.getElementById('pdf-badge-container');
+            element.style.display = 'flex'; // Usar flex para centrar el contenido
 
             let opt = {
                 margin:       0,
-                filename:     `Teacher_Ivan_Certificate_${studentName.replace(/\s+/g, '_')}.pdf`,
+                filename:     `Teacher_Ivan_Badge_${studentName.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
