@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Camp Final Test | Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Librería para exportar a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #28a745;
+            --rojo-alerta: #dc3545;
+            --gris-fondo: #e9ecef;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-cuerpo);
+            background-color: var(--gris-fondo);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Header y Timer --- */
+        header {
+            background-color: var(--azul-primario);
+            color: var(--blanco-puro);
+            padding: 15px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header-logo { display: flex; align-items: center; gap: 15px; }
+        .header-logo img { height: 50px; }
+        header h1 { font-family: var(--font-titulares); margin: 0; font-size: 1.5rem; text-transform: uppercase;}
+        header h1 span { color: var(--naranja-vibrante); }
+
+        .timer-display {
+            background: var(--blanco-puro); color: var(--azul-primario);
+            padding: 8px 15px; border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.3rem; display: none; align-items: center; gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .timer-display.warning { background: var(--rojo-alerta); color: white; }
+
+        /* --- Main Container --- */
+        .container {
+            max-width: 900px; margin: 40px auto; padding: 0 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Login Box --- */
+        .login-box {
+            background: var(--blanco-puro); padding: 40px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--naranja-vibrante);
+            text-align: center; max-width: 500px; margin: 50px auto;
+        }
+        .login-box img { height: 80px; margin-bottom: 20px; }
+        .login-box h2 { font-family: var(--font-titulares); color: var(--azul-primario); margin-top: 0; font-size: 2rem;}
+        
+        .login-input {
+            width: 100%; padding: 15px; margin: 20px 0; border: 2px solid #ccc; border-radius: 10px;
+            font-family: var(--font-cuerpo); font-size: 1.1rem; text-align: center;
+            outline: none; box-sizing: border-box; transition: 0.3s;
+        }
+        .login-input:focus { border-color: var(--naranja-vibrante); }
+
+        /* --- Secciones del Examen --- */
+        .exam-screen { display: none; }
+        .exam-section {
+            background: var(--blanco-puro); padding: 35px; border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 30px;
+            border-top: 5px solid var(--azul-primario);
+        }
+        
+        .section-title {
+            font-family: var(--font-titulares); color: var(--azul-primario);
+            border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-top: 0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .section-points { font-size: 1rem; color: var(--naranja-vibrante); background: #fff5ee; padding: 5px 10px; border-radius: 8px;}
+        .instruction { color: #555; font-size: 1rem; margin-bottom: 25px; line-height: 1.5;}
+
+        /* --- PART 1: Vocab Grid --- */
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .vocab-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8f9fa; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd;
+        }
+        .vocab-word { font-weight: bold; color: #444; font-size: 0.9rem;}
+        .vocab-input {
+            width: 100px; padding: 5px; border: 2px solid var(--gris-neutro); border-radius: 5px;
+            font-family: var(--font-cuerpo); text-align: center; outline: none; transition: 0.3s;
+        }
+        .vocab-input:focus { border-color: var(--naranja-vibrante); }
+
+        /* --- PART 2: Structuring --- */
+        .structure-box { background: rgba(150, 200, 230, 0.15); padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+        .sentence-line { font-size: 1.1rem; line-height: 2; color: #333; margin-bottom: 15px; }
+        .connector-select {
+            padding: 5px 10px; border: 2px solid var(--azul-primario); border-radius: 5px;
+            font-family: var(--font-titulares); color: var(--azul-primario); font-size: 1rem;
+            outline: none; cursor: pointer; background: white;
+        }
+
+        /* --- PART 3: Reading --- */
+        .reading-text {
+            font-size: 1.05rem; line-height: 1.8; color: #444; text-align: justify;
+            background: #fdfdfd; padding: 25px; border: 1px solid #eee; border-radius: 10px;
+            margin-bottom: 25px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .question-block { margin-bottom: 20px; }
+        .question-text { font-weight: bold; margin-bottom: 10px; color: #222; }
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .options-list li { margin-bottom: 8px; }
+        .options-list label {
+            display: flex; align-items: center; cursor: pointer; padding: 10px 15px;
+            background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; transition: 0.2s;
+        }
+        .options-list label:hover { background: #eef2f5; border-color: var(--azul-primario); }
+        .options-list input[type="radio"] { margin-right: 15px; transform: scale(1.2); }
+
+        /* --- PART 4: Essay --- */
+        .textarea-box {
+            width: 100%; height: 250px; padding: 15px; border: 2px solid #ccc;
+            border-radius: 10px; font-family: var(--font-cuerpo); font-size: 1.05rem;
+            line-height: 1.6; resize: vertical; outline: none; box-sizing: border-box; transition: 0.3s;
+        }
+        .textarea-box:focus { border-color: var(--naranja-vibrante); }
+        .word-count { text-align: right; font-size: 0.95rem; color: #666; margin-top: 10px; font-weight: bold;}
+        .word-count span { color: var(--azul-primario); font-size: 1.1rem;}
+        .word-count.success span { color: var(--verde-exito); }
+
+        /* --- Buttons --- */
+        .btn-primary {
+            background: var(--naranja-vibrante); color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-family: var(--font-titulares);
+            font-size: 1.2rem; cursor: pointer; text-transform: uppercase; width: 100%;
+            box-shadow: 0 5px 15px rgba(245, 110, 30, 0.4); transition: 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-primary:active { transform: scale(0.95); }
+
+        /* --- Modal Resultados & Certificado --- */
+        .result-screen { display: none; }
+        .score-display { font-size: 5rem; font-family: var(--font-titulares); color: var(--naranja-vibrante); line-height: 1;}
+        
+        /* Contenedor Oculto para Generar PDF */
+        #pdf-certificate {
+            width: 800px; height: 600px; background: white; padding: 40px; box-sizing: border-box;
+            position: relative; display: none; border: 15px solid #0A468C; font-family: 'Open Sans', sans-serif;
+            text-align: center; margin: 0 auto;
+        }
+        .cert-header { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px;}
+        .cert-header img { height: 80px; }
+        .cert-title { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: #0A468C; margin: 0; text-transform: uppercase;}
+        .cert-subtitle { font-size: 1.2rem; color: #F56E1E; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
+        .cert-body { margin-top: 50px; }
+        .cert-text { font-size: 1.3rem; color: #555; }
+        .cert-name { font-family: 'Montserrat', sans-serif; font-size: 3rem; color: #333; margin: 20px 0; border-bottom: 2px solid #ccc; display: inline-block; padding: 0 50px; }
+        .cert-score-box { background: #f8f9fa; border: 3px solid #28a745; padding: 20px; border-radius: 15px; display: inline-block; margin-top: 30px; }
+        .cert-score-text { font-size: 1.2rem; color: #28a745; font-weight: bold; margin: 0;}
+        .cert-score-number { font-family: 'Montserrat', sans-serif; font-size: 4rem; color: #28a745; margin: 0; line-height: 1;}
+        .cert-footer { position: absolute; bottom: 40px; width: 100%; left: 0; display: flex; justify-content: space-around; align-items: flex-end;}
+        .signature-line { border-top: 2px solid #333; width: 200px; padding-top: 10px; font-weight: bold; font-size: 1rem; color: #333;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h1>Winter Camp <span>Final Test</span></h1>
+        </div>
+        <div class="timer-display" id="timerDisplay">⏱️ <span id="timeText">35:00</span></div>
+    </header>
+
+    <!-- LOGIN SCREEN -->
+    <div class="container" id="loginScreen">
+        <div class="login-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h2>Final Assessment</h2>
+            <p style="color: #666; margin-bottom: 20px;">You have exactly <strong>35 minutes</strong> to complete all 4 sections. The exam will submit automatically when the time is up.</p>
+            <input type="text" id="studentName" class="login-input" placeholder="Enter your full name" autocomplete="off">
+            <button class="btn-primary" onclick="startExam()">Begin Test</button>
+        </div>
+    </div>
+
+    <!-- EXAM SCREEN -->
+    <div class="container exam-screen" id="examScreen">
+        
+        <!-- PART 1: VOCABULARY -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 1: Daily Vocabulary <span class="section-points">40 Pts</span></h2>
+            <p class="instruction">Translate the following 40 words into English. Check your spelling!</p>
+            <div class="vocab-grid" id="vocabGrid"></div>
+        </div>
+
+        <!-- PART 2: CONNECTORS -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 2: Connectors & Structure <span class="section-points">10 Pts</span></h2>
+            <p class="instruction">Choose the correct connector to give logical order to this daily routine.</p>
+            <div class="structure-box">
+                <div class="sentence-line">1. <select class="connector-select" data-answer="first"><option value="">Select...</option><option value="finally">Finally</option><option value="first">First</option><option value="then">Then</option></select>, I wake up at 7:00 AM and turn off my alarm.</div>
+                <div class="sentence-line">2. <select class="connector-select" data-answer="then"><option value="">Select...</option><option value="then">Then</option><option value="first">First</option><option value="never">Never</option></select>, I take a shower and get dressed for school.</div>
+                <div class="sentence-line">3. <select class="connector-select" data-answer="after that"><option value="">Select...</option><option value="always">Always</option><option value="after that">After that</option><option value="first">First</option></select>, I have a delicious breakfast with my family.</div>
+                <div class="sentence-line">4. I <select class="connector-select" data-answer="usually"><option value="">Select...</option><option value="usually">usually</option><option value="after that">after that</option><option value="then">then</option></select> take the bus, but sometimes I walk to school.</div>
+                <div class="sentence-line">5. <select class="connector-select" data-answer="finally"><option value="">Select...</option><option value="first">First</option><option value="then">Then</option><option value="finally">Finally</option></select>, I do my homework, have dinner, and go to bed at 10 PM.</div>
+            </div>
+        </div>
+
+        <!-- PART 3: READING -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 3: Reading Comprehension <span class="section-points">20 Pts</span></h2>
+            <p class="instruction">Read the text about Sofia's routine and answer the questions below.</p>
+            <div class="reading-text">
+                <strong>Sofia's Busy Day</strong><br><br>
+                My name is Sofia and I am a student in Bolivia. My daily routine is very busy but organized. I always wake up early, at 6:30 AM. First, I get up and take a quick shower. Then, I get dressed in my uniform and brush my teeth. At 7:00 AM, I have a healthy breakfast with my parents and my little brother. We usually eat bread, eggs, and drink hot chocolate. 
+                <br><br>
+                After that, I take the bus to school. My classes start at 8:00 AM and finish at 1:00 PM. I study many subjects, but my favorite is English because I want to travel. I always have lunch at 1:30 PM at home. In the afternoon, I do my homework and study for my exams in the living room. 
+                <br><br>
+                Sometimes, I play video games or watch TV for one hour to relax. I never go to bed late because I need energy for the next day. Finally, I have dinner at 7:30 PM, read a book, and go to sleep at 9:30 PM. During the weekend, my routine changes. I wake up late and play volleyball with my friends in the park.
+            </div>
+
+            <div id="readingQuestions">
+                <div class="question-block">
+                    <div class="question-text">1. What time does Sofia wake up on weekdays?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq1" value="7:00 AM"> <span>7:00 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="6:30 AM" data-correct="true"> <span>6:30 AM</span></label></li>
+                        <li><label><input type="radio" name="rq1" value="8:00 AM"> <span>8:00 AM</span></label></li>
+                    </ul>
+                </div>
+                <div class="question-block">
+                    <div class="question-text">2. What does she usually eat for breakfast?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq2" value="Cereal and milk"> <span>Cereal and milk</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Bread, eggs, and hot chocolate" data-correct="true"> <span>Bread, eggs, and hot chocolate</span></label></li>
+                        <li><label><input type="radio" name="rq2" value="Only hot chocolate"> <span>Only hot chocolate</span></label></li>
+                    </ul>
+                </div>
+                <div class="question-block">
+                    <div class="question-text">3. Why is English her favorite subject?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq3" value="Because it is easy"> <span>Because it is easy</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="Because the teacher is fun"> <span>Because the teacher is fun</span></label></li>
+                        <li><label><input type="radio" name="rq3" value="Because she wants to travel" data-correct="true"> <span>Because she wants to travel</span></label></li>
+                    </ul>
+                </div>
+                <div class="question-block">
+                    <div class="question-text">4. What does she do in the afternoon?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq4" value="She takes a nap"> <span>She takes a nap</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="She goes to school"> <span>She goes to school</span></label></li>
+                        <li><label><input type="radio" name="rq4" value="She does homework and studies" data-correct="true"> <span>She does homework and studies</span></label></li>
+                    </ul>
+                </div>
+                <div class="question-block">
+                    <div class="question-text">5. What does she do on the weekend?</div>
+                    <ul class="options-list">
+                        <li><label><input type="radio" name="rq5" value="Wakes up late and plays volleyball" data-correct="true"> <span>Wakes up late and plays volleyball</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="Goes to school"> <span>Goes to school</span></label></li>
+                        <li><label><input type="radio" name="rq5" value="Wakes up early and reads a book"> <span>Wakes up early and reads a book</span></label></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 4: ESSAY -->
+        <div class="exam-section">
+            <h2 class="section-title">Part 4: Essay Creation <span class="section-points">30 Pts</span></h2>
+            <p class="instruction">Write an essay about <strong>Your Daily Routine</strong>. Use the vocabulary and connectors from the previous sections. <br><strong>Requirement: Minimum 100 words.</strong></p>
+            <textarea class="textarea-box" id="essayText" placeholder="My name is... and my daily routine is..."></textarea>
+            <div class="word-count" id="wordCountDisplay">Words: <span id="essayWordCount">0</span> / 100</div>
+        </div>
+
+        <button class="btn-primary" style="margin-bottom: 40px; padding: 20px;" onclick="gradeExam()">Submit Final Exam</button>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div class="container result-screen" id="resultScreen">
+        <div class="login-box" style="max-width: 600px;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">Exam Completed!</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 20px;">Student: <strong id="resName">---</strong></p>
+            
+            <div class="score-display"><span id="totalScore">0</span><span style="font-size: 2.5rem; color: #333;">/100</span></div>
+            
+            <p id="teacherFeedback" style="font-weight: bold; color: var(--naranja-vibrante); font-size: 1.2rem; margin: 20px 0;"></p>
+
+            <button class="btn-primary" onclick="generatePDF()">Download Certificate</button>
+        </div>
+    </div>
+
+    <!-- CERTIFICADO OCULTO PARA EXPORTAR A PDF -->
+    <div id="pdf-certificate">
+        <div class="cert-header">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo">
+            <div>
+                <h1 class="cert-title">Teacher Ivan HUB</h1>
+                <div class="cert-subtitle">Winter Camp English Program</div>
+            </div>
+        </div>
+        
+        <div class="cert-body">
+            <div class="cert-text">This certifies that</div>
+            <div class="cert-name" id="certStudentName">Student Name</div>
+            <div class="cert-text">has successfully completed the</div>
+            <h2 style="font-family: 'Montserrat', sans-serif; color: #0A468C; margin: 15px 0;">Final Level Assessment</h2>
+            
+            <div class="cert-score-box">
+                <p class="cert-score-text">FINAL SCORE</p>
+                <p class="cert-score-number"><span id="certScore">0</span> / 100</p>
+            </div>
+        </div>
+
+        <div class="cert-footer">
+            <div style="text-align: center;">
+                <div class="signature-line" id="certDate">Date</div>
+                <div style="font-size: 0.9rem; color: #555; margin-top: 5px;">Date of Completion</div>
+            </div>
+            <div style="text-align: center;">
+                <div class="signature-line" style="font-family: 'Montserrat', sans-serif; font-style: italic; font-size: 1.2rem;">Teacher Ivan</div>
+                <div style="font-size: 0.9rem; color: #555; margin-top: 5px;">Lead Educator</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA PARA PART 1 (40 Palabras) ---
+        const vocabWords = [
+            { es: "Despertar", en: "wake up" }, { es: "Levantar", en: "get up" }, { es: "Duchar", en: "take a shower" }, { es: "Cepillar", en: "brush" },
+            { es: "Dientes", en: "teeth" }, { es: "Vestirse", en: "get dressed" }, { es: "Desayunar", en: "have breakfast" }, { es: "Ir", en: "go" },
+            { es: "Escuela", en: "school" }, { es: "Estudiar", en: "study" }, { es: "Almorzar", en: "have lunch" }, { es: "Hacer", en: "do" },
+            { es: "Tarea", en: "homework" }, { es: "Ver", en: "watch" }, { es: "Cenar", en: "have dinner" }, { es: "Dormir", en: "sleep" },
+            { es: "Cama", en: "bed" }, { es: "Mañana", en: "morning" }, { es: "Tarde (12-6pm)", en: "afternoon" }, { es: "Noche", en: "night" },
+            { es: "Siempre", en: "always" }, { es: "Usualmente", en: "usually" }, { es: "A veces", en: "sometimes" }, { es: "Nunca", en: "never" },
+            { es: "Temprano", en: "early" }, { es: "Tarde (Hora)", en: "late" }, { es: "Cada día", en: "everyday" }, { es: "Lunes", en: "monday" },
+            { es: "Martes", en: "tuesday" }, { es: "Miércoles", en: "wednesday" }, { es: "Jueves", en: "thursday" }, { es: "Viernes", en: "friday" },
+            { es: "Cara", en: "face" }, { es: "Manos", en: "hands" }, { es: "Ropa", en: "clothes" }, { es: "Autobús", en: "bus" },
+            { es: "Caminar", en: "walk" }, { es: "Leer", en: "read" }, { es: "Jugar", en: "play" }, { es: "Escuchar", en: "listen" }
+        ];
+
+        // Renderizar Grid
+        const grid = document.getElementById('vocabGrid');
+        vocabWords.forEach((word, index) => {
+            grid.innerHTML += `
+                <div class="vocab-item">
+                    <span class="vocab-word">${index + 1}. ${word.es}</span>
+                    <input type="text" class="vocab-input vocab-check" data-answer="${word.en}" autocomplete="off">
+                </div>
+            `;
+        });
+
+        // Contar palabras ensayo
+        const essayInput = document.getElementById('essayText');
+        const countDisplay = document.getElementById('essayWordCount');
+        const countContainer = document.getElementById('wordCountDisplay');
+
+        essayInput.addEventListener('input', function() {
+            let text = this.value.trim();
+            let words = text === "" ? 0 : text.split(/\s+/).length;
+            countDisplay.textContent = words;
+            if(words >= 100) countContainer.classList.add('success');
+            else countContainer.classList.remove('success');
+        });
+
+        // Variables Globales
+        let studentName = "";
+        let timerInterval;
+        let timeLeft = 35 * 60; // 35 minutos en segundos
+        let finalScore = 0;
+
+        function startExam() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if(!nameInput) {
+                alert("Please enter your name to begin.");
+                return;
+            }
+            studentName = nameInput;
+            
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('examScreen').style.display = 'block';
+            document.getElementById('timerDisplay').style.display = 'flex';
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                if(minutes < 10) minutes = '0' + minutes;
+                if(seconds < 10) seconds = '0' + seconds;
+                
+                document.getElementById('timeText').textContent = `${minutes}:${seconds}`;
+
+                if(timeLeft <= 300) document.getElementById('timerDisplay').classList.add('warning'); // Faltan 5 min
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Submitting exam automatically.");
+                    gradeExam();
+                }
+            }, 1000);
+        }
+
+        function gradeExam() {
+            clearInterval(timerInterval);
+            document.getElementById('timerDisplay').style.display = 'none';
+
+            let scoreP1 = 0; // 40 pts
+            let scoreP2 = 0; // 10 pts
+            let scoreP3 = 0; // 20 pts
+            let scoreP4 = 0; // 30 pts
+
+            // Part 1: Vocab
+            document.querySelectorAll('.vocab-check').forEach(input => {
+                if(input.value.trim().toLowerCase() === input.getAttribute('data-answer')) scoreP1 += 1;
+            });
+
+            // Part 2: Connectors
+            document.querySelectorAll('.connector-select').forEach(select => {
+                if(select.value === select.getAttribute('data-answer')) scoreP2 += 2;
+            });
+
+            // Part 3: Reading
+            for(let i=1; i<=5; i++) {
+                const selected = document.querySelector(`input[name="rq${i}"]:checked`);
+                if(selected && selected.hasAttribute('data-correct')) scoreP3 += 4;
+            }
+
+            // Part 4: Essay
+            let essayWords = essayInput.value.trim() === "" ? 0 : essayInput.value.trim().split(/\s+/).length;
+            if(essayWords >= 100) scoreP4 = 30;
+            else if(essayWords >= 75) scoreP4 = 20;
+            else if(essayWords >= 50) scoreP4 = 10;
+            else if(essayWords > 0) scoreP4 = 5;
+
+            finalScore = scoreP1 + scoreP2 + scoreP3 + scoreP4;
+
+            // UI de Resultados
+            document.getElementById('examScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+            document.getElementById('resName').textContent = studentName;
+            document.getElementById('totalScore').textContent = finalScore;
+
+            const feedback = document.getElementById('teacherFeedback');
+            if(finalScore >= 90) feedback.textContent = "Outstanding Performance! 🏆";
+            else if(finalScore >= 70) feedback.textContent = "Great Job! You have a solid foundation. 🌟";
+            else if(finalScore >= 51) feedback.textContent = "You Passed! Keep practicing. 👍";
+            else feedback.textContent = "Keep trying! Review the material. 📚";
+
+            // Preparar el PDF
+            document.getElementById('certStudentName').textContent = studentName;
+            document.getElementById('certScore').textContent = finalScore;
+            
+            let today = new Date();
+            document.getElementById('certDate').textContent = today.toLocaleDateString();
+        }
+
+        function generatePDF() {
+            const element = document.getElementById('pdf-certificate');
+            element.style.display = 'block';
+
+            let opt = {
+                margin:       0,
+                filename:     `Teacher_Ivan_Certificate_${studentName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
