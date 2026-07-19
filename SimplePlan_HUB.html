@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Plan Analyzer | Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --blanco-nieve: #FAFAF0; 
+            --gris-claro: #f0f4f8;
+            --verde-correcto: #4CAF50;
+            --rojo-error: #F44336;
+            --texto-oscuro: #333333;
+            --shadow: 0 10px 30px rgba(10, 70, 140, 0.1);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--blanco-nieve);
+            color: var(--texto-oscuro);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--azul-primario); margin: 0; }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 8px solid var(--azul-primario);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .back-link { position: absolute; top: 20px; left: 20px; text-decoration: none; color: #666; font-weight: 600; transition: 0.2s;}
+        .back-link:hover { color: var(--naranja-vibrante); }
+        
+        header img { height: 60px; margin-bottom: 10px; }
+        header h1 { font-size: 2.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase;}
+        .subtitle { color: #666; margin-top: 5px; font-weight: 600; font-size: 1.1rem;}
+
+        /* MAIN CONTAINER */
+        .container { max-width: 1200px; margin: 30px auto 50px; width: 95%; }
+
+        /* TABS */
+        .tabs-header {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 20px;
+            scrollbar-width: thin; scrollbar-color: var(--naranja-vibrante) #eee;
+        }
+        .tabs-header::-webkit-scrollbar { height: 8px; }
+        .tabs-header::-webkit-scrollbar-thumb { background-color: var(--naranja-vibrante); border-radius: 10px; }
+        
+        .tab-btn {
+            background: white; border: 2px solid #ddd; padding: 12px 25px; border-radius: 50px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; color: #666; cursor: pointer;
+            white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--azul-primario); color: var(--azul-primario); }
+        .tab-btn.active {
+            background: var(--naranja-vibrante); color: white; transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(245, 110, 30, 0.3); border-color: var(--naranja-vibrante);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TWO COLUMN LAYOUT */
+        .analyzer-layout {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .analyzer-layout { grid-template-columns: 1fr; }
+            .video-section { position: static !important; }
+        }
+
+        /* VIDEO SECTION (STICKY) */
+        .video-section {
+            background: white; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--naranja-vibrante); position: sticky; top: 20px;
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* LYRICS SECTION */
+        .lyrics-section, .exercise-section {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            border-top: 5px solid var(--azul-primario);
+        }
+        .instructions {
+            background: var(--gris-claro); padding: 15px 20px; border-left: 5px solid var(--naranja-vibrante);
+            border-radius: 0 8px 8px 0; font-size: 1rem; color: #444; margin-bottom: 30px; font-style: italic;
+        }
+
+        /* LYRICS & TRANSLATIONS */
+        .lyric-line { margin-bottom: 18px; font-family: 'Open Sans', sans-serif; font-size: 1.15rem; font-weight: 600; color: #333; line-height: 1.5; }
+        .lyric-translation { display: block; font-size: 0.95rem; color: #666; font-style: italic; font-weight: 400; margin-top: 4px; }
+
+        .gap-input {
+            width: 120px; padding: 4px 8px; border: 2px solid #ccc; border-radius: 6px;
+            font-family: 'Open Sans', sans-serif; font-weight: 700; text-align: center;
+            outline: none; transition: 0.3s; font-size: 1rem; margin: 0 5px; background: white; color: var(--azul-primario);
+        }
+        .gap-input:focus { border-color: var(--naranja-vibrante); box-shadow: 0 0 5px rgba(245, 110, 30, 0.3);}
+        .gap-input.correct { border-color: var(--verde-correcto); background: #e8f5e9; color: #2e7d32; pointer-events: none;}
+        .gap-input.wrong { border-color: var(--rojo-error); background: #ffebee; color: #c62828; }
+        
+        /* EXERCISE QUESTIONS */
+        .question-block { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #ddd; font-size: 1.1rem; font-weight: 600; }
+        .question-block:last-child { border-bottom: none; }
+
+        /* BUTTONS & FEEDBACK */
+        .btn-check {
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 40px; border-radius: 8px;
+            font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; width: 100%; font-family: 'Montserrat', sans-serif; margin-top: 35px;
+            display: flex; justify-content: center; align-items: center; gap: 10px; text-transform: uppercase;
+        }
+        .btn-check:hover { background: #d85c14; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 110, 30, 0.3);}
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; display: none; font-size: 1.1rem;
+        }
+        .success { background: #e8f5e9; color: var(--verde-correcto); }
+        .danger { background: #fff3e0; color: #ff9800; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="back-link">← Volver al HUB</a>
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+        <h1><span class="material-icons-round">library_music</span> Simple Plan Masterclass</h1>
+        <div class="subtitle">Listen, Fill the Gaps & Learn the Meaning</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="openTab('tab1', this)"><span class="material-icons-round">play_circle</span> Untitled</button>
+            <button class="tab-btn" onclick="openTab('tab2', this)"><span class="material-icons-round">play_circle</span> Me Against The World</button>
+            <button class="tab-btn" onclick="openTab('tab3', this)"><span class="material-icons-round">play_circle</span> I'm Just A Kid</button>
+            <button class="tab-btn" onclick="openTab('tab4', this)"><span class="material-icons-round">assignment</span> Vocabulary Test</button>
+        </div>
+
+        <!-- TAB 1: UNTITLED -->
+        <div id="tab1" class="tab-content active">
+            <div class="analyzer-layout">
+                <div class="video-section">
+                    <div class="video-wrapper">
+                        <!-- Official Video Link -->
+                        <iframe src="https://www.youtube.com/embed/ZQ7oqmikZDQ" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="lyrics-section">
+                    <div class="instructions">
+                        <span class="material-icons-round" style="vertical-align: middle;">headphones</span> <strong>Song 1:</strong> Listen to "Untitled" and fill in the missing words. Read the Spanish translation to understand the context.
+                    </div>
+                    
+                    <div id="lyrics-tab1">
+                        <div class="lyric-line">I open my eyes<div class="lyric-translation">Abro mis ojos</div></div>
+                        <div class="lyric-line">I try to see but I'm blinded by the white light<div class="lyric-translation">Intento ver pero estoy cegado por la luz blanca</div></div>
+                        <div class="lyric-line">I can't remember how<div class="lyric-translation">No puedo recordar cómo</div></div>
+                        <div class="lyric-line">I can't (1) <input type="text" class="gap-input" data-ans="remember"> why<div class="lyric-translation">No puedo (1) recordar por qué</div></div>
+                        <div class="lyric-line">I'm lyin' (2) <input type="text" class="gap-input" data-ans="here"> tonight<div class="lyric-translation">Estoy acostado (2) aquí esta noche</div></div>
+                        <div class="lyric-line">And I can't stand the pain<div class="lyric-translation">Y no soporto el dolor</div></div>
+                        <div class="lyric-line">And I can't make it go away<div class="lyric-translation">Y no puedo hacer que desaparezca</div></div>
+                        <div class="lyric-line">No I can't stand the pain<div class="lyric-translation">No, no soporto el dolor</div></div>
+                        <div class="lyric-line">How (3) <input type="text" class="gap-input" data-ans="could"> (4) <input type="text" class="gap-input" data-ans="this"> (5) <input type="text" class="gap-input" data-ans="happen"> to me?<div class="lyric-translation">¿Cómo (3) pudo (4) esto (5) pasarme a mí?</div></div>
+                        <div class="lyric-line">I've made my mistakes<div class="lyric-translation">He cometido mis errores</div></div>
+                        <div class="lyric-line">Got nowhere to run<div class="lyric-translation">No tengo adónde huir</div></div>
+                        <div class="lyric-line">The night goes on<div class="lyric-translation">La noche continúa</div></div>
+                        <div class="lyric-line">As I'm fadin' away<div class="lyric-translation">Mientras me desvanezco</div></div>
+                        <div class="lyric-line">I'm sick of this life<div class="lyric-translation">Estoy harto de esta vida</div></div>
+                        <div class="lyric-line">I (6) <input type="text" class="gap-input" data-ans="just"> wanna scream<div class="lyric-translation">Yo (6) solo quiero gritar</div></div>
+                        <div class="lyric-line">How could this happen to me?<div class="lyric-translation">¿Cómo pudo pasarme esto a mí?</div></div>
+                        <div class="lyric-line">Everybody's screamin'<div class="lyric-translation">Todos están gritando</div></div>
+                        <div class="lyric-line">I try to make a (7) <input type="text" class="gap-input" data-ans="sound"> but no one hears me<div class="lyric-translation">Intento hacer un (7) sonido pero nadie me escucha</div></div>
+                        <div class="lyric-line">I'm slippin' off the edge<div class="lyric-translation">Me estoy resbalando del borde</div></div>
+                        <div class="lyric-line">I'm hangin' by a thread<div class="lyric-translation">Estoy colgando de un hilo</div></div>
+                        <div class="lyric-line">I (8) <input type="text" class="gap-input" data-ans="wanna"> start this (10) <input type="text" class="gap-input" data-ans="over"> again<div class="lyric-translation">Yo (8) quiero empezar esto de (10) nuevo otra vez</div></div>
+                        <div class="lyric-line">So I try to hold onto a (11) <input type="text" class="gap-input" data-ans="time"> (12) <input type="text" class="gap-input" data-ans="when"> (13) <input type="text" class="gap-input" data-ans="nothing"> mattered<div class="lyric-translation">Así que intento aferrarme a un (11) tiempo (12) cuando (13) nada importaba</div></div>
+                        <div class="lyric-line">And I can't explain what happened<div class="lyric-translation">Y no puedo explicar qué pasó</div></div>
+                        <div class="lyric-line">And I can't (14) <input type="text" class="gap-input" data-ans="erase"> the things (15) <input type="text" class="gap-input" data-ans="that"> I've done<div class="lyric-translation">Y no puedo (14) borrar las cosas (15) que he hecho</div></div>
+                        <div class="lyric-line">No I can't<div class="lyric-translation">No, no puedo</div></div>
+                        <div class="lyric-line">How could this (16) <input type="text" class="gap-input" data-ans="happen"> to me?<div class="lyric-translation">¿Cómo pudo (16) pasarme esto a mí?</div></div>
+                        <div class="lyric-line">I've made my mistakes<div class="lyric-translation">He cometido mis errores</div></div>
+                        <div class="lyric-line">Got nowhere to run<div class="lyric-translation">No tengo adónde huir</div></div>
+                        <div class="lyric-line">The (17) <input type="text" class="gap-input" data-ans="night"> (18) <input type="text" class="gap-input" data-ans="goes"> on<div class="lyric-translation">La (17) noche (18) continúa</div></div>
+                        <div class="lyric-line">As I'm fadin' away<div class="lyric-translation">Mientras me desvanezco</div></div>
+                        <div class="lyric-line">I'm sick of (19) <input type="text" class="gap-input" data-ans="this"> life<div class="lyric-translation">Estoy harto de (19) esta vida</div></div>
+                        <div class="lyric-line">I just (20) <input type="text" class="gap-input" data-ans="wanna"> scream<div class="lyric-translation">Yo solo (20) quiero gritar</div></div>
+                        <div class="lyric-line">How could (21) <input type="text" class="gap-input" data-ans="this"> happen to me?<div class="lyric-translation">¿Cómo pudo (21) esto pasarme a mí?</div></div>
+                        <div class="lyric-line">I've made my mistakes<div class="lyric-translation">He cometido mis errores</div></div>
+                        <div class="lyric-line">Got nowhere to run<div class="lyric-translation">No tengo adónde huir</div></div>
+                        <div class="lyric-line">The night goes on<div class="lyric-translation">La noche continúa</div></div>
+                        <div class="lyric-line">As I'm fading away<div class="lyric-translation">Mientras me desvanezco</div></div>
+                        <div class="lyric-line">I'm sick of this life<div class="lyric-translation">Estoy harto de esta vida</div></div>
+                        <div class="lyric-line">I (22) <input type="text" class="gap-input" data-ans="just"> wanna scream<div class="lyric-translation">Yo (22) solo quiero gritar</div></div>
+                        <div class="lyric-line">How could this happen to me?<div class="lyric-translation">¿Cómo pudo pasarme esto a mí?</div></div>
+                    </div>
+                    
+                    <button class="btn-check" onclick="checkAnswers('tab1')">Revisar Respuestas <span class="material-icons-round">spellcheck</span></button>
+                    <div id="feedback-tab1" class="feedback-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ME AGAINST THE WORLD -->
+        <div id="tab2" class="tab-content">
+            <div class="analyzer-layout">
+                <div class="video-section">
+                    <div class="video-wrapper">
+                        <!-- Official Audio Link -->
+                        <iframe src="https://www.youtube.com/embed/j_b8fV_iIik" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="lyrics-section">
+                    <div class="instructions">
+                        <span class="material-icons-round" style="vertical-align: middle;">headphones</span> <strong>Song 2:</strong> Listen to "Me Against The World" and fill in the missing words. Read the Spanish translation carefully.
+                    </div>
+                    
+                    <div id="lyrics-tab2">
+                        <div class="lyric-line">We're not gonna be just a part of their game<div class="lyric-translation">No vamos a ser solo parte de su juego</div></div>
+                        <div class="lyric-line">We're not gonna be just the victims<div class="lyric-translation">No vamos a ser solo las víctimas</div></div>
+                        <div class="lyric-line">They're taking our dreams<div class="lyric-translation">Están tomando nuestros sueños</div></div>
+                        <div class="lyric-line">And they tear them apart<div class="lyric-translation">Y los destrozan</div></div>
+                        <div class="lyric-line">Till everyone's the same<div class="lyric-translation">Hasta que todos sean iguales</div></div>
+                        <div class="lyric-line">I've got no place to go<div class="lyric-translation">No tengo adónde ir</div></div>
+                        <div class="lyric-line">I've got nowhere to run<div class="lyric-translation">No tengo adónde huir</div></div>
+                        <div class="lyric-line">They love to watch me fall<div class="lyric-translation">Les encanta verme caer</div></div>
+                        <div class="lyric-line">They think they (1) <input type="text" class="gap-input" data-ans="know"> it all<div class="lyric-translation">Creen que lo (1) saben todo</div></div>
+                        <div class="lyric-line">I'm a nightmare, a disaster<div class="lyric-translation">Soy una pesadilla, un desastre</div></div>
+                        <div class="lyric-line">That's what (2) <input type="text" class="gap-input" data-ans="they"> (3) <input type="text" class="gap-input" data-ans="always"> said<div class="lyric-translation">Eso es lo que (2) ellos (3) siempre dijeron</div></div>
+                        <div class="lyric-line">I'm a (4) <input type="text" class="gap-input" data-ans="lost"> cause not a hero<div class="lyric-translation">Soy una causa (4) perdida, no un héroe</div></div>
+                        <div class="lyric-line">But I'll make it on my own<div class="lyric-translation">Pero lo lograré por mi cuenta</div></div>
+                        <div class="lyric-line">I've (5) <input type="text" class="gap-input" data-ans="gotta"> prove them wrong<div class="lyric-translation">Tengo que (5) demostrarles que se equivocan</div></div>
+                        <div class="lyric-line">Me (6) <input type="text" class="gap-input" data-ans="against"> the world<div class="lyric-translation">Yo (6) contra el mundo</div></div>
+                        <div class="lyric-line">It's me (7) <input type="text" class="gap-input" data-ans="against"> the world<div class="lyric-translation">Soy yo (7) contra el mundo</div></div>
+                        <div class="lyric-line">We won't let them change<div class="lyric-translation">No dejaremos que cambien</div></div>
+                        <div class="lyric-line">How we feel in our hearts<div class="lyric-translation">Cómo nos sentimos en nuestros corazones</div></div>
+                        <div class="lyric-line">We're not gonna let them control us<div class="lyric-translation">No vamos a dejar que nos controlen</div></div>
+                        <div class="lyric-line">We won't let them shove<div class="lyric-translation">No dejaremos que metan</div></div>
+                        <div class="lyric-line">All their thoughts in our heads<div class="lyric-translation">Todos sus pensamientos en nuestras cabezas</div></div>
+                        <div class="lyric-line">And we'll never be like them<div class="lyric-translation">Y nunca seremos como ellos</div></div>
+                        <div class="lyric-line">I've got no place to go<div class="lyric-translation">No tengo adónde ir</div></div>
+                        <div class="lyric-line">I've got nowhere to run<div class="lyric-translation">No tengo adónde huir</div></div>
+                        <div class="lyric-line">They love to (8) <input type="text" class="gap-input" data-ans="watch"> me fall<div class="lyric-translation">Les encanta (8) verme caer</div></div>
+                        <div class="lyric-line">They (9) <input type="text" class="gap-input" data-ans="think"> they know it all<div class="lyric-translation">Ellos (9) creen que lo saben todo</div></div>
+                        <div class="lyric-line">I'm a nightmare, a disaster<div class="lyric-translation">Soy una pesadilla, un desastre</div></div>
+                        <div class="lyric-line">That's (10) <input type="text" class="gap-input" data-ans="what"> they (11) <input type="text" class="gap-input" data-ans="always"> said<div class="lyric-translation">Eso es (10) lo que ellos (11) siempre dijeron</div></div>
+                        <div class="lyric-line">I'm a lost cause, not a hero<div class="lyric-translation">Soy una causa perdida, no un héroe</div></div>
+                        <div class="lyric-line">But I'll (12) <input type="text" class="gap-input" data-ans="make"> it on my own<div class="lyric-translation">Pero lo (12) lograré por mi cuenta</div></div>
+                        <div class="lyric-line">I've (13) <input type="text" class="gap-input" data-ans="gotta"> (14) <input type="text" class="gap-input" data-ans="prove"> (15) <input type="text" class="gap-input" data-ans="them"> wrong<div class="lyric-translation">Tengo (13) que (14) demostrar (15) que se equivocan</div></div>
+                        <div class="lyric-line">It's me (16) <input type="text" class="gap-input" data-ans="against"> the world<div class="lyric-translation">Soy yo (16) contra el mundo</div></div>
+                        <div class="lyric-line">World, world, world...<div class="lyric-translation">Mundo, mundo, mundo...</div></div>
+                        <div class="lyric-line">Me (17) <input type="text" class="gap-input" data-ans="against"> the world<div class="lyric-translation">Yo (17) contra el mundo</div></div>
+                        <div class="lyric-line">Now I'm (18) <input type="text" class="gap-input" data-ans="sick"> of this waiting<div class="lyric-translation">Ahora estoy (18) harto de esta espera</div></div>
+                        <div class="lyric-line">So come on and take your shot<div class="lyric-translation">Así que vamos, intenta dar el golpe</div></div>
+                        <div class="lyric-line">You can spit out (19) <input type="text" class="gap-input" data-ans="your"> insults<div class="lyric-translation">Puedes escupir (19) tus insultos</div></div>
+                        <div class="lyric-line">But nothing you say is (20) <input type="text" class="gap-input" data-ans="gonna"> change us<div class="lyric-translation">Pero nada de lo que digas (20) va a cambiarnos</div></div>
+                        <div class="lyric-line">You can sit (21) <input type="text" class="gap-input" data-ans="there"> and judge me<div class="lyric-translation">Puedes sentarte (21) ahí y juzgarme</div></div>
+                        <div class="lyric-line">Say (22) <input type="text" class="gap-input" data-ans="what"> you want to<div class="lyric-translation">Di (22) lo que quieras</div></div>
+                        <div class="lyric-line">We'll never let you win<div class="lyric-translation">Nunca te dejaremos ganar</div></div>
+                        <div class="lyric-line">I'm a nightmare, a disaster<div class="lyric-translation">Soy una pesadilla, un desastre</div></div>
+                        <div class="lyric-line">That's what they always said<div class="lyric-translation">Eso es lo que siempre dijeron</div></div>
+                        <div class="lyric-line">I'm a lost cause, not a hero<div class="lyric-translation">Soy una causa perdida, no un héroe</div></div>
+                        <div class="lyric-line">But I'll (23) <input type="text" class="gap-input" data-ans="make"> it on my own<div class="lyric-translation">Pero lo (23) lograré por mi cuenta</div></div>
+                        <div class="lyric-line">I'm (24) <input type="text" class="gap-input" data-ans="gonna"> prove them wrong<div class="lyric-translation">Voy (24) a demostrarles que se equivocan</div></div>
+                        <div class="lyric-line">They'll never bring us down<div class="lyric-translation">Nunca nos derribarán</div></div>
+                        <div class="lyric-line">We'll never fall in line<div class="lyric-translation">Nunca nos alinearemos</div></div>
+                        <div class="lyric-line">I'll (25) <input type="text" class="gap-input" data-ans="make"> it on my own<div class="lyric-translation">Lo (25) lograré por mi cuenta</div></div>
+                        <div class="lyric-line">Me against the world<div class="lyric-translation">Yo contra el mundo</div></div>
+                    </div>
+
+                    <button class="btn-check" onclick="checkAnswers('tab2')">Revisar Respuestas <span class="material-icons-round">spellcheck</span></button>
+                    <div id="feedback-tab2" class="feedback-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: I'M JUST A KID -->
+        <div id="tab3" class="tab-content">
+            <div class="analyzer-layout">
+                <div class="video-section">
+                    <div class="video-wrapper">
+                        <!-- Official Video Link -->
+                        <iframe src="https://www.youtube.com/embed/_GOR5gvQwDI" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="lyrics-section">
+                    <div class="instructions">
+                        <span class="material-icons-round" style="vertical-align: middle;">headphones</span> <strong>Song 3:</strong> Listen to "I'm Just A Kid" and fill in the missing words. Look at the Spanish translations to help you.
+                    </div>
+                    
+                    <div id="lyrics-tab3">
+                        <div class="lyric-line">I woke up it was 7<div class="lyric-translation">Me desperté, eran las 7</div></div>
+                        <div class="lyric-line">I waited till 11<div class="lyric-translation">Esperé hasta las 11</div></div>
+                        <div class="lyric-line">To figure out that no one would call<div class="lyric-translation">Para darme cuenta de que nadie llamaría</div></div>
+                        <div class="lyric-line">I think I've got a lot of friends<div class="lyric-translation">Creo que tengo muchos amigos</div></div>
+                        <div class="lyric-line">But I don't hear from them<div class="lyric-translation">Pero no sé nada de ellos</div></div>
+                        <div class="lyric-line">What's another night all alone?<div class="lyric-translation">¿Qué es otra noche completamente solo?</div></div>
+                        <div class="lyric-line">When your spending everyday on your own<div class="lyric-translation">Cuando pasas todos los días por tu cuenta</div></div>
+                        <div class="lyric-line">And here it goes<div class="lyric-translation">Y aquí va</div></div>
+                        <div class="lyric-line">I'm just a kid and life is a nightmare<div class="lyric-translation">Solo soy un niño y la vida es una pesadilla</div></div>
+                        <div class="lyric-line">I'm just a kid, I know that it's not fair<div class="lyric-translation">Solo soy un niño, sé que no es justo</div></div>
+                        <div class="lyric-line">Nobody cares<div class="lyric-translation">A nadie le importa</div></div>
+                        <div class="lyric-line">'Cause I'm alone and the world is<div class="lyric-translation">Porque estoy solo y el mundo se está</div></div>
+                        <div class="lyric-line">Having more fun than me<div class="lyric-translation">Divirtiendo más que yo</div></div>
+                        <div class="lyric-line">Tonight<div class="lyric-translation">Esta noche</div></div>
+                        <div class="lyric-line">And maybe (1) <input type="text" class="gap-input" data-ans="when"> the night is dead<div class="lyric-translation">Y tal vez (1) cuando la noche esté muerta</div></div>
+                        <div class="lyric-line">I'll crawl into my bed<div class="lyric-translation">Me arrastraré a mi cama</div></div>
+                        <div class="lyric-line">Staring at (2) <input type="text" class="gap-input" data-ans="these"> 4 walls again<div class="lyric-translation">Mirando a (2) estas 4 paredes de nuevo</div></div>
+                        <div class="lyric-line">I'll try to think about the last time<div class="lyric-translation">Intentaré pensar en la última vez</div></div>
+                        <div class="lyric-line">I had a good time<div class="lyric-translation">Que pasé un buen rato</div></div>
+                        <div class="lyric-line">Everyone's got somewhere to go<div class="lyric-translation">Todos tienen un lugar adonde ir</div></div>
+                        <div class="lyric-line">And they're gonna leave me here on my own<div class="lyric-translation">Y me van a dejar aquí por mi cuenta</div></div>
+                        <div class="lyric-line">And here it goes<div class="lyric-translation">Y aquí va</div></div>
+                        <div class="lyric-line">I'm just a kid and life is a nightmare<div class="lyric-translation">Solo soy un niño y la vida es una pesadilla</div></div>
+                        <div class="lyric-line">I'm just a kid, I (3) <input type="text" class="gap-input" data-ans="know"> that it's not fair<div class="lyric-translation">Solo soy un niño, yo (3) sé que no es justo</div></div>
+                        <div class="lyric-line">Nobody cares, cause I'm alone and the world is<div class="lyric-translation">A nadie le importa, porque estoy solo y el mundo se está</div></div>
+                        <div class="lyric-line">Having more fun than me<div class="lyric-translation">Divirtiendo más que yo</div></div>
+                        <div class="lyric-line">What the (4) <input type="text" class="gap-input" data-ans="hell"> is (5) <input type="text" class="gap-input" data-ans="wrong"> with me?<div class="lyric-translation">¿Qué (4) diablos pasa (5) de malo conmigo?</div></div>
+                        <div class="lyric-line">Don't fit in with anybody<div class="lyric-translation">No encajo con nadie</div></div>
+                        <div class="lyric-line">How did this happen to me?<div class="lyric-translation">¿Cómo me pasó esto a mí?</div></div>
+                        <div class="lyric-line">Wide awake I'm (6) <input type="text" class="gap-input" data-ans="bored"> and I can't fall asleep<div class="lyric-translation">Completamente despierto estoy (6) aburrido y no puedo quedarme dormido</div></div>
+                        <div class="lyric-line">And every night is the worst night ever<div class="lyric-translation">Y cada noche es la peor noche de todas</div></div>
+                        <div class="lyric-line">I'm just a kid<div class="lyric-translation">Solo soy un niño</div></div>
+                        <div class="lyric-line">I'm just a kid<div class="lyric-translation">Solo soy un niño</div></div>
+                        <div class="lyric-line">I'm just a kid (I'm just a kid)<div class="lyric-translation">Solo soy un niño (solo soy un niño)</div></div>
+                        <div class="lyric-line">Yeah, I'm (7) <input type="text" class="gap-input" data-ans="just"> a kid...<div class="lyric-translation">Sí, (7) solo soy un niño...</div></div>
+                        <div class="lyric-line">Yeah, I'm (8) <input type="text" class="gap-input" data-ans="just"> a kid...<div class="lyric-translation">Sí, (8) solo soy un niño...</div></div>
+                        <div class="lyric-line">I'm just a kid and life is a nightmare<div class="lyric-translation">Solo soy un niño y la vida es una pesadilla</div></div>
+                        <div class="lyric-line">I'm just a kid, I know (9) <input type="text" class="gap-input" data-ans="that"> its not fair<div class="lyric-translation">Solo soy un niño, sé (9) que no es justo</div></div>
+                        <div class="lyric-line">Nobody cares, cause I'm alone and the world is<div class="lyric-translation">A nadie le importa, porque estoy solo y el mundo está</div></div>
+                        <div class="lyric-line">Nobody wants to be alone in the world<div class="lyric-translation">Nadie quiere estar solo en el mundo</div></div>
+                        <div class="lyric-line">I'm just a kid and life is a nightmare<div class="lyric-translation">Solo soy un niño y la vida es una pesadilla</div></div>
+                        <div class="lyric-line">I'm just a kid, I know that its not fair<div class="lyric-translation">Solo soy un niño, sé que no es justo</div></div>
+                        <div class="lyric-line">Nobody cares, cause I'm alone and the world is<div class="lyric-translation">A nadie le importa, porque estoy solo y el mundo está</div></div>
+                        <div class="lyric-line">Nobody wants to be alone in the world<div class="lyric-translation">Nadie quiere estar solo en el mundo</div></div>
+                        <div class="lyric-line">Nobody cares, cause I'm alone and the world is<div class="lyric-translation">A nadie le importa, porque estoy solo y el mundo se está</div></div>
+                        <div class="lyric-line">Having more fun (10) <input type="text" class="gap-input" data-ans="than"> me tonight<div class="lyric-translation">Divirtiendo más (10) que yo esta noche</div></div>
+                        <div class="lyric-line">I'm all alone tonight<div class="lyric-translation">Estoy completamente solo esta noche</div></div>
+                        <div class="lyric-line">Nobody cares tonight<div class="lyric-translation">A nadie le importa esta noche</div></div>
+                        <div class="lyric-line">'Cause I'm just a kid tonight<div class="lyric-translation">Porque solo soy un niño esta noche</div></div>
+                    </div>
+
+                    <button class="btn-check" onclick="checkAnswers('tab3')">Revisar Respuestas <span class="material-icons-round">spellcheck</span></button>
+                    <div id="feedback-tab3" class="feedback-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: VOCABULARY EXERCISES -->
+        <div id="tab4" class="tab-content">
+            <div class="exercise-section">
+                <div class="instructions">
+                    <span class="material-icons-round" style="vertical-align: middle;">assignment</span> <strong>Vocabulary Test:</strong> Use the words you learned from the songs to complete the following 10 exercises. Remember your spelling!
+                </div>
+                
+                <div id="lyrics-tab4">
+                    <div class="question-block">
+                        1. I had a terrible dream last night, it was a complete <input type="text" class="gap-input" data-ans="nightmare">. <em>(pesadilla)</em>
+                    </div>
+                    <div class="question-block">
+                        2. You can't just <input type="text" class="gap-input" data-ans="erase"> the past as if it never happened. <em>(borrar)</em>
+                    </div>
+                    <div class="question-block">
+                        3. I asked him what he wanted, but he said <input type="text" class="gap-input" data-ans="nothing">. <em>(nada)</em>
+                    </div>
+                    <div class="question-block">
+                        4. Are you for or <input type="text" class="gap-input" data-ans="against"> the new school rules? <em>(en contra)</em>
+                    </div>
+                    <div class="question-block">
+                        5. It is really hard to <input type="text" class="gap-input" data-ans="remember"> everyone's names. <em>(recordar)</em>
+                    </div>
+                    <div class="question-block">
+                        6. I am so <input type="text" class="gap-input" data-ans="bored"> in this math class. <em>(aburrido)</em>
+                    </div>
+                    <div class="question-block">
+                        7. Please tell me, what is <input type="text" class="gap-input" data-ans="wrong"> with you today? <em>(mal / equivocado)</em>
+                    </div>
+                    <div class="question-block">
+                        8. Did you hear that loud <input type="text" class="gap-input" data-ans="sound"> outside? <em>(sonido)</em>
+                    </div>
+                    <div class="question-block">
+                        9. I have to work hard and <input type="text" class="gap-input" data-ans="prove"> them wrong. <em>(probar / demostrar)</em>
+                    </div>
+                    <div class="question-block">
+                        10. Tell me exactly <input type="text" class="gap-input" data-ans="when"> you are ready to leave. <em>(cuando)</em>
+                    </div>
+                </div>
+
+                <button class="btn-check" onclick="checkAnswers('tab4')">Revisar Ejercicios <span class="material-icons-round">spellcheck</span></button>
+                <div id="feedback-tab4" class="feedback-box"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation Logic
+        function openTab(tabId, btnElement) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Remove active class from buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show current tab and activate button
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // Answer Checking Logic
+        function checkAnswers(tabId) {
+            const container = document.getElementById(`lyrics-${tabId}`);
+            const inputs = container.querySelectorAll('.gap-input');
+            let score = 0;
+            let total = inputs.length;
+            let allFilled = true;
+
+            inputs.forEach(input => {
+                if(input.value.trim() === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("¡Por favor llena todos los espacios antes de revisar!");
+                return;
+            }
+
+            inputs.forEach(input => {
+                const correctAnswer = input.getAttribute('data-ans');
+                const studentAnswer = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'wrong');
+
+                if (studentAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    score++;
+                } else {
+                    input.classList.add('wrong');
+                }
+            });
+
+            // Feedback Display
+            const feedback = document.getElementById(`feedback-${tabId}`);
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-box';
+
+            if (score === total) {
+                feedback.classList.add('success');
+                feedback.innerHTML = `🎉 ¡Excelente! Tienes ${score}/${total} respuestas correctas.`;
+            } else {
+                feedback.classList.add('danger');
+                feedback.innerHTML = `⚠️ Obtuviste ${score} de ${total}. Corrige las cajas rojas e inténtalo de nuevo.`;
+            }
+        }
+    </script>
+</body>
+</html>
