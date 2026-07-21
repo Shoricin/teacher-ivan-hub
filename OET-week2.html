@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Week 2 Assignments - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://i.imgur.com/AIOtoMn.jpeg');
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero img { height: 90px; margin-bottom: 10px; }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* Tabs System */
+        .tab-container { display: flex; flex-wrap: wrap; border-bottom: 3px solid var(--gris-neutro); margin-bottom: 2rem; }
+        .tab-btn {
+            background: transparent; border: none; padding: 15px 25px; font-family: var(--font-titulares);
+            font-size: 1rem; color: var(--gris-neutro); cursor: pointer; transition: all 0.3s;
+            font-weight: 700; border-bottom: 4px solid transparent; margin-bottom: -3px;
+        }
+        .tab-btn.active { color: var(--azul-primario); border-bottom: 4px solid var(--naranja-vibrante); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards & Forms */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
+        }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        .btn-check { 
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px; 
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; 
+            font-size: 1.1rem; width: 100%; display: block; margin-top: 2rem; text-transform: uppercase;
+        }
+        .btn-check:hover { background: #e05e15; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.3);}
+
+        /* OET Specific Styles */
+        .exercise-block { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+        .question-line { margin-bottom: 15px; font-size: 1rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
+        .oet-input { 
+            border: 2px solid var(--gris-neutro); padding: 8px 12px; border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); width: 220px;
+            transition: all 0.3s; margin: 0 10px;
+        }
+        .oet-input:focus { border-color: var(--naranja-vibrante); outline: none; }
+        
+        .correction-span { font-weight: bold; margin-left: 10px; font-size: 0.9rem; padding: 3px 8px; border-radius: 4px; display: inline-block;}
+        .correct-tag { color: var(--verde-exito); background: #e8f5e9; border: 1px solid var(--verde-exito);}
+        .incorrect-tag { color: var(--rojo-alerta); background: #ffebee; border: 1px solid var(--rojo-alerta);}
+
+        /* Indicador de Autoguardado */
+        .save-indicator { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+        <h1 class="hero-title">OET Week 2 <span>Strategy & Vocab</span></h1>
+        <p>Julio 20 - Julio 23. Domina la estructura del examen paso a paso.</p>
+    </header>
+
+    <div class="save-indicator" id="save-indicator">💾 Progreso guardado</div>
+
+    <div class="container">
+        
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'lunes')">Lun 20: Vocabulary</button>
+            <button class="tab-btn" onclick="openTab(event, 'martes')">Mar 21: Part A Strategy</button>
+            <button class="tab-btn" onclick="openTab(event, 'miercoles')">Mié 22: Part B Strategy</button>
+            <button class="tab-btn" onclick="openTab(event, 'jueves')">Jue 23: Part C Strategy</button>
+        </div>
+
+        <!-- ================= LUNES: VOCABULARY ================= -->
+        <div id="lunes" class="tab-content active">
+            <section class="section-card">
+                <h2>OET Medical Vocabulary You NEED to Know</h2>
+                <p>El vocabulario es la base de la comprensión. Mira el video y completa la hoja de trabajo traduciendo los términos comunes al inglés médico o viceversa.</p>
+                
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/3A9n8jal-dw" allowfullscreen></iframe>
+                </div>
+
+                <div class="exercise-block">
+                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📝 Vocabulary Worksheet</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Write the correct medical term or layman's term based on the video.</p>
+                    
+                    <div class="question-line">1. Medical term for "Painkiller": <input type="text" id="voc1" class="oet-input"></div>
+                    <div class="question-line">2. Medical term for "High blood pressure": <input type="text" id="voc2" class="oet-input"></div>
+                    <div class="question-line">3. The term "Renal" refers to which organ? <input type="text" id="voc3" class="oet-input"></div>
+                    <div class="question-line">4. Layman's term for "Dyspnea": <input type="text" id="voc4" class="oet-input"> (Hint: Shortness of...)</div>
+                    <div class="question-line">5. Medical term for "Fever": <input type="text" id="voc5" class="oet-input"></div>
+                </div>
+                
+                <button class="btn-check" onclick="checkVocabulary()">✔️ Corregir Vocabulario</button>
+            </section>
+        </div>
+
+        <!-- ================= MARTES: PART A ================= -->
+        <div id="martes" class="tab-content">
+            <section class="section-card">
+                <h2>Mastering Part A: Consultations</h2>
+                <p>En este bloque analizaremos las reglas de oro de la Parte A. El video está programado para reproducir únicamente la sección correspondiente[cite: 10].</p>
+                
+                <div class="video-container">
+                    <!-- Parámetros start=126 (2:06) y end=543 (9:03) -->
+                    <iframe src="https://www.youtube.com/embed/BCYuWcZ-QSA?start=126&end=543" allowfullscreen></iframe>
+                </div>
+
+                <div class="exercise-block">
+                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📝 Part A Rules Worksheet</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Answer the questions based on the strategy video[cite: 10].</p>
+                    
+                    <div class="question-line">1. What type of interaction do you hear in Part A? Patient <input type="text" id="pa1" class="oet-input"></div>
+                    <div class="question-line">2. How much preparation time do you get before the audio starts? <input type="text" id="pa2" class="oet-input"> seconds</div>
+                    <div class="question-line">3. True or False: You can change the original wording to fit the grammar. <input type="text" id="pa3" class="oet-input"></div>
+                    <div class="question-line">4. How many separate audio extracts will you hear in Part A? <input type="text" id="pa4" class="oet-input"></div>
+                </div>
+
+                <button class="btn-check" onclick="checkPartA()">✔️ Corregir Part A Rules</button>
+            </section>
+        </div>
+
+        <!-- ================= MIÉRCOLES: PART B ================= -->
+        <div id="miercoles" class="tab-content">
+            <section class="section-card">
+                <h2>Mastering Part B: Workplace Extracts</h2>
+                <p>Hoy nos enfocaremos en las interacciones cortas de trabajo. Presta atención a las habilidades que se evalúan[cite: 10].</p>
+                
+                <div class="video-container">
+                    <!-- Parámetros start=544 (9:04) y end=764 (12:44) -->
+                    <iframe src="https://www.youtube.com/embed/BCYuWcZ-QSA?start=544&end=764" allowfullscreen></iframe>
+                </div>
+
+                <div class="exercise-block">
+                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📝 Part B Rules Worksheet</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Complete the gaps based on the video instructions[cite: 10].</p>
+                    
+                    <div class="question-line">1. How many short extracts are in Part B? <input type="text" id="pb1" class="oet-input"></div>
+                    <div class="question-line">2. These extracts are based on healthcare <input type="text" id="pb2" class="oet-input"> settings.</div>
+                    <div class="question-line">3. The questions test your ability to understand detail, <input type="text" id="pb3" class="oet-input">, and purpose.</div>
+                </div>
+
+                <button class="btn-check" onclick="checkPartB()">✔️ Corregir Part B Rules</button>
+            </section>
+        </div>
+
+        <!-- ================= JUEVES: PART C & OVERVIEW ================= -->
+        <div id="jueves" class="tab-content">
+            <section class="section-card">
+                <h2>Mastering Part C: Presentations & Interviews</h2>
+                <p>La última parte requiere concentración profunda. Revisa la estructura final y los puntajes requeridos[cite: 10].</p>
+                
+                <div class="video-container">
+                    <!-- Parámetros start=765 (12:45) y end=952 (15:52) -->
+                    <iframe src="https://www.youtube.com/embed/BCYuWcZ-QSA?start=765&end=952" allowfullscreen></iframe>
+                </div>
+
+                <div class="exercise-block">
+                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📝 Part C & General Overview Worksheet</h4>
+                    
+                    <div class="question-line">1. How many longer extracts are in Part C? <input type="text" id="pc1" class="oet-input"></div>
+                    <div class="question-line">2. How much prep time is given to read the questions in Part C? <input type="text" id="pc2" class="oet-input"> seconds</div>
+                    <div class="question-line">3. To achieve a typical target score of 350, you generally need <input type="text" id="pc3" class="oet-input"> out of 42 correct answers.</div>
+                    <div class="question-line">4. How many times will you hear the audio in the OET? <input type="text" id="pc4" class="oet-input"></div>
+                </div>
+
+                <button class="btn-check" onclick="checkPartC()">✔️ Corregir Part C Rules</button>
+            </section>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | OET Week 2 Listening Strategies</p>
+    </footer>
+
+    <script>
+        // --- TABS LOGIC ---
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // --- MINICACHE (LOCAL STORAGE) ---
+        function saveProgress() {
+            const data = {};
+            document.querySelectorAll('input[type="text"]').forEach(el => {
+                if(el.id) data[el.id] = el.value;
+            });
+            localStorage.setItem('oet_week2_progress', JSON.stringify(data));
+            
+            const indicator = document.getElementById('save-indicator');
+            indicator.style.opacity = '1';
+            setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('oet_week2_progress');
+            if(saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('input[type="text"]').forEach(el => {
+                    if(el.id && data[el.id]) el.value = data[el.id];
+                });
+            }
+        }
+
+        document.addEventListener('input', saveProgress);
+        document.addEventListener('DOMContentLoaded', loadProgress);
+
+        // --- GRADING SYSTEM ---
+        function gradeSection(prefix, totalQs, answerKey) {
+            for(let i = 1; i <= totalQs; i++) {
+                let inputEl = document.getElementById(prefix + i);
+                if(!inputEl) continue;
+
+                let userVal = inputEl.value.trim().toLowerCase();
+                // Permitimos múltiples respuestas correctas separadas por |
+                let correctOptions = answerKey[prefix + i].toLowerCase().split('|');
+                let isCorrect = correctOptions.some(opt => userVal === opt.trim());
+
+                let existingSpan = inputEl.parentNode.querySelector('.correction-span');
+                if (existingSpan) existingSpan.remove();
+
+                let span = document.createElement('span');
+                span.className = 'correction-span';
+
+                if (isCorrect && userVal !== "") {
+                    inputEl.style.borderColor = "var(--verde-exito)";
+                    inputEl.style.backgroundColor = "#e8f5e9";
+                    span.classList.add('correct-tag');
+                    span.innerText = "✔️ Correcto";
+                } else {
+                    inputEl.style.borderColor = "var(--rojo-alerta)";
+                    inputEl.style.backgroundColor = "#ffebee";
+                    span.classList.add('incorrect-tag');
+                    span.innerText = `❌ Respuesta: ${correctOptions[0].toUpperCase()}`;
+                }
+                inputEl.parentNode.appendChild(span);
+            }
+        }
+
+        function checkVocabulary() {
+            const answers = { voc1: "analgesic|analgesics", voc2: "hypertension", voc3: "kidney|kidneys", voc4: "breath", voc5: "pyrexia" };
+            gradeSection('voc', 5, answers);
+        }
+
+        function checkPartA() {
+            const answers = { pa1: "consultations|consultation", pa2: "30|thirty", pa3: "false|no", pa4: "2|two" };
+            gradeSection('pa', 4, answers);
+        }
+
+        function checkPartB() {
+            const answers = { pb1: "6|six", pb2: "workplace", pb3: "gist" };
+            gradeSection('pb', 3, answers);
+        }
+
+        function checkPartC() {
+            const answers = { pc1: "2|two", pc2: "90|ninety", pc3: "30|thirty", pc4: "1|one|once" };
+            gradeSection('pc', 4, answers);
+        }
+    </script>
+</body>
+</html>
