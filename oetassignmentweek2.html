@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OET Week 2 Assignments - Teacher Ivan HUB</title>
+    <title>OET Week 2 Assignments - Teacher Ivan</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,26 +22,37 @@
         body {
             margin: 0; font-family: var(--font-cuerpo);
             background-color: var(--blanco-nieve); color: var(--azul-primario);
-            line-height: 1.6;
+            line-height: 1.6; padding-top: 60px;
         }
 
         h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
 
+        /* --- STICKY TIMER --- */
+        .sticky-timer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--gris-neutro); color: #333;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800;
+            z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            letter-spacing: 2px; transition: background 0.3s, color 0.3s;
+        }
+        .timer-active { background: var(--naranja-vibrante); color: white; }
+        .timer-warning { background: #d32f2f; color: white; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
         /* Hero Section */
         .hero {
             padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
-            color: var(--blanco-nieve); text-align: center; position: relative;
+            color: var(--blanco-nieve); text-align: center;
         }
         .hero img { height: 90px; margin-bottom: 10px; }
         .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
         .hero-title span { color: var(--naranja-vibrante); }
-
-        .teacher-override {
-            position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2);
-            border: 1px solid white; color: white; padding: 5px 10px; border-radius: 5px;
-            cursor: pointer; font-size: 0.8rem; transition: 0.3s;
-        }
-        .teacher-override:hover { background: var(--naranja-vibrante); border-color: var(--naranja-vibrante); }
 
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
 
@@ -56,227 +67,227 @@
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Start Overlay para el Simulacro */
+        .start-overlay {
+            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
+            text-align: center; box-shadow: 0 10px 30px rgba(10, 70, 140, 0.15);
+            margin-bottom: 2rem; border-top: 5px solid var(--naranja-vibrante);
+        }
+        
+        .btn {
+            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+            font-size: 1.1rem; text-transform: uppercase; font-weight: 700; display: inline-block;
+        }
+        .btn:hover { background: #08366b; transform: translateY(-2px); }
+        .btn-start { background: var(--naranja-vibrante); font-size: 1.3rem; padding: 15px 40px; }
+        .btn-start:hover { background: #e05e15; }
 
-        /* Cards & Forms */
+        /* Contenedor del Test (Blur effect before start) */
+        .test-wrapper { filter: blur(6px); pointer-events: none; transition: filter 0.5s; }
+        .test-wrapper.active { filter: none; pointer-events: auto; }
+
+        /* Cards & Videos */
         .section-card {
             background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 5px solid var(--naranja-vibrante);
-            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem;
+            border: 1px solid rgba(200, 205, 210, 0.4);
         }
-
-        .locked-overlay {
-            text-align: center; padding: 4rem 2rem; background: #f8fafc; border-radius: 8px;
-            border: 2px dashed var(--gris-neutro);
-        }
-        .locked-overlay h3 { color: var(--gris-neutro); font-size: 1.8rem; margin-bottom: 10px; }
         
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
         .audio-player-container {
-            background: #eef2f6; padding: 15px; border-radius: 8px; margin-bottom: 1.5rem;
-            display: flex; flex-direction: column; align-items: center; border: 1px solid var(--gris-neutro);
-            position: sticky; top: 10px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; border: 2px solid var(--azul-claro);
+            position: sticky; top: 70px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        audio { width: 100%; outline: none; }
+        audio { width: 100%; outline: none; margin-bottom: 10px; }
         
-        .btn {
-            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
-            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
-            font-size: 1rem; text-transform: uppercase;
-        }
-        .btn:hover { background: #08366b; }
-        .btn-check { 
-            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px; 
-            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; 
-            font-size: 1.1rem; width: 100%; display: block; margin-top: 2rem; text-transform: uppercase;
-        }
-        .btn-check:hover { background: #e05e15; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.3);}
-        .btn-pdf { background: #4CAF50; width: 100%; margin-top: 1rem; font-size: 1.2rem; display: none; }
+        .jump-btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .btn-jump { background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario); padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.85rem;}
+        .btn-jump:hover { background: var(--azul-primario); color: white; }
 
-        /* OET Specific Styles */
-        .exercise-block { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
-        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
-        .oet-input { 
-            border: none; border-bottom: 2px solid var(--gris-neutro); padding: 5px; 
-            font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); width: 180px;
-            transition: all 0.3s; margin: 0 5px; background: transparent;
-        }
-        .oet-input:focus { border-color: var(--naranja-vibrante); outline: none; }
+        /* Survey Box */
+        .survey-box { background: #e8f5e9; border: 2px solid var(--verde-exito); border-radius: 8px; padding: 20px; text-align: center; }
+        .survey-box h3 { color: var(--verde-exito); margin-bottom: 15px; }
+        .survey-checkbox { margin: 10px 0; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .survey-checkbox input { width: 20px; height: 20px; cursor: pointer; }
+
+        /* OET Format Styles */
+        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 2rem 0 1rem 0; }
+        .extract-title { color: var(--naranja-vibrante); margin-bottom: 1rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
         
-        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; transition: all 0.3s; }
+        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
+        .oet-input { border: none; border-bottom: 2px solid var(--gris-neutro); padding: 5px; width: 180px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); outline: none; background: transparent; transition: all 0.3s; margin: 0 5px;}
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
+        
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
         .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
         .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+
+        /* Corrección Styles */
+        .correction-span { color: #d32f2f; font-weight: bold; margin-left: 10px; font-size: 0.85rem; background: #ffebee; padding: 3px 8px; border-radius: 4px; }
+        .correction-mcq { color: #d32f2f; font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
         
-        .correction-span { font-weight: bold; margin-left: 10px; font-size: 0.85rem; padding: 3px 8px; border-radius: 4px; display: inline-block;}
-        .correction-mcq { color: var(--rojo-alerta); font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
-
-        /* Survey Styles */
-        .survey-item { margin-bottom: 15px; }
-        .survey-item label { display: block; margin-bottom: 5px; font-weight: 600; }
-        .survey-item select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid var(--gris-neutro); font-family: var(--font-cuerpo); }
-
         /* Dashboard de Resultados */
-        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-top: 2rem; }
+        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
         .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--naranja-vibrante); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1rem auto; box-shadow: 0 4px 15px rgba(245, 110, 30, 0.4); }
         .grade-text { font-size: 1.5rem; font-weight: 700; color: var(--azul-primario); margin-bottom: 10px; }
 
         /* Indicador de Autoguardado */
         .save-indicator { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
-        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
-
         @media print {
             body { padding: 0; background: white; }
-            .hero, .tab-container, .audio-player-container, .video-container, .btn, .btn-check, .teacher-override, .save-indicator { display: none !important; }
+            .hero, .sticky-timer, .audio-player-container, .btn, .start-overlay, .tab-container, .save-indicator, #lunes { display: none !important; }
+            .test-wrapper { filter: none !important; pointer-events: auto !important; }
             .tab-content { display: block !important; opacity: 1 !important; }
             .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
-            .mcq-block { border: none; background: transparent; padding: 0; }
             #results-dashboard { display: block !important; border: 1px solid #ccc; background: transparent; }
         }
     </style>
 </head>
 <body>
 
+    <!-- TIMER SUPERIOR -->
+    <div class="sticky-timer" id="timer-display">⏱️ 45:00</div>
+
     <header class="hero">
-        <button class="teacher-override" onclick="unlockAll()">🔓 Teacher Override</button>
-        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
-        <h1 class="hero-title">OET Week 2 <span>Mock Test & Strategy</span></h1>
-        <p>Julio 27 - Julio 30. Completa tus tareas diarias (Progreso guardado automáticamente).</p>
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Mascot">
+        <h1 class="hero-title">OET Week 2 <span>Assignments</span></h1>
+        <p>Preparación Teórica y Simulacro Clínico Oficial</p>
     </header>
 
     <div class="save-indicator" id="save-indicator">💾 Progreso guardado</div>
 
     <div class="container">
-        
+
         <div class="tab-container">
-            <button class="tab-btn active" onclick="openTab(event, 'lunes', '2026-07-27')">Lun: Video & Survey</button>
-            <button class="tab-btn" onclick="openTab(event, 'martes', '2026-07-28')">Mar: Part A Test</button>
-            <button class="tab-btn" onclick="openTab(event, 'miercoles', '2026-07-29')">Mié: Part B Test</button>
-            <button class="tab-btn" onclick="openTab(event, 'jueves', '2026-07-30')">Jue: Part C Test & PDF</button>
+            <button class="tab-btn active" onclick="openTab(event, 'lunes')">Lun: Preparación</button>
+            <button class="tab-btn" onclick="openTab(event, 'martes')">Mar: Part A</button>
+            <button class="tab-btn" onclick="openTab(event, 'miercoles')">Mié: Part B</button>
+            <button class="tab-btn" onclick="openTab(event, 'jueves')">Jue: Part C</button>
         </div>
 
-        <!-- ================= LUNES: VIDEOS & SURVEY ================= -->
-        <div id="lunes" class="tab-content active" data-date="2026-07-27">
-            <div class="locked-message locked-overlay" style="display: none;">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Lunes.</p>
-            </div>
-            <section class="section-card task-content">
-                <h2>Preparation & Strategy</h2>
-                <p>Por favor mira atentamente estos dos videos fundamentales antes de proceder al examen de la semana.</p>
+        <!-- ================= LUNES ================= -->
+        <div id="lunes" class="tab-content active">
+            <section class="section-card">
+                <h2>OET Strategy & Vocabulary</h2>
+                <p>Bienvenido a la Semana 2. Para tener éxito en los simulacros de esta semana, es obligatorio que mires ambos videos metodológicos. Estos cubren el vocabulario médico esencial y la estrategia de los 16 minutos.</p>
                 
-                <h4 style="color: var(--naranja-vibrante);">1. OET Medical Vocabulary You NEED to Know</h4>
+                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">Video 1: Medical Vocabulary You NEED to Know</h4>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/3A9n8jal-dw" allowfullscreen></iframe>
                 </div>
 
-                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">2. Understand OET Listening in JUST 16 Minutes!</h4>
+                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">Video 2: Understand OET Listening in JUST 16 Minutes!</h4>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/BCYuWcZ-QSA" allowfullscreen></iframe>
                 </div>
 
-                <div class="exercise-block" style="margin-top: 2rem;">
-                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📝 Compliance Survey</h4>
-                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Confirma que has asimilado el contenido para desbloquear tu progreso.</p>
-                    
-                    <div class="survey-item">
-                        <label>Did you watch the Medical Vocabulary video completely?</label>
-                        <select id="survey1" class="oet-input" style="width:100%; border:1px solid #ccc;">
-                            <option value="">Select an option...</option>
-                            <option value="yes">Yes, I took notes on the vocabulary.</option>
-                            <option value="no">No, not yet.</option>
-                        </select>
-                    </div>
-                    <div class="survey-item">
-                        <label>Did you watch the 16-Minute Strategy video completely?</label>
-                        <select id="survey2" class="oet-input" style="width:100%; border:1px solid #ccc;">
-                            <option value="">Select an option...</option>
-                            <option value="yes">Yes, I understand the structure of Parts A, B, and C.</option>
-                            <option value="no">No, not yet.</option>
-                        </select>
-                    </div>
+                <!-- Survey -->
+                <div class="survey-box">
+                    <h3>Teacher Ivan's Checklist</h3>
+                    <p>Confirma que has completado el material teórico de hoy:</p>
+                    <label class="survey-checkbox">
+                        <input type="checkbox" id="survey_v1"> He visto y analizado el Video 1 (Vocabulario).
+                    </label>
+                    <label class="survey-checkbox">
+                        <input type="checkbox" id="survey_v2"> He visto y entendido el Video 2 (Estrategia OET).
+                    </label>
+                    <button class="btn" style="margin-top: 15px;" onclick="alert('¡Excelente! Tus respuestas han sido guardadas. Ahora estás listo para el simulacro.')">Guardar Asignación</button>
                 </div>
             </section>
         </div>
 
-        <!-- REPRODUCTOR GLOBAL PARA EL MOCK TEST (Martes, Miércoles, Jueves) -->
-        <div id="global-audio-container" class="audio-player-container" style="display: none;">
-            <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Mock Test Audio</h4>
+        <!-- OVERLAY DE INICIO PARA EL SIMULACRO (Aparecerá en los días de test) -->
+        <div class="start-overlay" id="start-overlay" style="display: none;">
+            <h2>Instrucciones del Simulacro (Partes A, B y C)</h2>
+            <p>Este examen tiene una duración de 45 minutos. El reloj y el audio comenzarán en cuanto presiones el botón. El audio se detendrá automáticamente antes de las respuestas oficiales.</p>
+            <button class="btn btn-start" onclick="startExam()">▶ Iniciar Simulacro OET</button>
+        </div>
+
+        <!-- REPRODUCTOR DE AUDIO GLOBAL PARA EL TEST -->
+        <div id="global-audio-container" class="audio-player-container test-wrapper" style="display: none;">
             <audio id="oet-audio-player" controls controlsList="nodownload">
-                <source src="audios/oetweek2assigmentaudio.m4a" type="audio/mp4">
-                Tu navegador no soporta el elemento de audio.
+                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/oetweek2assigmentaudio.m4a" type="audio/mp4">
+                Tu navegador no soporta el audio.
             </audio>
-            <p style="font-size: 0.8rem; margin-top: 5px; color: #666;">Utiliza este reproductor para las Partes A, B y C del simulacro.</p>
+            <div class="jump-btn-group">
+                <button class="btn-jump" onclick="jumpAudio(0)">00:00 Intro</button>
+                <button class="btn-jump" onclick="jumpAudio(15)">00:15 Instructions</button>
+                <button class="btn-jump" onclick="jumpAudio(65)">01:05 Part A</button>
+                <button class="btn-jump" onclick="jumpAudio(743)">12:23 Part B</button>
+                <button class="btn-jump" onclick="jumpAudio(1264)">21:04 Part C</button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD DE RESULTADOS (Oculto inicialmente) -->
+        <div id="results-dashboard">
+            <h2>Reporte Oficial OET</h2>
+            <div class="score-circle" id="final-score">0/42</div>
+            <div class="grade-text" id="final-grade">Grade: -</div>
+            <p id="feedback-text">Revisa las respuestas marcadas en rojo a continuación.</p>
+            <button class="btn" style="background: #4CAF50;" onclick="window.print()">📥 Descargar PDF</button>
         </div>
 
         <!-- ================= MARTES: PART A ================= -->
-        <div id="martes" class="tab-content" data-date="2026-07-28">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Martes.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
-                <h3 style="background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px;">PART A - Questions 1 to 24 (Notes Completion)</h3>
-                <p><em>Instructions: Complete the following notes with a word or short phrase.</em></p>
+        <div id="martes" class="tab-content">
+            <section class="section-card test-wrapper">
+                <h3 class="part-title">PART A: NOTE COMPLETION</h3>
+                <p><em>Complete the following notes with a word or short phrase based on the audio extracts.</em></p>
 
-                <h4 style="color: var(--naranja-vibrante); border-bottom: 2px solid #ccc; padding-bottom: 5px;">Extract 01: Questions 01-12 | Patient: Lucy</h4>
-                
+                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Lucy</h4>
                 <h5>Reason for Appointment:</h5>
-                <div class="question-line">(1) <input type="text" id="q1" class="oet-input"> pain due to jellyfish sting.</div>
+                <div class="question-line">• (1) <input type="text" id="q1" class="oet-input"> pain due to jellyfish sting.</div>
                 
-                <h5>Incident Details:</h5>
+                <h5 style="margin-top:10px;">Incident Details:</h5>
                 <div class="question-line">• Pain level: Described as (2) <input type="text" id="q2" class="oet-input">.</div>
                 <div class="question-line">• Happened while: (3) <input type="text" id="q3" class="oet-input"> with her kids.</div>
                 <div class="question-line">• Initial treatment by lifeguard: Rinsed with water and applied (4) <input type="text" id="q4" class="oet-input">.</div>
                 
-                <h5>Symptoms Reported:</h5>
+                <h5 style="margin-top:10px;">Symptoms Reported:</h5>
                 <div class="question-line">• Main symptoms: Pain, swelling, and (5) <input type="text" id="q5" class="oet-input"> around the sting area.</div>
                 <div class="question-line">• Other symptoms: Nausea and (6) <input type="text" id="q6" class="oet-input">.</div>
                 
-                <h5>Examination and Doctor's Observations:</h5>
+                <h5 style="margin-top:10px;">Examination and Doctor's Observations:</h5>
                 <div class="question-line">• Redness and (7) <input type="text" id="q7" class="oet-input"> observed at the sting site.</div>
                 <div class="question-line">• Doctor notes the sting reaction is (8) <input type="text" id="q8" class="oet-input">.</div>
                 <div class="question-line">• No remnants of (9) <input type="text" id="q9" class="oet-input"> found on the skin.</div>
                 
-                <h5>Treatment Plan:</h5>
+                <h5 style="margin-top:10px;">Treatment Plan & Complications:</h5>
                 <div class="question-line">• Topical corticosteroid and (10) <input type="text" id="q10" class="oet-input"> prescribed.</div>
                 <div class="question-line">• Oral medication for nausea and (11) <input type="text" id="q11" class="oet-input"> recommended.</div>
-                
-                <h5>Possible Complications:</h5>
                 <div class="question-line">• Patient advised to monitor for increased swelling or (12) <input type="text" id="q12" class="oet-input"> within 24 hours.</div>
 
-                <h4 style="color: var(--naranja-vibrante); border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Mr. Daniels</h4>
-                
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Mr. Daniels</h4>
                 <h5>Medical History:</h5>
                 <div class="question-line">• (13) <input type="text" id="q13" class="oet-input"> lasted for some days.</div>
                 <div class="question-line">• Patient has also experienced fatigue and a lack of (14) <input type="text" id="q14" class="oet-input">.</div>
                 <div class="question-line">• Symptoms include night sweats and intermittent (15) <input type="text" id="q15" class="oet-input"> in the stomach.</div>
                 <div class="question-line">• Recent exposure to (16) <input type="text" id="q16" class="oet-input"> is noted in the patient's history.</div>
                 
-                <h5>Current Condition:</h5>
+                <h5 style="margin-top:10px;">Current Condition:</h5>
                 <div class="question-line">• Suspects the patient has contracted (17) <input type="text" id="q17" class="oet-input">.</div>
                 <div class="question-line">• Infection often spreads through contaminated food or (18) <input type="text" id="q18" class="oet-input">.</div>
                 <div class="question-line">• Its an infection caused by (19) <input type="text" id="q19" class="oet-input">.</div>
                 <div class="question-line">• If untreated, typhoid can cause serious complications, including intestinal (20) <input type="text" id="q20" class="oet-input"> or bleeding.</div>
                 
-                <h5>Treatment and Diagnosis:</h5>
+                <h5 style="margin-top:10px;">Treatment and Diagnosis:</h5>
                 <div class="question-line">• To confirm the diagnosis, a blood test and possibly a (21) <input type="text" id="q21" class="oet-input">.</div>
                 <div class="question-line">• Common antibiotics include ciprofloxacin or (22) <input type="text" id="q22" class="oet-input">.</div>
                 <div class="question-line">• May need hospitalization if severe dehydration or (23) <input type="text" id="q23" class="oet-input"> is observed.</div>
                 <div class="question-line">• It is important for the patient to stay hydrated and avoid spicy or (24) <input type="text" id="q24" class="oet-input"> foods.</div>
-
-                <button class="btn-check" onclick="checkPartA()">✔️ Corregir Part A</button>
             </section>
         </div>
 
         <!-- ================= MIÉRCOLES: PART B ================= -->
-        <div id="miercoles" class="tab-content" data-date="2026-07-29">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Miércoles.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
-                <h3 style="background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px;">PART B - Questions 25 to 30 (Multiple Choice)</h3>
-                
+        <div id="miercoles" class="tab-content">
+            <section class="section-card test-wrapper">
+                <h3 class="part-title">PART B: MULTIPLE CHOICE QUESTIONS (25-30)</h3>
+                <p><em>Choose the best option (A, B, or C) that answers each question based on the audio recordings.</em></p>
+
                 <div class="mcq-block" id="block-q25">
                     <div class="mcq-question">25. What does the respiratory specialist want his colleague to do?</div>
                     <label class="mcq-option"><input type="radio" name="q25" value="A"> (a) Track the patient's respiratory issues and possible past infections.</label>
@@ -313,18 +324,14 @@
                     <label class="mcq-option"><input type="radio" name="q30" value="B"> (b) The training is for specialists helping athletes optimize recovery practices.</label>
                     <label class="mcq-option"><input type="radio" name="q30" value="C"> (c) The training is for health professionals focused on athlete performance management.</label>
                 </div>
-
-                <button class="btn-check" onclick="checkPartB()">✔️ Corregir Part B</button>
             </section>
         </div>
 
-        <!-- ================= JUEVES: PART C & FINAL SCORE ================= -->
-        <div id="jueves" class="tab-content" data-date="2026-07-30">
-            <div class="locked-message locked-overlay">
-                <h3>🔒 Bloqueado</h3><p>Esta asignación estará disponible el Jueves.</p>
-            </div>
-            <section class="section-card task-content" style="display: none;">
-                <h3 style="background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px;">PART C - Questions 31 to 42 (Multiple Choice Extracts)</h3>
+        <!-- ================= JUEVES: PART C ================= -->
+        <div id="jueves" class="tab-content">
+            <section class="section-card test-wrapper">
+                <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42)</h3>
+                <p><em>Choose the best option (A, B, or C) based on the presentations or interviews.</em></p>
 
                 <h4 class="extract-title">Extract 01: Questions 31-36 (Scabies)</h4>
                 <div class="mcq-block" id="block-q31">
@@ -340,7 +347,7 @@
                     <label class="mcq-option"><input type="radio" name="q32" value="C"> (c) Scabies can spread without any direct physical contact.</label>
                 </div>
                 <div class="mcq-block" id="block-q33">
-                    <div class="mcq-question">33. Dr. Collins states that scabies symptoms often mimic those of</div>
+                    <div class="mcq-question">33. Dr. Collins states that scabies symptoms often mimic those of...</div>
                     <label class="mcq-option"><input type="radio" name="q33" value="A"> (a) Common skin conditions like eczema and dermatitis.</label>
                     <label class="mcq-option"><input type="radio" name="q33" value="B"> (b) More severe diseases, leading to unnecessary treatment.</label>
                     <label class="mcq-option"><input type="radio" name="q33" value="C"> (c) Allergic reactions to various environmental factors.</label>
@@ -364,7 +371,7 @@
                     <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) Strict isolation of infected individuals to prevent spread.</label>
                 </div>
 
-                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Clinical Decision Support Systems - CDSS)</h4>
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Clinical Decision Support Systems)</h4>
                 <div class="mcq-block" id="block-q37">
                     <div class="mcq-question">37. According to the speaker, the main benefit of CDSS in healthcare is...</div>
                     <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) Improving accuracy and reducing mistakes in medical diagnoses</label>
@@ -374,7 +381,7 @@
                 <div class="mcq-block" id="block-q38">
                     <div class="mcq-question">38. Why does the speaker mention dermatology and cardiology?</div>
                     <label class="mcq-option"><input type="radio" name="q38" value="A"> (a) To highlight medical fields where CDSS proves especially useful</label>
-                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) To emphasize areas where Al support is most frequently adopted</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) To emphasize areas where AI support is most frequently adopted</label>
                     <label class="mcq-option"><input type="radio" name="q38" value="C"> (c) To outline specialties that have integrated CDSS into routine practice</label>
                 </div>
                 <div class="mcq-block" id="block-q39">
@@ -384,10 +391,10 @@
                     <label class="mcq-option"><input type="radio" name="q39" value="C"> (c) Concerns about its impact on professional roles and expertise</label>
                 </div>
                 <div class="mcq-block" id="block-q40">
-                    <div class="mcq-question">40. What concern does the speaker express regarding Al and bias?</div>
-                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) Al may unintentionally maintain historical prejudices in patient treatment</label>
-                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) Al systems could produce recommendations based on biased data sources</label>
-                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) Al might inadvertently overlook diverse patient demographics and conditions</label>
+                    <div class="mcq-question">40. What concern does the speaker express regarding AI and bias?</div>
+                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) AI may unintentionally maintain historical prejudices in patient treatment</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) AI systems could produce recommendations based on biased data sources</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) AI might inadvertently overlook diverse patient demographics and conditions</label>
                 </div>
                 <div class="mcq-block" id="block-q41">
                     <div class="mcq-question">41. According to the speaker, what must be done to keep CDSS relevant?</div>
@@ -397,58 +404,20 @@
                 </div>
                 <div class="mcq-block" id="block-q42">
                     <div class="mcq-question">42. How does the speaker suggest patient trust in CDSS can be improved?</div>
-                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) By demonstrating transparency in how Al analyzes patient data</label>
-                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) By clearly explaining how Al enhances the doctor's recommendations</label>
-                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) By reassuring patients that Al complements, not replaces, physicians</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) By demonstrating transparency in how AI analyzes patient data</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) By clearly explaining how AI enhances the doctor's recommendations</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) By reassuring patients that AI complements, not replaces, physicians</label>
                 </div>
-
-                <button class="btn-check" onclick="checkPartC()">✔️ Corregir Part C</button>
-
-                <!-- SCORE CALCULATION & PDF GENERATION -->
-                <div id="results-dashboard">
-                    <h2>Reporte Oficial OET - Final de Semana</h2>
-                    <div class="score-circle" id="final-score">0/42</div>
-                    <div class="grade-text" id="final-grade">Grade: -</div>
-                    <button class="btn btn-pdf" style="display: block;" onclick="calculateFinalScore()">📊 Calcular Puntaje Final</button>
-                    <button class="btn btn-pdf" id="btn-print" style="margin-top: 10px;" onclick="window.print()">📥 Generar y Descargar Reporte PDF</button>
-                </div>
-
+                
+                <button class="btn" style="width: 100%; padding: 20px; font-size: 1.5rem; background: var(--naranja-vibrante); margin-top: 1rem;" onclick="finishExam()">Finalizar Examen y Evaluar</button>
             </section>
         </div>
 
     </div>
 
-    <footer class="footer">
-        <p>© 2026 Teacher Ivan HUB | OET Week 2 Listening Module</p>
-    </footer>
-
     <script>
-        // CONFIGURACIÓN DE FECHA (Usamos la fecha actual proveída: 20 de Julio de 2026)
-        const currentDate = new Date('2026-07-20T21:34:00');
-        let overrideActive = false;
-
-        function checkDateLocks() {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => {
-                const unlockDateStr = tab.getAttribute('data-date');
-                if (!unlockDateStr) return;
-                
-                const unlockDate = new Date(unlockDateStr + 'T00:00:00');
-                const lockedMsg = tab.querySelector('.locked-message');
-                const taskContent = tab.querySelector('.task-content');
-
-                if (currentDate >= unlockDate || overrideActive) {
-                    lockedMsg.style.display = 'none';
-                    taskContent.style.display = 'block';
-                } else {
-                    lockedMsg.style.display = 'block';
-                    taskContent.style.display = 'none';
-                }
-            });
-        }
-
-        // LÓGICA DE TABS Y MOSTRAR AUDIO GLOBAL
-        function openTab(evt, tabName, requiredDate) {
+        // --- TABS LOGIC ---
+        function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
@@ -463,41 +432,91 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            // Mostrar el reproductor de audio global SOLO en Martes, Miércoles y Jueves
+            // Mostrar u ocultar el Overlay de Inicio de Examen
+            const startOverlay = document.getElementById('start-overlay');
             const globalAudio = document.getElementById('global-audio-container');
-            const unlockDate = new Date(requiredDate + 'T00:00:00');
             
-            if ((tabName === 'martes' || tabName === 'miercoles' || tabName === 'jueves') && (currentDate >= unlockDate || overrideActive)) {
-                globalAudio.style.display = 'flex';
+            if (tabName !== 'lunes') {
+                startOverlay.style.display = 'block';
+                if (examStarted) {
+                    startOverlay.style.display = 'none';
+                    globalAudio.style.display = 'flex';
+                } else {
+                    globalAudio.style.display = 'none';
+                }
             } else {
+                startOverlay.style.display = 'none';
                 globalAudio.style.display = 'none';
-                let audioEl = document.getElementById('oet-audio-player');
-                if(audioEl) audioEl.pause();
             }
         }
 
-        // FUNCIÓN TEACHER OVERRIDE
-        function unlockAll() {
-            overrideActive = true;
-            checkDateLocks();
-            alert("🔓 Modo Profesor Activado: Todas las asignaciones han sido desbloqueadas para su revisión.");
-            const activeTab = document.querySelector('.tab-btn.active').getAttribute('onclick');
-            if (activeTab.includes('martes') || activeTab.includes('miercoles') || activeTab.includes('jueves')) {
-                document.getElementById('global-audio-container').style.display = 'flex';
-            }
+        // --- TIMER & EXAM LOGIC ---
+        let totalTime = 45 * 60; // 45 minutos
+        let timerInterval = null;
+        let examStarted = false;
+        const timerDisplay = document.getElementById('timer-display');
+        const audioEl = document.getElementById('oet-audio-player');
+
+        function startExam() {
+            examStarted = true;
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('global-audio-container').style.display = 'flex';
+            
+            // Unblur todas las secciones del test
+            const wrappers = document.querySelectorAll('.test-wrapper');
+            wrappers.forEach(w => w.classList.add('active'));
+
+            timerDisplay.classList.add('timer-active');
+            
+            // Intentar Iniciar Audio
+            audioEl.play().catch(e => console.log("Se requiere interacción para reproducir el audio"));
+
+            timerInterval = setInterval(() => {
+                if (totalTime > 0) {
+                    totalTime--;
+                    let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+                    let seconds = (totalTime % 60).toString().padStart(2, '0');
+                    timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
+                    
+                    if (totalTime < 300) { 
+                        timerDisplay.classList.add('timer-warning');
+                    }
+                } else {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerText = "⏱️ TIME'S UP!";
+                    finishExam();
+                }
+            }, 1000);
         }
 
-        // SISTEMA DE MINICACHE (LOCAL STORAGE)
+        // Detener audio antes de las respuestas (35:28 = 2128 segundos)
+        audioEl.addEventListener('timeupdate', function() {
+            if (this.currentTime >= 2128) {
+                this.pause();
+                this.currentTime = 2127;
+                alert("⚠️ Fin del material de evaluación. El audio se detuvo para no revelar las respuestas oficiales.");
+            }
+        });
+
+        function jumpAudio(seconds) {
+            audioEl.currentTime = seconds;
+            audioEl.play();
+        }
+
+        // --- MINICACHE (LOCAL STORAGE) ---
         function saveProgress() {
             const data = {};
-            document.querySelectorAll('input[type="text"], select').forEach(el => {
+            document.querySelectorAll('input[type="text"]').forEach(el => {
                 if(el.id) data[el.id] = el.value;
             });
             document.querySelectorAll('input[type="radio"]').forEach(el => {
                 if(el.checked) data[el.name] = el.value;
             });
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                if(el.id) data[el.id] = el.checked;
+            });
             
-            localStorage.setItem('oet_week2_mock_progress', JSON.stringify(data));
+            localStorage.setItem('oet_week2_exam_progress', JSON.stringify(data));
             
             const indicator = document.getElementById('save-indicator');
             indicator.style.opacity = '1';
@@ -505,46 +524,52 @@
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('oet_week2_mock_progress');
+            const saved = localStorage.getItem('oet_week2_exam_progress');
             if(saved) {
                 const data = JSON.parse(saved);
-                document.querySelectorAll('input[type="text"], select').forEach(el => {
+                document.querySelectorAll('input[type="text"]').forEach(el => {
                     if(el.id && data[el.id]) el.value = data[el.id];
                 });
                 document.querySelectorAll('input[type="radio"]').forEach(el => {
                     if(data[el.name] && el.value === data[el.name]) el.checked = true;
+                });
+                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                    if(el.id && data[el.id]) el.checked = data[el.id];
                 });
             }
         }
 
         document.addEventListener('input', saveProgress);
         document.addEventListener('change', saveProgress);
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProgress();
-            checkDateLocks();
-        });
+        document.addEventListener('DOMContentLoaded', loadProgress);
 
-        // ESTRUCTURA DE RESPUESTAS OFICIALES
-        const answersA = {
-            q1: "pain", q2: "more than i expected|more than expected", q3: "swimming", q4: "vinegar",
-            q5: "swelling", q6: "lightheaded|lightheadedness", q7: "localized swelling", q8: "mild",
-            q9: "tentacle", q10: "antihistamine", q11: "itching", q12: "trouble breathing",
-            q13: "high fever", q14: "appetite", q15: "cramping", q16: "southeast asia",
-            q17: "typhoid fever", q18: "water", q19: "salmonella typhi", q20: "perforation",
-            q21: "stool culture", q22: "azithromycin|ciprofloxacin or azithromycin", q23: "confusion", q24: "greasy"
-        };
-        const answersBC = {
-            q25: "A", q26: "B", q27: "B", q28: "B", q29: "C", q30: "A",
-            q31: "B", q32: "B", q33: "A", q34: "A", q35: "C", q36: "B",
-            q37: "A", q38: "A", q39: "C", q40: "B", q41: "A", q42: "B"
-        };
+        // --- GRADING SYSTEM ---
+        function finishExam() {
+            clearInterval(timerInterval);
+            audioEl.pause();
+            let score = 0;
 
-        // SISTEMA DE AUTOCORRECCIÓN - PART A
-        function checkPartA() {
-            for(let i = 1; i <= 24; i++) {
+            // Flexibilidad en las respuestas de la Parte A
+            const answersA = {
+                q1: "pain", q2: "more than i expected|more than expected", q3: "swimming", q4: "vinegar",
+                q5: "swelling", q6: "lightheaded|lightheadedness", q7: "localized swelling", q8: "mild",
+                q9: "tentacle", q10: "antihistamine", q11: "itching", q12: "trouble breathing",
+                q13: "high fever", q14: "appetite", q15: "cramping", q16: "southeast asia",
+                q17: "typhoid fever", q18: "water", q19: "salmonella typhi", q20: "perforation",
+                q21: "stool culture", q22: "ciprofloxacin or azithromycin|azithromycin|ciprofloxacin", q23: "confusion", q24: "greasy"
+            };
+
+            const answersBC = {
+                q25: "A", q26: "B", q27: "B", q28: "B", q29: "C", q30: "A",
+                q31: "B", q32: "B", q33: "A", q34: "A", q35: "C", q36: "B",
+                q37: "A", q38: "A", q39: "C", q40: "B", q41: "A", q42: "B"
+            };
+
+            // Evaluar Parte A
+            for (let i = 1; i <= 24; i++) {
                 let inputEl = document.getElementById('q' + i);
-                if(!inputEl) continue;
-
+                if (!inputEl) continue;
+                
                 let userVal = inputEl.value.trim().toLowerCase();
                 let correctOptions = answersA['q' + i].toLowerCase().split('|');
                 let isCorrect = correctOptions.some(opt => userVal === opt.trim());
@@ -552,27 +577,25 @@
                 let existingSpan = inputEl.parentNode.querySelector('.correction-span');
                 if (existingSpan) existingSpan.remove();
 
-                let span = document.createElement('span');
-                span.className = 'correction-span';
-
                 if (isCorrect && userVal !== "") {
-                    inputEl.style.borderColor = "var(--verde-exito)";
-                    inputEl.style.color = "var(--verde-exito)";
-                    span.style.color = "var(--verde-exito)";
-                    span.innerText = "✔️ Correcto";
+                    inputEl.style.borderColor = "#4CAF50";
+                    inputEl.style.backgroundColor = "#e8f5e9";
+                    inputEl.style.color = "#2E7D32";
+                    score++;
                 } else {
-                    inputEl.style.borderColor = "var(--rojo-alerta)";
-                    inputEl.style.color = "var(--rojo-alerta)";
-                    span.style.color = "var(--rojo-alerta)";
-                    span.innerText = `❌ Resp: ${correctOptions[0]}`;
+                    inputEl.style.borderColor = "#d32f2f";
+                    inputEl.style.backgroundColor = "#ffebee";
+                    inputEl.style.color = "#d32f2f";
+                    
+                    let span = document.createElement('span');
+                    span.className = 'correction-span';
+                    span.innerText = `Respuesta Correcta: ${correctOptions[0]}`;
+                    inputEl.parentNode.appendChild(span);
                 }
-                inputEl.parentNode.appendChild(span);
             }
-        }
 
-        // SISTEMA DE AUTOCORRECCIÓN - PART B & C
-        function checkMCQ(start, end, blockPrefix) {
-            for (let i = start; i <= end; i++) {
+            // Evaluar Parte B y C
+            for (let i = 25; i <= 42; i++) {
                 let radios = document.getElementsByName('q' + i);
                 let selectedVal = "";
                 for (let r of radios) {
@@ -586,51 +609,21 @@
                 if (existingMsg) existingMsg.remove();
 
                 if (selectedVal === correctVal) {
-                    blockEl.style.border = "2px solid var(--verde-exito)";
+                    blockEl.style.border = "2px solid #4CAF50";
                     blockEl.style.backgroundColor = "#e8f5e9";
+                    score++;
                 } else {
-                    blockEl.style.border = "2px solid var(--rojo-alerta)";
+                    blockEl.style.border = "2px solid #d32f2f";
                     blockEl.style.backgroundColor = "#ffebee";
                     
                     let p = document.createElement('p');
                     p.className = 'correction-mcq';
-                    p.innerText = `❌ Incorrecto. Respuesta Correcta: (${correctVal.toLowerCase()})`;
+                    p.innerText = `❌ Incorrecto. La respuesta correcta era: (${correctVal.toLowerCase()})`;
                     blockEl.appendChild(p);
                 }
             }
-        }
 
-        function checkPartB() { checkMCQ(25, 30, 'b'); }
-        function checkPartC() { 
-            checkMCQ(31, 42, 'c'); 
-            document.getElementById('results-dashboard').style.display = 'block';
-        }
-
-        // CALCULO DEL SCORE GLOBAL OET
-        function calculateFinalScore() {
-            let score = 0;
-            // A count
-            for (let i = 1; i <= 24; i++) {
-                let inputEl = document.getElementById('q' + i);
-                if (inputEl) {
-                    let userVal = inputEl.value.trim().toLowerCase();
-                    let correctOptions = answersA['q' + i].toLowerCase().split('|');
-                    if (correctOptions.some(opt => userVal === opt.trim()) && userVal !== "") {
-                        score++;
-                    }
-                }
-            }
-            // BC count
-            for (let i = 25; i <= 42; i++) {
-                let radios = document.getElementsByName('q' + i);
-                let selectedVal = "";
-                for (let r of radios) {
-                    if (r.checked) selectedVal = r.value;
-                }
-                if (selectedVal === answersBC['q' + i]) score++;
-            }
-
-            // OET Grading Scale
+            // Escala OET
             let grade = "E";
             if (score >= 35) grade = "A";
             else if (score >= 30) grade = "B";
@@ -638,9 +631,21 @@
             else if (score >= 20) grade = "C";
             else if (score >= 10) grade = "D";
 
+            // Dashboard
+            const dashboard = document.getElementById('results-dashboard');
             document.getElementById('final-score').innerText = `${score}/42`;
-            document.getElementById('final-grade').innerText = `OET Grade: ${grade}`;
-            document.getElementById('btn-print').style.display = 'inline-block';
+            document.getElementById('final-grade').innerText = `OET Grade Estimada: ${grade}`;
+            
+            dashboard.style.display = "block";
+            
+            // Obligar a visualizar todas las pestañas para el PDF
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = "block";
+            });
+            document.querySelector('.tab-container').style.display = "none";
+            document.getElementById('start-overlay').style.display = "none";
+
+            window.scrollTo({ top: dashboard.offsetTop - 80, behavior: 'smooth' });
         }
     </script>
 </body>
