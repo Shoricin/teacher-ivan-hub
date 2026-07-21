@@ -183,7 +183,7 @@
             <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Audio Track</h4>
             <!-- El audio corta automáticamente en el minuto 35:28 (2128 segundos) -->
             <audio id="oet-audio-player" controls controlsList="nodownload">
-                <source src="audios/oetweek2assigmentaudio.m4a" type="audio/mp4">
+                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/oetwwek2audioexam.m4a" type="audio/mp4">
                 Tu navegador no soporta el elemento de audio.
             </audio>
             <div class="jump-btn-group" style="margin-top: 10px;">
@@ -204,7 +204,7 @@
 
                 <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Lucy</h4>
                 <h5>Reason for Appointment:</h5>
-                <div class="question-line">• (1) <input type="text" id="q1" class="oet-input"> pain due to jellyfish sting.</div>
+                <div class="question-line">• (1) <input type="text" id="q1" class="oet-input"> due to jellyfish sting.</div>
                 
                 <h5 style="margin-top:10px;">Incident Details:</h5>
                 <div class="question-line">• Pain level: Described as (2) <input type="text" id="q2" class="oet-input">.</div>
@@ -212,7 +212,7 @@
                 <div class="question-line">• Initial treatment by lifeguard: Rinsed with water and applied (4) <input type="text" id="q4" class="oet-input">.</div>
                 
                 <h5 style="margin-top:10px;">Symptoms Reported:</h5>
-                <div class="question-line">• Main symptoms: Pain, swelling, and (5) <input type="text" id="q5" class="oet-input"> around the sting area.</div>
+                <div class="question-line">• Main symptoms: Pain, and (5) <input type="text" id="q5" class="oet-input"> around the sting area.</div>
                 <div class="question-line">• Other symptoms: Nausea and (6) <input type="text" id="q6" class="oet-input">.</div>
                 
                 <h5 style="margin-top:10px;">Examination and Doctor's Observations:</h5>
@@ -447,7 +447,7 @@
                 if(el.checked) data[el.name] = el.value;
             });
             
-            localStorage.setItem('oet_week2_v2_progress', JSON.stringify(data));
+            localStorage.setItem('oet_week2_v3_progress', JSON.stringify(data));
             
             const indicator = document.getElementById('save-indicator');
             indicator.style.opacity = '1';
@@ -455,7 +455,7 @@
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('oet_week2_v2_progress');
+            const saved = localStorage.getItem('oet_week2_v3_progress');
             if(saved) {
                 const data = JSON.parse(saved);
                 document.querySelectorAll('input[type="text"], textarea').forEach(el => {
