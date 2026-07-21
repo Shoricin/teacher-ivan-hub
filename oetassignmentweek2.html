@@ -22,33 +22,15 @@
         body {
             margin: 0; font-family: var(--font-cuerpo);
             background-color: var(--blanco-nieve); color: var(--azul-primario);
-            line-height: 1.6; padding-top: 60px;
+            line-height: 1.6;
         }
 
         h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
 
-        /* --- STICKY TIMER --- */
-        .sticky-timer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
-            background: var(--gris-neutro); color: #333;
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800;
-            z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            letter-spacing: 2px; transition: background 0.3s, color 0.3s;
-        }
-        .timer-active { background: var(--naranja-vibrante); color: white; }
-        .timer-warning { background: #d32f2f; color: white; animation: pulse 1s infinite; }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
         /* Hero Section */
         .hero {
             padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
-            color: var(--blanco-nieve); text-align: center;
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
         }
         .hero img { height: 90px; margin-bottom: 10px; }
         .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
@@ -63,85 +45,79 @@
             font-size: 1rem; color: var(--gris-neutro); cursor: pointer; transition: all 0.3s;
             font-weight: 700; border-bottom: 4px solid transparent; margin-bottom: -3px;
         }
+        .tab-btn:hover { color: var(--azul-primario); }
         .tab-btn.active { color: var(--azul-primario); border-bottom: 4px solid var(--naranja-vibrante); }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
 
-        /* Start Overlay para el Simulacro */
-        .start-overlay {
-            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
-            text-align: center; box-shadow: 0 10px 30px rgba(10, 70, 140, 0.15);
-            margin-bottom: 2rem; border-top: 5px solid var(--naranja-vibrante);
-        }
-        
-        .btn {
-            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
-            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
-            font-size: 1.1rem; text-transform: uppercase; font-weight: 700; display: inline-block;
-        }
-        .btn:hover { background: #08366b; transform: translateY(-2px); }
-        .btn-start { background: var(--naranja-vibrante); font-size: 1.3rem; padding: 15px 40px; }
-        .btn-start:hover { background: #e05e15; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Contenedor del Test (Blur effect before start) */
-        .test-wrapper { filter: blur(6px); pointer-events: none; transition: filter 0.5s; }
-        .test-wrapper.active { filter: none; pointer-events: auto; }
-
-        /* Cards & Videos */
+        /* Cards & Forms */
         .section-card {
             background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem;
-            border: 1px solid rgba(200, 205, 210, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 5px solid var(--naranja-vibrante);
+            margin-bottom: 2rem;
         }
         
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
         .audio-player-container {
-            background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 2rem;
-            display: flex; flex-direction: column; align-items: center; border: 2px solid var(--azul-claro);
-            position: sticky; top: 70px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #eef2f6; padding: 15px; border-radius: 8px; margin-bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; border: 1px solid var(--gris-neutro);
+            position: sticky; top: 10px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         audio { width: 100%; outline: none; margin-bottom: 10px; }
-        
+
         .jump-btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .btn-jump { background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario); padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.85rem;}
         .btn-jump:hover { background: var(--azul-primario); color: white; }
 
-        /* Survey Box */
-        .survey-box { background: #e8f5e9; border: 2px solid var(--verde-exito); border-radius: 8px; padding: 20px; text-align: center; }
-        .survey-box h3 { color: var(--verde-exito); margin-bottom: 15px; }
-        .survey-checkbox { margin: 10px 0; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .survey-checkbox input { width: 20px; height: 20px; cursor: pointer; }
+        .btn-check { 
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px; 
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; 
+            font-size: 1.1rem; width: 100%; display: block; margin-top: 2rem; text-transform: uppercase;
+        }
+        .btn-check:hover { background: #e05e15; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.3);}
+        
+        .btn-pdf { background: #4CAF50; width: 100%; margin-top: 1rem; font-size: 1.2rem; color: white; border: none; padding: 15px; border-radius: 5px; cursor: pointer; font-family: var(--font-titulares); text-transform: uppercase; transition: 0.3s;}
+        .btn-pdf:hover { background: #388E3C; }
 
-        /* OET Format Styles */
-        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 2rem 0 1rem 0; }
+        /* OET Specific Styles */
+        .exercise-block { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 0 0 1.5rem 0; }
         .extract-title { color: var(--naranja-vibrante); margin-bottom: 1rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
+
+        .question-line { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
+        .oet-input { 
+            border: 2px dashed var(--gris-neutro); padding: 6px 10px; border-radius: 6px; 
+            font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); width: 220px;
+            transition: all 0.3s; margin: 0 10px; background: transparent;
+        }
+        .oet-input:focus { border-color: var(--naranja-vibrante); outline: none; }
         
-        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
-        .oet-input { border: none; border-bottom: 2px solid var(--gris-neutro); padding: 5px; width: 180px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); outline: none; background: transparent; transition: all 0.3s; margin: 0 5px;}
-        .oet-input:focus { border-color: var(--naranja-vibrante); }
-        
-        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; transition: all 0.3s; }
         .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
         .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
 
-        /* Corrección Styles */
-        .correction-span { color: #d32f2f; font-weight: bold; margin-left: 10px; font-size: 0.85rem; background: #ffebee; padding: 3px 8px; border-radius: 4px; }
+        .correction-span { font-weight: bold; margin-left: 10px; font-size: 0.9rem; padding: 3px 8px; border-radius: 4px; display: inline-block;}
+        .correct-tag { color: var(--verde-exito); background: #e8f5e9; border: 1px solid var(--verde-exito);}
+        .incorrect-tag { color: var(--rojo-alerta); background: #ffebee; border: 1px solid var(--rojo-alerta);}
         .correction-mcq { color: #d32f2f; font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
-        
+
         /* Dashboard de Resultados */
-        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; margin-top: 2rem;}
         .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--naranja-vibrante); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1rem auto; box-shadow: 0 4px 15px rgba(245, 110, 30, 0.4); }
         .grade-text { font-size: 1.5rem; font-weight: 700; color: var(--azul-primario); margin-bottom: 10px; }
 
         /* Indicador de Autoguardado */
         .save-indicator { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
+
         @media print {
             body { padding: 0; background: white; }
-            .hero, .sticky-timer, .audio-player-container, .btn, .start-overlay, .tab-container, .save-indicator, #lunes { display: none !important; }
-            .test-wrapper { filter: none !important; pointer-events: auto !important; }
+            .hero, .tab-container, .audio-player-container, .video-container, .btn-check, .btn-pdf, .save-indicator { display: none !important; }
             .tab-content { display: block !important; opacity: 1 !important; }
             .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
             #results-dashboard { display: block !important; border: 1px solid #ccc; background: transparent; }
@@ -150,91 +126,79 @@
 </head>
 <body>
 
-    <!-- TIMER SUPERIOR -->
-    <div class="sticky-timer" id="timer-display">⏱️ 45:00</div>
-
     <header class="hero">
-        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Mascot">
         <h1 class="hero-title">OET Week 2 <span>Assignments</span></h1>
-        <p>Preparación Teórica y Simulacro Clínico Oficial</p>
+        <p>Estrategia, Vocabulario y Simulacro Completo (Progreso guardado automáticamente).</p>
     </header>
 
     <div class="save-indicator" id="save-indicator">💾 Progreso guardado</div>
 
     <div class="container">
-
+        
         <div class="tab-container">
-            <button class="tab-btn active" onclick="openTab(event, 'lunes')">Lun: Preparación</button>
-            <button class="tab-btn" onclick="openTab(event, 'martes')">Mar: Part A</button>
-            <button class="tab-btn" onclick="openTab(event, 'miercoles')">Mié: Part B</button>
-            <button class="tab-btn" onclick="openTab(event, 'jueves')">Jue: Part C</button>
+            <button class="tab-btn active" onclick="openTab(event, 'lunes')">Lun: Strategy & Vocab</button>
+            <button class="tab-btn" onclick="openTab(event, 'martes')">Mar: Mock Part A</button>
+            <button class="tab-btn" onclick="openTab(event, 'miercoles')">Mié: Mock Part B</button>
+            <button class="tab-btn" onclick="openTab(event, 'jueves')">Jue: Mock Part C</button>
         </div>
 
-        <!-- ================= LUNES ================= -->
+        <!-- ================= LUNES: VIDEOS & SURVEY ================= -->
         <div id="lunes" class="tab-content active">
             <section class="section-card">
-                <h2>OET Strategy & Vocabulary</h2>
-                <p>Bienvenido a la Semana 2. Para tener éxito en los simulacros de esta semana, es obligatorio que mires ambos videos metodológicos. Estos cubren el vocabulario médico esencial y la estrategia de los 16 minutos.</p>
+                <h3 class="part-title">Preparation: Essential Videos</h3>
+                <p>Por favor, visualiza ambos videos antes de proceder a los simulacros de los siguientes días.</p>
                 
-                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">Video 1: Medical Vocabulary You NEED to Know</h4>
+                <h4 class="extract-title">1. OET Medical Vocabulary</h4>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/3A9n8jal-dw" allowfullscreen></iframe>
                 </div>
 
-                <h4 style="color: var(--naranja-vibrante); margin-top: 2rem;">Video 2: Understand OET Listening in JUST 16 Minutes!</h4>
+                <h4 class="extract-title" style="margin-top: 2rem;">2. Understand OET Listening in 16 Minutes</h4>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/BCYuWcZ-QSA" allowfullscreen></iframe>
                 </div>
 
-                <!-- Survey -->
-                <div class="survey-box">
-                    <h3>Teacher Ivan's Checklist</h3>
-                    <p>Confirma que has completado el material teórico de hoy:</p>
-                    <label class="survey-checkbox">
-                        <input type="checkbox" id="survey_v1"> He visto y analizado el Video 1 (Vocabulario).
-                    </label>
-                    <label class="survey-checkbox">
-                        <input type="checkbox" id="survey_v2"> He visto y entendido el Video 2 (Estrategia OET).
-                    </label>
-                    <button class="btn" style="margin-top: 15px;" onclick="alert('¡Excelente! Tus respuestas han sido guardadas. Ahora estás listo para el simulacro.')">Guardar Asignación</button>
+                <div class="exercise-block" style="margin-top: 2rem;">
+                    <h4 style="color: var(--naranja-vibrante); margin-top:0;">📋 Video Verification Survey</h4>
+                    <div class="question-line">
+                        1. Did you watch the Medical Vocabulary video completely? 
+                        <label style="margin-left: 10px;"><input type="radio" name="surv1" value="Yes"> Yes</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="surv1" value="No"> No</label>
+                    </div>
+                    <div class="question-line">
+                        2. Did you watch the OET Listening Overview video? 
+                        <label style="margin-left: 10px;"><input type="radio" name="surv2" value="Yes"> Yes</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="surv2" value="No"> No</label>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <p style="margin-bottom: 5px; font-weight: bold;">3. What was the most important takeaway for you?</p>
+                        <textarea id="surv3" style="width: 100%; height: 80px; padding: 10px; border: 1px solid var(--gris-neutro); border-radius: 5px; font-family: var(--font-cuerpo); resize: vertical;"></textarea>
+                    </div>
                 </div>
             </section>
         </div>
 
-        <!-- OVERLAY DE INICIO PARA EL SIMULACRO (Aparecerá en los días de test) -->
-        <div class="start-overlay" id="start-overlay" style="display: none;">
-            <h2>Instrucciones del Simulacro (Partes A, B y C)</h2>
-            <p>Este examen tiene una duración de 45 minutos. El reloj y el audio comenzarán en cuanto presiones el botón. El audio se detendrá automáticamente antes de las respuestas oficiales.</p>
-            <button class="btn btn-start" onclick="startExam()">▶ Iniciar Simulacro OET</button>
-        </div>
-
-        <!-- REPRODUCTOR DE AUDIO GLOBAL PARA EL TEST -->
-        <div id="global-audio-container" class="audio-player-container test-wrapper" style="display: none;">
+        <!-- REPRODUCTOR GLOBAL (Visible Martes, Miércoles, Jueves) -->
+        <div id="global-audio-container" class="audio-player-container" style="display: none;">
+            <h4 style="color: var(--naranja-vibrante); margin-bottom: 10px;">🎧 OET Official Audio Track</h4>
+            <!-- El audio corta automáticamente en el minuto 35:28 (2128 segundos) -->
             <audio id="oet-audio-player" controls controlsList="nodownload">
-                <source src="https://raw.githubusercontent.com/Shoricin/teacher-ivan-hub/main/audios/oetweek2assigmentaudio.m4a" type="audio/mp4">
-                Tu navegador no soporta el audio.
+                <source src="audios/oetweek2assigmentaudio.m4a" type="audio/mp4">
+                Tu navegador no soporta el elemento de audio.
             </audio>
-            <div class="jump-btn-group">
+            <div class="jump-btn-group" style="margin-top: 10px;">
                 <button class="btn-jump" onclick="jumpAudio(0)">00:00 Intro</button>
                 <button class="btn-jump" onclick="jumpAudio(15)">00:15 Instructions</button>
                 <button class="btn-jump" onclick="jumpAudio(65)">01:05 Part A</button>
                 <button class="btn-jump" onclick="jumpAudio(743)">12:23 Part B</button>
                 <button class="btn-jump" onclick="jumpAudio(1264)">21:04 Part C</button>
             </div>
-        </div>
-
-        <!-- DASHBOARD DE RESULTADOS (Oculto inicialmente) -->
-        <div id="results-dashboard">
-            <h2>Reporte Oficial OET</h2>
-            <div class="score-circle" id="final-score">0/42</div>
-            <div class="grade-text" id="final-grade">Grade: -</div>
-            <p id="feedback-text">Revisa las respuestas marcadas en rojo a continuación.</p>
-            <button class="btn" style="background: #4CAF50;" onclick="window.print()">📥 Descargar PDF</button>
+            <p style="font-size: 0.8rem; margin-top: 10px; color: #666; margin-bottom: 0;">El audio se detendrá antes de revelar las respuestas oficiales.</p>
         </div>
 
         <!-- ================= MARTES: PART A ================= -->
         <div id="martes" class="tab-content">
-            <section class="section-card test-wrapper">
+            <section class="section-card">
                 <h3 class="part-title">PART A: NOTE COMPLETION</h3>
                 <p><em>Complete the following notes with a word or short phrase based on the audio extracts.</em></p>
 
@@ -255,7 +219,7 @@
                 <div class="question-line">• Redness and (7) <input type="text" id="q7" class="oet-input"> observed at the sting site.</div>
                 <div class="question-line">• Doctor notes the sting reaction is (8) <input type="text" id="q8" class="oet-input">.</div>
                 <div class="question-line">• No remnants of (9) <input type="text" id="q9" class="oet-input"> found on the skin.</div>
-                
+
                 <h5 style="margin-top:10px;">Treatment Plan & Complications:</h5>
                 <div class="question-line">• Topical corticosteroid and (10) <input type="text" id="q10" class="oet-input"> prescribed.</div>
                 <div class="question-line">• Oral medication for nausea and (11) <input type="text" id="q11" class="oet-input"> recommended.</div>
@@ -271,7 +235,7 @@
                 <h5 style="margin-top:10px;">Current Condition:</h5>
                 <div class="question-line">• Suspects the patient has contracted (17) <input type="text" id="q17" class="oet-input">.</div>
                 <div class="question-line">• Infection often spreads through contaminated food or (18) <input type="text" id="q18" class="oet-input">.</div>
-                <div class="question-line">• Its an infection caused by (19) <input type="text" id="q19" class="oet-input">.</div>
+                <div class="question-line">• It's an infection caused by (19) <input type="text" id="q19" class="oet-input">.</div>
                 <div class="question-line">• If untreated, typhoid can cause serious complications, including intestinal (20) <input type="text" id="q20" class="oet-input"> or bleeding.</div>
                 
                 <h5 style="margin-top:10px;">Treatment and Diagnosis:</h5>
@@ -284,7 +248,7 @@
 
         <!-- ================= MIÉRCOLES: PART B ================= -->
         <div id="miercoles" class="tab-content">
-            <section class="section-card test-wrapper">
+            <section class="section-card">
                 <h3 class="part-title">PART B: MULTIPLE CHOICE QUESTIONS (25-30)</h3>
                 <p><em>Choose the best option (A, B, or C) that answers each question based on the audio recordings.</em></p>
 
@@ -327,9 +291,9 @@
             </section>
         </div>
 
-        <!-- ================= JUEVES: PART C ================= -->
+        <!-- ================= JUEVES: PART C & FINAL GRADE ================= -->
         <div id="jueves" class="tab-content">
-            <section class="section-card test-wrapper">
+            <section class="section-card">
                 <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42)</h3>
                 <p><em>Choose the best option (A, B, or C) based on the presentations or interviews.</em></p>
 
@@ -371,7 +335,7 @@
                     <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) Strict isolation of infected individuals to prevent spread.</label>
                 </div>
 
-                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Clinical Decision Support Systems)</h4>
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Clinical Decision Support Systems - CDSS)</h4>
                 <div class="mcq-block" id="block-q37">
                     <div class="mcq-question">37. According to the speaker, the main benefit of CDSS in healthcare is...</div>
                     <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) Improving accuracy and reducing mistakes in medical diagnoses</label>
@@ -408,12 +372,25 @@
                     <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) By clearly explaining how AI enhances the doctor's recommendations</label>
                     <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) By reassuring patients that AI complements, not replaces, physicians</label>
                 </div>
-                
-                <button class="btn" style="width: 100%; padding: 20px; font-size: 1.5rem; background: var(--naranja-vibrante); margin-top: 1rem;" onclick="finishExam()">Finalizar Examen y Evaluar</button>
+
+                <button class="btn-check" onclick="gradeAll()">✔️ Finalize and Grade Entire Exam</button>
+
+                <!-- DASHBOARD DE RESULTADOS (Oculto inicialmente) -->
+                <div id="results-dashboard">
+                    <h2>Reporte Oficial OET</h2>
+                    <div class="score-circle" id="final-score">0/42</div>
+                    <div class="grade-text" id="final-grade">Grade: -</div>
+                    <p id="feedback-text">Revisa tus respuestas. Las correcciones aparecerán junto a los errores.</p>
+                    <button class="btn-pdf" onclick="window.print()">📥 Descargar PDF</button>
+                </div>
             </section>
         </div>
 
     </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | OET Week 2 Full Listening Practice</p>
+    </footer>
 
     <script>
         // --- TABS LOGIC ---
@@ -432,91 +409,45 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            // Mostrar u ocultar el Overlay de Inicio de Examen
-            const startOverlay = document.getElementById('start-overlay');
+            // Mostrar el reproductor de audio global SOLO en Martes, Miércoles y Jueves
             const globalAudio = document.getElementById('global-audio-container');
-            
-            if (tabName !== 'lunes') {
-                startOverlay.style.display = 'block';
-                if (examStarted) {
-                    startOverlay.style.display = 'none';
-                    globalAudio.style.display = 'flex';
-                } else {
-                    globalAudio.style.display = 'none';
-                }
+            if (tabName === 'martes' || tabName === 'miercoles' || tabName === 'jueves') {
+                globalAudio.style.display = 'flex';
             } else {
-                startOverlay.style.display = 'none';
                 globalAudio.style.display = 'none';
+                document.getElementById('oet-audio-player').pause();
             }
         }
 
-        // --- TIMER & EXAM LOGIC ---
-        let totalTime = 45 * 60; // 45 minutos
-        let timerInterval = null;
-        let examStarted = false;
-        const timerDisplay = document.getElementById('timer-display');
+        // --- AUDIO CUTOFF LOGIC ---
         const audioEl = document.getElementById('oet-audio-player');
-
-        function startExam() {
-            examStarted = true;
-            document.getElementById('start-overlay').style.display = 'none';
-            document.getElementById('global-audio-container').style.display = 'flex';
-            
-            // Unblur todas las secciones del test
-            const wrappers = document.querySelectorAll('.test-wrapper');
-            wrappers.forEach(w => w.classList.add('active'));
-
-            timerDisplay.classList.add('timer-active');
-            
-            // Intentar Iniciar Audio
-            audioEl.play().catch(e => console.log("Se requiere interacción para reproducir el audio"));
-
-            timerInterval = setInterval(() => {
-                if (totalTime > 0) {
-                    totalTime--;
-                    let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
-                    let seconds = (totalTime % 60).toString().padStart(2, '0');
-                    timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
-                    
-                    if (totalTime < 300) { 
-                        timerDisplay.classList.add('timer-warning');
-                    }
-                } else {
-                    clearInterval(timerInterval);
-                    timerDisplay.innerText = "⏱️ TIME'S UP!";
-                    finishExam();
-                }
-            }, 1000);
-        }
-
-        // Detener audio antes de las respuestas (35:28 = 2128 segundos)
         audioEl.addEventListener('timeupdate', function() {
+            // Detener en el minuto 35:28 (2128 segundos)
             if (this.currentTime >= 2128) {
                 this.pause();
                 this.currentTime = 2127;
-                alert("⚠️ Fin del material de evaluación. El audio se detuvo para no revelar las respuestas oficiales.");
+                alert("⚠️ Has alcanzado el final de la prueba. El audio se ha detenido antes de las respuestas.");
             }
         });
 
         function jumpAudio(seconds) {
             audioEl.currentTime = seconds;
-            audioEl.play();
+            audioEl.play().catch(e => console.log(e));
         }
 
         // --- MINICACHE (LOCAL STORAGE) ---
         function saveProgress() {
             const data = {};
-            document.querySelectorAll('input[type="text"]').forEach(el => {
+            // Text inputs
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => {
                 if(el.id) data[el.id] = el.value;
             });
+            // Radio buttons
             document.querySelectorAll('input[type="radio"]').forEach(el => {
                 if(el.checked) data[el.name] = el.value;
             });
-            document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-                if(el.id) data[el.id] = el.checked;
-            });
             
-            localStorage.setItem('oet_week2_exam_progress', JSON.stringify(data));
+            localStorage.setItem('oet_week2_v2_progress', JSON.stringify(data));
             
             const indicator = document.getElementById('save-indicator');
             indicator.style.opacity = '1';
@@ -524,17 +455,14 @@
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('oet_week2_exam_progress');
+            const saved = localStorage.getItem('oet_week2_v2_progress');
             if(saved) {
                 const data = JSON.parse(saved);
-                document.querySelectorAll('input[type="text"]').forEach(el => {
+                document.querySelectorAll('input[type="text"], textarea').forEach(el => {
                     if(el.id && data[el.id]) el.value = data[el.id];
                 });
                 document.querySelectorAll('input[type="radio"]').forEach(el => {
                     if(data[el.name] && el.value === data[el.name]) el.checked = true;
-                });
-                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-                    if(el.id && data[el.id]) el.checked = data[el.id];
                 });
             }
         }
@@ -543,20 +471,19 @@
         document.addEventListener('change', saveProgress);
         document.addEventListener('DOMContentLoaded', loadProgress);
 
-        // --- GRADING SYSTEM ---
-        function finishExam() {
-            clearInterval(timerInterval);
+        // --- GRADING LOGIC ---
+        function gradeAll() {
             audioEl.pause();
             let score = 0;
 
-            // Flexibilidad en las respuestas de la Parte A
+            // Respuestas Flexibles Part A
             const answersA = {
                 q1: "pain", q2: "more than i expected|more than expected", q3: "swimming", q4: "vinegar",
                 q5: "swelling", q6: "lightheaded|lightheadedness", q7: "localized swelling", q8: "mild",
                 q9: "tentacle", q10: "antihistamine", q11: "itching", q12: "trouble breathing",
                 q13: "high fever", q14: "appetite", q15: "cramping", q16: "southeast asia",
                 q17: "typhoid fever", q18: "water", q19: "salmonella typhi", q20: "perforation",
-                q21: "stool culture", q22: "ciprofloxacin or azithromycin|azithromycin|ciprofloxacin", q23: "confusion", q24: "greasy"
+                q21: "stool culture", q22: "azithromycin|ciprofloxacin|ciprofloxacin or azithromycin", q23: "confusion", q24: "greasy"
             };
 
             const answersBC = {
@@ -565,7 +492,7 @@
                 q37: "A", q38: "A", q39: "C", q40: "B", q41: "A", q42: "B"
             };
 
-            // Evaluar Parte A
+            // Grade Part A
             for (let i = 1; i <= 24; i++) {
                 let inputEl = document.getElementById('q' + i);
                 if (!inputEl) continue;
@@ -577,24 +504,25 @@
                 let existingSpan = inputEl.parentNode.querySelector('.correction-span');
                 if (existingSpan) existingSpan.remove();
 
+                let span = document.createElement('span');
+                span.className = 'correction-span';
+
                 if (isCorrect && userVal !== "") {
-                    inputEl.style.borderColor = "#4CAF50";
+                    inputEl.style.borderColor = "var(--verde-exito)";
                     inputEl.style.backgroundColor = "#e8f5e9";
-                    inputEl.style.color = "#2E7D32";
+                    span.classList.add('correct-tag');
+                    span.innerText = "✔️";
                     score++;
                 } else {
-                    inputEl.style.borderColor = "#d32f2f";
+                    inputEl.style.borderColor = "var(--rojo-alerta)";
                     inputEl.style.backgroundColor = "#ffebee";
-                    inputEl.style.color = "#d32f2f";
-                    
-                    let span = document.createElement('span');
-                    span.className = 'correction-span';
-                    span.innerText = `Respuesta Correcta: ${correctOptions[0]}`;
-                    inputEl.parentNode.appendChild(span);
+                    span.classList.add('incorrect-tag');
+                    span.innerText = `❌ Respuesta: ${correctOptions[0].toUpperCase()}`;
                 }
+                inputEl.parentNode.appendChild(span);
             }
 
-            // Evaluar Parte B y C
+            // Grade Part B & C
             for (let i = 25; i <= 42; i++) {
                 let radios = document.getElementsByName('q' + i);
                 let selectedVal = "";
@@ -609,11 +537,11 @@
                 if (existingMsg) existingMsg.remove();
 
                 if (selectedVal === correctVal) {
-                    blockEl.style.border = "2px solid #4CAF50";
+                    blockEl.style.border = "2px solid var(--verde-exito)";
                     blockEl.style.backgroundColor = "#e8f5e9";
                     score++;
                 } else {
-                    blockEl.style.border = "2px solid #d32f2f";
+                    blockEl.style.border = "2px solid var(--rojo-alerta)";
                     blockEl.style.backgroundColor = "#ffebee";
                     
                     let p = document.createElement('p');
@@ -623,7 +551,7 @@
                 }
             }
 
-            // Escala OET
+            // Calculate OET Band Grade
             let grade = "E";
             if (score >= 35) grade = "A";
             else if (score >= 30) grade = "B";
@@ -631,21 +559,12 @@
             else if (score >= 20) grade = "C";
             else if (score >= 10) grade = "D";
 
-            // Dashboard
             const dashboard = document.getElementById('results-dashboard');
             document.getElementById('final-score').innerText = `${score}/42`;
             document.getElementById('final-grade').innerText = `OET Grade Estimada: ${grade}`;
             
             dashboard.style.display = "block";
-            
-            // Obligar a visualizar todas las pestañas para el PDF
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.style.display = "block";
-            });
-            document.querySelector('.tab-container').style.display = "none";
-            document.getElementById('start-overlay').style.display = "none";
-
-            window.scrollTo({ top: dashboard.offsetTop - 80, behavior: 'smooth' });
+            window.scrollTo({ top: dashboard.offsetTop - 50, behavior: 'smooth' });
         }
     </script>
 </body>
