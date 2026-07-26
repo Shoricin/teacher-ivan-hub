@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Audio & Transcript Worksheet - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 2rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        /* Sticky Audio Player */
+        .audio-player-container {
+            background: #eef2f6; padding: 15px; border-bottom: 2px solid var(--gris-neutro);
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        audio { width: 100%; max-width: 800px; outline: none; }
+        
+        .jump-btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+        .btn-jump { 
+            background: var(--blanco-puro); border: 1px solid var(--azul-primario); color: var(--azul-primario); 
+            padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.85rem;
+        }
+        .btn-jump:hover { background: var(--azul-primario); color: white; }
+
+        .main-layout {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 20px; max-width: 1200px; margin: 2rem auto; padding: 0 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Transcript Area */
+        .transcript-container {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--azul-primario);
+            max-height: 75vh; overflow-y: auto;
+        }
+        
+        .transcript-title { color: var(--naranja-vibrante); margin-bottom: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .transcript-part { background: var(--azul-primario); color: white; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.1rem; }
+        
+        .dialogue { margin-bottom: 15px; font-size: 0.95rem; color: #333; }
+        .speaker { font-weight: 800; color: var(--azul-primario); }
+        .medical-term { background: #ffebee; color: var(--rojo-alerta); padding: 0 4px; border-radius: 3px; font-weight: 700; }
+
+        /* Vocabulary Tracker Area */
+        .tracker-container {
+            background: #f8fafc; border-radius: 12px; padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--naranja-vibrante);
+            position: sticky; top: 120px; height: fit-content;
+        }
+        .tracker-title { color: var(--azul-primario); margin-bottom: 1rem; }
+        .tracker-instructions { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+        
+        .tracker-textarea {
+            width: 100%; height: 50vh; padding: 15px; border: 1px solid var(--gris-neutro);
+            border-radius: 8px; font-family: var(--font-cuerpo); resize: vertical; outline: none;
+        }
+        .tracker-textarea:focus { border-color: var(--naranja-vibrante); }
+
+        .btn-print {
+            background: var(--verde-exito); color: white; border: none; padding: 12px; width: 100%;
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+            margin-top: 15px; text-transform: uppercase; font-size: 1rem;
+        }
+        .btn-print:hover { background: #388E3C; }
+
+        /* Estilos de Impresión */
+        @media print {
+            .audio-player-container, .tracker-container, .hero { display: none !important; }
+            .main-layout { display: block; }
+            .transcript-container { max-height: none; overflow: visible; box-shadow: none; border: none; }
+        }
+        
+        .citation { font-size: 0.7rem; color: #999; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1 class="hero-title">OET Active <span>Listening</span></h1>
+        <p>Read along with the transcript and identify key medical terminology.</p>
+    </header>
+
+    <!-- STICKY AUDIO PLAYER -->
+    <div class="audio-player-container">
+        <audio id="oet-audio-player" controls>
+            <source src="audios/OETWEEK3AUDIO.m4a" type="audio/mp4">
+            Tu navegador no soporta el audio.
+        </audio>
+        <div class="jump-btn-group">
+            <button class="btn-jump" onclick="jumpAudio(0)">00:00 Intro</button>
+            <button class="btn-jump" onclick="jumpAudio(65)">01:05 Part A</button>
+            <button class="btn-jump" onclick="jumpAudio(716)">11:56 Part B</button>
+            <button class="btn-jump" onclick="jumpAudio(1221)">20:21 Part C</button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        
+        <!-- TRANSCRIPT AREA -->
+        <div class="transcript-container">
+            <h2 class="transcript-title">📄 Official Transcript</h2>
+            
+            <div class="transcript-part">PART A - Extract 1</div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> Mrs. Anderson, please come in. How are you feeling today? <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Hi doctor, not great to be honest. I've been having a lot of discomfort and I'm starting to get really worried. I've been feeling off for a few months now, but lately, it's been getting worse. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Well, it started with some general <span class="medical-term">stomach pain</span>. At first, I thought it was <span class="medical-term">indigestion</span> or something minor, but the pain has become more persistent. It's a dull, constant ache that's worse after I eat. I've also noticed I'm losing weight, but I haven't been trying to... <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> It's been about three months. It wasn't that bad at first, so I ignored it. But recently, it's become more intense and spreads to my back. It feels like it's deep inside, and sometimes I have trouble sleeping because of it. I've also been feeling <span class="medical-term">nauseous</span> more often, and food just doesn't sit right anymore. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> Have you noticed any changes in your bowel movements? Sometimes <span class="medical-term">gastrointestinal issues</span> can show up in more ways than just pain. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Actually, yes. I wasn't sure if it was important, but I've had more <span class="medical-term">diarrhea</span> than usual. My stools are also pale and greasy, almost grey sometimes, and greasy. I didn't think much of it, but it's been happening pretty frequently. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> That's useful information, Mrs. Anderson. Changes in stool color and texture can sometimes indicate an issue with digestion, especially involving the <span class="medical-term">pancreas</span>. I'm also concerned about your unexplained weight loss. Have you had any issues with <span class="medical-term">jaundice</span>, yellowing of your skin or eyes? <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> It's important not to jump to conclusions just yet. <span class="medical-term">Pancreatic cancer</span> is one possibility based on your symptoms, but there are other conditions that could also cause similar issues, such as <span class="medical-term">pancreatitis</span> or <span class="medical-term">gallbladder problems</span>... <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> We'll start with some blood tests to check your liver and pancreatic function, as well as a scan like a <span class="medical-term">CT or MRI</span>, to get a better look at the pancreas and surrounding organs. We may also need to do an <span class="medical-term">endoscopic ultrasound</span> or a <span class="medical-term">biopsy</span>, depending on what we find. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Doctor:</span> Treatment options may include surgery, <span class="medical-term">chemotherapy</span>, or radiation, depending on the stage and type... If you feel like the anxiety or mood changes are becoming overwhelming, we can also discuss ways to help manage that side of things, whether through counseling or medication if needed. <span class="citation">[cite: 13]</span></div>
+
+            <div class="transcript-part">PART A - Extract 2</div>
+            <div class="dialogue"><span class="speaker">Ms. Lewis:</span> It feels like I'm always on edge, like there's something bad about to happen... I can't seem to focus on anything else, and it's exhausting. Sometimes, I even get these physical symptoms, like my <span class="medical-term">heart races</span>, or I get <span class="medical-term">short of breath</span>. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Psychiatrist:</span> Based on what you've described, it sounds like you might be dealing with <span class="medical-term">Generalized Anxiety Disorder</span>, or GAD. GAD is characterized by persistent and excessive worry about a variety of things... <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Psychiatrist:</span> One approach we can take is <span class="medical-term">Cognitive Behavioral Therapy</span>, or CBT. CBT helps you identify and challenge the negative thought patterns that contribute to your anxiety... We can also explore relaxation techniques like deep breathing, progressive muscle relaxation, or mindfulness... <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Psychiatrist:</span> Medication can be a valuable part of treatment, especially in combination with therapy. There are several options, including <span class="medical-term">SSRIs</span>, which are commonly used to treat anxiety. They work by balancing the chemicals in your brain that affect mood and anxiety. <span class="citation">[cite: 13]</span></div>
+
+            <div class="transcript-part">PART B</div>
+            <div class="dialogue"><span class="speaker">Question 26 - Doctor:</span> We're going to use a <span class="medical-term">multimodal analgesia</span> approach to manage your pain, which means we'll use a combination of medications that work together... We'll use a combination of <span class="medical-term">non-opioid medications</span> like <span class="medical-term">ibuprofen</span> and possibly a low dose of <span class="medical-term">opioids</span>, if needed, for more severe pain. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Question 28 - GP:</span> This does sound like a condition called <span class="medical-term">aquagenic urticaria</span>, which is an extremely rare allergy to water. <span class="citation">[cite: 13]</span></div>
+
+            <div class="transcript-part">PART C</div>
+            <div class="dialogue"><span class="speaker">Extract 1 - Dr. Shaw:</span> My name is Dr. Elizabeth Shaw, and I specialize in <span class="medical-term">geriatric palliative care</span>... The key to effective palliative care in <span class="medical-term">dementia</span> is maintaining dignity and autonomy despite severe <span class="medical-term">cognitive impairment</span>. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Extract 1 - Dr. Shaw:</span> The concept of <span class="medical-term">advanced care planning</span> is crucial here. It allows patients to document their preferences while they still have the capacity to do so... <span class="citation">[cite: 13]</span></div>
+            
+            <div class="dialogue"><span class="speaker">Extract 2 - Dr. Carter:</span> My journey started in internal medicine, focusing primarily on <span class="medical-term">gastrointestinal disorders</span>. However, my career took a turn when my daughter Emily was diagnosed with <span class="medical-term">celiac disease</span> after years of misdiagnoses. For years, she was told she had <span class="medical-term">irritable bowel syndrome</span>... <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Extract 2 - Dr. Carter:</span> Patients can present with symptoms similar to irritable bowel syndrome (IBS), <span class="medical-term">Crohn's disease</span>, <span class="medical-term">lactose intolerance</span>, or even depression... In children, celiac disease may be misdiagnosed as <span class="medical-term">failure to thrive</span>, whereas in adults, it may be mistaken for <span class="medical-term">anemia</span> or <span class="medical-term">chronic fatigue syndrome</span>. <span class="citation">[cite: 13]</span></div>
+            <div class="dialogue"><span class="speaker">Extract 2 - Dr. Carter:</span> A blood test looking for certain antibodies, like <span class="medical-term">tissue transglutaminase antibodies (tTG-IgA)</span>, is often the first screening tool. If that test comes back positive, the next step is usually an <span class="medical-term">endoscopic biopsy</span> of the small intestine to look for damage to the <span class="medical-term">villi</span>, which is a hallmark of celiac disease. <span class="citation">[cite: 13]</span></div>
+
+        </div>
+
+        <!-- VOCABULARY TRACKER -->
+        <div class="tracker-container">
+            <h3 class="tracker-title">📝 Clinical Vocabulary Tracker</h3>
+            <p class="tracker-instructions">As you listen and read, write down any medical conditions, treatments, or symptoms you notice. Define them in your own words.</p>
+            
+            <textarea class="tracker-textarea" id="vocab-notes" placeholder="Example:&#10;1. Jaundice - Yellowing of the skin/eyes.&#10;2. CBT - Cognitive Behavioral Therapy..."></textarea>
+            
+            <button class="btn-print" onclick="window.print()">Print My Notes</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Funcionalidad de salto de audio
+        function jumpAudio(seconds) {
+            const audioEl = document.getElementById('oet-audio-player');
+            audioEl.currentTime = seconds;
+            audioEl.play().catch(e => console.log(e));
+        }
+
+        // Minicache para guardar las notas del vocabulario automáticamente
+        const notesArea = document.getElementById('vocab-notes');
+        
+        notesArea.addEventListener('input', function() {
+            localStorage.setItem('oet_reading_vocab_notes', this.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedNotes = localStorage.getItem('oet_reading_vocab_notes');
+            if (savedNotes) {
+                notesArea.value = savedNotes;
+            }
+        });
+    </script>
+</body>
+</html>
