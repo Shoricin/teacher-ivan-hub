@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Listening Mock Test Week 3 - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6; padding-top: 60px;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* --- STICKY TIMER --- */
+        .sticky-timer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--gris-neutro); color: #333;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800;
+            z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            letter-spacing: 2px; transition: background 0.3s, color 0.3s;
+        }
+        .timer-active { background: var(--naranja-vibrante); color: white; }
+        .timer-warning { background: #d32f2f; color: white; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-nieve); text-align: center;
+        }
+        .hero img { height: 90px; margin-bottom: 10px; }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; }
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* Contenedor Principal (Blur effect before start) */
+        #exam-content { filter: blur(5px); pointer-events: none; transition: filter 0.5s; }
+        #exam-content.active { filter: none; pointer-events: auto; }
+
+        /* Start Overlay */
+        .start-overlay {
+            background: var(--blanco-puro); border-radius: 12px; padding: 3rem;
+            text-align: center; box-shadow: 0 10px 30px rgba(10, 70, 140, 0.15);
+            margin-bottom: 2rem; border-top: 5px solid var(--naranja-vibrante);
+        }
+        
+        .btn {
+            background: var(--azul-primario); color: white; border: none; padding: 12px 25px;
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s;
+            font-size: 1.1rem; text-transform: uppercase; font-weight: 700;
+        }
+        .btn:hover { background: #08366b; transform: translateY(-2px); }
+        .btn-start { background: var(--naranja-vibrante); font-size: 1.3rem; padding: 15px 40px; }
+        .btn-start:hover { background: #e05e15; }
+
+        /* Cards & Audio */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem;
+            border: 1px solid rgba(200, 205, 210, 0.4);
+        }
+        
+        .audio-player-container {
+            background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; border: 2px solid var(--azul-claro);
+            position: sticky; top: 70px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        audio { width: 100%; outline: none; margin-bottom: 10px; }
+
+        /* OET Format Styles */
+        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 2rem 0 1rem 0; }
+        .extract-title { color: var(--naranja-vibrante); margin-bottom: 1rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
+        
+        .question-line { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; display: flex; align-items: center; flex-wrap: wrap; }
+        .oet-input { border: none; border-bottom: 2px dashed var(--gris-neutro); padding: 5px; width: 180px; font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); outline: none; background: transparent; transition: all 0.3s; margin: 0 5px;}
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
+        
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
+        .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+
+        /* Corrección Styles */
+        .correction-span { font-weight: bold; margin-left: 10px; font-size: 0.85rem; padding: 3px 8px; border-radius: 4px; }
+        .correct-tag { color: var(--verde-exito); background: #e8f5e9; border: 1px solid var(--verde-exito); }
+        .incorrect-tag { color: var(--rojo-alerta); background: #ffebee; border: 1px solid var(--rojo-alerta); }
+        .correction-mcq { color: #d32f2f; font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
+        
+        /* Dashboard de Resultados */
+        #results-dashboard { display: none; background: #eef2f6; border: 2px solid var(--azul-primario); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--naranja-vibrante); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1rem auto; box-shadow: 0 4px 15px rgba(245, 110, 30, 0.4); }
+        .grade-text { font-size: 1.5rem; font-weight: 700; color: var(--azul-primario); margin-bottom: 10px; }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .hero, .sticky-timer, .audio-player-container, .btn, .start-overlay { display: none !important; }
+            #exam-content { filter: none; pointer-events: auto; }
+            .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
+            #results-dashboard { display: block !important; border: 1px solid #ccc; background: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TIMER SUPERIOR -->
+    <div class="sticky-timer" id="timer-display">⏱️ 45:00</div>
+
+    <header class="hero">
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Mascot">
+        <h1 class="hero-title">OET Listening <span>Week 3</span></h1>
+        <p>Evaluación Oficial | Mock Test - Repositorio Clínico</p>
+    </header>
+
+    <div class="container">
+
+        <div class="start-overlay" id="start-overlay">
+            <h2>Instrucciones del Simulacro</h2>
+            <p>Este examen tiene una duración estricta de 45 minutos. Asegúrate de estar en un entorno tranquilo y utiliza auriculares de ser posible.</p>
+            <button class="btn btn-start" onclick="startExam()">▶ Iniciar Examen</button>
+        </div>
+        
+        <div id="exam-content">
+            
+            <!-- REPRODUCTOR -->
+            <div class="audio-player-container">
+                <audio id="oet-audio-player" controls controlsList="nodownload">
+                    <!-- URL apuntando a la ruta del audio proveida -->
+                    <source src="audios/OETWEEK3AUDIO.m4a" type="audio/mp4">
+                    Tu navegador no soporta el audio.
+                </audio>
+            </div>
+
+            <!-- DASHBOARD DE RESULTADOS (Oculto inicialmente) -->
+            <div id="results-dashboard">
+                <h2>Reporte Oficial OET - Week 3</h2>
+                <div class="score-circle" id="final-score">0/42</div>
+                <div class="grade-text" id="final-grade">Grade: -</div>
+                <p id="feedback-text">Revisa tus errores a continuación. El puntaje se basa en la escala oficial de OET.</p>
+                <button class="btn" style="background: #4CAF50;" onclick="window.print()">📥 Descargar PDF de Resultados</button>
+            </div>
+
+            <!-- ================= PART A ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART A: NOTE COMPLETION</h3>
+                <p><em>Complete the following notes with a word or short phrase based on the audio extracts.</em></p>
+
+                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Mrs. Anderson</h4>
+                <h5>Presenting Symptoms:</h5>
+                <div class="question-line">• Initial issue: (1) <input type="text" id="q1" class="oet-input"> pain, initially thought to be minor.</div>
+                <div class="question-line">• Pain has increased and is now felt in the (2) <input type="text" id="q2" class="oet-input">.</div>
+                <div class="question-line">• Pain affects sleep and is worse after eating.</div>
+                <div class="question-line">• Additional symptoms include (3) <input type="text" id="q3" class="oet-input"> and poor digestion.</div>
+                
+                <h5 style="margin-top:10px;">Bowel Changes:</h5>
+                <div class="question-line">• Stools are described as (4) <input type="text" id="q4" class="oet-input"> in both colour and texture.</div>
+                
+                <h5 style="margin-top:10px;">Doctor's Concerns:</h5>
+                <div class="question-line">• GP suspects possible issue with the (5) <input type="text" id="q5" class="oet-input">.</div>
+                <div class="question-line">• Patient has unintentionally experienced (6) <input type="text" id="q6" class="oet-input">.</div>
+                <div class="question-line">• Patient shows signs of (7) <input type="text" id="q7" class="oet-input">, visible in the skin.</div>
+                <div class="question-line">• Other potential causes mentioned: pancreatitis and (8) <input type="text" id="q8" class="oet-input"> problems.</div>
+
+                <h5 style="margin-top:10px;">Proposed Investigations:</h5>
+                <div class="question-line">• Initial tests include blood work and (9) <input type="text" id="q9" class="oet-input">.</div>
+                <div class="question-line">• Further tests may include biopsy or (10) <input type="text" id="q10" class="oet-input"> ultrasound.</div>
+                
+                <h5 style="margin-top:10px;">Emotional Impact & Next Steps:</h5>
+                <div class="question-line">• GP offers support and suggests (11) <input type="text" id="q11" class="oet-input"> or medication for emotional wellbeing.</div>
+                <div class="question-line">• Patient advised to reach out if symptoms (12) <input type="text" id="q12" class="oet-input">.</div>
+
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Ms. Lewis</h4>
+                <h5>Reason for Appointment & Symptoms:</h5>
+                <div class="question-line">• Persistent (13) <input type="text" id="q13" class="oet-input"> affecting daily life.</div>
+                <div class="question-line">• Describes constant (14) <input type="text" id="q14" class="oet-input"> about various aspects of life.</div>
+                <div class="question-line">• Feels constantly (15) <input type="text" id="q15" class="oet-input">.</div>
+                <div class="question-line">• Reports difficulty with focus and (16) <input type="text" id="q16" class="oet-input"> due to racing thoughts.</div>
+                <div class="question-line">• Physical symptoms include (17) <input type="text" id="q17" class="oet-input"> and shortness of breath.</div>
+                
+                <h5 style="margin-top:10px;">Diagnosis:</h5>
+                <div class="question-line">• Psychiatrist suspects (18) <input type="text" id="q18" class="oet-input">.</div>
+                <div class="question-line">• Condition involves both (19) <input type="text" id="q19" class="oet-input"> and physical symptoms.</div>
+                
+                <h5 style="margin-top:10px;">Triggers and Patterns:</h5>
+                <div class="question-line">• Worsens with (20) <input type="text" id="q20" class="oet-input">.</div>
+                <div class="question-line">• He/She has been experiencing tension (21) <input type="text" id="q21" class="oet-input"> despite everything in their life seeming fine.</div>
+                
+                <h5 style="margin-top:10px;">Treatment Plan:</h5>
+                <div class="question-line">• Recommends (22) <input type="text" id="q22" class="oet-input"> to address thought patterns.</div>
+                <div class="question-line">• Suggests relaxation methods like deep breathing and (23) <input type="text" id="q23" class="oet-input">.</div>
+                <div class="question-line">• Possible addition of (24) <input type="text" id="q24" class="oet-input"> if symptoms severe.</div>
+            </section>
+
+            <!-- ================= PART B ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART B: MULTIPLE CHOICE QUESTIONS (25-30)</h3>
+                <p><em>Choose the best option (A, B, or C) that answers each question based on the audio recordings.</em></p>
+
+                <div class="mcq-block" id="block-q25">
+                    <div class="mcq-question">25. What does the vet conducting the briefing want to explore?</div>
+                    <label class="mcq-option"><input type="radio" name="q25" value="A"> (a) How the dog's relationship with its owner might be affecting its condition</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="B"> (b) The role the dog's emotional well-being plays in its health</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="C"> (c) The potential impact of the owner's stress on the dog's physical state.</label>
+                </div>
+                <div class="mcq-block" id="block-q26">
+                    <div class="mcq-question">26. The physician is planning to manage the patient's pain by...</div>
+                    <label class="mcq-option"><input type="radio" name="q26" value="A"> (a) Administering a combination of pain relievers that work synergistically</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="B"> (b) Using a carefully selected blend of medications to alleviate the pain</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="C"> (c) Providing a mix of different drugs to address the pain from multiple pathways</label>
+                </div>
+                <div class="mcq-block" id="block-q27">
+                    <div class="mcq-question">27. They think that few people have shown interest because...</div>
+                    <label class="mcq-option"><input type="radio" name="q27" value="A"> (a) They feel it won't help them in their daily routines</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="B"> (b) They believe it's not directly relevant to their roles</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="C"> (c) They think it doesn't apply to their specific tasks</label>
+                </div>
+                <div class="mcq-block" id="block-q28">
+                    <div class="mcq-question">28. What does the GP ask the patient to clarify?</div>
+                    <label class="mcq-option"><input type="radio" name="q28" value="A"> (a) Whether the reaction is only caused by exposure to particular water sources</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="B"> (b) Whether the skin reaction occurs when in contact with all forms of water</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="C"> (c) Whether the irritation is due to specific kinds of water like rain or tap water</label>
+                </div>
+                <div class="mcq-block" id="block-q29">
+                    <div class="mcq-question">29. The trainer is explaining that today's session will:</div>
+                    <label class="mcq-option"><input type="radio" name="q29" value="A"> (a) Expand on previously introduced technical skills</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="B"> (b) Develop further the concepts and methods they have been exposed to</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="C"> (c) Build upon prior knowledge with a more advanced application of tools</label>
+                </div>
+                <div class="mcq-block" id="block-q30">
+                    <div class="mcq-question">30. They agree that the leadership team should...</div>
+                    <label class="mcq-option"><input type="radio" name="q30" value="A"> (a) Broaden current strategies to improve care coordination</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="B"> (b) Build on prior efforts to enhance patient outcomes</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="C"> (c) Implement more comprehensive measures to support staff education</label>
+                </div>
+            </section>
+
+            <!-- ================= PART C ================= -->
+            <section class="section-card">
+                <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42)</h3>
+                <p><em>Choose the best option (A, B, or C) based on the presentations or interviews.</em></p>
+
+                <h4 class="extract-title">Extract 01: Questions 31-36 (Dementia Care)</h4>
+                <div class="mcq-block" id="block-q31">
+                    <div class="mcq-question">31. What challenge in dementia care does Dr. Shaw identify?</div>
+                    <label class="mcq-option"><input type="radio" name="q31" value="A"> (a) It's hard to manage pain in early dementia.</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="B"> (b) Dementia patients' identities can be overlooked as their condition worsens.</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="C"> (c) Family members are reluctant to get involved in care.</label>
+                </div>
+                <div class="mcq-block" id="block-q32">
+                    <div class="mcq-question">32. Why does Dr. Shaw emphasize the importance of advanced care planning?</div>
+                    <label class="mcq-option"><input type="radio" name="q32" value="A"> (a) It ensures that patients get access to the latest treatments.</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="B"> (b) It allows patients to express their wishes before they lose the ability to communicate.</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="C"> (c) It helps healthcare professionals avoid making medical errors.</label>
+                </div>
+                <div class="mcq-block" id="block-q33">
+                    <div class="mcq-question">33. For Dr. Shaw, the results of the study reveal that person-centered care:</div>
+                    <label class="mcq-option"><input type="radio" name="q33" value="A"> (a) Is the standard approach in most healthcare settings.</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="B"> (b) Is more widely available than family members are aware of.</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="C"> (c) Is not as common as it should be in dementia care.</label>
+                </div>
+                <div class="mcq-block" id="block-q34">
+                    <div class="mcq-question">34. What does Dr. Shaw say about pain management in dementia patients?</div>
+                    <label class="mcq-option"><input type="radio" name="q34" value="A"> (a) Many patients refuse pain relief.</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="B"> (b) It's difficult because healthcare professionals don't know how to assess pain in non-verbal patients.</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="C"> (c) It's not necessary in the late stages of the disease.</label>
+                </div>
+                <div class="mcq-block" id="block-q35">
+                    <div class="mcq-question">35. Dr. Shaw says that the lack of knowledge about patient rights:</div>
+                    <label class="mcq-option"><input type="radio" name="q35" value="A"> (a) Can lead to treatment decisions that do not respect the patient's wishes.</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="B"> (b) Shows that more family members should be involved in decision-making.</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="C"> (c) Leads to better outcomes for patients in end-of-life care.</label>
+                </div>
+                <div class="mcq-block" id="block-q36">
+                    <div class="mcq-question">36. Dr. Shaw argues that person-centered care is important because:</div>
+                    <label class="mcq-option"><input type="radio" name="q36" value="A"> (a) It helps patients live longer lives.</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="B"> (b) It ensures the patient's dignity and identity are respected throughout the disease process.</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) It reduces the number of decisions healthcare professionals have to make.</label>
+                </div>
+
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Celiac Disease Management)</h4>
+                <div class="mcq-block" id="block-q37">
+                    <div class="mcq-question">37. What prompted Dr. Carter to leave his previous medical practice?</div>
+                    <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) He was driven by personal experiences with family health challenges</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="B"> (b) He grew disenchanted with his role in internal medicine</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="C"> (c) He was influenced by his daughter's health condition</label>
+                </div>
+                <div class="mcq-block" id="block-q38">
+                    <div class="mcq-question">38. How did Dr. Carter's daughter's condition finally receive a proper diagnosis?</div>
+                    <label class="mcq-option"><input type="radio" name="q38" value="A"> (a) By conducting further tests, including blood work and tissue analysis</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) Through a combination of diagnostic screenings and thorough investigation</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="C"> (c) By evaluating both serological tests and intestinal biopsies</label>
+                </div>
+                <div class="mcq-block" id="block-q39">
+                    <div class="mcq-question">39. Why does Dr. Carter draw attention to irritable bowel syndrome (IBS)?</div>
+                    <label class="mcq-option"><input type="radio" name="q39" value="A"> (a) Due to its frequent confusion with celiac disease</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="B"> (b) Because of its association with gastrointestinal complications</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="C"> (c) Since it shares overlapping symptoms with celiac disease</label>
+                </div>
+                <div class="mcq-block" id="block-q40">
+                    <div class="mcq-question">40. What misconception about celiac disease has recently been challenged?</div>
+                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) That it primarily affects only children and young adults</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) That it is less widespread than previously thought</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) That it is considered a rare autoimmune disorder</label>
+                </div>
+                <div class="mcq-block" id="block-q41">
+                    <div class="mcq-question">41. What symptoms encouraged Dr. Carter to pursue further investigation for his daughter?</div>
+                    <label class="mcq-option"><input type="radio" name="q41" value="A"> (a) Cognitive difficulties and lack of energy</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="B"> (b) Chronic tiredness and diminished mental clarity</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="C"> (c) Persistent fatigue and recurring brain fog</label>
+                </div>
+                <div class="mcq-block" id="block-q42">
+                    <div class="mcq-question">42. What promising developments in celiac disease management were mentioned by Dr. Carter?</div>
+                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) The possibility of a gluten-tolerant vaccine.</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) The potential of an immunotherapy to reduce gluten sensitivity.</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) The exploration of medical interventions to allow gluten consumption.</label>
+                </div>
+            </section>
+
+            <button class="btn" style="width: 100%; padding: 20px; font-size: 1.5rem; background: var(--naranja-vibrante);" onclick="finishExam()">Finalizar Examen y Evaluar</button>
+
+        </div>
+    </div>
+
+    <script>
+        // --- TIMER LOGIC ---
+        let totalTime = 45 * 60; // 45 minutos
+        let timerInterval = null;
+        const timerDisplay = document.getElementById('timer-display');
+        const examContent = document.getElementById('exam-content');
+        const startOverlay = document.getElementById('start-overlay');
+        const audioEl = document.getElementById('oet-audio-player');
+
+        function startExam() {
+            startOverlay.style.display = 'none';
+            examContent.classList.add('active');
+            timerDisplay.classList.add('timer-active');
+            
+            // Iniciar Audio
+            audioEl.play().catch(e => console.log("User interaction required to play audio."));
+
+            timerInterval = setInterval(() => {
+                if (totalTime > 0) {
+                    totalTime--;
+                    let minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+                    let seconds = (totalTime % 60).toString().padStart(2, '0');
+                    timerDisplay.innerText = `⏱️ ${minutes}:${seconds}`;
+                    
+                    if (totalTime < 300) { // < 5 mins
+                        timerDisplay.classList.add('timer-warning');
+                    }
+                } else {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerText = "⏱️ TIME'S UP!";
+                    finishExam();
+                }
+            }, 1000);
+        }
+
+        // --- GRADING LOGIC ---
+        function finishExam() {
+            clearInterval(timerInterval);
+            audioEl.pause();
+            let score = 0;
+
+            // OET Week 3 Answer Key
+            const answersA = {
+                q1: "stomach", 
+                q2: "back", 
+                q3: "nauseous|nausea", 
+                q4: "pale and greasy",
+                q5: "pancreas", 
+                q6: "weight loss", 
+                q7: "jaundice", 
+                q8: "gallbladder",
+                q9: "scan", 
+                q10: "endoscopic", 
+                q11: "counseling", 
+                q12: "worsen",
+                q13: "overwhelmed", 
+                q14: "worry", 
+                q15: "on edge", 
+                q16: "exhausting",
+                q17: "heart races", 
+                q18: "generalized anxiety disorder|gad", 
+                q19: "mental", 
+                q20: "work deadlines",
+                q21: "no matter what i do", 
+                q22: "cognitive behavioral therapy|cbt", 
+                q23: "mindfulness", 
+                q24: "medication"
+            };
+
+            const answersBC = {
+                q25: "C", q26: "B", q27: "A", q28: "B", q29: "C", q30: "A",
+                q31: "B", q32: "B", q33: "C", q34: "B", q35: "A", q36: "B",
+                q37: "C", q38: "A", q39: "A", q40: "C", q41: "C", q42: "A"
+            };
+
+            // Grade Part A
+            for (let i = 1; i <= 24; i++) {
+                let inputEl = document.getElementById('q' + i);
+                if (!inputEl) continue;
+                
+                let userVal = inputEl.value.trim().toLowerCase();
+                let correctOptions = answersA['q' + i].toLowerCase().split('|');
+                let isCorrect = correctOptions.some(opt => userVal === opt.trim());
+
+                let existingSpan = inputEl.parentNode.querySelector('.correction-span');
+                if (existingSpan) existingSpan.remove();
+
+                let span = document.createElement('span');
+                span.className = 'correction-span';
+
+                if (isCorrect && userVal !== "") {
+                    inputEl.style.borderColor = "var(--verde-exito)";
+                    inputEl.style.backgroundColor = "#e8f5e9";
+                    span.classList.add('correct-tag');
+                    span.innerText = "✔️";
+                    score++;
+                } else {
+                    inputEl.style.borderColor = "var(--rojo-alerta)";
+                    inputEl.style.backgroundColor = "#ffebee";
+                    span.classList.add('incorrect-tag');
+                    span.innerText = `❌ Correct Answer: ${correctOptions[0].toUpperCase()}`;
+                }
+                inputEl.parentNode.appendChild(span);
+            }
+
+            // Grade Part B & C
+            for (let i = 25; i <= 42; i++) {
+                let radios = document.getElementsByName('q' + i);
+                let selectedVal = "";
+                for (let r of radios) {
+                    if (r.checked) selectedVal = r.value;
+                }
+                
+                let blockEl = document.getElementById('block-q' + i);
+                let correctVal = answersBC['q' + i];
+
+                let existingMsg = blockEl.querySelector('.correction-mcq');
+                if (existingMsg) existingMsg.remove();
+
+                if (selectedVal === correctVal) {
+                    blockEl.style.border = "2px solid var(--verde-exito)";
+                    blockEl.style.backgroundColor = "#e8f5e9";
+                    score++;
+                } else {
+                    blockEl.style.border = "2px solid var(--rojo-alerta)";
+                    blockEl.style.backgroundColor = "#ffebee";
+                    
+                    let p = document.createElement('p');
+                    p.className = 'correction-mcq';
+                    p.innerText = `❌ Incorrect. The correct answer was: (${correctVal.toLowerCase()})`;
+                    blockEl.appendChild(p);
+                }
+            }
+
+            // Calculate OET Band Grade
+            let grade = "E";
+            if (score >= 35) grade = "A";
+            else if (score >= 30) grade = "B";
+            else if (score >= 25) grade = "C+";
+            else if (score >= 20) grade = "C";
+            else if (score >= 10) grade = "D";
+
+            const dashboard = document.getElementById('results-dashboard');
+            document.getElementById('final-score').innerText = `${score}/42`;
+            document.getElementById('final-grade').innerText = `OET Grade Estimada: ${grade}`;
+            
+            dashboard.style.display = "block";
+            window.scrollTo({ top: dashboard.offsetTop - 50, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
