@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Clinical Vocabulary Bank - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero-title { font-size: 2.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;}
+        .hero-title span { color: var(--naranja-vibrante); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+        /* Tips Section */
+        .tips-section {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 3rem;
+            border-left: 8px solid var(--naranja-vibrante);
+        }
+        .tips-section h2 { color: var(--azul-primario); margin-bottom: 1.5rem; font-size: 1.8rem;}
+        .tips-list { list-style: none; padding: 0; margin: 0; }
+        .tips-list li { position: relative; padding-left: 35px; margin-bottom: 15px; font-size: 1rem; color: #444; }
+        .tips-list li::before { content: '💡'; position: absolute; left: 0; top: 0; font-size: 1.2rem; }
+
+        /* Search Bar */
+        .search-container { margin-bottom: 2rem; text-align: center; position: sticky; top: 15px; z-index: 100;}
+        .search-input {
+            width: 100%; max-width: 600px; padding: 15px 25px; border-radius: 30px;
+            border: 2px solid var(--azul-primario); font-family: var(--font-cuerpo);
+            font-size: 1.1rem; color: var(--azul-primario); outline: none; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); background: white;
+        }
+        .search-input:focus { border-color: var(--naranja-vibrante); box-shadow: 0 5px 20px rgba(245, 110, 30, 0.2); }
+
+        /* Accordion List */
+        .accordion-item {
+            background: var(--blanco-puro); border-radius: 8px; margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0;
+            overflow: hidden; transition: all 0.3s;
+        }
+        .accordion-header {
+            width: 100%; text-align: left; background: none; border: none; padding: 18px 25px;
+            font-size: 1.2rem; font-family: var(--font-titulares); color: var(--azul-primario);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: background 0.3s; font-weight: 700;
+        }
+        .accordion-header:hover { background: #f8fafc; }
+        .accordion-header::after { content: '+'; font-size: 1.5rem; color: var(--naranja-vibrante); transition: transform 0.3s;}
+        
+        .accordion-item.active .accordion-header { background: var(--azul-primario); color: white; }
+        .accordion-item.active .accordion-header::after { content: '−'; transform: rotate(180deg); color: white;}
+
+        .accordion-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease;
+            background: var(--blanco-puro);
+        }
+        .accordion-item.active .accordion-content { padding: 20px 25px; max-height: 500px; border-top: 1px solid #eee;}
+        
+        .vocab-meaning { font-size: 1rem; color: #444; margin-bottom: 15px; line-height: 1.6;}
+        .vocab-meaning strong { color: var(--naranja-vibrante); }
+        
+        .vocab-sentence { background: #f1f5f9; padding: 15px; border-radius: 6px; font-style: italic; font-size: 0.95rem; color: #555; border-left: 4px solid var(--azul-claro);}
+        .vocab-sentence strong { color: var(--azul-primario); font-style: normal; font-weight: 700;}
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo" style="height: 80px; margin-bottom: 15px;">
+        <h1 class="hero-title">OET Listening <span>Vocabulary Bank</span></h1>
+        <p>Domina los términos clínicos y anatómicos clave del examen OET.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Consejos Section -->
+        <div class="tips-section">
+            <h2>🎧 5 Consejos para Reconocer Términos Médicos</h2>
+            <ul class="tips-list">
+                <li><strong>Cuidado con los sinónimos (Layman's terms):</strong> En la Parte A, el paciente usará términos comunes (ej. "painkillers") pero el doctor o tus notas podrían requerir el término médico ("analgesics" o "over-the-counter").</li>
+                <li><strong>Presta atención a los prefijos y sufijos:</strong> Reconocer sufijos como <em>-itis</em> (inflamación), <em>-ectomy</em> (extirpación) o <em>-algia</em> (dolor) te ayudará a deducir el significado aunque no conozcas la palabra completa.</li>
+                <li><strong>Anticipa el tipo de palabra:</strong> Utiliza el tiempo de lectura (30 segundos) para predecir. Si dice "prescribed a course of ___", tu cerebro debe estar preparado para escuchar un medicamento o antibiótico.</li>
+                <li><strong>Patrones de acentuación (Stress):</strong> En inglés médico, la sílaba tónica puede ser confusa. Presta atención a la musicalidad de palabras largas como <em>an-ti-his-ta-mine</em> o <em>phys-i-o-the-ra-py</em>.</li>
+                <li><strong>No te detengas si no sabes deletrear perfectamente:</strong> Escribe la palabra como suene fonéticamente en el momento para no perder el hilo de la grabación. Puedes corregir la ortografía al final durante los minutos de revisión.</li>
+            </ul>
+        </div>
+
+        <!-- Barra de Búsqueda -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search for a medical term..." onkeyup="filterVocab()">
+        </div>
+
+        <!-- Lista Desplegable (Accordion) -->
+        <div class="accordion-container" id="vocabList">
+            
+            <div class="accordion-item">
+                <button class="accordion-header">Alopecia Areata</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition that causes hair to fall out in small patches, which can be an autoimmune disorder.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient has a possible autoimmune disorder, specifically <strong>alopecia areata</strong>, causing patchy hair loss.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Anemia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition in which the blood doesn't have enough healthy red blood cells, leading to reduced oxygen flow to the body's organs.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The blood tests confirmed that her constant fatigue was due to severe iron deficiency <strong>anemia</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Angina</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A type of chest pain caused by reduced blood flow to the heart muscle.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient experienced a sharp episode of <strong>angina</strong> after walking up the steep hill.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Antihistamine</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A type of drug used primarily to treat allergies, itching, and swelling.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> A topical corticosteroid and an oral <strong>antihistamine</strong> were prescribed for the sting reaction.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Appendicitis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A serious medical condition in which the appendix becomes inflamed and painful.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Suspecting acute <strong>appendicitis</strong>, the doctor ordered an immediate ultrasound of the lower abdomen.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Arrhythmia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A problem with the rate or rhythm of the heartbeat.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The ECG monitor displayed a slight <strong>arrhythmia</strong> that needs to be closely observed.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Asthma</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A respiratory condition marked by spasms in the bronchi of the lungs, causing difficulty in breathing.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> She uses an inhaler to manage her <strong>asthma</strong> symptoms during vigorous exercise.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Asymptomatic</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Producing or showing no symptoms of a disease.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The carrier of the virus remained completely <strong>asymptomatic</strong> throughout the incubation period.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Benign</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Refers to a condition, tumor, or growth that is not cancerous.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The family was relieved to hear that the biopsy confirmed the tumor was <strong>benign</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Biopsy</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An examination of tissue removed from a living body to discover the presence, cause, or extent of a disease.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Further investigations may include an endoscopic ultrasound or a tissue <strong>biopsy</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Bladder Cancer</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A common type of cancer that begins in the cells of the bladder.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The urologist is concerned about potential <strong>bladder cancer</strong> due to the recurrent hematuria.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Bronchitis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Inflammation of the mucous membrane in the bronchial tubes, typically causing bronchospasm and coughing.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> His persistent, productive cough was eventually diagnosed as acute <strong>bronchitis</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Cataract</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A medical condition in which the lens of the eye becomes progressively opaque, resulting in blurred vision.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The elderly patient is scheduled for routine surgery to remove a developing <strong>cataract</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Celiac Disease</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An immune reaction to eating gluten, a protein found in wheat, barley, and rye.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Dr. Carter challenged the misconception that <strong>celiac disease</strong> is a rare autoimmune disorder.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Cirrhosis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A late stage of scarring (fibrosis) of the liver caused by many forms of liver diseases.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient's long-term alcohol dependency unfortunately resulted in severe liver <strong>cirrhosis</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Cognitive Behavioral Therapy (CBT)</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A type of psychological treatment that helps patients address and change negative thought patterns.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The doctor recommended <strong>Cognitive Behavioral Therapy</strong> to address the patient's racing thoughts and anxiety.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Concussion</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A traumatic brain injury that affects your brain function, usually caused by a blow to the head.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The athlete was taken off the field to be assessed for a mild <strong>concussion</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">COPD</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Chronic Obstructive Pulmonary Disease; a group of lung diseases that block airflow and make it difficult to breathe.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Long-term smoking is identified as the primary risk factor for developing <strong>COPD</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Cyanosis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A bluish discoloration of the skin resulting from poor circulation or inadequate oxygenation of the blood.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The triage nurse immediately noticed <strong>cyanosis</strong> around the patient's lips and fingertips.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Dermatitis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A general term that describes a common skin irritation, resulting in red, swollen, and itchy skin.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The localized rash was diagnosed as contact <strong>dermatitis</strong> due to a chemical reaction.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Diabetes Mellitus</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A disease in which the body's ability to produce or respond to the hormone insulin is impaired, resulting in abnormal metabolism of carbohydrates.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Careful diet management and daily insulin injections are crucial for controlling <strong>diabetes mellitus</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Dialysis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> The clinical process of removing excess water, solutes, and toxins from the blood in people whose kidneys can no longer perform these functions naturally.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Following renal failure, the patient is required to visit the clinic three times a week for <strong>dialysis</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Dysphagia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> The medical term for the symptom of difficulty in swallowing.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient's condition had a constant course starting with <strong>dysphagia</strong> for solids, followed by epigastric pain.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Edema</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Swelling caused by excess fluid trapped in your body's tissues.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The GP noted severe pitting <strong>edema</strong> in the patient's ankles during the physical examination.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Embolism</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Sudden blocking of an artery by a blood clot or foreign material that has been brought to its site of lodgment by the blood current.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Immediate intervention was required to prevent a fatal pulmonary <strong>embolism</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Endoscopy</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A nonsurgical procedure used to examine a person's digestive tract using a flexible tube with a light and camera.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The urologist recommended a cystoscopy and possibly an <strong>endoscopy</strong> to locate the stricture.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Epidural</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An injection of local anesthetic into the space surrounding the spinal nerves, commonly used during childbirth.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The mother requested an <strong>epidural</strong> block to manage the pain during labor.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Epilepsy</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A neurological disorder marked by sudden recurrent episodes of sensory disturbance, loss of consciousness, or convulsions, associated with abnormal electrical activity in the brain.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The child's <strong>epilepsy</strong> is currently well-managed with a new regimen of anticonvulsants.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Fibrosis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> The thickening and scarring of connective tissue, usually as a result of injury or chronic inflammation.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The prior parasitic infection caused lasting <strong>fibrosis</strong> and calcium deposition in the bladder.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Gastroenteritis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An intestinal infection marked by diarrhea, cramps, nausea, vomiting, and fever.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The sudden outbreak of <strong>gastroenteritis</strong> in the ward required immediate isolation protocols.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Generalized Anxiety Disorder (GAD)</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A mental health disorder characterized by excessive, uncontrollable, and often irrational worry about everyday things.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The psychiatrist suspects <strong>Generalized Anxiety Disorder</strong>, noting it involves both mental and physical symptoms.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Glaucoma</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A group of eye conditions that damage the optic nerve, often caused by an abnormally high pressure in your eye.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Routine optical exams are highly recommended to detect <strong>glaucoma</strong> before irreversible vision loss occurs.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hematuria</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> The presence of blood in a person's urine, which can be a sign of infection or more serious conditions.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The condition known as <strong>hematuria</strong> was accompanied by a severe burning sensation during urination.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hemorrhage</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An escape of blood from a ruptured blood vessel, especially when profuse.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The surgical team acted swiftly to clamp the vessel and stop the internal <strong>hemorrhage</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hepatitis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An inflammatory condition of the liver, most commonly caused by a viral infection.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The jaundice and abdominal pain raised immediate concerns of viral <strong>hepatitis</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hernia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition in which part of an organ is displaced and protrudes through the wall of the cavity containing it.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Working as a mechanic and doing heavy lifting likely contributed to the development of the <strong>hernia</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hyperglycemia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An abnormally high blood glucose (blood sugar) level, often associated with diabetes.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient was admitted to the emergency room presenting with severe <strong>hyperglycemia</strong> and confusion.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hypertension</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition in which the force of the blood against the artery walls is too high; high blood pressure.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> He was diagnosed with <strong>hypertension</strong> three years ago, but it is currently controlled by diet.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hypoglycemia</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition characterized by an abnormally low level of blood sugar (glucose).</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The diabetic patient felt dizzy and weak, recognizing the familiar symptoms of <strong>hypoglycemia</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Hypothyroidism</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A condition in which the thyroid gland doesn't produce enough of certain crucial hormones.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Unexplained weight gain and chronic fatigue were the primary indicators leading to her <strong>hypothyroidism</strong> diagnosis.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Intestinal Perforation</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A complete penetration or hole in the wall of the stomach, small intestine, or large bowel.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> If left untreated, severe typhoid can cause complications including bleeding or <strong>intestinal perforation</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Intravesical Therapy</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A medical treatment where liquid medicine is put directly into the bladder rather than being swallowed or injected.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Following the tumor removal, the specialist scheduled the patient for a course of <strong>intravesical therapy</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Jaundice</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A medical condition with yellowing of the skin or whites of the eyes, arising from excess of the pigment bilirubin.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient shows signs of <strong>jaundice</strong>, which is clearly visible in the skin.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Malaria Prophylaxis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Preventive treatment consisting of antimalarial medications given to people exposed to the disease.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient's <strong>malaria prophylaxis</strong> was continued for two weeks after returning from the tropical trip.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Sclerotherapy</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> A medical procedure used to eliminate varicose veins and "spider veins" by injecting a solution directly into the vein.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> Minimally invasive options for the bulging veins include laser treatment and <strong>sclerotherapy</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Scoliosis</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An abnormal lateral (sideways) curvature of the spine.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient was diagnosed with <strong>scoliosis</strong> at age 15 and has experienced back discomfort ever since.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Stricture</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An abnormal narrowing of a bodily passage, usually caused by inflammation or scar tissue.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The specialist suspects a <strong>stricture</strong> based on the patient's two-week history of severe acid reflux.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Topical Corticosteroid</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Anti-inflammatory medicines applied directly to the skin to treat conditions like eczema or severe stings.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The doctor prescribed a <strong>topical corticosteroid</strong> to reduce the severe swelling from the jellyfish sting.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Typhoid Fever</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> An infectious bacterial fever with an eruption of red spots on the chest and abdomen and severe intestinal irritation.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> After his trip to Southeast Asia, the doctor suspects he has contracted <strong>typhoid fever</strong>.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Varicose Veins</button>
+                <div class="accordion-content">
+                    <div class="vocab-meaning"><strong>Meaning:</strong> Enlarged, twisted veins that often appear blue or dark purple, most commonly found in the legs.</div>
+                    <div class="vocab-sentence"><strong>Example:</strong> The patient reported aching and heavy legs, leading the GP to diagnose her with <strong>varicose veins</strong>.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | OET Advanced Clinical Vocabulary Bank</p>
+    </footer>
+
+    <script>
+        // Funcionalidad del Accordion
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const item = this.parentElement;
+                
+                // Opción para cerrar los demás (descomentar si se desea)
+                // document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                //     if(otherItem !== item) otherItem.classList.remove('active');
+                // });
+
+                item.classList.toggle('active');
+            });
+        });
+
+        // Funcionalidad de Búsqueda
+        function filterVocab() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.getElementsByClassName('accordion-item');
+
+            for (let i = 0; i < items.length; i++) {
+                let term = items[i].getElementsByClassName('accordion-header')[0].innerText.toLowerCase();
+                
+                if (term.includes(input)) {
+                    items[i].style.display = "block";
+                } else {
+                    items[i].style.display = "none";
+                    items[i].classList.remove('active'); // Cerrar al filtrar si no coincide
+                }
+            }
+        }
+    </script>
+</body>
+</html>
