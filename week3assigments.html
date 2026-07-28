@@ -104,7 +104,7 @@
         .transcript-part { background: var(--azul-primario); color: white; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.1rem; }
         .dialogue { margin-bottom: 15px; font-size: 0.95rem; color: #333; }
         .speaker { font-weight: 800; color: var(--azul-primario); }
-        .cite-tag { font-size: 0.7rem; color: #999; vertical-align: super; }
+        .medical-term { background: #ffebee; color: var(--rojo-alerta); padding: 0 4px; border-radius: 3px; font-weight: 700; }
 
         /* Indicador de Autoguardado */
         .save-indicator { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
@@ -152,50 +152,45 @@
                 <h3 class="part-title">PART A: NOTE COMPLETION</h3>
                 <p><em>Complete the following notes with a word or short phrase based on the audio extracts.</em></p>
 
-                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Mrs. Anderson</h4>
-                <h5>Presenting Symptoms:</h5>
-                <div class="question-line">• Initial issue: (1) <input type="text" id="q1" class="oet-input"> pain, initially thought to be minor.</div>
-                <div class="question-line">• Pain has increased and is now felt in the (2) <input type="text" id="q2" class="oet-input">.</div>
-                <div class="question-line">• Pain affects sleep and is worse after eating.</div>
-                <div class="question-line">• Additional symptoms include (3) <input type="text" id="q3" class="oet-input"> and poor digestion.</div>
+                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Emily</h4>
+                <h5>Presenting concern:</h5>
+                <div class="question-line">• Patient suspects she may have (1) <input type="text" id="q1" class="oet-input">.</div>
+                <div class="question-line">• Reports feeling overwhelmed and daily life is being (2) <input type="text" id="q2" class="oet-input">.</div>
+                <div class="question-line">• Checking behaviors triggered by fear of something (3) <input type="text" id="q3" class="oet-input"> happening.</div>
+                <div class="question-line">• Symptoms have worsened over the past few (4) <input type="text" id="q4" class="oet-input">.</div>
+                <div class="question-line">• Causes lateness due to prolonged (5) <input type="text" id="q5" class="oet-input"> routines.</div>
                 
-                <h5 style="margin-top:10px;">Bowel Changes:</h5>
-                <div class="question-line">• Stools are described as (4) <input type="text" id="q4" class="oet-input"> in both colour and texture.</div>
-                
-                <h5 style="margin-top:10px;">Doctor's Concerns:</h5>
-                <div class="question-line">• GP suspects possible issue with the (5) <input type="text" id="q5" class="oet-input">.</div>
-                <div class="question-line">• Patient has unintentionally experienced (6) <input type="text" id="q6" class="oet-input">.</div>
-                <div class="question-line">• Patient shows signs of (7) <input type="text" id="q7" class="oet-input">, visible in the skin.</div>
-                <div class="question-line">• Other potential causes mentioned: pancreatitis and (8) <input type="text" id="q8" class="oet-input"> problems.</div>
+                <h5 style="margin-top:10px;">Obsessions and compulsions:</h5>
+                <div class="question-line">• Frequent fear of (6) <input type="text" id="q6" class="oet-input"> leads to excessive handwashing.</div>
+                <div class="question-line">• Repetitive behaviors have caused (7) <input type="text" id="q7" class="oet-input"> skin.</div>
+                <div class="question-line">• Discomfort if items are (8) <input type="text" id="q8" class="oet-input"> on desk.</div>
+                <div class="question-line">• Admits behaviors feel irrational but (9) <input type="text" id="q9" class="oet-input"> to stop.</div>
 
-                <h5 style="margin-top:10px;">Proposed Investigations:</h5>
-                <div class="question-line">• Initial tests include blood work and (9) <input type="text" id="q9" class="oet-input">.</div>
-                <div class="question-line">• Further tests may include biopsy or (10) <input type="text" id="q10" class="oet-input"> ultrasound.</div>
-                
-                <h5 style="margin-top:10px;">Emotional Impact & Next Steps:</h5>
-                <div class="question-line">• GP offers support and suggests (11) <input type="text" id="q11" class="oet-input"> or medication for emotional wellbeing.</div>
-                <div class="question-line">• Patient advised to reach out if symptoms (12) <input type="text" id="q12" class="oet-input">.</div>
+                <h5 style="margin-top:10px;">Treatment discussion:</h5>
+                <div class="question-line">• GP recommends therapy called (10) <input type="text" id="q10" class="oet-input">.</div>
+                <div class="question-line">• Medication option includes type of antidepressants called (11) <input type="text" id="q11" class="oet-input">.</div>
+                <div class="question-line">• Emily feels relieved to know there is (12) <input type="text" id="q12" class="oet-input">.</div>
 
-                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Ms. Lewis</h4>
-                <h5>Reason for Appointment & Symptoms:</h5>
-                <div class="question-line">• Persistent (13) <input type="text" id="q13" class="oet-input"> affecting daily life.</div>
-                <div class="question-line">• Describes constant (14) <input type="text" id="q14" class="oet-input"> about various aspects of life.</div>
-                <div class="question-line">• Feels constantly (15) <input type="text" id="q15" class="oet-input">.</div>
-                <div class="question-line">• Reports difficulty with focus and (16) <input type="text" id="q16" class="oet-input"> due to racing thoughts.</div>
-                <div class="question-line">• Physical symptoms include (17) <input type="text" id="q17" class="oet-input"> and shortness of breath.</div>
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 13-24 | Patient: Mrs. Thompson</h4>
+                <h5>Diagnosis and Explanation:</h5>
+                <div class="question-line">• Blood cannot pass from (13) <input type="text" id="q13" class="oet-input"> to lungs.</div>
+                <div class="question-line">• Currently dependent on (14) <input type="text" id="q14" class="oet-input"> for oxygen delivery.</div>
+                <div class="question-line">• Maintained open with (15) <input type="text" id="q15" class="oet-input"> medication.</div>
                 
-                <h5 style="margin-top:10px;">Diagnosis:</h5>
-                <div class="question-line">• Psychiatrist suspects (18) <input type="text" id="q18" class="oet-input">.</div>
-                <div class="question-line">• Condition involves both (19) <input type="text" id="q19" class="oet-input"> and physical symptoms.</div>
+                <h5 style="margin-top:10px;">Short-Term Management:</h5>
+                <div class="question-line">• Medication is a (16) <input type="text" id="q16" class="oet-input"> solution.</div>
+                <div class="question-line">• Surgical plan depends on baby's heart (17) <input type="text" id="q17" class="oet-input">.</div>
+                <div class="question-line">• Initial procedure may involve placing a (18) <input type="text" id="q18" class="oet-input">.</div>
                 
-                <h5 style="margin-top:10px;">Triggers and Patterns:</h5>
-                <div class="question-line">• Worsens with (20) <input type="text" id="q20" class="oet-input">.</div>
-                <div class="question-line">• He/She has been experiencing tension (21) <input type="text" id="q21" class="oet-input"> despite everything in their life seeming fine.</div>
+                <h5 style="margin-top:10px;">Surgical and Long-Term Outlook:</h5>
+                <div class="question-line">• First surgery typically occurs in (19) <input type="text" id="q19" class="oet-input"> of life.</div>
+                <div class="question-line">• (20) <input type="text" id="q20" class="oet-input"> needs adjustment as the baby grows.</div>
+                <div class="question-line">• Ongoing risks exist but surgery is (21) <input type="text" id="q21" class="oet-input">.</div>
                 
-                <h5 style="margin-top:10px;">Treatment Plan:</h5>
-                <div class="question-line">• Recommends (22) <input type="text" id="q22" class="oet-input"> to address thought patterns.</div>
-                <div class="question-line">• Suggests relaxation methods like deep breathing and (23) <input type="text" id="q23" class="oet-input">.</div>
-                <div class="question-line">• Possible addition of (24) <input type="text" id="q24" class="oet-input"> if symptoms severe.</div>
+                <h5 style="margin-top:10px;">Prognosis and Development:</h5>
+                <div class="question-line">• Lifelong need for (22) <input type="text" id="q22" class="oet-input"> monitoring.</div>
+                <div class="question-line">• May face limits on (23) <input type="text" id="q23" class="oet-input"> activities.</div>
+                <div class="question-line">• Specialists will support child's growth and (24) <input type="text" id="q24" class="oet-input">.</div>
 
                 <button class="btn-check" onclick="checkPartA()">✔️ Corregir Part A</button>
             </section>
@@ -208,118 +203,118 @@
                 <p><em>Choose the best option (A, B, or C) that answers each question based on the audio recordings.</em></p>
 
                 <div class="mcq-block" id="block-q25">
-                    <div class="mcq-question">25. What does the vet conducting the briefing want to explore?</div>
-                    <label class="mcq-option"><input type="radio" name="q25" value="A"> (a) How the dog's relationship with its owner might be affecting its condition</label>
-                    <label class="mcq-option"><input type="radio" name="q25" value="B"> (b) The role the dog's emotional well-being plays in its health</label>
-                    <label class="mcq-option"><input type="radio" name="q25" value="C"> (c) The potential impact of the owner's stress on the dog's physical state.</label>
+                    <div class="mcq-question">25. What benefits have nurses experienced from the mindfulness practices?</div>
+                    <label class="mcq-option"><input type="radio" name="q25" value="A"> (a) It helped them stay more attentive and less stressed.</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="B"> (b) It made them more concentrated and less overwhelmed.</label>
+                    <label class="mcq-option"><input type="radio" name="q25" value="C"> (c) It improved their focus and lowered their tension.</label>
                 </div>
                 <div class="mcq-block" id="block-q26">
-                    <div class="mcq-question">26. The physician is planning to manage the patient's pain by...</div>
-                    <label class="mcq-option"><input type="radio" name="q26" value="A"> (a) Administering a combination of pain relievers that work synergistically</label>
-                    <label class="mcq-option"><input type="radio" name="q26" value="B"> (b) Using a carefully selected blend of medications to alleviate the pain</label>
-                    <label class="mcq-option"><input type="radio" name="q26" value="C"> (c) Providing a mix of different drugs to address the pain from multiple pathways</label>
+                    <div class="mcq-question">26. What is the surgeon focusing on?</div>
+                    <label class="mcq-option"><input type="radio" name="q26" value="A"> (a) Explaining the nature of the procedure</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="B"> (b) Reassuring the patient about their concerns</label>
+                    <label class="mcq-option"><input type="radio" name="q26" value="C"> (c) Providing details about the surgery</label>
                 </div>
                 <div class="mcq-block" id="block-q27">
-                    <div class="mcq-question">27. They think that few people have shown interest because...</div>
-                    <label class="mcq-option"><input type="radio" name="q27" value="A"> (a) They feel it won't help them in their daily routines</label>
-                    <label class="mcq-option"><input type="radio" name="q27" value="B"> (b) They believe it's not directly relevant to their roles</label>
-                    <label class="mcq-option"><input type="radio" name="q27" value="C"> (c) They think it doesn't apply to their specific tasks</label>
+                    <div class="mcq-question">27. The aim of his research was:</div>
+                    <label class="mcq-option"><input type="radio" name="q27" value="A"> (a) To investigate how COVID-19 impacts long-term cardiovascular and pulmonary health</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="B"> (b) To explore persistent effects of COVID-19 on respiratory and cardiac systems</label>
+                    <label class="mcq-option"><input type="radio" name="q27" value="C"> (c) To study prolonged symptoms caused by COVID-19 affecting the lungs and heart</label>
                 </div>
                 <div class="mcq-block" id="block-q28">
-                    <div class="mcq-question">28. What does the GP ask the patient to clarify?</div>
-                    <label class="mcq-option"><input type="radio" name="q28" value="A"> (a) Whether the reaction is only caused by exposure to particular water sources</label>
-                    <label class="mcq-option"><input type="radio" name="q28" value="B"> (b) Whether the skin reaction occurs when in contact with all forms of water</label>
-                    <label class="mcq-option"><input type="radio" name="q28" value="C"> (c) Whether the irritation is due to specific kinds of water like rain or tap water</label>
+                    <div class="mcq-question">28. The trainee found it difficult to:</div>
+                    <label class="mcq-option"><input type="radio" name="q28" value="A"> (a) Convey the potential of telemedicine to patients.</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="B"> (b) Maintain a clear and objective tone during the conversation.</label>
+                    <label class="mcq-option"><input type="radio" name="q28" value="C"> (c) Reassure patients about the safety and effectiveness of telemedicine.</label>
                 </div>
                 <div class="mcq-block" id="block-q29">
-                    <div class="mcq-question">29. The trainer is explaining that today's session will:</div>
-                    <label class="mcq-option"><input type="radio" name="q29" value="A"> (a) Expand on previously introduced technical skills</label>
-                    <label class="mcq-option"><input type="radio" name="q29" value="B"> (b) Develop further the concepts and methods they have been exposed to</label>
-                    <label class="mcq-option"><input type="radio" name="q29" value="C"> (c) Build upon prior knowledge with a more advanced application of tools</label>
+                    <div class="mcq-question">29. The psychiatrist says their next focus should be:</div>
+                    <label class="mcq-option"><input type="radio" name="q29" value="A"> (a) To conduct neuroinflammatory screening</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="B"> (b) To assess neurobiological indicators for PTSD</label>
+                    <label class="mcq-option"><input type="radio" name="q29" value="C"> (c) To evaluate the need for additional anti-inflammatory measures</label>
                 </div>
                 <div class="mcq-block" id="block-q30">
-                    <div class="mcq-question">30. They agree that the leadership team should...</div>
-                    <label class="mcq-option"><input type="radio" name="q30" value="A"> (a) Broaden current strategies to improve care coordination</label>
-                    <label class="mcq-option"><input type="radio" name="q30" value="B"> (b) Build on prior efforts to enhance patient outcomes</label>
-                    <label class="mcq-option"><input type="radio" name="q30" value="C"> (c) Implement more comprehensive measures to support staff education</label>
+                    <div class="mcq-question">30. What is the pharmacist doing?</div>
+                    <label class="mcq-option"><input type="radio" name="q30" value="A"> (a) Reporting patient adherence issues</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="B"> (b) Discussing incomplete treatment</label>
+                    <label class="mcq-option"><input type="radio" name="q30" value="C"> (c) Addressing improper medication use</label>
                 </div>
 
                 <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42)</h3>
                 
-                <h4 class="extract-title">Extract 01: Questions 31-36 (Dementia Care)</h4>
+                <h4 class="extract-title">Extract 01: Questions 31-36</h4>
                 <div class="mcq-block" id="block-q31">
-                    <div class="mcq-question">31. What challenge in dementia care does Dr. Shaw identify?</div>
-                    <label class="mcq-option"><input type="radio" name="q31" value="A"> (a) It's hard to manage pain in early dementia.</label>
-                    <label class="mcq-option"><input type="radio" name="q31" value="B"> (b) Dementia patients' identities can be overlooked as their condition worsens.</label>
-                    <label class="mcq-option"><input type="radio" name="q31" value="C"> (c) Family members are reluctant to get involved in care.</label>
+                    <div class="mcq-question">31. What is the primary expertise of the interviewee?</div>
+                    <label class="mcq-option"><input type="radio" name="q31" value="A"> (a) Overseeing hospital operations and management.</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="B"> (b) Direct involvement in patient care practices.</label>
+                    <label class="mcq-option"><input type="radio" name="q31" value="C"> (c) Innovating new clinical treatment methodologies.</label>
                 </div>
                 <div class="mcq-block" id="block-q32">
-                    <div class="mcq-question">32. Why does Dr. Shaw emphasize the importance of advanced care planning?</div>
-                    <label class="mcq-option"><input type="radio" name="q32" value="A"> (a) It ensures that patients get access to the latest treatments.</label>
-                    <label class="mcq-option"><input type="radio" name="q32" value="B"> (b) It allows patients to express their wishes before they lose the ability to communicate.</label>
-                    <label class="mcq-option"><input type="radio" name="q32" value="C"> (c) It helps healthcare professionals avoid making medical errors.</label>
+                    <div class="mcq-question">32. What does the interviewee identify as the most significant obstacle in adopting new hospital technologies?</div>
+                    <label class="mcq-option"><input type="radio" name="q32" value="A"> (a) The financial burden of acquiring cutting-edge systems.</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="B"> (b) Achieving seamless functionality between new and old systems.</label>
+                    <label class="mcq-option"><input type="radio" name="q32" value="C"> (c) The reluctance of hospital personnel to adapt to new systems.</label>
                 </div>
                 <div class="mcq-block" id="block-q33">
-                    <div class="mcq-question">33. For Dr. Shaw, the results of the study reveal that person-centered care:</div>
-                    <label class="mcq-option"><input type="radio" name="q33" value="A"> (a) Is the standard approach in most healthcare settings.</label>
-                    <label class="mcq-option"><input type="radio" name="q33" value="B"> (b) Is more widely available than family members are aware of.</label>
-                    <label class="mcq-option"><input type="radio" name="q33" value="C"> (c) Is not as common as it should be in dementia care.</label>
+                    <div class="mcq-question">33. Why was the interviewer taken aback by the interviewee's comment on technology integration?</div>
+                    <label class="mcq-option"><input type="radio" name="q33" value="A"> (a) The interviewer had anticipated cost to be the foremost barrier.</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="B"> (b) The interviewer believed the technology was obsolete.</label>
+                    <label class="mcq-option"><input type="radio" name="q33" value="C"> (c) The interviewer held a differing perspective on the topic.</label>
                 </div>
                 <div class="mcq-block" id="block-q34">
-                    <div class="mcq-question">34. What does Dr. Shaw say about pain management in dementia patients?</div>
-                    <label class="mcq-option"><input type="radio" name="q34" value="A"> (a) Many patients refuse pain relief.</label>
-                    <label class="mcq-option"><input type="radio" name="q34" value="B"> (b) It's difficult because healthcare professionals don't know how to assess pain in non-verbal patients.</label>
-                    <label class="mcq-option"><input type="radio" name="q34" value="C"> (c) It's not necessary in the late stages of the disease.</label>
+                    <div class="mcq-question">34. According to the interviewee, what is an unintended effect of introducing new technology in hospitals?</div>
+                    <label class="mcq-option"><input type="radio" name="q34" value="A"> (a) It can result in reduced staffing needs.</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="B"> (b) It may lead to a heavier workload for hospital employees.</label>
+                    <label class="mcq-option"><input type="radio" name="q34" value="C"> (c) It diminishes patients' confidence in healthcare providers.</label>
                 </div>
                 <div class="mcq-block" id="block-q35">
-                    <div class="mcq-question">35. Dr. Shaw says that the lack of knowledge about patient rights:</div>
-                    <label class="mcq-option"><input type="radio" name="q35" value="A"> (a) Can lead to treatment decisions that do not respect the patient's wishes.</label>
-                    <label class="mcq-option"><input type="radio" name="q35" value="B"> (b) Shows that more family members should be involved in decision-making.</label>
-                    <label class="mcq-option"><input type="radio" name="q35" value="C"> (c) Leads to better outcomes for patients in end-of-life care.</label>
+                    <div class="mcq-question">35. What strategy does the interviewee propose to mitigate integration issues with new technology?</div>
+                    <label class="mcq-option"><input type="radio" name="q35" value="A"> (a) Expanding training initiatives for hospital workers.</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="B"> (b) Involving healthcare professionals in early-stage planning.</label>
+                    <label class="mcq-option"><input type="radio" name="q35" value="C"> (c) Limiting the deployment of new technological solutions.</label>
                 </div>
                 <div class="mcq-block" id="block-q36">
-                    <div class="mcq-question">36. Dr. Shaw argues that person-centered care is important because:</div>
-                    <label class="mcq-option"><input type="radio" name="q36" value="A"> (a) It helps patients live longer lives.</label>
-                    <label class="mcq-option"><input type="radio" name="q36" value="B"> (b) It ensures the patient's dignity and identity are respected throughout the disease process.</label>
-                    <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) It reduces the number of decisions healthcare professionals have to make.</label>
+                    <div class="mcq-question">36. Which emerging technology does the interviewee express the most enthusiasm about?</div>
+                    <label class="mcq-option"><input type="radio" name="q36" value="A"> (a) Robotic-assisted procedures in surgery.</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="B"> (b) Remote healthcare delivery systems like telemedicine.</label>
+                    <label class="mcq-option"><input type="radio" name="q36" value="C"> (c) AI-driven innovations in medical diagnostics and patient care.</label>
                 </div>
 
-                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42 (Celiac Disease Management)</h4>
+                <h4 class="extract-title" style="margin-top: 2rem;">Extract 02: Questions 37-42</h4>
                 <div class="mcq-block" id="block-q37">
-                    <div class="mcq-question">37. What prompted Dr. Carter to leave his previous medical practice?</div>
-                    <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) He was driven by personal experiences with family health challenges</label>
-                    <label class="mcq-option"><input type="radio" name="q37" value="B"> (b) He grew disenchanted with his role in internal medicine</label>
-                    <label class="mcq-option"><input type="radio" name="q37" value="C"> (c) He was influenced by his daughter's health condition</label>
+                    <div class="mcq-question">37. The speaker suggests that the rise in neck pain cases is mainly due to</div>
+                    <label class="mcq-option"><input type="radio" name="q37" value="A"> (a) Increased levels of physical activity.</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="B"> (b) The growing number of elderly people in the population.</label>
+                    <label class="mcq-option"><input type="radio" name="q37" value="C"> (c) Changes in sedentary work environments.</label>
                 </div>
                 <div class="mcq-block" id="block-q38">
-                    <div class="mcq-question">38. How did Dr. Carter's daughter's condition finally receive a proper diagnosis?</div>
-                    <label class="mcq-option"><input type="radio" name="q38" value="A"> (a) By conducting further tests, including blood work and tissue analysis</label>
-                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) Through a combination of diagnostic screenings and thorough investigation</label>
-                    <label class="mcq-option"><input type="radio" name="q38" value="C"> (c) By evaluating both serological tests and intestinal biopsies</label>
+                    <div class="mcq-question">38. The primary aim of the study mentioned was to</div>
+                    <label class="mcq-option"><input type="radio" name="q38" value="A"> (a) Assess non-surgical treatments for neck pain.</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="B"> (b) Explore alternative methods to reduce neck discomfort.</label>
+                    <label class="mcq-option"><input type="radio" name="q38" value="C"> (c) Investigate invasive techniques to address chronic neck issues.</label>
                 </div>
                 <div class="mcq-block" id="block-q39">
-                    <div class="mcq-question">39. Why does Dr. Carter draw attention to irritable bowel syndrome (IBS)?</div>
-                    <label class="mcq-option"><input type="radio" name="q39" value="A"> (a) Due to its frequent confusion with celiac disease</label>
-                    <label class="mcq-option"><input type="radio" name="q39" value="B"> (b) Because of its association with gastrointestinal complications</label>
-                    <label class="mcq-option"><input type="radio" name="q39" value="C"> (c) Since it shares overlapping symptoms with celiac disease</label>
+                    <div class="mcq-question">39. According to the study, which of the following helped to alleviate neck pain symptoms?</div>
+                    <label class="mcq-option"><input type="radio" name="q39" value="A"> (a) Medication and stress reduction.</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="B"> (b) Intensive physical therapy and stretching exercises.</label>
+                    <label class="mcq-option"><input type="radio" name="q39" value="C"> (c) Adjustments to posture and workplace ergonomics.</label>
                 </div>
                 <div class="mcq-block" id="block-q40">
-                    <div class="mcq-question">40. What misconception about celiac disease has recently been challenged?</div>
-                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) That it primarily affects only children and young adults</label>
-                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) That it is less widespread than previously thought</label>
-                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) That it is considered a rare autoimmune disorder</label>
+                    <div class="mcq-question">40. How did the small group sessions assist patients in managing their neck pain?</div>
+                    <label class="mcq-option"><input type="radio" name="q40" value="A"> (a) By offering personalized care plans.</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="B"> (b) By educating them on proper body mechanics and simple exercises.</label>
+                    <label class="mcq-option"><input type="radio" name="q40" value="C"> (c) By providing medical treatments for severe neck conditions.</label>
                 </div>
                 <div class="mcq-block" id="block-q41">
-                    <div class="mcq-question">41. What symptoms encouraged Dr. Carter to pursue further investigation for his daughter?</div>
-                    <label class="mcq-option"><input type="radio" name="q41" value="A"> (a) Cognitive difficulties and lack of energy</label>
-                    <label class="mcq-option"><input type="radio" name="q41" value="B"> (b) Chronic tiredness and diminished mental clarity</label>
-                    <label class="mcq-option"><input type="radio" name="q41" value="C"> (c) Persistent fatigue and recurring brain fog</label>
+                    <div class="mcq-question">41. How did the project ease the burden on healthcare providers?</div>
+                    <label class="mcq-option"><input type="radio" name="q41" value="A"> (a) By limiting the need for repeated consultations.</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="B"> (b) By lowering the number of physiotherapists required.</label>
+                    <label class="mcq-option"><input type="radio" name="q41" value="C"> (c) By encouraging early medical intervention for severe pain.</label>
                 </div>
                 <div class="mcq-block" id="block-q42">
-                    <div class="mcq-question">42. What promising developments in celiac disease management were mentioned by Dr. Carter?</div>
-                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) The possibility of a gluten-tolerant vaccine.</label>
-                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) The potential of an immunotherapy to reduce gluten sensitivity.</label>
-                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) The exploration of medical interventions to allow gluten consumption.</label>
+                    <div class="mcq-question">42. According to the speaker, addressing neck pain in its early stages is critical because it</div>
+                    <label class="mcq-option"><input type="radio" name="q42" value="A"> (a) Prevents the pain from progressing into a more severe condition.</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="B"> (b) Minimizes the need for continuous medical supervision.</label>
+                    <label class="mcq-option"><input type="radio" name="q42" value="C"> (c) Enhances the effectiveness of physical therapy in later stages.</label>
                 </div>
 
                 <button class="btn-check" onclick="checkPartBC()">✔️ Corregir Part B & C</button>
@@ -334,123 +329,39 @@
                 
                 <div class="transcript-container">
                     
-                    <div class="dialogue">This test has three parts. In each part, you'll hear a number of different extracts. At the start of each extract, you'll hear this sound: *(Beep)*. You'll have time to read the questions before you hear each extract, and you'll hear each extract once only. Complete your answers as you listen. At the end of the test, you'll have two minutes to check your answers. <span class="cite-tag">[cite: 13]</span></div>
+                    <div class="transcript-part">Extract 01: Questions 1–12 (Patient: Emily)</div>
+                    <div class="dialogue">
+                        • Well, I've been really struggling lately. I'm not sure how to explain it exactly, but I think I might have <span class="medical-term">OCD</span>.<br>
+                        • I've been feeling overwhelmed, and it's affecting my <span class="medical-term">day-to-day life</span>.<br>
+                        • I just can't seem to stop myself, and if I don't do it, I feel this intense anxiety, like something <span class="medical-term">bad</span> is going to happen.<br>
+                        • It's been a few <span class="medical-term">months</span> now, but I think it's been building up for a while. At first, it was just small things-like double-checking if I locked the car.<br>
+                        • But now it's happening all the time, and I feel trapped in these patterns. I'll spend 20 minutes just <span class="medical-term">checking</span> things before I can leave the house.<br>
+                        • Yes, it's not just about checking things. I also have this fear of <span class="medical-term">germs</span>, and I wash my hands constantly.<br>
+                        • Sometimes, I'll wash my hands so many times that my skin becomes <span class="medical-term">dry and cracked</span>.<br>
+                        • If something feels <span class="medical-term">out of place</span>, it bothers me until I fix it. I know these things sound irrational, but I can't seem to stop myself from doing them.<br>
+                        • That's exactly how I feel. I know these thoughts don't make sense, but I'm <span class="medical-term">unable</span> to stop.<br>
+                        • Therapy, particularly <span class="medical-term">cognitive-behavioral therapy (CBT)</span>, is often very effective for OCD.<br>
+                        • There are medications, such as <span class="medical-term">selective serotonin reuptake inhibitors (SSRIs)</span>, that are commonly used to treat OCD.<br>
+                        • That sounds good, doctor. I'm really relieved to know that there's <span class="medical-term">help</span> for this. I've been feeling so lost.
+                    </div>
+
+                    <div class="transcript-part">Extract 02: Questions 13–24 (Patient: Mrs. Thompson)</div>
+                    <div class="dialogue">
+                        • This means blood can't flow directly from the <span class="medical-term">right ventricle</span> of the heart to the lungs to pick up oxygen.<br>
+                        • Babies with pulmonary atresia often rely on a small connection between two arteries called the <span class="medical-term">ductus arteriosus</span>.<br>
+                        • Right now, we're giving him medication called <span class="medical-term">prostaglandin</span> to keep that duct open so that blood can flow to the lungs.<br>
+                        • The medication is a <span class="medical-term">temporary</span> solution, and surgery will definitely be necessary.<br>
+                        • There are different surgical approaches we can take, depending on the specifics of your son's heart <span class="medical-term">structure</span>.<br>
+                        • Some babies may need a <span class="medical-term">shunt</span> placed, which is a small tube that helps direct blood to the lungs.<br>
+                        • In most cases, the first surgery happens within the <span class="medical-term">first weeks</span> of life, depending on how stable the baby is and how well they're....<br>
+                        • After the first surgery, there will usually be follow-up procedures as he grows, since his <span class="medical-term">heart</span> will need to be adjusted as his body develops.<br>
+                        • These surgeries carry risks, as with any procedure, but they are <span class="medical-term">lifesaving</span>, and many children with pulmonary atresia go on to live active lives....<br>
+                        • However, it's important to recognize that he'll need ongoing care from a <span class="medical-term">cardiologist</span> throughout his life.<br>
+                        • There might be limitations on his <span class="medical-term">physical</span> activities, and he'll need regular check-ups to monitor his heart function.<br>
+                        • .... like pediatric nutritionists and developmental therapists to make sure he's getting the support he needs in his <span class="medical-term">development</span>.
+                    </div>
                     
-                    <div class="transcript-part">PART A</div>
-                    <div class="dialogue">In this part of the test, you'll hear two different extracts. In each extract, a health professional is talking to a patient. For questions 1 to 24, complete the notes with information you hear. Now look at the notes for Extract 01. <span class="cite-tag">[cite: 13]</span></div>
-                    
-                    <div class="transcript-part">Extract 01: Questions 1–12 (Patient: Mrs. Anderson)</div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> Mrs. Anderson, please come in. How are you feeling today? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Hi doctor, not great to be honest. I've been having a lot of discomfort and I'm starting to get really worried. I've been feeling off for a few months now, but lately, it's been getting worse. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> I'm sorry to hear that. Why don't you tell me more about the symptoms you've been experiencing? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Well, it started with some general stomach pain. At first, I thought it was indigestion or something minor, but the pain has become more persistent. It's a dull, constant ache that's worse after I eat. I've also noticed I'm losing weight, but I haven't been trying to. I thought that might be a good thing at first, but now it's starting to feel concerning. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> I understand why you're worried. How long has the pain been going on? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> It's been about three months. It wasn't that bad at first, so I ignored it. But recently, it's become more intense and spreads to my back. It feels like it's deep inside, and sometimes I have trouble sleeping because of it. I've also been feeling nauseous more often, and food just doesn't sit right anymore. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> Have you noticed any changes in your bowel movements? Sometimes gastrointestinal issues can show up in more ways than just pain. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Actually, yes. I wasn't sure if it was important, but I've had more diarrhea than usual. My stools are also pale and greasy, almost grey sometimes, and greasy. I didn't think much of it, but it's been happening pretty frequently. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> That's useful information, Mrs. Anderson. Changes in stool color and texture can sometimes indicate an issue with digestion, especially involving the pancreas. I'm also concerned about your unexplained weight loss. Have you had any issues with jaundice, yellowing of your skin or eyes? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> I noticed my skin looks a little yellow lately, but I thought it was just because I haven't been feeling well. My eyes are fine though, at least from what I can tell. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> It sounds like your symptoms are becoming more significant, especially with the weight loss, nausea, and now jaundice. Given what you've described, I'd like to investigate further. I'm concerned that your symptoms may suggest an issue with your pancreas, possibly pancreatic cancer. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> Pancreatic cancer? I was afraid it might be something serious, but hearing it out loud is a shock. Is it possible that it could be something else? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> It's important not to jump to conclusions just yet. Pancreatic cancer is one possibility based on your symptoms, but there are other conditions that could also cause similar issues, such as pancreatitis or gallbladder problems. However, because pancreatic cancer is difficult to detect in its early stages and your symptoms are concerning, I think it's important to rule it out sooner rather than later. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> What tests will you need to do? I want to figure this out as soon as possible. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> We'll start with some blood tests to check your liver and pancreatic function, as well as a scan like a CT or MRI, to get a better look at the pancreas and surrounding organs. We may also need to do an endoscopic ultrasound or a biopsy, depending on what we find. These tests will help us determine whether there's a tumor or another underlying issue. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> That sounds like a lot, but I want to do whatever it takes to get to the bottom of this. How serious is pancreatic cancer if that's what it turns out to be? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> Pancreatic cancer can be serious because it's often detected in later stages when symptoms become more noticeable, like what you're experiencing now. However, the earlier we catch it, the better the chances of treating it effectively. Treatment options may include surgery, chemotherapy, or radiation, depending on the stage and type. But remember, we're still in the diagnostic phase. We'll take it one step at a time and see what the tests show. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mrs. Anderson:</span> I appreciate your honesty. I've been feeling so out of control with my health lately. It's been affecting my mood too. I've been more anxious and down than usual. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> That's completely understandable, Mrs. Anderson. Facing uncertain health issues can take a toll emotionally as well as physically. You're taking the right step by seeking help now, and we'll support you through this process. If you feel like the anxiety or mood changes are becoming overwhelming, we can also discuss ways to help manage that side of things, whether through counseling or medication if needed. In the meantime, if your symptoms worsen or you feel like you need more support, don't hesitate to reach out. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="transcript-part">Extract 02: Questions 13–24 (Patient: Ms. Lewis)</div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> Good afternoon, Miss Lewis. How are you doing today? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> Afternoon, Doctor. I'm... well, honestly, I'm not sure how to answer that. I've been feeling overwhelmed lately, like there's this constant sense of worry that I just can't shake. It's been affecting everything: work, sleep, even just trying to relax at home. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> I'm sorry to hear that. It sounds like you've been going through a difficult time. Can you tell me more about what you've been experiencing? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> Sure. It feels like I'm always on edge, like there's something bad about to happen, even though I know there's no real reason for it. I worry about everything: my job, my health, my family. It's like my mind won't stop racing, constantly jumping from one worst-case scenario to another. I can't seem to focus on anything else, and it's exhausting. Sometimes, I even get these physical symptoms, like my heart races, or I get short of breath. It's been going on for months, but lately, it's gotten worse. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> That sounds very distressing, Miss Lewis. It's not uncommon for anxiety to manifest in both mental and physical symptoms, especially when it's been going on for a while. Based on what you've described, it sounds like you might be dealing with Generalized Anxiety Disorder, or GAD. GAD is characterized by persistent and excessive worry about a variety of things, often more intense than the situation warrants. Does that sound like what you're experiencing? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> Yes, that sounds exactly like what I'm going through. It's like I'm stuck in this loop of worrying about everything, no matter how small or irrational it might seem, and I can't turn it off. I've tried to distract myself, but nothing seems to work. It's starting to feel like I'm losing control over my own thoughts. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> I understand how difficult that must be. Anxiety can be overwhelming, especially when it feels like it's taking over your life. The important thing to remember is that you're not alone in this, and there are effective treatments that can help you regain control. We'll work together to develop a plan that addresses both the mental and physical aspects of your anxiety. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> That's good to hear. I've been feeling so isolated, like no one else understands what I'm going through. It's reassuring to know that there's a way forward. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> You're definitely not alone, Miss Lewis. Many people experience anxiety, and it's something that can be managed with the right approach. The first step is to identify the triggers that might be fueling your anxiety. Sometimes it's related to specific stressors, but with GAD, it can often feel like there's no clear reason for the worry. That's why we'll focus on both immediate coping strategies and long-term solutions. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> I've noticed that certain things make it worse, like work deadlines or worrying about my family's health. But even when everything's fine, I still feel this underlying tension. It's like I can't relax, no matter what I do. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> That's a common experience with GAD. The mind can get stuck in a pattern of constant vigilance, always looking for something to worry about, even when there's no immediate threat. One approach we can take is Cognitive Behavioral Therapy, or CBT. CBT helps you identify and challenge the negative thought patterns that contribute to your anxiety. By learning to recognize these patterns, you can start to reframe your thinking and reduce the intensity of your worry. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> I've heard of CBT before, but I've never tried it. Do you think it could really help? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> CBT is one of the most effective treatments for anxiety. It's a practical, hands-on approach that gives you tools to manage your anxiety in real time. We can also explore relaxation techniques like deep breathing, progressive muscle relaxation, or mindfulness, which can help you stay grounded when your anxiety spikes. In some cases, medication might also be considered to help manage the symptoms, especially if they're severe or impacting your daily life. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> I'm open to trying whatever will help. I just want to feel like myself again. The idea of having tools to manage this sounds really empowering. What about medication? I've been hesitant, but I don't want to rule anything out if it could help. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> Medication can be a valuable part of treatment, especially in combination with therapy. There are several options, including SSRIs, which are commonly used to treat anxiety. They work by balancing the chemicals in your brain that affect mood and anxiety. If you decide to try medication, we'll monitor your progress closely to make sure it's effective and that you're comfortable with it. The goal is to find the right balance for you, whether that's therapy, medication, or a combination of both. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> That makes sense. I feel a bit more hopeful now, knowing there are different options to explore. I'm ready to give this a try and start working on getting better. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> That's a great mindset, Miss Lewis. Taking the first step is always the hardest, but you've already done that by reaching out for help. We'll take this one step at a time, and I'll be here to support you throughout the process. Let's start by setting up a plan that includes some CBT techniques and, if you're comfortable, we can discuss medication as well. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Ms. Lewis:</span> Thank you, Doctor. I feel like I've been carrying this weight for so long, and it's a relief to know there's a path forward. I'm ready to start working on it. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Psychiatrist:</span> You're very welcome, Miss Lewis. We're in this together, and I'm confident we can find the right approach to help you manage your anxiety. Let's start with some initial sessions focused on CBT, and we'll go from there. Remember, it's a process, and progress might take time, but you're already on the right track by taking action. Let's get started. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="transcript-part">PART B</div>
-                    <div class="dialogue"><span class="speaker">Question 25</span></div>
-                    <div class="dialogue"><span class="speaker">Speaker:</span> So, this morning, we assessed a four-year-old Labrador who was brought in by his owner after they noticed he had been unusually lethargic and had lost some weight over the past few weeks. The dog is typically very active, but there's been a noticeable decline in energy recently. Upon examination, there is no history of prior medical conditions or any recent infections. However, the owner mentioned that they've been under significant stress at work, which may have affected their interaction with the dog. Initial tests, including blood work and X-rays, came back normal, with no signs of underlying diseases. The dog's behavior and weight loss could possibly be a response to the emotional strain the owner is experiencing, which may have disrupted their usual bond. We see similar effects in therapy and service animals, where the pet's health can reflect the mental state of the owner. The most likely diagnosis at this point is a psychosomatic reaction, where the dog's health is being influenced by the emotional environment in the home. We'll look into improving the emotional connection between the owner and the dog and monitor for health improvements. <span class="cite-tag">[cite: 13]</span></div>
-                    
-                    <div class="dialogue"><span class="speaker">Question 26</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> I see. We're going to use a multimodal analgesia approach to manage your pain, which means we'll use a combination of medications that work together. This should help control your pain better from different angles. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Patient:</span> That sounds good. What exactly does that mean? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> We'll use a combination of non-opioid medications like ibuprofen and possibly a low dose of opioids, if needed, for more severe pain. By combining these, we can reduce the amount of opioids used while effectively controlling the pain. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Patient:</span> Will that be enough to make the pain go away? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> It should definitely help. Each medication targets pain differently, so using several together can give better relief than relying on just one type. We're tailoring the treatment to your specific needs. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Patient:</span> I trust you. What's next? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Doctor:</span> I am going to prescribe a mix of medications and we'll monitor how well they work together. We might adjust the doses depending on how you respond. In the meantime, we'll keep an eye on your symptoms. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="dialogue"><span class="speaker">Question 27</span></div>
-                    <div class="dialogue"><span class="speaker">Colleague 1:</span> The attendance for the flexibility and prioritization techniques course hasn't been great, has it? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Colleague 2:</span> No, it hasn't. I thought more people would be interested, considering how crucial it is. We've made sure everyone knows about it, and we even arranged for it to be held in shorter sessions to accommodate shift patterns, but that hasn't seemed to help. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Colleague 1:</span> Yeah, though I don't think the scheduling change was the issue. I have a feeling that once staff recognize how these techniques can help them manage daily priorities more effectively, there might be a better response. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Colleague 2:</span> Agreed. There's definitely a need for it, but it seems like the staff don't yet see how it applies to their day-to-day responsibilities. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="dialogue"><span class="speaker">Question 28</span></div>
-                    <div class="dialogue"><span class="speaker">GP:</span> So Mr. Smith, I see you've come in today because you're experiencing severe reactions after coming into contact with water. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mr. Smith:</span> Yes, that's right. Every time I take a shower or wash my hands, I get these painful red rashes all over my skin. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">GP:</span> That sounds distressing. I remember from your last visit you mentioned the rashes appeared soon after bathing, and that you've also experienced itching and burning sensations. Have these symptoms continued? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mr. Smith:</span> Yes, and it seems to be getting worse. I'm also noticing the rashes last longer now. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">GP:</span> I see. This does sound like a condition called aquagenic urticaria, which is an extremely rare allergy to water. Now, did you say earlier that the reaction only happens with certain types of water, like rainwater or tap water? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Mr. Smith:</span> No, it happens every time I touch any kind of water, even when I sweat. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">GP:</span> Right, that's consistent with aquagenic urticaria. I'll recommend some treatment options to help manage the condition, but we will need to... <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="dialogue"><span class="speaker">Question 29</span></div>
-                    <div class="dialogue"><span class="speaker">Trainer:</span> Welcome to session number five. Today we're going to dive deeper into how technology is shaping modern dental education. If you remember from last session, we discussed virtual reality simulations and how they help you practice complex procedures in a controlled, realistic environment. We also went over 3D printing technology, where you printed a basic dental model. Now, for today's session, we're going to build on those concepts. You're going to use 3D printing again, but this time for more intricate dental prosthetics. And for the first time, you'll be combining that with our VR platform to practice fitting the prosthetics on a simulated patient. This means we'll be elevating the complexity of the procedures you've already started learning. You'll need to pay more attention to accuracy, precision, and real-time adjustments. We'll also discuss briefly how AI-driven diagnostic tools work, though we'll go deeper into that topic in later sessions. Let's focus on integrating the technologies we've already covered for now. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="dialogue"><span class="speaker">Question 30</span></div>
-                    <div class="dialogue"><span class="speaker">Nurse Manager:</span> Thinking about our next quality improvement initiative... <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Charge Nurse:</span> Yes, last year we focused on improving patient handover communication, didn't we? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Nurse Manager:</span> That's right. We implemented those standardized forms and had training sessions, which really helped reduce errors. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Charge Nurse:</span> Yes, I remember that well. It was a bit challenging at first for the team to adjust, but overall, it worked quite effectively, don't you think? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Nurse Manager:</span> Definitely. But I've been reading more about new approaches to care coordination, and I think we might need to expand our focus this year. With the increasing complexity of patient needs, it's crucial that we continue to refine our processes. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Charge Nurse:</span> So, we should probably consider rolling out some additional staff training, maybe focus on interdisciplinary communication. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Nurse Manager:</span> That's exactly what I was thinking. Let's discuss this with the leadership team. They might have suggestions for how to integrate it into our current workflow. <span class="cite-tag">[cite: 13]</span></div>
-
-                    <div class="transcript-part">PART C</div>
-                    <div class="transcript-part">Extract 01: Questions 31–36 (Dr. Elizabeth Shaw on Geriatric Palliative Care)</div>
-                    <div class="dialogue"><span class="speaker">Dr. Elizabeth Shaw:</span> My name is Dr. Elizabeth Shaw, and I specialize in geriatric palliative care. Today, I want to address an important but often overlooked aspect of end-of-life care for patients with advanced dementia: recognizing and preserving personhood. It's a challenging area of healthcare, and it's vital that we not only treat the illness, but also respect the individual behind the diagnosis. Personhood, in the context of dementia care, refers to recognizing that even as cognitive abilities decline, the individual's identity, preferences, and life history remain important. Dementia patients, particularly those in the advanced stages, often lose the ability to communicate, make decisions, or express their needs. This can lead to a risk of their identity being overshadowed by their illness. The key to effective palliative care in dementia is maintaining dignity and autonomy despite severe cognitive impairment. This is where the concept of person-centered care becomes essential. As healthcare professionals, we must constantly ask ourselves: how can we ensure that a patient's sense of self and dignity is upheld? How can we honor their wishes, especially when they are no longer able to communicate them clearly? This is particularly critical in dementia care, where the patient's ability to express their preferences is compromised. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue">In collaboration with Dementia Care Australia, we recently conducted a study to investigate how personhood is managed in end-of-life dementia care. This study involved over 1,200 responses from healthcare professionals, family carers, and patients themselves where possible. The findings highlighted several important gaps in current care approaches. One key issue is the difficulty of making decisions that align with the patient's wishes when those preferences haven't been discussed or documented early enough. Often, families are left guessing what their loved ones might have wanted in terms of treatment decisions, such as the use of antibiotics, pain relief, or resuscitation. This can cause distress for both the family and the patient. The concept of advanced care planning is crucial here. It allows patients to document their preferences while they still have the capacity to do so, ensuring that their values and wishes are respected even in later stages when they can no longer communicate. But unfortunately, as our study revealed, nearly 40% of healthcare professionals have never initiated a conversation about advanced care planning with their dementia patients. This is a significant gap, given the importance of these conversations in upholding patient autonomy and dignity. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue">Another aspect we must address is the family's involvement in care. The family plays a critical role in dementia care, but they often feel unsupported or unsure of their loved one's wishes. In our survey, 70% of family carers reported feeling uncertain or anxious about the decisions they had to make. Many expressed regret over not having had conversations about end-of-life preferences earlier in the disease's progression. Despite these challenges, there are promising examples of excellent person-centered care. In some cases, healthcare teams have worked closely with families, using the patient's life history, values, and past preferences to guide decisions. This helps ensure that the care remains focused on the individual, not just the disease. However, such examples are still the exception rather than the norm. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue">Additionally, pain management is another area where upholding personhood becomes essential. Pain is often under-recognized and under-treated in dementia patients, as they may be unable to communicate their discomfort. Our research found that 25% of healthcare professionals were unsure of how to assess pain in non-verbal patients, leading to concerns about under-treatment. Providing adequate pain relief is not just a medical necessity, but a fundamental human right. When it is overlooked, the personhood of the patient is disregarded. Our study also revealed a concerning gap in healthcare professionals' knowledge about patient rights. For example, 20% of respondents were unaware that patients have the right to refuse treatments such as hydration and nutrition at the end of life. Without this knowledge, professionals may fail to respect patient autonomy, further undermining their personhood. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue">Ultimately, what we need is a comprehensive, well-funded approach to palliative dementia care that prioritizes personhood. This means investing in training for healthcare professionals so they are equipped to discuss and honor patients' wishes. It means supporting families to help them make informed decisions. Most importantly, it means ensuring that the care delivered is not just about managing symptoms, but about preserving the dignity and identity of every person affected by dementia. We still have a long way to go, but with initiatives like advanced care planning and better pain management protocols, we can move towards a model of dementia care that respects and maintains the personhood of patients, even in the most challenging stages of the disease. <span class="cite-tag">[cite: 13]</span></div>
-                    
-                    <div class="transcript-part">Extract 02: Questions 37–42 (Dr. Carter on Celiac Disease Management)</div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> I have with me Dr. Carter, an expert in celiac disease, an autoimmune disorder affecting the small intestine. Hello, Dr. Carter, thank you for joining us today. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Thank you for inviting me. I'm happy to share insights into my journey and the ongoing challenges surrounding celiac disease, particularly the frequent misdiagnosis it faces. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> I understand you didn't always focus on celiac disease. Can you share how you transitioned from general internal medicine to specializing in this area? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Absolutely. My journey started in internal medicine, focusing primarily on gastrointestinal disorders. However, my career took a turn when my daughter Emily was diagnosed with celiac disease after years of misdiagnoses. For years, she was told she had irritable bowel syndrome, and even a psychological disorder due to the symptoms not fitting the standard profile for celiac disease. Her experience opened my eyes to the difficulties patients face in getting an accurate diagnosis, especially for conditions like celiac disease, which can mimic other disorders. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> It must have been a challenging time for your family. What finally led to the correct diagnosis? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> It was a long and frustrating process. Emily's symptoms ranged from abdominal pain to severe fatigue and brain fog. These are non-specific symptoms, which is why doctors initially misdiagnosed her. Eventually, after pushing for more tests, a blood test for celiac markers and a biopsy of her small intestine confirmed the diagnosis. This personal experience drove me to specialize in celiac disease to prevent others from going through what Emily did. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> Misdiagnosis seems to be a recurring theme with autoimmune diseases. Why do you think that is, particularly with celiac disease? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> You're absolutely right. One of the biggest challenges with celiac disease is that it mimics so many other conditions. Patients can present with symptoms similar to irritable bowel syndrome (IBS), Crohn's disease, lactose intolerance, or even depression. The symptoms can also vary greatly from one patient to another, which complicates diagnosis further. For example, in children, celiac disease may be misdiagnosed as failure to thrive, whereas in adults, it may be mistaken for anemia or chronic fatigue syndrome. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> Could you provide some insight into the conditions that are most often mistaken for celiac disease? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Certainly. Some of the most common conditions misdiagnosed in place of celiac disease include irritable bowel syndrome, inflammatory bowel disease, lactose intolerance, and non-celiac gluten sensitivity. However, it's not just gastrointestinal conditions. Because celiac disease can also cause symptoms like joint pain and migraines, it's often confused with fibromyalgia or chronic migraines. This wide range of overlapping symptoms is what leads to frequent misdiagnosis. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> That's a broad spectrum of conditions. Given how common misdiagnosis is, what steps do you recommend for patients who suspect they may have celiac disease but have been diagnosed with something else? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> The first step is to advocate for yourself and ask for specific testing. A blood test looking for certain antibodies, like tissue transglutaminase antibodies (tTG-IgA), is often the first screening tool. If that test comes back positive, the next step is usually an endoscopic biopsy of the small intestine to look for damage to the villi, which is a hallmark of celiac disease. It's also crucial that patients are still consuming gluten when these tests are done, because stopping gluten can lead to false negatives. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> How has the awareness and understanding of celiac disease evolved in recent years? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Awareness has improved dramatically, but there's still a long way to go. 20 years ago, celiac disease was considered rare, but now we know it affects about 1 in 100 people worldwide. One of the biggest changes is that doctors are becoming more aware of the non-classic symptoms, such as neurological issues, infertility, and osteoporosis, which can all be linked to celiac disease. These symptoms were often overlooked in the past. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> It's clear that proper diagnosis is critical for effective treatment. What is life like for your daughter now that she has a confirmed diagnosis? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Emily is doing very well now, thanks to a strict gluten-free diet. That's the only treatment for celiac disease at the moment, but it has made a world of difference in her life. The fatigue, brain fog, and gastrointestinal symptoms have almost completely disappeared. She's now able to live a normal, healthy life. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> It's wonderful to hear she's doing so well. Before we wrap up, can you tell us about any ongoing research or developments in the treatment of celiac disease? <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> There's exciting research underway, including efforts to develop a vaccine that could allow people with celiac disease to consume gluten without damaging their intestines. Additionally, there are medications in development aimed at reducing the immune response to gluten. However, for now, the gluten-free diet remains the most effective treatment. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Journalist:</span> Thank you, Dr. Carter, for sharing your insights and personal story with us today. It's been incredibly informative. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Dr. Carter:</span> Thank you for the opportunity to raise awareness about this important issue. <span class="cite-tag">[cite: 13]</span></div>
-                    <div class="dialogue"><span class="speaker">Announcer:</span> That is the end of Part C. You now have two minutes to check your answers. <span class="cite-tag">[cite: 13]</span></div>
+                    <div class="dialogue" style="color: #666; margin-top: 20px; font-style: italic;">(Note: Full transcript for Parts B and C are not provided in this specific document snippet, but candidates should focus on analyzing the detailed Part A notes above.)</div>
 
                 </div>
             </section>
@@ -507,7 +418,7 @@
                 if(el.checked) data[el.name] = el.value;
             });
             
-            localStorage.setItem('oet_week4_progress', JSON.stringify(data));
+            localStorage.setItem('oet_week4_progress_v4', JSON.stringify(data));
             
             const indicator = document.getElementById('save-indicator');
             indicator.style.opacity = '1';
@@ -515,7 +426,7 @@
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('oet_week4_progress');
+            const saved = localStorage.getItem('oet_week4_progress_v4');
             if(saved) {
                 const data = JSON.parse(saved);
                 document.querySelectorAll('input[type="text"]').forEach(el => {
@@ -534,13 +445,30 @@
         // --- GRADING LOGIC ---
         function checkPartA() {
             const answersA = {
-                q1: "stomach", q2: "back", q3: "nauseous|nausea", q4: "pale and greasy",
-                q5: "pancreas", q6: "weight loss", q7: "jaundice", q8: "gallbladder",
-                q9: "scan", q10: "endoscopic", q11: "counseling", q12: "worsen",
-                q13: "overwhelmed", q14: "worry", q15: "on edge", q16: "exhausting",
-                q17: "heart races", q18: "generalized anxiety disorder|gad", q19: "mental", 
-                q20: "work deadlines", q21: "no matter what i do", q22: "cognitive behavioral therapy|cbt", 
-                q23: "mindfulness", q24: "medication"
+                q1: "ocd", 
+                q2: "day-to-day life|day to day life", 
+                q3: "bad", 
+                q4: "months",
+                q5: "checking", 
+                q6: "germs", 
+                q7: "dry and cracked", 
+                q8: "out of place",
+                q9: "unable", 
+                q10: "cognitive-behavioral therapy (cbt)|cognitive-behavioral therapy|cbt", 
+                q11: "selective serotonin reuptake inhibitors (ssris)|selective serotonin reuptake inhibitors|ssris", 
+                q12: "help",
+                q13: "right ventricle", 
+                q14: "ductus arteriosus", 
+                q15: "prostaglandin", 
+                q16: "temporary",
+                q17: "structure", 
+                q18: "shunt", 
+                q19: "first weeks", 
+                q20: "heart", 
+                q21: "lifesaving", 
+                q22: "cardiologist", 
+                q23: "physical", 
+                q24: "development"
             };
 
             for (let i = 1; i <= 24; i++) {
@@ -574,9 +502,9 @@
 
         function checkPartBC() {
             const answersBC = {
-                q25: "C", q26: "B", q27: "A", q28: "B", q29: "C", q30: "A",
-                q31: "B", q32: "B", q33: "C", q34: "B", q35: "A", q36: "B",
-                q37: "C", q38: "A", q39: "A", q40: "C", q41: "C", q42: "A"
+                q25: "A", q26: "B", q27: "B", q28: "A", q29: "A", q30: "B",
+                q31: "A", q32: "B", q33: "A", q34: "B", q35: "B", q36: "C",
+                q37: "C", q38: "B", q39: "C", q40: "B", q41: "A", q42: "A"
             };
 
             for (let i = 25; i <= 42; i++) {
