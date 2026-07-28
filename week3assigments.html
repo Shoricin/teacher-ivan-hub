@@ -3,15 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fielding School - OET Assignments Week 4</title>
+    <title>Fielding School App by Teacher Ivan - OET Listening Week 4</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
             --secondary-color: #3b82f6;
-            --bg-color: #f0f4f8;
+            --accent-color: #0ea5e9;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
             --card-bg: #ffffff;
-            --text-color: #334155;
-            --border-color: #cbd5e1;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -19,239 +26,642 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            margin: 0;
-            padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 20px;
             text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            color: var(--primary-color);
+        .header-banner h1 {
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            font-weight: 600;
-            color: var(--secondary-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9em;
+        .header-banner p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            color: #e0f2fe;
         }
 
-        .day-section {
-            background: #f8fafc;
-            border-left: 6px solid var(--secondary-color);
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-top: 0;
+        .audio-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--card-bg);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        h3 {
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-        }
-
-        .audio-wrapper {
-            background: var(--card-bg);
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-top: 15px;
+            justify-content: center;
+            border-bottom: 3px solid var(--accent-color);
         }
 
         audio {
             width: 100%;
+            max-width: 800px;
             outline: none;
         }
 
-        .transcript-container {
-            height: 400px;
-            overflow-y: auto;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
 
-        .speaker {
+        .day-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .play-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .play-btn:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.02);
+        }
+
+        .play-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .part-title {
+            background-color: #e0f2fe;
+            border-left: 5px solid var(--accent-color);
+            padding: 8px 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0369a1;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .extract-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .notes-box {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            border-bottom: 1px solid var(--text-color);
+            color: var(--secondary-color);
+            font-weight: bold;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .mcq-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .mcq-options .option {
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .mcq-options .option:hover {
+            background-color: #e0f2fe;
+        }
+
+        .transcript-container {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+        }
+
+        .transcript-line {
+            margin-bottom: 10px;
+            padding-left: 15px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .speaker-name {
             font-weight: bold;
             color: var(--primary-color);
         }
 
-        .dialogue {
-            margin-bottom: 12px;
+        @media (max-width: 768px) {
+            .grid-2-col {
+                grid-template-columns: 1fr;
+            }
+            .day-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .play-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>OET Listening - Week 4 Assignments</h1>
-            <div class="subtitle">Fielding School App by Teacher Ivan</div>
-        </header>
+    <!-- Header Section -->
+    <header class="header-banner">
+        <h1>Fielding School Virtual Classes</h1>
+        <p>OET Listening Assignments Week 4 - By Teacher Ivan</p>
+    </header>
 
-        <!-- MARTES -->
-        <div class="day-section">
-            <h2>📅 Martes: OET Listening Part A</h2>
-            <p>Escucha atentamente las consultas de los pacientes (Extracts 1 & 2) y practica completando las notas con la información requerida.</p>
-            <div class="audio-wrapper">
-                <audio controls preload="metadata">
-                    <!-- Reproduce desde 01:05 (65s) hasta 13:10 (790s) -->
-                    <source src="audios/oetassigmentsweek4.m4a#t=65,790" type="audio/mp4">
-                    Tu navegador no soporta el elemento de audio.
-                </audio>
-            </div>
-        </div>
-
-        <!-- MIÉRCOLES -->
-        <div class="day-section">
-            <h2>📅 Miércoles: OET Listening Part B & Part C</h2>
-            <p>Concéntrate en los extractos cortos en entornos clínicos y luego en las presentaciones médicas extensas.</p>
-            
-            <h3>Part B</h3>
-            <div class="audio-wrapper">
-                <audio controls preload="metadata">
-                    <!-- Reproduce desde 13:10 (790s) hasta 21:41 (1301s) -->
-                    <source src="audios/oetassigmentsweek4.m4a#t=790,1301" type="audio/mp4">
-                </audio>
-            </div>
-
-            <h3>Part C</h3>
-            <div class="audio-wrapper">
-                <audio controls preload="metadata">
-                    <!-- Reproduce desde 21:41 (1301s) hasta 35:58 (2158s) -->
-                    <source src="audios/oetassigmentsweek4.m4a#t=1301,2158" type="audio/mp4">
-                </audio>
-            </div>
-        </div>
-
-        <!-- JUEVES -->
-        <div class="day-section">
-            <h2>📅 Jueves: Listening Activo</h2>
-            <p>Reproduce el audio completo y sigue la transcripción detallada. Utiliza esta sesión para afinar tu comprensión de vocabulario técnico, pronunciación y fluidez.</p>
-            
-            <div class="audio-wrapper">
-                <audio controls preload="metadata">
-                    <source src="audios/oetassigmentsweek4.m4a" type="audio/mp4">
-                </audio>
-            </div>
-
-            <h3 style="margin-top: 20px;">Respuestas (Answers)</h3>
-            <p>Revisa tus respuestas correctas escuchando la sección final del audio.</p>
-            <div class="audio-wrapper">
-                <audio controls preload="metadata">
-                    <!-- Reproduce desde 35:58 (2158s) hasta el final -->
-                    <source src="audios/oetassigmentsweek4.m4a#t=2158" type="audio/mp4">
-                </audio>
-            </div>
-
-            <h3 style="margin-top: 25px;">Transcripción Completa del Audio</h3>
-            <div class="transcript-container">
-                <div class="dialogue">
-                    <span class="speaker">Announcer:</span> Welcome to OET Answers. Occupational English Test. OET Answers Practice Test. Listening Test. This test has three parts...
-                </div>
-                
-                <h4 style="color: #0369a1;">--- PART A ---</h4>
-                <div class="dialogue">
-                    <span class="speaker">Patient (Emily):</span> Hi doctor. Thanks for seeing me today.
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Doctor:</span> Of course, Emily. What brings you in today?
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Patient (Emily):</span> Well, I've been really struggling lately. I'm not sure how to explain it exactly, but I think I might have OCD. I've been doing a lot of research online, and a lot of what I'm reading feels very close to what I'm going through. I've been feeling overwhelmed, and it's affecting my day-to-day life.
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Doctor:</span> I see. Well, thank you for bringing this up. It sounds like it's been difficult for you. Let's start by discussing what you've been experiencing. What makes you think it might be OCD?
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Patient (Emily):</span> I've always been a bit of a perfectionist, but recently, it's gotten worse. I find myself obsessing over small things, like whether I've locked the door or turned off the stove. I'll check and recheck multiple times, even when I know I already did it...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Doctor:</span> It sounds like these thoughts and behaviors are really interfering with your daily routine. How long have you been experiencing this?
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Patient (Emily):</span> It's been a few months now, but I think it's been building up for a while...
-                </div>
-                <p><em>(Continúa el diálogo discutiendo los síntomas y el tratamiento CBT y SSRIs...)</em></p>
-
-                <h4 style="color: #0369a1;">--- Extract 02: Patient: Mrs. Thompson ---</h4>
-                <div class="dialogue">
-                    <span class="speaker">Pediatric Cardiologist:</span> Good afternoon, Mrs. Thompson. I know you've had a lot of information to process in the past few days...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Mrs. Thompson:</span> Thank you, doctor. We're trying to understand everything, but it's been tough. When they told us our son has something called pulmonary atresia, we were in shock. What does this mean for him?
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Pediatric Cardiologist:</span> Pulmonary atresia is a congenital heart defect... This means blood can't flow directly from the right ventricle of the heart to the lungs to pick up oxygen.
-                </div>
-                <p><em>(Continúa la explicación sobre el ductus arteriosus, el uso de prostaglandina, la derivación quirúrgica y el pronóstico a largo plazo...)</em></p>
-
-                <h4 style="color: #0369a1;">--- PART B ---</h4>
-                <div class="dialogue">
-                    <span class="speaker">Nurse 1:</span> So, we've started implementing mindfulness practices for the staff...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Surgeon:</span> The hemispherectomy is a complex procedure, but it can offer significant relief from your seizures...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Researcher:</span> My primary area of study is the long-term effects of COVID-19, particularly on the heart and lungs...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Trainee:</span> Well, I was asked to look into how effective telemedicine has been in providing care for these patients...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Psychiatrist:</span> I think we're seeing some clear links here between the patient's gut microbiota and their depressive symptoms...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Pharmacist:</span> I noticed he didn't complete the course. He mentioned he was feeling better and decided to stop taking the medication...
-                </div>
-
-                <h4 style="color: #0369a1;">--- PART C ---</h4>
-                <p><strong>Extract 01: Interview with Sam Peterson (Hospital Technology & Integration)</strong></p>
-                <div class="dialogue">
-                    <span class="speaker">Interviewer:</span> Today we have Sam Peterson with us, a healthcare administrator with over 15 years of experience...
-                </div>
-                <div class="dialogue">
-                    <span class="speaker">Sam Peterson:</span> Thanks for having me... One of the biggest challenges is interoperability, meaning that new systems need to communicate with existing ones...
-                </div>
-                <p><em>(Continúa abordando los obstáculos financieros, los cuellos de botella en la formación del personal y las prometedoras tecnologías de IA...)</em></p>
-
-                <p><strong>Extract 02: Presentation on Neck Pain Study</strong></p>
-                <div class="dialogue">
-                    <span class="speaker">Speaker:</span> Good afternoon, everyone. I'm pleased to be here today to talk about neck pain, a condition that affects a large portion of the population... The primary reason neck pain is so prevalent today is due to lifestyle changes...
-                </div>
-                <p><em>(Continúa explicando que los abordajes no quirúrgicos, la educación ergonómica y el control del estrés demostraron una mejora notable en los resultados de los pacientes y una reducción de la carga asistencial...)</em></p>
-                <div class="dialogue">
-                    <span class="speaker">Announcer:</span> That is the end of Part C. You now have two minutes to check your answers.
-                </div>
-            </div>
-        </div>
+    <!-- Global Audio Player -->
+    <div class="audio-container">
+        <audio id="oetAudio" controls preload="metadata">
+            <source src="audios/oetassigmentsweek4.m4a" type="audio/mp4">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
     </div>
+
+    <div class="container">
+
+        <!-- MARTES: Part A -->
+        <section class="day-section" id="tuesday">
+            <div class="day-header">
+                <div class="day-title">Día Martes: OET Listening Part A</div>
+                <button class="play-btn" onclick="playAudioSegment(65, 790)">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Reproducir Part A (01:05)
+                </button>
+            </div>
+            
+            <p><em>Complete the following notes with a word or short phrase. You have 30 seconds to look at the notes.</em></p>
+
+            <div class="part-title">Extract 01: Questions 01-12 | Patient: Emily</div>
+            <div class="grid-2-col">
+                <div class="notes-box">
+                    <strong>Presenting concern</strong>
+                    <ul>
+                        <li>Patient suspects she may have (1) <span class="blank"></span>.</li>
+                        <li>Reports feeling overwhelmed and daily life is being (2) <span class="blank"></span>.</li>
+                        <li>Checking behaviors triggered by fear of something (3) <span class="blank"></span> happening.</li>
+                        <li>Symptoms have worsened over the past few (4) <span class="blank"></span>.</li>
+                        <li>Causes lateness due to prolonged (5) <span class="blank"></span> routines.</li>
+                    </ul>
+                    <strong>Obsessions and compulsions</strong>
+                    <ul>
+                        <li>Frequent fear of (6) <span class="blank"></span> leads to excessive handwashing.</li>
+                    </ul>
+                </div>
+                <div class="notes-box">
+                    <ul>
+                        <li>Repetitive behaviors have caused (7) <span class="blank"></span> skin.</li>
+                        <li>Discomfort if items are (8) <span class="blank"></span> on desk.</li>
+                        <li>Admits behaviors feel irrational but (9) <span class="blank"></span> to stop.</li>
+                    </ul>
+                    <strong>Treatment discussion</strong>
+                    <ul>
+                        <li>GP recommends therapy called (10) <span class="blank"></span>.</li>
+                        <li>Medication option includes type of antidepressants called (11) <span class="blank"></span>.</li>
+                        <li>Emily feels relieved to know there is (12) <span class="blank"></span>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="part-title">Extract 02: Questions 13-24 | Patient: Mrs. Thompson</div>
+            <div class="grid-2-col">
+                <div class="notes-box">
+                    <strong>Diagnosis and Explanation</strong>
+                    <ul>
+                        <li>Blood cannot pass from (13) <span class="blank"></span> to lungs.</li>
+                        <li>Currently dependent on (14) <span class="blank"></span> for oxygen delivery.</li>
+                        <li>Maintained open with (15) <span class="blank"></span> medication.</li>
+                    </ul>
+                    <strong>Short-Term Management</strong>
+                    <ul>
+                        <li>Medication is a (16) <span class="blank"></span> solution.</li>
+                        <li>Surgical plan depends on baby's heart (17) <span class="blank"></span>.</li>
+                        <li>Initial procedure may involve placing a (18) <span class="blank"></span>.</li>
+                    </ul>
+                </div>
+                <div class="notes-box">
+                    <strong>Surgical and Long-Term Outlook</strong>
+                    <ul>
+                        <li>First surgery typically occurs in (19) <span class="blank"></span> of life.</li>
+                        <li>(20) <span class="blank"></span> needs adjustment as the baby grows.</li>
+                        <li>Ongoing risks exist but surgery is (21) <span class="blank"></span>.</li>
+                    </ul>
+                    <strong>Prognosis and Development</strong>
+                    <ul>
+                        <li>Lifelong need for (22) <span class="blank"></span> monitoring.</li>
+                        <li>May face limits on (23) <span class="blank"></span> activities.</li>
+                        <li>Specialists will support child's growth and (24) <span class="blank"></span>.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- MIÉRCOLES: Part B y Part C -->
+        <section class="day-section" id="wednesday">
+            <div class="day-header">
+                <div class="day-title">Día Miércoles: OET Listening Part B & C</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="play-btn" onclick="playAudioSegment(790, 1301)">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        Reproducir Part B (13:10)
+                    </button>
+                    <button class="play-btn" onclick="playAudioSegment(1301, 2158)">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        Reproducir Part C (21:41)
+                    </button>
+                </div>
+            </div>
+
+            <div class="part-title">PART B – Questions 25 to 30</div>
+            
+            <div class="mcq-item">
+                <div class="mcq-question">25. What benefits have nurses experienced from the mindfulness practices?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) It helped them stay more attentive and less stressed.</div>
+                    <div class="option">(b) It made them more concentrated and less overwhelmed.</div>
+                    <div class="option">(c) It improved their focus and lowered their tension.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">26. What is the surgeon focusing on?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Explaining the nature of the procedure</div>
+                    <div class="option">(b) Reassuring the patient about their concerns</div>
+                    <div class="option">(c) Providing details about the surgery</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">27. The aim of his research was:</div>
+                <div class="mcq-options">
+                    <div class="option">(a) To investigate how COVID-19 impacts long-term cardiovascular and pulmonary health</div>
+                    <div class="option">(b) To explore persistent effects of COVID-19 on respiratory and cardiac systems</div>
+                    <div class="option">(c) To study prolonged symptoms caused by COVID-19 affecting the lungs and heart</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">28. The trainee found it difficult to:</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Convey the potential of telemedicine to patients.</div>
+                    <div class="option">(b) Maintain a clear and objective tone during the conversation.</div>
+                    <div class="option">(c) Reassure patients about the safety and effectiveness of telemedicine.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">29. The psychiatrist says their next focus should be:</div>
+                <div class="mcq-options">
+                    <div class="option">(a) To conduct neuroinflammatory screening</div>
+                    <div class="option">(b) To assess neurobiological indicators for PTSD</div>
+                    <div class="option">(c) To evaluate the need for additional anti-inflammatory measures</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">30. What is the pharmacist doing?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Reporting patient adherence issues</div>
+                    <div class="option">(b) Discussing incomplete treatment</div>
+                    <div class="option">(c) Addressing improper medication use</div>
+                </div>
+            </div>
+
+            <div class="part-title">PART C – Extract 01: Questions 31-36</div>
+            <div class="mcq-item">
+                <div class="mcq-question">31. What is the primary expertise of the interviewee?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Overseeing hospital operations and management.</div>
+                    <div class="option">(b) Direct involvement in patient care practices.</div>
+                    <div class="option">(c) Innovating new clinical treatment methodologies.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">32. What does the interviewee identify as the most significant obstacle in adopting new hospital technologies?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) The financial burden of acquiring cutting-edge systems.</div>
+                    <div class="option">(b) Achieving seamless functionality between new and old systems.</div>
+                    <div class="option">(c) The reluctance of hospital personnel to adapt to new systems.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">33. Why was the interviewer taken aback by the interviewee’s comment on technology integration?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) The interviewer had anticipated cost to be the foremost barrier.</div>
+                    <div class="option">(b) The interviewer believed the technology was obsolete.</div>
+                    <div class="option">(c) The interviewer held a differing perspective on the topic.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">34. According to the interviewee, what is an unintended effect of introducing new technology in hospitals?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) It can result in reduced staffing needs.</div>
+                    <div class="option">(b) It may lead to a heavier workload for hospital employees.</div>
+                    <div class="option">(c) It diminishes patients’ confidence in healthcare providers.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">35. What strategy does the interviewee propose to mitigate integration issues with new technology?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Expanding training initiatives for hospital workers.</div>
+                    <div class="option">(b) Involving healthcare professionals in early-stage planning.</div>
+                    <div class="option">(c) Limiting the deployment of new technological solutions.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">36. Which emerging technology does the interviewee express the most enthusiasm about?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Robotic-assisted procedures in surgery.</div>
+                    <div class="option">(b) Remote healthcare delivery systems like telemedicine.</div>
+                    <div class="option">(c) AI-driven innovations in medical diagnostics and patient care.</div>
+                </div>
+            </div>
+
+            <div class="part-title">PART C – Extract 02: Questions 37-42</div>
+            <div class="mcq-item">
+                <div class="mcq-question">37. The speaker suggests that the rise in neck pain cases is mainly due to</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Increased levels of physical activity.</div>
+                    <div class="option">(b) The growing number of elderly people in the population.</div>
+                    <div class="option">(c) Changes in sedentary work environments.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">38. The primary aim of the study mentioned was to</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Assess non-surgical treatments for neck pain.</div>
+                    <div class="option">(b) Explore alternative methods to reduce neck discomfort.</div>
+                    <div class="option">(c) Investigate invasive techniques to address chronic neck issues.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">39. According to the study, which of the following helped to alleviate neck pain symptoms?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Medication and stress reduction.</div>
+                    <div class="option">(b) Intensive physical therapy and stretching exercises.</div>
+                    <div class="option">(c) Adjustments to posture and workplace ergonomics.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">40. How did the small group sessions assist patients in managing their neck pain?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) By offering personalized care plans.</div>
+                    <div class="option">(b) By educating them on proper body mechanics and simple exercises.</div>
+                    <div class="option">(c) By providing medical treatments for severe neck conditions.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">41. How did the project ease the burden on healthcare providers?</div>
+                <div class="mcq-options">
+                    <div class="option">(a) By limiting the need for repeated consultations.</div>
+                    <div class="option">(b) By lowering the number of physiotherapists required.</div>
+                    <div class="option">(c) By encouraging early medical intervention for severe pain.</div>
+                </div>
+            </div>
+            <div class="mcq-item">
+                <div class="mcq-question">42. According to the speaker, addressing neck pain in its early stages is critical because it</div>
+                <div class="mcq-options">
+                    <div class="option">(a) Prevents the pain from progressing into a more severe condition.</div>
+                    <div class="option">(b) Minimizes the need for continuous medical supervision.</div>
+                    <div class="option">(c) Enhances the effectiveness of physical therapy in later stages.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JUEVES: Active Listening -->
+        <section class="day-section" id="thursday">
+            <div class="day-header">
+                <div class="day-title">Día Jueves: Active Listening (Transcripción Completa)</div>
+                <button class="play-btn" onclick="playAudioSegment(65, 2158)">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Reproducir Todo el Audio
+                </button>
+            </div>
+            
+            <p style="margin-bottom: 15px;"><em>Instrucciones: Escucha el audio cuidadosamente mientras sigues la lectura de la transcripción oficial. Esto te ayudará a conectar los sonidos con el vocabulario técnico.</em></p>
+
+            <div class="transcript-container">
+                <div class="part-title" style="margin-top: 0;">PART A - Transcripts</div>
+                
+                <h3 class="extract-title">Extract 01: Patient Emily</h3>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> Hi doctor. Thanks for seeing me today.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> Of course, Emily. What brings you in today?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> Well, I've been really struggling lately. I'm not sure how to explain it exactly, but I think I might have OCD. I've been doing a lot of research online, and a lot of what I'm reading feels very close to what I'm going through. I've been feeling overwhelmed, and it's affecting my day-to-day life.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> I see. Well, thank you for bringing this up. It sounds like it's been difficult for you. Let's start by discussing what you've been experiencing. What makes you think it might be OCD?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> I've always been a bit of a perfectionist, but recently, it's gotten worse. I find myself obsessing over small things, like whether I've locked the door or turned off the stove. I'll check and recheck multiple times, even when I know I already did it. It's not just a quick check; it takes me several minutes, sometimes longer. I just can't seem to stop myself, and if I don't do it, I feel this intense anxiety, like something bad is going to happen. It's exhausting.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> It sounds like these thoughts and behaviors are really interfering with your daily routine. How long have you been experiencing this?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> It's been a few months now, but I think it's been building up for a while. At first, it was just small things—like double-checking if I locked the car. But now it's happening all the time, and I feel trapped in these patterns. I'll spend 20 minutes just checking things before I can leave the house. It's gotten so bad that I'm late for work or other appointments because I can't leave until I'm sure everything's right.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> That does sound distressing. OCD often involves these repetitive behaviors or compulsions driven by intrusive thoughts or obsessions. You mentioned that you feel anxious if you don't go through these checks. Do you notice any other patterns of thoughts or behaviors?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> Yes, it's not just about checking things. I also have this fear of germs, and I wash my hands constantly. I know it's excessive, but I feel like I have to do it to stay clean. Sometimes, I'll wash my hands so many times that my skin becomes dry and cracked. I also have certain routines I follow, like needing to arrange things on my desk in a particular way. If something feels out of place, it bothers me until I fix it. I know these things sound irrational, but I can't seem to stop myself from doing them.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> It sounds like these compulsions are taking up a significant amount of your time and causing distress. It's important to know that OCD is a recognized mental health condition, and you're not alone in feeling this way. Many people with OCD experience similar patterns of obsessive thoughts and compulsive behaviors. It can be very difficult to manage on your own.</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> That's exactly how I feel. I know these thoughts don't make sense, but I'm unable to stop. I'm constantly worrying that if I don't do these things, something terrible will happen. It's like I don't trust my own mind anymore.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> I understand. OCD can create a cycle where the compulsions temporarily reduce anxiety, but the intrusive thoughts keep returning, reinforcing the behavior. The good news is that there are treatments that can help break this cycle. Have you ever spoken to a therapist or considered seeking treatment for these symptoms?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> I haven't talked to anyone about it until now. I've been trying to handle it on my own, but it's getting to the point where I don't think I can. I've read that therapy can help, but I don't know where to start.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> Therapy, particularly cognitive-behavioral therapy (CBT), is often very effective for OCD. There's a specific type of CBT called exposure and response prevention (ERP), where you gradually face the situations that trigger your obsessions without performing the compulsive behavior. Over time, this helps reduce the anxiety and breaks the cycle. In some cases, medication can also be helpful, especially if the OCD is severely impacting your ability to function. Would you be open to exploring therapy as a treatment option?</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> I think I'd like to try therapy. I've read about ERP, but it sounds a bit scary. I'm not sure if I'll be able to handle the anxiety.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> It's completely normal to feel apprehensive about starting therapy, especially ERP, as it does involve facing your fears directly. However, it's a gradual process, and you'll be working with a therapist who will guide you step-by-step. The goal is to help you feel more in control of your thoughts and behaviors over time. If you're feeling overwhelmed, we can also discuss medication options to help manage the anxiety while you work through therapy.</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> That sounds like a good plan. I think I need help with the anxiety too, because it's just so intense when I try to resist the compulsions.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> That's understandable. There are medications, such as selective serotonin reuptake inhibitors (SSRIs), that are commonly used to treat OCD. They can help reduce the intensity of the intrusive thoughts and compulsions, making it easier to engage in therapy. We can explore that as an option, but it's entirely your choice.</div>
+                <div class="transcript-line"><span class="speaker-name">Patient (Emily):</span> That sounds good, doctor. I'm really relieved to know that there's help for this. I've been feeling so lost. Right now, it feels like this disorder is controlling me.</div>
+                <div class="transcript-line"><span class="speaker-name">Doctor:</span> I understand.</div>
+
+                <h3 class="extract-title" style="margin-top: 20px;">Extract 02: Patient Mrs. Thompson</h3>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> Good afternoon, Mrs. Thompson. I know you've had a lot of information to process in the past few days, and I'm sure it's been overwhelming. I'm here to answer any questions you might have about your baby's condition and explain the steps we'll take moving forward.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> Thank you, doctor. We're trying to understand everything, but it's been tough. When they told us our son has something called pulmonary atresia, we were in shock. What does this mean for him? Is it as serious as it sounds?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> I understand how frightening it can be to hear that diagnosis. Pulmonary atresia is a congenital heart defect, which means your baby was born with it. Essentially, it's a condition where the valve that normally allows blood to flow from the heart to the lungs, the pulmonary valve, hasn't formed properly. This means blood can't flow directly from the right ventricle of the heart to the lungs to pick up oxygen.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> So, if the blood can't reach the lungs, how is he surviving right now?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> That's a good question. Babies with pulmonary atresia often rely on a small connection between two arteries called the ductus arteriosus. It's a normal part of fetal circulation, and it allows blood to bypass the lungs before birth. However, after birth, babies need to get oxygen from their lungs, and since the pulmonary valve is closed, we'll need to keep that ductus arteriosus open for the time being. Right now, we're giving him medication called prostaglandin to keep that duct open so that blood can flow to the lungs.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> That explains why they started him on medication right after he was born. But is the medication a long-term solution, or will he need surgery?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> The medication is a temporary solution, and surgery will definitely be necessary. The goal is to create a more permanent way for blood to flow from the heart to the lungs. There are different surgical approaches we can take, depending on the specifics of your son's heart structure. Some babies may need a shunt placed, which is a small tube that helps direct blood to the lungs. Others might need more complex procedures to fully address the defect.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> And how soon will he need surgery? Is it something that has to be done right away?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> In most cases, the first surgery happens within the first weeks of life, depending on how stable the baby is and how well they're responding to the prostaglandin. We're monitoring your son closely to make sure he stays stable, and we'll likely be discussing surgery very soon. After the first surgery, there will usually be follow-up procedures as he grows, since his heart will need to be adjusted as his body develops.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> So, he'll need multiple surgeries over time? How does that work, and what are the risks involved?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> Yes, pulmonary atresia is typically managed through a series of surgeries. The first surgery, often called a palliative procedure, is designed to stabilize him and allow his heart to function better in the short term. Later on, as he grows, we'll look at additional surgeries to either improve the blood flow further or reconstruct parts of the heart. These surgeries carry risks, as with any procedure, but they are lifesaving, and many children with pulmonary atresia go on to live active lives with the right medical care.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> And what are the long-term effects? Will he be able to live a normal life?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> That's a common concern for parents. While pulmonary atresia is a serious condition, many children can lead fulfilling lives with proper medical management. However, it's important to recognize that he'll need ongoing care from a cardiologist throughout his life. There might be limitations on his physical activities, and he'll need regular check-ups to monitor his heart function. Some children may also need medications long-term, depending on how their heart functions after the surgeries.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> Will he ever fully outgrow this, or is it something he'll always have to deal with?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> Pulmonary atresia is a lifelong condition, but the goal of surgery and ongoing treatment is to manage it effectively so that your son can live as normal a life as possible. While he may never be completely cured, the surgeries aim to give him the best quality of life. Advances in medical technology mean that many children with this condition go on to do very well.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> That's reassuring. But we're also worried about his development in other areas. Will his heart condition affect his ability to grow and learn like other kids?</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> That's a natural concern. Some babies with congenital heart defects like pulmonary atresia may have slower growth early on, especially if they're not getting enough oxygen. However, once the surgeries are done and blood flow improves, many children catch up in growth. Developmental delays aren't guaranteed, but it's something we'll keep an eye on as part of his overall care. We'll work with a team that includes specialists like pediatric nutritionists and developmental therapists to make sure he's getting the support he needs in his development.</div>
+                <div class="transcript-line"><span class="speaker-name">Mrs. Thompson:</span> Thank you, doctor. We've been so overwhelmed with everything happening so quickly. It's good to know he has options and that you're here to guide us through this.</div>
+                <div class="transcript-line"><span class="speaker-name">Pediatric Cardiologist:</span> Of course. I know it's a lot to take in, but we are here for you every step of the way.</div>
+
+                <div class="part-title">PART B - Transcripts</div>
+                
+                <div class="transcript-line"><strong>Question 25</strong><br>
+                <span class="speaker-name">Nurse 1:</span> So, we've started implementing mindfulness practices for the staff, like meditation sessions during breaks and optional yoga after shifts. The idea is to help reduce stress and burnout levels, especially with how challenging things have been lately.<br>
+                <span class="speaker-name">Nurse 2:</span> That sounds really useful. Have you noticed any changes in the team?<br>
+                <span class="speaker-name">Nurse 1:</span> Absolutely. Some of the nurses are saying they feel more focused during shifts, and their overall anxiety has decreased. I've personally felt more resilient when handling stressful situations, and I'm not as drained at the end of the day.<br>
+                <span class="speaker-name">Nurse 2:</span> How long are the sessions? And is everyone participating?<br>
+                <span class="speaker-name">Nurse 1:</span> The meditation sessions are 15 minutes long, and the yoga classes are 30 minutes. Participation is voluntary, but we're encouraging more people to try it. The main thing is that we've noticed improvements in well-being for those who do join.</div>
+
+                <div class="transcript-line"><strong>Question 26</strong><br>
+                <span class="speaker-name">Patient:</span> Thank you. I've been feeling really nervous about the whole thing.<br>
+                <span class="speaker-name">Surgeon:</span> I understand. The hemispherectomy is a complex procedure, but it can offer significant relief from your seizures. You'll only be having surgery on the affected side of your brain, and the other hemisphere will gradually take over many of the lost functions.<br>
+                <span class="speaker-name">Patient:</span> That sounds hard to believe.<br>
+                <span class="speaker-name">Surgeon:</span> It does seem incredible, but the brain has an amazing ability to adapt, especially in cases like yours. We've had good results with this procedure. You'll also have a thorough rehabilitation plan to support your recovery.<br>
+                <span class="speaker-name">Patient:</span> Okay.<br>
+                <span class="speaker-name">Surgeon:</span> The surgery will take around five hours. Does that sound manageable for you?<br>
+                <span class="speaker-name">Patient:</span> I think so.<br>
+                <span class="speaker-name">Surgeon:</span> All right. Let's get everything set for the operation.</div>
+
+                <div class="transcript-line"><strong>Question 27</strong><br>
+                <span class="speaker-name">Researcher:</span> My primary area of study is the long-term effects of COVID-19, particularly on the heart and lungs. We know that during infection, the virus can cause significant damage to these organs. However, my research focuses on how this damage persists in some individuals even after the initial infection has cleared, a condition commonly referred to as long COVID. To better understand this, I've been tracking patients for over a year. My goal is to identify patterns in the deterioration of cardiac and respiratory function and find ways to counteract these effects. One promising intervention involves the use of specialized rehabilitation programs to help patients regain lung capacity and reduce inflammation around the heart. My team is also looking into how different COVID-19 variants might exacerbate these long-term issues.</div>
+
+                <div class="transcript-line"><strong>Question 28</strong><br>
+                <span class="speaker-name">Trainee:</span> Would you mind if we talked about the effectiveness of telemedicine in elderly patients living in remote areas?<br>
+                <span class="speaker-name">Supervisor:</span> Sure, what's on your mind?<br>
+                <span class="speaker-name">Trainee:</span> Well, I was asked to look into how effective telemedicine has been in providing care for these patients. You know, considering their unique challenges like limited mobility and access to healthcare facilities.<br>
+                <span class="speaker-name">Supervisor:</span> That's an important issue. How did your research go?<br>
+                <span class="speaker-name">Trainee:</span> It was pretty overwhelming. The data shows that telemedicine has great potential, but when I had to discuss it with a few patients, they seemed really unsure about the technology. It was difficult to explain the benefits while they were hesitant and didn't seem fully convinced.<br>
+                <span class="speaker-name">Supervisor:</span> It's normal to encounter some resistance, especially with new technologies in healthcare.</div>
+
+                <div class="transcript-line"><strong>Question 29</strong><br>
+                <span class="speaker-name">Psychiatrist:</span> I think we're seeing some clear links here between the patient's gut microbiota and their depressive symptoms. Their inflammation markers are higher than normal.<br>
+                <span class="speaker-name">Neurologist:</span> Yes, the gut-brain axis plays a huge role. Have you considered running tests for neuroinflammation?<br>
+                <span class="speaker-name">Psychiatrist:</span> That's a good idea. I've already started them on probiotics, but I'll look into adding anti-inflammatory treatment if the results suggest it.<br>
+                <span class="speaker-name">Neurologist:</span> Also, we should monitor how they respond to the novel therapy for anxiety we're trialing. Are they showing any signs of improvement yet?<br>
+                <span class="speaker-name">Psychiatrist:</span> Not yet, but it's early days. I'll continue to track their progress and adjust the dosage if needed.<br>
+                <span class="speaker-name">Neurologist:</span> Great. We should also investigate the PTSD symptoms more closely. There may be overlap in how these neurobiological mechanisms are affecting all three conditions.</div>
+
+                <div class="transcript-line"><strong>Question 30</strong><br>
+                <span class="speaker-name">Pharmacist:</span> I just wanted a quick word about Mr. Jennings's antibiotic prescription. The one for the broad-spectrum antibiotics that you gave him after his last appointment.<br>
+                <span class="speaker-name">Doctor:</span> Oh yes, for his respiratory infection.<br>
+                <span class="speaker-name">Pharmacist:</span> Yes. So he's been on them for a week now, 500 mg three times daily. The thing is, he's just been in the pharmacy, and I noticed he didn't complete the course. He mentioned he was feeling better and decided to stop taking the medication.<br>
+                <span class="speaker-name">Doctor:</span> Really? Well, that's a bit concerning, especially with the ongoing issue of antibiotic resistance. I'll make sure to remind him of the need to finish the full treatment.<br>
+                <span class="speaker-name">Pharmacist:</span> Okay, I'll talk to him as well and stress the importance of adhering to the full dosage, shall I?<br>
+                <span class="speaker-name">Doctor:</span> Yes, please. Thanks.</div>
+
+                <div class="part-title">PART C - Transcripts</div>
+
+                <h3 class="extract-title">Extract 01: Healthcare Administrator</h3>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> Welcome, everyone. Today we have Sam Peterson with us, a healthcare administrator with over 15 years of experience managing hospital systems... Sam, what initially drew you to healthcare administration?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Thanks for having me. I've always been interested in problem-solving, and healthcare is one of the most complex fields out there. My background in health informatics gave me a unique perspective on how data and technology can transform patient care...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> It sounds like you're passionate about innovation. Could you tell us about some of the major challenges you face when implementing new technologies in hospitals?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Sure. One of the biggest challenges is interoperability, meaning that new systems need to communicate with existing ones. Hospitals often use a variety of software and equipment from different vendors, and getting these systems to work together is not always easy...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> That's interesting. I would have thought the cost of new technology would be the biggest hurdle. Is that not the case?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Cost is certainly a challenge, especially for smaller healthcare facilities. But I think people sometimes underestimate the difficulty of ensuring compatibility between different systems. The costs can actually escalate due to these integration issues...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> So, would you say that the initial investment isn't the biggest problem, but rather making sure the technology actually works as intended?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Exactly. For instance, we've seen hospitals invest in new imaging technology that wasn't compatible with the hospital's radiology system. It led to delays in diagnosing patients, which can have serious consequences...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> That makes sense. Now, let's talk about training. I imagine implementing new technology requires a lot of training for hospital staff. How big of an issue is that?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> It's a significant challenge, yes. Many hospital staff are already overworked, and finding the time for comprehensive training can be difficult...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> I've heard that technology can sometimes lead to unintended consequences, like increasing the workload for nurses and doctors. Is that true?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Absolutely. While new systems are meant to make things easier, if they're not user-friendly or if they don't work well with existing processes, they can actually create more work...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> That's an important point. Do you have any solutions or strategies for overcoming these challenges?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> One key strategy is involving the clinical staff early in the process. When nurses, doctors, and other users are part of the decision-making, they can provide feedback on how the technology will fit into their workflow...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> That's a great suggestion. Finally, are there any emerging technologies that you're particularly excited about?</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> Yes, I'm really excited about artificial intelligence (AI) in healthcare. We're starting to see AI applications that can assist in diagnosing diseases or predicting patient outcomes...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> AI sounds fascinating, but I imagine it comes with its own set of challenges.</div>
+                <div class="transcript-line"><span class="speaker-name">Sam Peterson:</span> It does. There are concerns about data privacy, especially with AI systems that rely on vast amounts of patient data. And of course, there's the issue of trust...</div>
+                <div class="transcript-line"><span class="speaker-name">Interviewer:</span> Well, it sounds like there are exciting developments on the horizon, but also a lot of hurdles to overcome. Thank you for sharing your insights, Sam.</div>
+
+                <h3 class="extract-title" style="margin-top: 20px;">Extract 02: Neck Pain Study</h3>
+                <div class="transcript-line"><span class="speaker-name">Speaker:</span> Good afternoon, everyone. I'm pleased to be here today to talk about neck pain, a condition that affects a large portion of the population, particularly those who spend long hours sitting or using computers. Recent studies show that about 70% of people will experience neck pain at some point in their lives, with nearly 20% suffering from chronic neck issues...</div>
+                <div class="transcript-line">The primary reason neck pain is so prevalent today is due to lifestyle changes. Many of us are working in jobs that require prolonged periods of sitting or looking at screens, which puts strain on the neck muscles...</div>
+                <div class="transcript-line">That brings us to the focus of our study. The aim was to explore the effectiveness of different non-invasive treatments for neck pain and to identify which approaches could reduce the burden on healthcare services... Our research found that educating patients about posture and ergonomics significantly reduces neck pain symptoms in many individuals. A simple change, such as adjusting the height of a computer monitor, can greatly reduce strain on the neck...</div>
+                <div class="transcript-line">Another important finding was the role of stress in neck pain. Many patients reported that stress exacerbated their pain... The impact of the study on healthcare services was significant. By empowering patients to manage their neck pain through education and exercise, we were able to reduce the number of unnecessary medical appointments...</div>
+                <div class="transcript-line">We also found that many cases of neck pain, if left untreated, could become chronic and lead to long-term disability. Therefore, early intervention is crucial. For patients experiencing mild to moderate neck pain, addressing the issue early through non-invasive methods can prevent it from becoming a persistent problem...</div>
+                <div class="transcript-line">As part of the study, we developed an educational workshop that focused on posture, ergonomics, and exercises for neck pain. Patients attended small group sessions where they learned about the importance of maintaining good posture and how to adjust their work environment to minimize neck strain...</div>
+                <div class="transcript-line">After attending these workshops, we noticed a significant reduction in the number of follow-up appointments needed for neck pain... To summarize, the study demonstrated that non-invasive treatments, particularly education and exercise, are highly effective in managing neck pain...</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script para control de Audio -->
+    <script>
+        const audioEl = document.getElementById('oetAudio');
+        let checkEndInterval = null;
+
+        function playAudioSegment(startTime, endTime) {
+            if(checkEndInterval) {
+                clearInterval(checkEndInterval);
+            }
+            audioEl.currentTime = startTime;
+            audioEl.play();
+            
+            checkEndInterval = setInterval(() => {
+                if (audioEl.currentTime >= endTime) {
+                    audioEl.pause();
+                    clearInterval(checkEndInterval);
+                }
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
