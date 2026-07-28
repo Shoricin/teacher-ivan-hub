@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 Ultimate Review - Teacher Ivan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-oscuro: #08366B; 
+            --oro-corona: #FFD700; 
+            --blanco-nieve: #FAFAF0; 
+            --gris-claro: #f0f4f8;
+            --verde-correcto: #4CAF50; 
+            --rojo-error: #F44336;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--blanco-nieve);
+            color: #333;
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--azul-oscuro); }
+
+        .worksheet-container {
+            max-width: 1100px;
+            margin: 40px auto; 
+            background: white;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(8, 54, 107, 0.2);
+            border-top: 8px solid var(--oro-corona);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ribbon */
+        .ribbon {
+            position: absolute; top: 30px; right: -60px; background: var(--oro-corona);
+            color: var(--azul-oscuro); padding: 8px 60px; font-weight: 900; font-family: 'Montserrat';
+            transform: rotate(45deg); box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-size: 1rem; letter-spacing: 1px;
+        }
+
+        /* Header */
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid var(--gris-claro); }
+        .header img { max-width: 100%; height: 70px; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; color: var(--azul-oscuro); }
+        .header p { color: #555; font-size: 1.1rem; margin-top: 5px; font-weight: bold; }
+        .difficulty-badge { background: var(--azul-oscuro); color: var(--oro-corona); padding: 6px 15px; border-radius: 20px; font-size: 0.95rem; font-weight: 800; display: inline-block; margin-top: 10px; border: 2px solid var(--oro-corona); }
+
+        /* General Grammar Banner */
+        .grammar-banner {
+            background: linear-gradient(135deg, var(--azul-oscuro), #155799);
+            color: white; padding: 25px; border-radius: 8px; margin-bottom: 40px; text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .grammar-banner h2 { color: var(--oro-corona); margin-top: 0; }
+        .grammar-banner p { margin: 0; font-size: 1.05rem; }
+
+        /* Exercises Sections */
+        .exercise-section { margin-bottom: 40px; background: #fff; padding: 25px; border-radius: 8px; border: 2px solid var(--gris-claro); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .exercise-section h3 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin-top: 0; color: var(--azul-oscuro); border-bottom: 2px solid var(--oro-corona); padding-bottom: 10px; }
+        .exercise-section h3 span { background: var(--oro-corona); color: var(--azul-oscuro); min-width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1.1rem; font-weight: 900; }
+        
+        .hint-box { background: #fff8e1; border-left: 4px solid var(--oro-corona); padding: 10px 15px; margin-bottom: 20px; font-size: 0.9rem; color: #555; font-style: italic; }
+
+        .question { margin-bottom: 15px; font-size: 1rem; line-height: 1.8; font-weight: 600; color: #444; }
+        
+        input[type="text"] {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            padding: 4px 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s;
+            background-color: #fafafa;
+            color: var(--azul-oscuro);
+            font-weight: 700;
+            display: inline-block;
+        }
+        input[type="text"]:focus { border-color: var(--oro-corona); background-color: white; box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+        
+        .short-input { width: 120px; text-align: center; }
+        .medium-input { width: 180px; text-align: center; }
+        .long-input { width: 100%; display: block; margin-top: 5px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+        /* Action Buttons */
+        .actions { display: flex; justify-content: center; margin-top: 40px; border-top: 3px solid var(--gris-claro); padding-top: 30px; }
+        .btn-check { background-color: var(--azul-oscuro); color: var(--oro-corona); padding: 18px 50px; font-size: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 900; border: 2px solid var(--oro-corona); border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; width: 100%; max-width: 500px; box-shadow: 0 5px 15px rgba(8, 54, 107, 0.4); }
+        .btn-check:hover { background-color: var(--oro-corona); color: var(--azul-oscuro); border-color: var(--azul-oscuro); transform: translateY(-3px); }
+
+        #feedback-message { display: none; text-align: center; font-weight: bold; margin-top: 30px; font-size: 1.5rem; padding: 25px; border-radius: 8px; border: 3px solid; }
+
+        /* --- MOBILE RESPONSIVE QUERIES --- */
+        @media (max-width: 768px) {
+            .worksheet-container { margin: 15px 10px; padding: 20px 15px; border-radius: 8px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+            .header h1 { font-size: 1.6rem; }
+            .exercise-section { padding: 15px; }
+            .btn-check { width: 100%; max-width: none; font-size: 1.1rem; }
+            .ribbon { right: -75px; font-size: 0.8rem; padding: 5px 50px; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .worksheet-container { box-shadow: none; margin: 0; padding: 0; border: none; }
+            .exercise-section { border: none; padding: 0; margin-bottom: 20px; }
+            .actions, .btn-check, #feedback-message, .ribbon, .grammar-banner { display: none !important; }
+            input[type="text"] { border: none; border-bottom: 1px solid black; border-radius: 0; background: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="worksheet-container">
+        <div class="ribbon">FINAL EXAM</div>
+        
+        <div class="header">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <h1>A2 Ultimate Review</h1>
+            <p>100 Questions | Covering Units 1 to 5</p>
+            <span class="difficulty-badge">🏆 Target Score: 100 Points</span>
+        </div>
+
+        <div class="grammar-banner">
+            <h2>The A2 Master Challenge</h2>
+            <p>Bienvenido al simulacro final. Aquí pondrás a prueba todo tu conocimiento del Nivel A2. Lee cuidadosamente las instrucciones de cada sección. Tienes 100 espacios por llenar. ¡Buena suerte!</p>
+        </div>
+
+        <!-- Section 1: Past Simple -->
+        <div class="exercise-section">
+            <h3><span>1</span> The Past Simple (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Remember irregular verbs. For negatives and questions, use <em>did / didn't</em> + BASE verb.</div>
+            
+            <div class="grid-2">
+                <div class="question">1. I <input type="text" class="medium-input" data-answer="went"> (go) to Sucre last year.</div>
+                <div class="question">2. She <input type="text" class="medium-input" data-answer="didn't play|did not play"> (not / play) tennis yesterday.</div>
+                <div class="question">3. <input type="text" class="medium-input" data-answer="did you watch"> (you / watch) the movie?</div>
+                <div class="question">4. We <input type="text" class="medium-input" data-answer="ate"> (eat) pizza last night.</div>
+                <div class="question">5. They <input type="text" class="medium-input" data-answer="didn't study|did not study"> (not / study) for the exam.</div>
+                <div class="question">6. Leonardo <input type="text" class="medium-input" data-answer="bought"> (buy) a new laptop.</div>
+                <div class="question">7. <input type="text" class="medium-input" data-answer="did he see"> (he / see) the teacher?</div>
+                <div class="question">8. I <input type="text" class="medium-input" data-answer="did"> (do) my homework.</div>
+                <div class="question">9. El Michi <input type="text" class="medium-input" data-answer="didn't sleep|did not sleep"> (not / sleep) well.</div>
+                <div class="question">10. We <input type="text" class="medium-input" data-answer="traveled|travelled"> (travel) to China.</div>
+            </div>
+        </div>
+
+        <!-- Section 2: Sports & Gerunds -->
+        <div class="exercise-section">
+            <h3><span>2</span> Sports, Hobbies & Gerunds (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Play (ball/team), Go (verb+ing), Do (martial arts/individual). After verbs like love/hate/enjoy, use VERB+ING.</div>
+            
+            <div class="grid-2">
+                <div class="question">11. I want to <input type="text" class="short-input" data-answer="do"> yoga today.</div>
+                <div class="question">12. Let's <input type="text" class="short-input" data-answer="go"> swimming in the pool.</div>
+                <div class="question">13. They <input type="text" class="short-input" data-answer="play"> tennis on weekends.</div>
+                <div class="question">14. Santiago loves to <input type="text" class="short-input" data-answer="do"> CrossFit.</div>
+                <div class="question">15. She wants to <input type="text" class="short-input" data-answer="go"> running in the park.</div>
+                <div class="question">16. I love <input type="text" class="medium-input" data-answer="reading"> (read) history books.</div>
+                <div class="question">17. She hates <input type="text" class="medium-input" data-answer="cooking"> (cook) dinner.</div>
+                <div class="question">18. We don't mind <input type="text" class="medium-input" data-answer="walking"> (walk) to school.</div>
+                <div class="question">19. He enjoys <input type="text" class="medium-input" data-answer="playing"> (play) video games.</div>
+                <div class="question">20. I like <input type="text" class="medium-input" data-answer="lifting"> (lift) heavy weights.</div>
+            </div>
+        </div>
+
+        <!-- Section 3: Prepositions & Frequency -->
+        <div class="exercise-section">
+            <h3><span>3</span> Prepositions & Adverbs of Frequency (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> AT (time/night), ON (days), IN (months/years). Adverbs go BEFORE the main verb but AFTER the verb "to be".</div>
+            
+            <div class="grid-2">
+                <div class="question">21. We train <input type="text" class="short-input" data-answer="at"> 5:00 AM.</div>
+                <div class="question">22. My birthday is <input type="text" class="short-input" data-answer="in"> March.</div>
+                <div class="question">23. We don't work <input type="text" class="short-input" data-answer="on"> Sundays.</div>
+                <div class="question">24. (100%) I <input type="text" class="short-input" data-answer="always"> study English.</div>
+                <div class="question">25. (0%) She <input type="text" class="short-input" data-answer="never"> drinks soda.</div>
+                <div class="question">26. (80%) We <input type="text" class="short-input" data-answer="usually"> go to the gym.</div>
+                <div class="question">27. (50%) They <input type="text" class="short-input" data-answer="sometimes"> eat pizza.</div>
+                <div class="question">28. <em>Rewrite (never):</em> I am late. <input type="text" class="long-input" data-answer="i am never late.|i am never late"></div>
+                <div class="question">29. <em>Rewrite (always):</em> He runs. <input type="text" class="long-input" data-answer="he always runs.|he always runs"></div>
+                <div class="question">30. I sleep very well <input type="text" class="short-input" data-answer="at"> night.</div>
+            </div>
+        </div>
+
+        <!-- Section 4: Future - Going To -->
+        <div class="exercise-section">
+            <h3><span>4</span> Future Plans (Be going to) (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Am/Is/Are + going to + Base Verb. Used for organized plans and strong determination.</div>
+            
+            <div class="grid-2">
+                <div class="question">31. I <input type="text" class="medium-input" data-answer="am going to build|'m going to build"> (build) an HTML app.</div>
+                <div class="question">32. She <input type="text" class="medium-input" data-answer="isn't going to quit|is not going to quit"> (not / quit).</div>
+                <div class="question">33. <input type="text" class="medium-input" data-answer="are you going to travel"> (you / travel) to China?</div>
+                <div class="question">34. We <input type="text" class="medium-input" data-answer="are going to win|'re going to win"> (win) the match.</div>
+                <div class="question">35. He <input type="text" class="medium-input" data-answer="isn't going to lose|is not going to lose"> (not / lose) the game.</div>
+                <div class="question">36. They <input type="text" class="medium-input" data-answer="are going to study|'re going to study"> (study) history.</div>
+                <div class="question">37. What <input type="text" class="medium-input" data-answer="are you going to do"> (you / do) tomorrow?</div>
+                <div class="question">38. Look at the clouds! It <input type="text" class="medium-input" data-answer="is going to rain|'s going to rain"> (rain).</div>
+                <div class="question">39. I <input type="text" class="medium-input" data-answer="am not going to give up|'m not going to give up"> (not / give up).</div>
+                <div class="question">40. Ivan <input type="text" class="medium-input" data-answer="is going to help"> (help) us with grammar.</div>
+            </div>
+        </div>
+
+        <!-- Section 5: Future - Will -->
+        <div class="exercise-section">
+            <h3><span>5</span> Predictions & Decisions (Will) (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Use Will/Won't for sudden decisions, promises, and predictions based on opinion (I think, I hope).</div>
+            
+            <div class="grid-2">
+                <div class="question">41. I think cars <input type="text" class="medium-input" data-answer="will fly"> (fly) in 2050.</div>
+                <div class="question">42. I promise I <input type="text" class="medium-input" data-answer="won't forget|will not forget"> (not / forget).</div>
+                <div class="question">43. It's cold! I <input type="text" class="medium-input" data-answer="will close|'ll close"> (close) the window.</div>
+                <div class="question">44. I don't think it <input type="text" class="medium-input" data-answer="will rain"> (rain) today.</div>
+                <div class="question">45. I hope you <input type="text" class="medium-input" data-answer="will pass|'ll pass"> (pass) the exam.</div>
+                <div class="question">46. I'm sure she <input type="text" class="medium-input" data-answer="won't fail|will not fail"> (not / fail).</div>
+                <div class="question">47. <input type="text" class="medium-input" data-answer="will you help"> (you / help) me?</div>
+                <div class="question">48. I think he <input type="text" class="medium-input" data-answer="will be|'ll be"> (be) a great boss.</div>
+                <div class="question">49. <em>(Sudden choice)</em> We <input type="text" class="medium-input" data-answer="will win|'ll win"> (win)!</div>
+                <div class="question">50. I don't think they <input type="text" class="medium-input" data-answer="will come"> (come) to the party.</div>
+            </div>
+        </div>
+
+        <!-- Section 6: Infinitive of Purpose -->
+        <div class="exercise-section">
+            <h3><span>6</span> Infinitive of Purpose (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> To express WHY you do an action, use "to + Base Verb". Never use "for + verb"!</div>
+            
+            <div class="grid-2">
+                <div class="question">51. I study English <input type="text" class="medium-input" data-answer="to travel"> (travel).</div>
+                <div class="question">52. She went to the gym <input type="text" class="medium-input" data-answer="to train"> (train).</div>
+                <div class="question">53. He uses HTML <input type="text" class="medium-input" data-answer="to build"> (build) apps.</div>
+                <div class="question">54. I bought a kettlebell <input type="text" class="medium-input" data-answer="to exercise"> (exercise).</div>
+                <div class="question">55. They study <input type="text" class="medium-input" data-answer="to pass"> (pass) the A2 exam.</div>
+                <div class="question">56. We need water <input type="text" class="medium-input" data-answer="to survive"> (survive).</div>
+                <div class="question">57. I run every day <input type="text" class="medium-input" data-answer="to get"> (get) fit.</div>
+                <div class="question">58. Open the window <input type="text" class="medium-input" data-answer="to let"> (let) air in.</div>
+                <div class="question">59. He saved money <input type="text" class="medium-input" data-answer="to buy"> (buy) a PC.</div>
+                <div class="question">60. Call Teacher Ivan <input type="text" class="medium-input" data-answer="to ask"> (ask) a question.</div>
+            </div>
+        </div>
+
+        <!-- Section 7: Comparatives -->
+        <div class="exercise-section">
+            <h3><span>7</span> Comparatives (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Add -er (short) or more (long). Irregulars: good->better, bad->worse. Don't forget "than"!</div>
+            
+            <div class="grid-2">
+                <div class="question">61. La Paz is <input type="text" class="medium-input" data-answer="colder"> (cold) than Sucre.</div>
+                <div class="question">62. A Ferrari is <input type="text" class="medium-input" data-answer="more expensive"> (expensive) than a Toyota.</div>
+                <div class="question">63. My English is <input type="text" class="medium-input" data-answer="better"> (good) than before.</div>
+                <div class="question">64. Today is <input type="text" class="medium-input" data-answer="worse"> (bad) than yesterday.</div>
+                <div class="question">65. Santa Cruz is <input type="text" class="medium-input" data-answer="hotter"> (hot) than Cochabamba.</div>
+                <div class="question">66. El Alto is <input type="text" class="medium-input" data-answer="higher"> (high) than Sucre.</div>
+                <div class="question">67. A laptop is <input type="text" class="medium-input" data-answer="heavier"> (heavy) than a phone.</div>
+                <div class="question">68. This test is <input type="text" class="medium-input" data-answer="easier"> (easy) than the last one.</div>
+                <div class="question">69. My brother is <input type="text" class="medium-input" data-answer="taller"> (tall) than me.</div>
+                <div class="question">70. The new gym is <input type="text" class="medium-input" data-answer="bigger"> (big) than the old one.</div>
+            </div>
+        </div>
+
+        <!-- Section 8: Superlatives & Equality -->
+        <div class="exercise-section">
+            <h3><span>8</span> Superlatives & As...As (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> The + est / The most. Equality: as + adj + as. DO NOT modify the adjective in "as...as".</div>
+            
+            <div class="grid-2">
+                <div class="question">71. Mount Everest is <input type="text" class="medium-input" data-answer="the highest"> (high) mountain.</div>
+                <div class="question">72. This is <input type="text" class="medium-input" data-answer="the most expensive"> (expensive) car.</div>
+                <div class="question">73. Fielding is <input type="text" class="medium-input" data-answer="the best"> (good) school.</div>
+                <div class="question">74. That was <input type="text" class="medium-input" data-answer="the worst"> (bad) movie.</div>
+                <div class="question">75. El Michi is <input type="text" class="medium-input" data-answer="the laziest"> (lazy) cat.</div>
+                <div class="question">76. Water is <input type="text" class="medium-input" data-answer="as healthy as"> (healthy) milk. (Equality)</div>
+                <div class="question">77. A dog is not <input type="text" class="medium-input" data-answer="as independent as"> (independent) a cat.</div>
+                <div class="question">78. I am not <input type="text" class="medium-input" data-answer="as fast as"> (fast) you.</div>
+                <div class="question">79. English is <input type="text" class="medium-input" data-answer="as important as"> (important) math.</div>
+                <div class="question">80. The Amazon is <input type="text" class="medium-input" data-answer="the longest"> (long) river. (Superlative)</div>
+            </div>
+        </div>
+
+        <!-- Section 9: Advice & Prohibitions -->
+        <div class="exercise-section">
+            <h3><span>9</span> Advice (Should) & Prohibitions (Mustn't) (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Should = good idea. Mustn't = 100% prohibited/illegal. No "to" or "s"!</div>
+            
+            <div class="grid-2">
+                <div class="question">81. You <input type="text" class="medium-input" data-answer="should eat"> (eat) more vegetables. (Advice)</div>
+                <div class="question">82. You <input type="text" class="medium-input" data-answer="mustn't smoke|must not smoke"> (not / smoke) here. It's illegal!</div>
+                <div class="question">83. He has a test. He <input type="text" class="medium-input" data-answer="should study"> (study).</div>
+                <div class="question">84. We <input type="text" class="medium-input" data-answer="must wear"> (wear) the uniform. It's a strict rule.</div>
+                <div class="question">85. She is tired. She <input type="text" class="medium-input" data-answer="should go"> (go) to bed.</div>
+                <div class="question">86. You <input type="text" class="medium-input" data-answer="mustn't cheat|must not cheat"> (not / cheat) on the exam.</div>
+                <div class="question">87. <input type="text" class="medium-input" data-answer="should i see"> (I / see) a doctor?</div>
+                <div class="question">88. They <input type="text" class="medium-input" data-answer="shouldn't drink|should not drink"> (not / drink) so much soda.</div>
+                <div class="question">89. Students <input type="text" class="medium-input" data-answer="mustn't run|must not run"> (not / run) in the halls.</div>
+                <div class="question">90. You <input type="text" class="medium-input" data-answer="must listen"> (listen) to the teacher.</div>
+            </div>
+        </div>
+
+        <!-- Section 10: Obligations -->
+        <div class="exercise-section">
+            <h3><span>10</span> Obligations (Have to / Don't have to) (10 pts)</h3>
+            <div class="hint-box">💡 <strong>Hint:</strong> Have to/Has to = Obligation. Don't/Doesn't have to = Optional (0% obligation).</div>
+            
+            <div class="grid-2">
+                <div class="question">91. I <input type="text" class="medium-input" data-answer="have to grade"> (grade) exams today.</div>
+                <div class="question">92. She <input type="text" class="medium-input" data-answer="doesn't have to cook|does not have to cook"> (not / cook). We ordered pizza.</div>
+                <div class="question">93. <input type="text" class="medium-input" data-answer="do you have to work"> (you / work) on Sundays?</div>
+                <div class="question">94. He <input type="text" class="medium-input" data-answer="has to travel"> (travel) to China for business.</div>
+                <div class="question">95. We <input type="text" class="medium-input" data-answer="don't have to wear|do not have to wear"> (not / wear) a uniform on Friday.</div>
+                <div class="question">96. Leonardo <input type="text" class="medium-input" data-answer="has to memorize"> (memorize) the vocabulary.</div>
+                <div class="question">97. <input type="text" class="medium-input" data-answer="does she have to take"> (she / take) the A1 test?</div>
+                <div class="question">98. They <input type="text" class="medium-input" data-answer="don't have to pay|do not have to pay"> (not / pay) for the app. It's free.</div>
+                <div class="question">99. I <input type="text" class="medium-input" data-answer="have to wake up"> (wake up) early tomorrow.</div>
+                <div class="question">100. Teacher Ivan <input type="text" class="medium-input" data-answer="has to plan"> (plan) the lessons.</div>
+            </div>
+        </div>
+
+        <div id="feedback-message"></div>
+
+        <div class="actions">
+            <button class="btn-check" id="submit-btn" onclick="checkAllAnswers()">🏁 SUBMIT A2 EXAM (100 PTS)</button>
+        </div>
+
+    </div>
+
+    <script>
+        let examSubmitted = false;
+
+        function checkAllAnswers() {
+            if(examSubmitted) return; 
+            examSubmitted = true;
+
+            const inputs = document.querySelectorAll('input[type="text"]');
+            let score = 0;
+            const totalMax = 100;
+
+            inputs.forEach(input => {
+                input.readOnly = true; 
+
+                let userAnswer = input.value.toLowerCase().trim().replace(/[\.,!]$/, '').replace(/\s+/g, ' ');
+                let correctAnswers = input.getAttribute('data-answer').split('|');
+                
+                // Flexible punctuation matching for question marks
+                correctAnswers = correctAnswers.map(ans => {
+                    if(!ans.includes("?")) return ans.replace(/[\.,!]$/, '');
+                    return ans;
+                });
+                
+                if(!input.getAttribute('data-answer').includes("?")) {
+                    userAnswer = userAnswer.replace(/[\.,!]$/, ''); 
+                }
+
+                if (correctAnswers.includes(userAnswer) && userAnswer !== "") {
+                    input.style.borderColor = "var(--verde-correcto)";
+                    input.style.backgroundColor = "#e8f5e9";
+                    input.style.color = "#2e7d32";
+                    score++;
+                } else {
+                    input.style.borderColor = "var(--rojo-error)";
+                    input.style.backgroundColor = "#ffebee";
+                    input.style.color = "#c62828";
+                    if(userAnswer === "") input.value = "---";
+                }
+            });
+
+            const percentage = Math.round((score / totalMax) * 100);
+
+            const feedback = document.getElementById('feedback-message');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            feedback.style.display = 'block';
+            submitBtn.style.display = 'none'; 
+
+            let message = "";
+            let color = "";
+            let bgColor = "";
+
+            if (percentage >= 90) {
+                message = `🏆 OUTSTANDING! You are officially an A2 Master. Estás completamente listo para el nivel B1. ¡Felicidades!`;
+                color = "var(--verde-correcto)";
+                bgColor = "#e8f5e9";
+            } else if (percentage >= 70) {
+                message = `👍 GREAT JOB! Has aprobado el nivel A2 satisfactoriamente. Revisa los recuadros rojos para pulir tus errores.`;
+                color = "#FF9800";
+                bgColor = "#fff3e0";
+            } else {
+                message = `⚠️ NEEDS WORK. Aún hay temas gramaticales que debes repasar antes de pasar al nivel B1. ¡No te rindas!`;
+                color = "var(--rojo-error)";
+                bgColor = "#ffebee";
+            }
+
+            feedback.style.color = color;
+            feedback.style.backgroundColor = bgColor;
+            feedback.style.borderColor = color;
+            feedback.innerHTML = `FINAL SCORE: ${score} / ${totalMax} (${percentage}%)<br><br><span style="font-size: 1.1rem; color: #333; font-weight: 600;">${message}</span>`;
+            
+            // Scroll to top or bottom smoothly
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
