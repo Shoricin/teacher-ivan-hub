@@ -148,15 +148,14 @@
         }
         
         .logos-container img {
-            max-height: 50px; /* Reduced max height */
             width: auto;      /* Maintain aspect ratio */
             object-fit: contain;
         }
 
-        /* Specific adjustments for individual logos if needed */
-        .logos-container img:nth-child(1) { height: 45px; } /* Teacher Ivan */
-        .logos-container img:nth-child(2) { height: 35px; } /* Google */
-        .logos-container img:nth-child(3) { height: 50px; } /* EF SET */
+        /* Ajuste de simetría y peso visual de los logos */
+        .logos-container img:nth-child(1) { height: 85px; } /* Teacher Ivan: Más alto para compensar su formato cuadrado */
+        .logos-container img:nth-child(2) { height: 45px; } /* Google: Formato rectangular estándar */
+        .logos-container img:nth-child(3) { height: 30px; } /* EF SET: Letras muy gruesas y negras, requiere menor altura para equilibrar */
         
         .header { text-align: center; margin-bottom: 40px; }
         .header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; color: var(--negro-ef); letter-spacing: 1px;}
@@ -247,6 +246,7 @@
 </head>
 <body>
 
+    <!-- Pantalla de Login (Agregada antes de iniciar el examen) -->
     <div id="login-screen">
         <h2>A2 Certification Login</h2>
         <div class="exam-info">
@@ -269,6 +269,7 @@
         <p id="login-error" style="color: var(--rojo-error); display: none; margin-top: 10px; font-weight: bold;">Please fill in all fields.</p>
     </div>
 
+    <!-- Interfaz principal del examen (Oculta hasta pasar el Login) -->
     <div id="exam-interface">
         <div id="timer-bar">⏱️ TIME LEFT: <span id="time-display">40:00</span></div>
 
