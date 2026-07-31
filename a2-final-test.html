@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 Final Level Test - Certification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-oscuro: #08366B; 
+            --oro-corona: #FFD700; 
+            --blanco-nieve: #FAFAF0; 
+            --gris-claro: #f0f4f8;
+            --verde-correcto: #4CAF50; 
+            --rojo-error: #F44336;
+            --negro-ef: #1a1a1a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--blanco-nieve);
+            color: #333;
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: var(--azul-oscuro); }
+
+        #timer-bar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: var(--negro-ef);
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            transition: background 0.3s;
+        }
+
+        .worksheet-container {
+            max-width: 1000px;
+            margin: 80px auto 40px auto; 
+            background: white;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-top: 10px solid var(--negro-ef);
+            position: relative;
+        }
+
+        /* Logos Section */
+        .logos-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .logos-container img { height: 50px; object-fit: contain; }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; color: var(--negro-ef); letter-spacing: 1px;}
+        .header p { color: #666; font-size: 1.1rem; margin-top: 5px; font-weight: bold; }
+        .score-badge { background: var(--negro-ef); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.95rem; font-weight: 800; display: inline-block; margin-top: 10px; }
+
+        .exercise-section { margin-bottom: 45px; background: #fafafa; padding: 30px; border-radius: 8px; border: 1px solid #ddd; }
+        .exercise-section h3 { display: flex; align-items: center; gap: 10px; font-size: 1.4rem; margin-top: 0; color: var(--negro-ef); border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        .exercise-section h3 span { background: var(--negro-ef); color: white; min-width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1.1rem; font-weight: 900; }
+        
+        .instructions { font-style: italic; color: #555; margin-bottom: 20px; border-left: 4px solid var(--azul-oscuro); padding-left: 10px; font-weight: 600;}
+
+        .question { margin-bottom: 15px; font-size: 1.05rem; line-height: 1.8; color: #222; }
+        
+        /* Select & Text Inputs */
+        select, input[type="text"] {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            padding: 6px 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s;
+            background-color: white;
+            color: #333;
+            font-weight: 600;
+        }
+        select:focus, input[type="text"]:focus { border-color: var(--azul-oscuro); box-shadow: 0 0 5px rgba(8, 54, 107, 0.3); }
+        
+        .medium-input { width: 180px; text-align: center; }
+        .long-input { width: 100%; display: block; margin-top: 5px; }
+        select { cursor: pointer; max-width: 100%; }
+
+        /* Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Audio & Reading Boxes */
+        .audio-container { text-align: center; margin-bottom: 25px; padding: 20px; background: #e3f2fd; border-radius: 8px; border: 1px solid #bbdefb; }
+        .audio-container audio { width: 100%; max-width: 400px; outline: none; }
+        
+        .reading-box { line-height: 1.9; font-size: 1.05rem; padding: 25px; background: white; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 25px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+
+        textarea {
+            width: 100%; height: 200px; font-family: 'Open Sans', sans-serif; font-size: 1.05rem; padding: 15px;
+            border: 2px solid #ccc; border-radius: 5px; resize: vertical; outline: none; line-height: 1.6;
+        }
+        textarea:focus { border-color: var(--azul-oscuro); }
+        .word-counter { font-size: 0.95rem; color: #666; text-align: right; margin-top: 5px; font-weight: bold; }
+
+        .actions { display: flex; justify-content: center; gap: 20px; margin-top: 40px; border-top: 3px solid #eee; padding-top: 30px; }
+        .btn-action { padding: 18px 40px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; width: 100%; max-width: 350px;}
+        .btn-submit { background-color: var(--negro-ef); color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-submit:hover { background-color: #333; transform: translateY(-2px); }
+        .btn-pdf { background-color: var(--azul-oscuro); color: white; display: none; } /* Hidden until submitted */
+        .btn-pdf:hover { background-color: #06254a; }
+
+        #feedback-message { display: none; text-align: center; margin-top: 30px; padding: 30px; border-radius: 8px; border: 3px solid; }
+        #feedback-message h2 { margin: 0 0 10px 0; font-size: 2rem; }
+        #feedback-message p { font-size: 1.2rem; margin: 0; font-weight: 600; color: #333;}
+
+        @media (max-width: 768px) {
+            .worksheet-container { margin: 70px 10px 20px 10px; padding: 25px 20px; border-radius: 8px; }
+            .logos-container { flex-direction: column; gap: 15px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 15px; }
+            .actions { flex-direction: column; align-items: center; }
+            .btn-action { max-width: none; }
+        }
+
+        @media print {
+            body { background: white; }
+            #timer-bar, .actions, .audio-container { display: none !important; }
+            .worksheet-container { box-shadow: none; margin: 0; padding: 0; border: none; }
+            .exercise-section { border: none; padding: 0; margin-bottom: 20px; page-break-inside: avoid;}
+            select, input[type="text"] { border: none; border-bottom: 1px solid black; border-radius: 0; background: transparent; -webkit-appearance: none; -moz-appearance: none; appearance: none;}
+            textarea { border: 1px solid black; height: 300px; }
+            /* Make sure select shows selected value cleanly on print */
+            select::-ms-expand { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="timer-bar">⏱️ TIME LEFT: <span id="time-display">40:00</span></div>
+
+    <div class="worksheet-container" id="exam-content">
+        
+        <div class="logos-container">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+            <img src="https://i.imgur.com/ZBCAtDh.png" alt="Google for Education Logo">
+            <img src="https://i.imgur.com/ZWmDIMY.png" alt="EF SET Logo">
+        </div>
+
+        <div class="header">
+            <h1>A2 Final Certification Test</h1>
+            <p>Listening, Reading, Grammar & Writing</p>
+            <span class="score-badge">Total Score: 100 Points</span>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>1</span> Part 1: Listening Comprehension (30 pts)</h3>
+            <p class="instructions">Listen to the audio about travel experiences and answer the 10 multiple-choice questions. Each question is worth 3 points.</p>
+            
+            <div class="audio-container">
+                <audio controls id="exam-audio">
+                    <source src="audios/A2 English Listening Practice - Travel.m4a" type="audio/mp4">
+                    Your browser does not support the audio element.
+                </audio>
+                <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #555;">File: audios/A2 English Listening Practice - Travel.m4a</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="question">1. Where did the speaker travel with his family when he was young?<br>
+                    <select class="mc-select" data-answer="b">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Italy</option>
+                        <option value="b">B) Hawaii</option>
+                        <option value="c">C) Madrid</option>
+                    </select>
+                </div>
+                <div class="question">2. How many times has he been to Hawaii?<br>
+                    <select class="mc-select" data-answer="c">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Only once</option>
+                        <option value="b">B) Three or four times</option>
+                        <option value="c">C) Six or seven times</option>
+                    </select>
+                </div>
+                <div class="question">3. What kind of environment does he prefer over the beach?<br>
+                    <select class="mc-select" data-answer="a">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Countryside, forest, or mountains</option>
+                        <option value="b">B) Big cities and crowded places</option>
+                        <option value="c">C) Small islands</option>
+                    </select>
+                </div>
+                <div class="question">4. Where did he recently take a road trip?<br>
+                    <select class="mc-select" data-answer="b">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Through the USA</option>
+                        <option value="b">B) Tuscany, Italy</option>
+                        <option value="c">C) Portugal</option>
+                    </select>
+                </div>
+                <div class="question">5. Where did he go on a backpacking trip?<br>
+                    <select class="mc-select" data-answer="a">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Portugal and Spain</option>
+                        <option value="b">B) France and Italy</option>
+                        <option value="c">C) The US and Mexico</option>
+                    </select>
+                </div>
+                <div class="question">6. How did they travel during their backpacking trip?<br>
+                    <select class="mc-select" data-answer="c">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) They rented a car</option>
+                        <option value="b">B) Only by airplane</option>
+                        <option value="c">C) Walking, buses, and trains</option>
+                    </select>
+                </div>
+                <div class="question">7. What bad experience did he have in Madrid?<br>
+                    <select class="mc-select" data-answer="c">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) His flight was canceled</option>
+                        <option value="b">B) He lost his backpack</option>
+                        <option value="c">C) He was bitten by bed bugs</option>
+                    </select>
+                </div>
+                <div class="question">8. Why was the bug experience worse for him?<br>
+                    <select class="mc-select" data-answer="b">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) He is allergic to medicine</option>
+                        <option value="b">B) He has really sensitive skin</option>
+                        <option value="c">C) He was alone</option>
+                    </select>
+                </div>
+                <div class="question">9. Where does he prefer to stay lately when he travels?<br>
+                    <select class="mc-select" data-answer="a">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Airbnbs</option>
+                        <option value="b">B) Hostels</option>
+                        <option value="c">C) Expensive hotels</option>
+                    </select>
+                </div>
+                <div class="question">10. What does he consider the worst part about traveling?<br>
+                    <select class="mc-select" data-answer="b">
+                        <option value="">-- Select --</option>
+                        <option value="a">A) Packing the bags</option>
+                        <option value="b">B) The flight</option>
+                        <option value="c">C) Paying for food</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>2</span> Part 2: Reading Comprehension (40 pts)</h3>
+            <p class="instructions">Read the text carefully. Then, answer the 20 multiple-choice questions. Each question is worth 2 points.</p>
+            
+            <div class="reading-box">
+                "My name is Sofia, I am 25 years old, and I am a student at Fielding School in Bolivia. Last year, I traveled to Sucre with my family for a vacation. It was the most beautiful trip of my life! Sucre is smaller than La Paz, but the weather is hotter and the traditional food is much more delicious. We visited three museums, walked in the main square, and ate a lot of salteñas. We didn't stay in a hotel; we stayed in a small Airbnb because it was cheaper. <br><br>
+                Next summer, I am going to travel to Europe. I am going to visit Paris, Rome, and Madrid. I think Paris will be amazing, but I don't think it will be as cheap as Bolivia. Actually, I am sure it will be the most expensive trip ever! <br><br>
+                At school, I study very hard to get good grades. My teacher, Ivan, says that we must practice English every day to improve. We shouldn't use our phones in class, and we have to do our homework on time. I always do my homework in the evening. I love learning languages because I want to travel the world. Sometimes learning grammar is difficult, but I don't mind studying. I think everyone should learn a second language. It is the best way to understand new cultures and meet interesting people."
+            </div>
+
+            <div class="grid-2">
+                <!-- Comprehension Qs -->
+                <div class="question">11. How old is Sofia?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) 20</option><option value="b">B) 25</option><option value="c">C) 30</option></select>
+                </div>
+                <div class="question">12. Where did she travel last year?<br>
+                    <select class="mc-select" data-answer="a"><option value="">-- Select --</option><option value="a">A) Sucre</option><option value="b">B) La Paz</option><option value="c">C) Europe</option></select>
+                </div>
+                <div class="question">13. Who did she travel with?<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) Friends</option><option value="b">B) Teacher Ivan</option><option value="c">C) Her family</option></select>
+                </div>
+                <div class="question">14. Which city is smaller according to the text?<br>
+                    <select class="mc-select" data-answer="a"><option value="">-- Select --</option><option value="a">A) Sucre</option><option value="b">B) La Paz</option><option value="c">C) They are equal</option></select>
+                </div>
+                <div class="question">15. How is the weather in Sucre compared to La Paz?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) Colder</option><option value="b">B) Hotter</option><option value="c">C) The same</option></select>
+                </div>
+                <div class="question">16. How many museums did they visit?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) Two</option><option value="b">B) Three</option><option value="c">C) Four</option></select>
+                </div>
+                <div class="question">17. Did they stay in a hotel?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) Yes, they did.</option><option value="b">B) No, they didn't.</option><option value="c">C) The text doesn't say.</option></select>
+                </div>
+                <div class="question">18. Why did they stay in an Airbnb?<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) It was bigger.</option><option value="b">B) It was cleaner.</option><option value="c">C) It was cheaper.</option></select>
+                </div>
+                <div class="question">19. Where is she going to travel next summer?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) The USA</option><option value="b">B) Europe</option><option value="c">C) Peru</option></select>
+                </div>
+                <div class="question">20. Which cities is she going to visit?<br>
+                    <select class="mc-select" data-answer="a"><option value="">-- Select --</option><option value="a">A) Paris, Rome, Madrid</option><option value="b">B) London, Paris, Rome</option><option value="c">C) Madrid, Berlin, Paris</option></select>
+                </div>
+                <div class="question">21. Does she think Paris will be cheap?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) Yes, she thinks so.</option><option value="b">B) No, she doesn't think so.</option><option value="c">C) She is not sure.</option></select>
+                </div>
+                <div class="question">22. What does Teacher Ivan say they must do?<br>
+                    <select class="mc-select" data-answer="a"><option value="">-- Select --</option><option value="a">A) Practice English every day.</option><option value="b">B) Travel to Europe.</option><option value="c">C) Read a book a week.</option></select>
+                </div>
+                <div class="question">23. What shouldn't they do in class?<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) Eat food.</option><option value="b">B) Talk loud.</option><option value="c">C) Use their phones.</option></select>
+                </div>
+                <div class="question">24. When does she always do her homework?<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) In the morning.</option><option value="b">B) In the afternoon.</option><option value="c">C) In the evening.</option></select>
+                </div>
+                <div class="question">25. Why does she love learning languages?<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) To get good grades.</option><option value="b">B) To travel the world.</option><option value="c">C) To be a teacher.</option></select>
+                </div>
+                
+                <!-- Grammar in Context Qs -->
+                <div class="question">26. "The most beautiful" is an example of...<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) Comparative</option><option value="b">B) Superlative</option><option value="c">C) Equality</option></select>
+                </div>
+                <div class="question">27. What tense is "I traveled"?<br>
+                    <select class="mc-select" data-answer="a"><option value="">-- Select --</option><option value="a">A) Past Simple</option><option value="b">B) Present Simple</option><option value="c">C) Future</option></select>
+                </div>
+                <div class="question">28. What tense is "I am going to visit"?<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) Past Simple</option><option value="b">B) Present Continuous (Action now)</option><option value="c">C) Future (Plan)</option></select>
+                </div>
+                <div class="question">29. "I don't mind studying". The verb 'studying' is a...<br>
+                    <select class="mc-select" data-answer="c"><option value="">-- Select --</option><option value="a">A) Base verb</option><option value="b">B) Infinitive</option><option value="c">C) Gerund</option></select>
+                </div>
+                <div class="question">30. "We shouldn't use". "Shouldn't" expresses...<br>
+                    <select class="mc-select" data-answer="b"><option value="">-- Select --</option><option value="a">A) A strict 100% prohibition</option><option value="b">B) Advice / Recommendation</option><option value="c">C) Lack of obligation</option></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h3><span>3</span> Part 3: Advanced Grammar (25 pts)</h3>
+            <p class="instructions">Fill in the blanks with the correct grammatical structure based on the Nivel A2 rules. Each question is worth 1 point.</p>
+            
+            <div class="grid-2">
+                <div class="question">31. <em>(Past)</em> I <input type="text" class="medium-input" data-answer="went"> (go) to the cinema yesterday.</div>
+                <div class="question">32. <em>(Past - Neg)</em> She <input type="text" class="medium-input" data-answer="didn't play|did not play"> (not / play) tennis last week.</div>
+                <div class="question">33. <em>(Past - ?)</em> <input type="text" class="medium-input" data-answer="did you watch"> (you / watch) the match?</div>
+                <div class="question">34. <em>(Superlative)</em> This is <input type="text" class="medium-input" data-answer="the worst"> (bad) day of my life.</div>
+                <div class="question">35. <em>(Comparative)</em> Iron is <input type="text" class="medium-input" data-answer="heavier"> (heavy) than wood.</div>
+                <div class="question">36. <em>(Equality)</em> My car is as <input type="text" class="medium-input" data-answer="fast"> (fast) as yours.</div>
+                <div class="question">37. <em>(Prohibition)</em> You <input type="text" class="medium-input" data-answer="mustn't|must not"> (must / -) smoke here.</div>
+                <div class="question">38. <em>(Advice)</em> You <input type="text" class="medium-input" data-answer="should"> (should) eat more vegetables.</div>
+                <div class="question">39. <em>(Obligation)</em> She <input type="text" class="medium-input" data-answer="has to"> (have to) work on Monday.</div>
+                <div class="question">40. <em>(No obligation)</em> We <input type="text" class="medium-input" data-answer="don't have to|do not have to"> (not / have to) pay; it's free.</div>
+                <div class="question">41. <em>(Future Plan)</em> I <input type="text" class="medium-input" data-answer="am going to study|'m going to study"> (be going to / study) tonight.</div>
+                <div class="question">42. <em>(Future - Neg)</em> I promise I <input type="text" class="medium-input" data-answer="won't|will not"> (will / -) tell anyone.</div>
+                <div class="question">43. <em>(Purpose)</em> I study <input type="text" class="medium-input" data-answer="to travel"> (travel) the world.</div>
+                <div class="question">44. <em>(Sport)</em> We <input type="text" class="medium-input" data-answer="play"> (play/go/do) basketball.</div>
+                <div class="question">45. <em>(Sport)</em> He loves to <input type="text" class="medium-input" data-answer="do"> (play/go/do) CrossFit.</div>
+                <div class="question">46. <em>(Gerund)</em> I enjoy <input type="text" class="medium-input" data-answer="reading"> (read) books.</div>
+                <div class="question">47. <em>(Adverb)</em> She <input type="text" class="medium-input" data-answer="always arrives"> (always / arrive) on time.</div>
+                <div class="question">48. <em>(Superlative)</em> August is <input type="text" class="medium-input" data-answer="the hottest"> (hot) month.</div>
+                <div class="question">49. <em>(Comparative)</em> A laptop is <input type="text" class="medium-input" data-answer="more expensive"> (expensive) than a TV.</div>
+                <div class="question">50. <em>(Comparative)</em> Your grade is <input type="text" class="medium-input" data-answer="better"> (good) than mine.</div>
+                <div class="question">51. <em>(Past To Be)</em> They <input type="text" class="medium-input" data-answer="were"> (be) happy yesterday.</div>
+                <div class="question">52. <em>(Past To Be - Neg)</em> It <input type="text" class="medium-input" data-answer="wasn't|was not"> (not / be) raining.</div>
+                <div class="question">53. <em>(Past)</em> We <input type="text" class="medium-input" data-answer="bought"> (buy) a new house.</div>
+                <div class="question">54. <em>(Past)</em> I <input type="text" class="medium-input" data-answer="studied"> (study) a lot last night.</div>
+                <div class="question">55. <em>(Past)</em> He <input type="text" class="medium-input" data-answer="saw"> (see) his friends at the park.</div>
+            </div>
+        </div>
+
+        <div class="exercise-section" id="writing-container">
+            <h3><span>4</span> Part 4: Writing (5 pts)</h3>
+            <p class="instructions">Write about your last vacation and your plans for your next trip. Use past simple for your last trip, and future (will / going to) for your next trip. Compare the two places. <strong>(Strict Minimum: 100 words).</strong></p>
+            
+            <textarea id="writing-section" placeholder="Last year, I traveled to... The food was... Next year, I am going to... I think it will be..."></textarea>
+            <div class="word-counter">Words: <span id="word-count">0</span> / 100</div>
+        </div>
+
+        <!-- Feedback & Actions -->
+        <div id="feedback-message">
+            <h2 id="final-score-title">Score</h2>
+            <p id="final-score-text"></p>
+        </div>
+
+        <div class="actions">
+            <button class="btn-action btn-submit" id="submit-btn" onclick="submitExam(false)">🏁 Finish Exam</button>
+            <button class="btn-action btn-pdf" id="pdf-btn" onclick="window.print()">🖨️ Export to PDF</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Timer Logic
+        let totalSeconds = 40 * 60; // 40 minutes
+        const timeDisplay = document.getElementById('time-display');
+        const timerBar = document.getElementById('timer-bar');
+        let timerInterval;
+        let examSubmitted = false;
+
+        function updateTimer() {
+            if(examSubmitted) return;
+
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = totalSeconds % 60;
+            
+            if (seconds < 10) seconds = '0' + seconds;
+            if (minutes < 10) minutes = '0' + minutes;
+            
+            timeDisplay.innerText = `${minutes}:${seconds}`;
+
+            if (totalSeconds <= 300) { // Last 5 minutes
+                timerBar.style.backgroundColor = "var(--rojo-error)";
+            }
+
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                timeDisplay.innerText = "00:00";
+                submitExam(true); 
+            } else {
+                totalSeconds--;
+            }
+        }
+
+        window.onload = function() {
+            timerInterval = setInterval(updateTimer, 1000);
+        };
+
+        // Word Counter
+        const textarea = document.getElementById('writing-section');
+        const wordCountDisplay = document.getElementById('word-count');
+
+        textarea.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text === "" ? 0 : text.split(/\s+/).length;
+            wordCountDisplay.innerText = words;
+            if(words >= 100) {
+                wordCountDisplay.style.color = "var(--verde-correcto)";
+            } else {
+                wordCountDisplay.style.color = "#666";
+            }
+        });
+
+        // Exam Grading
+        function submitExam(isTimeout) {
+            if(examSubmitted) return; 
+            examSubmitted = true;
+            clearInterval(timerInterval); 
+
+            // Stop audio if playing
+            const audio = document.getElementById('exam-audio');
+            if(audio) audio.pause();
+
+            let totalScore = 0;
+            const MAX_SCORE = 100;
+
+            // 1. Grade Selects (Listening & Reading)
+            const selects = document.querySelectorAll('.mc-select');
+            selects.forEach((select, index) => {
+                select.disabled = true; // Lock input
+                let isCorrect = select.value === select.getAttribute('data-answer');
+                
+                if(isCorrect) {
+                    select.style.borderColor = "var(--verde-correcto)";
+                    select.style.backgroundColor = "#e8f5e9";
+                    select.style.color = "#2e7d32";
+                    // Q1-Q10 (Listening) = 3 pts. Q11-Q30 (Reading) = 2 pts.
+                    if(index < 10) { totalScore += 3; } else { totalScore += 2; }
+                } else {
+                    select.style.borderColor = "var(--rojo-error)";
+                    select.style.backgroundColor = "#ffebee";
+                    select.style.color = "#c62828";
+                }
+            });
+
+            // 2. Grade Text Inputs (Grammar)
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                input.readOnly = true; 
+
+                let userAnswer = input.value.toLowerCase().trim().replace(/[\.,!]$/, '').replace(/\s+/g, ' ');
+                let correctAnswers = input.getAttribute('data-answer').split('|');
+                
+                if(!input.getAttribute('data-answer').includes("?")) {
+                    userAnswer = userAnswer.replace(/[\.,!]$/, ''); 
+                }
+
+                if (correctAnswers.includes(userAnswer) && userAnswer !== "") {
+                    input.style.borderColor = "var(--verde-correcto)";
+                    input.style.backgroundColor = "#e8f5e9";
+                    input.style.color = "#2e7d32";
+                    totalScore += 1; // 25 inputs * 1 pt = 25 pts
+                } else {
+                    input.style.borderColor = "var(--rojo-error)";
+                    input.style.backgroundColor = "#ffebee";
+                    input.style.color = "#c62828";
+                    if(userAnswer === "") input.value = "---";
+                }
+            });
+
+            // 3. Grade Writing (5 pts)
+            textarea.readOnly = true;
+            const writingWords = textarea.value.trim() === "" ? 0 : textarea.value.trim().split(/\s+/).length;
+            
+            if(writingWords >= 100) {
+                totalScore += 5;
+                textarea.style.borderColor = "var(--verde-correcto)";
+                textarea.style.backgroundColor = "#e8f5e9";
+            } else {
+                textarea.style.borderColor = "var(--rojo-error)";
+                textarea.style.backgroundColor = "#ffebee";
+            }
+
+            // UI Updates
+            document.getElementById('submit-btn').style.display = 'none'; 
+            document.getElementById('pdf-btn').style.display = 'block'; 
+            timerBar.style.backgroundColor = "var(--negro-ef)";
+            timeDisplay.innerText = "EXAM FINISHED";
+
+            const feedback = document.getElementById('feedback-message');
+            const feedbackTitle = document.getElementById('final-score-title');
+            const feedbackText = document.getElementById('final-score-text');
+            feedback.style.display = 'block';
+
+            let msg = "";
+            let color = "";
+            let bgColor = "";
+
+            if (totalScore >= 90) {
+                msg = `A2 CERTIFIED - DISTINCTION! An excellent performance across all language skills.`;
+                color = "var(--verde-correcto)";
+                bgColor = "#e8f5e9";
+            } else if (totalScore >= 70) {
+                msg = `A2 CERTIFIED - PASS! You have successfully completed the level.`;
+                color = "var(--azul-oscuro)";
+                bgColor = "#e3f2fd";
+            } else {
+                msg = `NOT CERTIFIED. A score of 70 is required to pass the A2 level. Review your errors.`;
+                color = "var(--rojo-error)";
+                bgColor = "#ffebee";
+            }
+
+            if(isTimeout) msg += "<br><small style='color:black;'>⏱️ Time is up! Exam auto-submitted.</small>";
+
+            feedback.style.color = color;
+            feedback.style.backgroundColor = bgColor;
+            feedback.style.borderColor = color;
+            
+            feedbackTitle.innerText = `${totalScore} / ${MAX_SCORE} Points`;
+            feedbackText.innerHTML = msg;
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
