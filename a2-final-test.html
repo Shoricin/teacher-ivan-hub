@@ -28,6 +28,89 @@
 
         h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: var(--azul-oscuro); }
 
+        #login-screen {
+            max-width: 500px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-top: 10px solid var(--negro-ef);
+            text-align: center;
+        }
+
+        #login-screen h2 {
+            color: var(--negro-ef);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .login-field {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .login-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .login-field input[type="text"],
+        .login-field input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .login-field input[type="text"]:focus,
+        .login-field input[type="date"]:focus {
+            border-color: var(--azul-oscuro);
+            outline: none;
+        }
+
+        .exam-info {
+            background: var(--gris-claro);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .exam-info strong {
+            color: var(--negro-ef);
+        }
+
+        .btn-start {
+            background-color: var(--negro-ef);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+        }
+
+        .btn-start:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+
+        #exam-interface {
+            display: none; /* Hidden by default */
+        }
+
         #timer-bar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -55,7 +138,6 @@
             position: relative;
         }
 
-        /* Logos Section */
         .logos-container {
             display: flex;
             justify-content: space-between;
@@ -64,7 +146,17 @@
             padding-bottom: 20px;
             border-bottom: 2px solid #eee;
         }
-        .logos-container img { height: 50px; object-fit: contain; }
+        
+        .logos-container img {
+            max-height: 50px; /* Reduced max height */
+            width: auto;      /* Maintain aspect ratio */
+            object-fit: contain;
+        }
+
+        /* Specific adjustments for individual logos if needed */
+        .logos-container img:nth-child(1) { height: 45px; } /* Teacher Ivan */
+        .logos-container img:nth-child(2) { height: 35px; } /* Google */
+        .logos-container img:nth-child(3) { height: 50px; } /* EF SET */
         
         .header { text-align: center; margin-bottom: 40px; }
         .header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; color: var(--negro-ef); letter-spacing: 1px;}
@@ -127,10 +219,12 @@
 
         @media (max-width: 768px) {
             .worksheet-container { margin: 70px 10px 20px 10px; padding: 25px 20px; border-radius: 8px; }
-            .logos-container { flex-direction: column; gap: 15px; }
+            .logos-container { flex-direction: column; gap: 20px; justify-content: center; } /* Adjusted for mobile */
+            .logos-container img { max-height: 40px; } /* Smaller on mobile */
             .grid-2 { grid-template-columns: 1fr; gap: 15px; }
             .actions { flex-direction: column; align-items: center; }
             .btn-action { max-width: none; }
+            #login-screen { margin: 50px 10px; padding: 30px 20px; }
         }
 
         @media print {
@@ -142,58 +236,58 @@
             textarea { border: 1px solid black; height: 300px; }
             /* Make sure select shows selected value cleanly on print */
             select::-ms-expand { display: none; }
+            
+            /* Add student info header on print */
+            .print-header { display: block !important; text-align: left; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+            .print-header p { margin: 5px 0; font-weight: bold; }
         }
+
+        .print-header { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="timer-bar">⏱️ TIME LEFT: <span id="time-display">40:00</span></div>
-
-    <div class="worksheet-container" id="exam-content">
+    <div id="login-screen">
+        <h2>A2 Certification Login</h2>
+        <div class="exam-info">
+            <p><strong>Date:</strong> <span id="current-date"></span></p>
+            <p><strong>Time:</strong> <span id="current-time"></span></p>
+            <p><strong>Duration:</strong> 40 Minutes</p>
+        </div>
         
-        <div class="logos-container">
-            <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
-            <img src="https://i.imgur.com/ZBCAtDh.png" alt="Google for Education Logo">
-            <img src="https://i.imgur.com/ZWmDIMY.png" alt="EF SET Logo">
+        <div class="login-field">
+            <label for="student-name">Full Name:</label>
+            <input type="text" id="student-name" placeholder="Enter your full name" required>
         </div>
-
-        <div class="header">
-            <h1>A2 Final Certification Test</h1>
-            <p>Listening, Reading, Grammar & Writing</p>
-            <span class="score-badge">Total Score: 100 Points</span>
+        
+        <div class="login-field">
+            <label for="student-dob">Date of Birth:</label>
+            <input type="date" id="student-dob" required>
         </div>
+        
+        <button class="btn-start" onclick="startExam()">Start Exam</button>
+        <p id="login-error" style="color: var(--rojo-error); display: none; margin-top: 10px; font-weight: bold;">Please fill in all fields.</p>
+    </div>
 
-        <div class="exercise-section">
-            <h3><span>1</span> Part 1: Listening Comprehension (30 pts)</h3>
-            <p class="instructions">Listen to the audio about travel experiences and answer the 10 multiple-choice questions. Each question is worth 3 points.</p>
+    <div id="exam-interface">
+        <div id="timer-bar">⏱️ TIME LEFT: <span id="time-display">40:00</span></div>
+
+        <div class="worksheet-container" id="exam-content">
             
-            <div class="audio-container">
-                <audio controls id="exam-audio">
-                    <source src="audios/A2 English Listening Practice - Travel.m4a" type="audio/mp4">
-                    Your browser does not support the audio element.
-                </audio>
-                <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #555;">File: audios/A2 English Listening Practice - Travel.m4a</p>
+            <!-- Student info for PDF export -->
+            <div class="print-header">
+                <p><strong>Student Name:</strong> <span id="print-name"></span></p>
+                <p><strong>Date of Birth:</strong> <span id="print-dob"></span></p>
+                <p><strong>Exam Date:</strong> <span id="print-date"></span></p>
             </div>
 
-            <div class="grid-2">
-                <div class="question">1. Where did the speaker travel with his family when he was young?<br>
-                    <select class="mc-select" data-answer="b">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) Italy</option>
-                        <option value="b">B) Hawaii</option>
-                        <option value="c">C) Madrid</option>
-                    </select>
-                </div>
-                <div class="question">2. How many times has he been to Hawaii?<br>
-                    <select class="mc-select" data-answer="c">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) Only once</option>
-                        <option value="b">B) Three or four times</option>
-                        <option value="c">C) Six or seven times</option>
-                    </select>
-                </div>
-                <div class="question">3. What kind of environment does he prefer over the beach?<br>
-                    <select class="mc-select" data-answer="a">
+            <div class="logos-container">
+                <img src="https://i.imgur.com/s05NqFM.png" alt="Teacher Ivan Logo">
+                <img src="https://i.imgur.com/ZBCAtDh.png" alt="Google for Education Logo">
+                <img src="https://i.imgur.com/ZWmDIMY.png" alt="EF SET Logo">
+            </div>
+
+            <div class="header">
                         <option value="">-- Select --</option>
                         <option value="a">A) Countryside, forest, or mountains</option>
                         <option value="b">B) Big cities and crowded places</option>
@@ -385,13 +479,57 @@
 
         <div class="actions">
             <button class="btn-action btn-submit" id="submit-btn" onclick="submitExam(false)">🏁 Finish Exam</button>
-            <button class="btn-action btn-pdf" id="pdf-btn" onclick="window.print()">🖨️ Export to PDF</button>
+            <button class="btn-action btn-pdf" id="pdf-btn" onclick="prepareAndPrint()">🖨️ Export to PDF</button>
         </div>
 
-    </div>
+        </div> <!-- End of worksheet-container -->
+    </div> <!-- End of exam-interface -->
 
     <script>
-        // Timer Logic
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            
+            document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', dateOptions);
+            document.getElementById('current-time').innerText = now.toLocaleTimeString('en-US', timeOptions);
+        }
+
+        // Update time every second on the login screen
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Initial call
+
+        let studentName = "";
+        let studentDob = "";
+
+        function startExam() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            const dobInput = document.getElementById('student-dob').value;
+            
+            if (nameInput === "" || dobInput === "") {
+                document.getElementById('login-error').style.display = 'block';
+                return;
+            }
+
+            studentName = nameInput;
+            studentDob = dobInput;
+            
+            // Set values for print header
+            document.getElementById('print-name').innerText = studentName;
+            document.getElementById('print-dob').innerText = studentDob;
+            document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+
+            // Hide login, show exam
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('exam-interface').style.display = 'block';
+
+            // Start Timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
         let totalSeconds = 40 * 60; // 40 minutes
         const timeDisplay = document.getElementById('time-display');
         const timerBar = document.getElementById('timer-bar');
@@ -422,11 +560,8 @@
             }
         }
 
-        window.onload = function() {
-            timerInterval = setInterval(updateTimer, 1000);
-        };
+        // Removed window.onload timer start, moved to startExam()
 
-        // Word Counter
         const textarea = document.getElementById('writing-section');
         const wordCountDisplay = document.getElementById('word-count');
 
@@ -550,6 +685,15 @@
             feedbackText.innerHTML = msg;
             
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function prepareAndPrint() {
+            // Update print header info just in case
+            document.getElementById('print-name').innerText = studentName;
+            document.getElementById('print-dob').innerText = studentDob;
+            document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+            
+            window.print();
         }
     </script>
 </body>
