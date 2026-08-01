@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OET Final Mock Test - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50; --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body { margin: 0; font-family: var(--font-cuerpo); background-color: var(--blanco-nieve); color: var(--azul-primario); line-height: 1.6; }
+        h1, h2, h3, h4, h5 { font-family: var(--font-titulares); margin: 0; }
+
+        /* HEADER & TIMER */
+        .sticky-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: var(--azul-primario); color: white; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; box-sizing: border-box; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .timer-display { font-family: var(--font-titulares); font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; background: var(--naranja-vibrante); padding: 5px 15px; border-radius: 5px;}
+        .timer-warning { background: var(--rojo-alerta); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* SCREENS */
+        .screen { display: none; padding-top: 80px; min-height: 100vh; }
+        .screen.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        /* LOGIN SCREEN */
+        .login-box {
+            background: var(--blanco-puro); max-width: 500px; margin: 10vh auto; padding: 3rem;
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+            border-top: 6px solid var(--naranja-vibrante);
+        }
+        .login-input {
+            width: 100%; padding: 15px; margin: 20px 0; border: 2px solid var(--gris-neutro);
+            border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; font-family: var(--font-cuerpo);
+        }
+        .btn {
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px;
+            border-radius: 8px; font-family: var(--font-titulares); font-size: 1.2rem; cursor: pointer;
+            transition: 0.3s; width: 100%; text-transform: uppercase; font-weight: 700;
+        }
+        .btn:hover { background: #e05e15; transform: translateY(-2px); }
+        .btn-next { background: var(--azul-primario); margin-top: 20px; }
+        .btn-next:hover { background: #08366b; }
+
+        /* CARDS & SPLIT VIEWS */
+        .section-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border: 1px solid #eee;
+        }
+        .split-view { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 900px) { .split-view { grid-template-columns: 1fr; } }
+        
+        .scrollable-pane { max-height: 75vh; overflow-y: auto; padding-right: 15px; }
+
+        /* QUESTIONS STYLING */
+        .part-title { background: var(--azul-primario); color: white; padding: 10px 15px; border-radius: 5px; margin: 1rem 0; }
+        .extract-title { color: var(--naranja-vibrante); margin: 1.5rem 0 1rem 0; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 5px; }
+        .question-line { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.8; }
+        .oet-input { 
+            border: none; border-bottom: 2px dashed var(--gris-neutro); padding: 5px; width: 180px; 
+            font-family: var(--font-cuerpo); font-weight: 600; color: var(--azul-primario); background: transparent; outline: none;
+        }
+        .oet-input:focus { border-color: var(--naranja-vibrante); }
+        .oet-input-short { width: 50px; text-align: center; }
+
+        .mcq-block { margin-bottom: 1.5rem; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .mcq-question { font-weight: 700; margin-bottom: 10px; font-size: 1rem; }
+        .mcq-option { display: block; margin-bottom: 8px; font-size: 0.95rem; cursor: pointer; }
+
+        /* READING & WRITING TEXTS */
+        .reading-text-box { background: #f8fafc; padding: 20px; border-left: 4px solid var(--azul-primario); margin-bottom: 20px; font-size: 0.95rem; }
+        .writing-textarea { width: 100%; height: 60vh; padding: 15px; border: 2px solid var(--gris-neutro); border-radius: 8px; font-family: var(--font-cuerpo); font-size: 1rem; resize: vertical; box-sizing: border-box; }
+        
+        /* RESULTS & PDF */
+        .correction-span { font-weight: bold; margin-left: 10px; font-size: 0.85rem; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        .correct-tag { color: var(--verde-exito); background: #e8f5e9; border: 1px solid var(--verde-exito); }
+        .incorrect-tag { color: var(--rojo-alerta); background: #ffebee; border: 1px solid var(--rojo-alerta); }
+        .correction-mcq { color: var(--rojo-alerta); font-weight: bold; margin-top: 10px; font-size: 0.9rem; background: #ffebee; padding: 5px 10px; border-radius: 4px; display: inline-block;}
+        
+        #results-dashboard { text-align: center; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--naranja-vibrante); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1rem auto; box-shadow: 0 4px 15px rgba(245, 110, 30, 0.4); }
+
+        @media print {
+            .sticky-header, .btn, audio { display: none !important; }
+            .screen { display: block !important; padding-top: 0 !important; min-height: auto; }
+            .scrollable-pane { max-height: none; overflow: visible; }
+            .split-view { display: block; }
+            .section-card { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; page-break-inside: avoid; }
+            #screen-login { display: none !important; }
+        }
+        .cite { font-size: 0.7rem; color: #888; vertical-align: super; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="sticky-header" id="main-header" style="display: none;">
+        <div><strong>Student: </strong><span id="display-name"></span></div>
+        <div id="section-title" style="font-weight: 800;">Section</div>
+        <div class="timer-display" id="timer-display">00:00</div>
+    </div>
+
+    <!-- 1. LOGIN SCREEN -->
+    <div id="screen-login" class="screen active">
+        <div class="login-box">
+            <img src="https://i.imgur.com/s05NqFM.png" alt="Logo" style="height: 80px; margin-bottom: 20px;">
+            <h2>OET Final Official Mock Test</h2>
+            <p>Welcome to Teacher Ivan HUB. Please enter your full name to begin the complete simulation.</p>
+            <input type="text" id="student-name" class="login-input" placeholder="Full Name (e.g. John Doe)">
+            <button class="btn" onclick="startListening()">Start Listening Test (40 Min)</button>
+        </div>
+    </div>
+
+    <!-- 2. LISTENING SECTION -->
+    <div id="screen-listening" class="screen">
+        <div class="container">
+            <section class="section-card" style="text-align: center;">
+                <h3>OET Listening Sub-test <span class="cite">[cite: 15]</span></h3>
+                <audio id="oet-audio-player" controls style="width: 100%; max-width: 600px; margin-top: 15px;">
+                    <source src="audios/oet-finaltest-audio.m4a" type="audio/mp4">
+                    Your browser does not support the audio element.
+                </audio>
+            </section>
+
+            <section class="section-card">
+                <h3 class="part-title">PART A: NOTE COMPLETION</h3>
+                
+                <h4 class="extract-title">Extract 01: Questions 01-12 | Patient: Mr. Collins <span class="cite">[cite: 15]</span></h4>
+                <h5>Medical History and Symptoms:</h5>
+                <div class="question-line">• Feeling unwell for several days; symptoms stronger than usual flu</div>
+                <div class="question-line">• Concerned about (1) <input type="text" id="l_q1" class="oet-input"> due to recent media reports</div>
+                <div class="question-line">• Began with fever, followed by (2) <input type="text" id="l_q2" class="oet-input"> and body aches</div>
+                <div class="question-line">• Complains of sore throat, cough, weakness, and persistent (3) <input type="text" id="l_q3" class="oet-input"></div>
+                <div class="question-line">• Experiencing unusual symptom of (4) <input type="text" id="l_q4" class="oet-input"></div>
+                
+                <h5 style="margin-top:10px;">Exposure History:</h5>
+                <div class="question-line">• Helps out at a (5) <input type="text" id="l_q5" class="oet-input"> on weekends</div>
+                <div class="question-line">• Recently involved in clearing a (6) <input type="text" id="l_q6" class="oet-input"></div>
+                <div class="question-line">• A few chickens had (7) <input type="text" id="l_q7" class="oet-input"> unexpectedly</div>
+                
+                <h5 style="margin-top:10px;">Testing and Diagnosis:</h5>
+                <div class="question-line">• GP recommends nasal or (8) <input type="text" id="l_q8" class="oet-input"> for testing</div>
+                <div class="question-line">• May also require a (9) <input type="text" id="l_q9" class="oet-input"> to detect antibodies</div>
+                
+                <h5 style="margin-top:10px;">Precautions and Treatment:</h5>
+                <div class="question-line">• GP advises Mr. Collins to (10) <input type="text" id="l_q10" class="oet-input"> from family until diagnosis confirmed</div>
+                <div class="question-line">• Antiviral treatment would typically last about (11) <input type="text" id="l_q11" class="oet-input"></div>
+                <div class="question-line">• Precautionary measures include wearing protective gear and reporting (12) <input type="text" id="l_q12" class="oet-input"> birds</div>
+
+                <h4 class="extract-title">Extract 02: Questions 13-24 | Patient: Chris Davis <span class="cite">[cite: 15]</span></h4>
+                <h5>Symptoms:</h5>
+                <div class="question-line">• Onset of sore throat and body aches approximately (13) <input type="text" id="l_q13" class="oet-input"> ago</div>
+                <div class="question-line">• Developed (14) <input type="text" id="l_q14" class="oet-input"> the following day (38.5°C)</div>
+                <div class="question-line">• Fever described as (15) <input type="text" id="l_q15" class="oet-input"> over time</div>
+                <div class="question-line">• Complains of persistent (16) <input type="text" id="l_q16" class="oet-input"> pain</div>
+                <div class="question-line">• No reports of shortness of breath or (17) <input type="text" id="l_q17" class="oet-input"> problems</div>
+                <div class="question-line">• Mild (18) <input type="text" id="l_q18" class="oet-input"> reported, but not severe</div>
+                
+                <h5 style="margin-top:10px;">Background:</h5>
+                <div class="question-line">• No chronic conditions; describes general health as (19) <input type="text" id="l_q19" class="oet-input"></div>
+                <div class="question-line">• Did not receive (20) <input type="text" id="l_q20" class="oet-input"> this year</div>
+                <div class="question-line">• Possible exposure from (21) <input type="text" id="l_q21" class="oet-input"> at work</div>
+                
+                <h5 style="margin-top:10px;">Management:</h5>
+                <div class="question-line">• Plan to conduct a (22) <input type="text" id="l_q22" class="oet-input"> test</div>
+                <div class="question-line">• Advised to maintain (23) <input type="text" id="l_q23" class="oet-input"> and hydration</div>
+                <div class="question-line">• Warned to avoid (24) <input type="text" id="l_q24" class="oet-input"> due to risk with viral infections</div>
+            </section>
+
+            <section class="section-card">
+                <h3 class="part-title">PART B: MULTIPLE CHOICE QUESTIONS (25-30) <span class="cite">[cite: 15]</span></h3>
+                
+                <div class="mcq-block" id="block-l25">
+                    <div class="mcq-question">25. The nurse believes it's important to:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q25" value="A"> (a) Address the patient's anxiety</label>
+                    <label class="mcq-option"><input type="radio" name="l_q25" value="B"> (b) Notify the patient's family</label>
+                    <label class="mcq-option"><input type="radio" name="l_q25" value="C"> (c) Improve the patient's circulation</label>
+                </div>
+                <div class="mcq-block" id="block-l26">
+                    <div class="mcq-question">26. What do the speakers agree to do?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q26" value="A"> (a) Administer an inhaler to the patient</label>
+                    <label class="mcq-option"><input type="radio" name="l_q26" value="B"> (b) Monitor the patient's oxygen levels</label>
+                    <label class="mcq-option"><input type="radio" name="l_q26" value="C"> (c) Give the patient a nebulizer treatment</label>
+                </div>
+                <div class="mcq-block" id="block-l27">
+                    <div class="mcq-question">27. What is the nurse doing?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q27" value="A"> (a) Reporting side effects</label>
+                    <label class="mcq-option"><input type="radio" name="l_q27" value="B"> (b) Checking the dosage</label>
+                    <label class="mcq-option"><input type="radio" name="l_q27" value="C"> (c) Recommending an alternative</label>
+                </div>
+                <div class="mcq-block" id="block-l28">
+                    <div class="mcq-question">28. What is the most likely diagnosis?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q28" value="A"> (a) must be Pneumonia</label>
+                    <label class="mcq-option"><input type="radio" name="l_q28" value="B"> (b) can be Asthma</label>
+                    <label class="mcq-option"><input type="radio" name="l_q28" value="C"> (c) could be COPD</label>
+                </div>
+                <div class="mcq-block" id="block-l29">
+                    <div class="mcq-question">29. What is the main advantage of the new respiratory device?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q29" value="A"> (a) It allows real-time data sharing with healthcare providers.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q29" value="B"> (b) It is less costly than traditional peak flow meters.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q29" value="C"> (c) It is more effective in measuring lung function.</label>
+                </div>
+                <div class="mcq-block" id="block-l30">
+                    <div class="mcq-question">30. What problem do the pharmacists discuss?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q30" value="A"> (a) Delays in the medication review process</label>
+                    <label class="mcq-option"><input type="radio" name="l_q30" value="B"> (b) Issues with the new software system</label>
+                    <label class="mcq-option"><input type="radio" name="l_q30" value="C"> (c) Difficulty in securing insulin supplies</label>
+                </div>
+            </section>
+
+            <section class="section-card">
+                <h3 class="part-title">PART C: MULTIPLE CHOICE QUESTIONS (31-42) <span class="cite">[cite: 15]</span></h3>
+                
+                <h4 class="extract-title">Extract 01: Questions 31-36</h4>
+                <div class="mcq-block" id="block-l31">
+                    <div class="mcq-question">31. Dr. Miller states that primary immunodeficiency disorders are:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q31" value="A"> (a) Commonly caused by environmental factors.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q31" value="B"> (b) Typically genetic and inherited.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q31" value="C"> (c) Primarily diagnosed in adulthood.</label>
+                </div>
+                <div class="mcq-block" id="block-l32">
+                    <div class="mcq-question">32. Dr. Miller suggests that a major challenge in managing PI is:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q32" value="A"> (a) The lack of available treatments.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q32" value="B"> (b) The high cost of genetic testing.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q32" value="C"> (c) The frequent misdiagnosis of the condition.</label>
+                </div>
+                <div class="mcq-block" id="block-l33">
+                    <div class="mcq-question">33. Dr. Miller uses data to show that early diagnosis and treatment of PI:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q33" value="A"> (a) Has no impact on patient outcomes.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q33" value="B"> (b) Increases the need for frequent hospital visits.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q33" value="C"> (c) Significantly improves patient quality of life.</label>
+                </div>
+                <div class="mcq-block" id="block-l34">
+                    <div class="mcq-question">34. Dr. Miller notes that immunoglobulin therapy for PI:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q34" value="A"> (a) Can be challenging due to the need for frequent infusions.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q34" value="B"> (b) Is generally free of side effects.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q34" value="C"> (c) Offers little benefit in reducing infections.</label>
+                </div>
+                <div class="mcq-block" id="block-l35">
+                    <div class="mcq-question">35. Dr. Miller emphasizes that the psychological impact of PI:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q35" value="A"> (a) Can include anxiety and depression.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q35" value="B"> (b) Is rarely a concern for patients.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q35" value="C"> (c) Is addressed solely through medication.</label>
+                </div>
+                <div class="mcq-block" id="block-l36">
+                    <div class="mcq-question">36. Dr. Miller concludes by stressing that improving outcomes relies on:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q36" value="A"> (a) Developing new medications.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q36" value="B"> (b) Increasing awareness and early diagnosis.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q36" value="C"> (c) Reducing the cost of immunoglobulin therapy.</label>
+                </div>
+
+                <h4 class="extract-title">Extract 02: Questions 37-42</h4>
+                <div class="mcq-block" id="block-l37">
+                    <div class="mcq-question">37. Primary reason stomach cancer is difficult to treat:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q37" value="A"> (a) The presence of highly aggressive tumors</label>
+                    <label class="mcq-option"><input type="radio" name="l_q37" value="B"> (b) Late detection due to vague symptoms</label>
+                    <label class="mcq-option"><input type="radio" name="l_q37" value="C"> (c) Ineffective chemotherapy treatments</label>
+                </div>
+                <div class="mcq-block" id="block-l38">
+                    <div class="mcq-question">38. Major challenge in treating stomach cancer:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q38" value="A"> (a) Accessing the stomach without invasive procedures</label>
+                    <label class="mcq-option"><input type="radio" name="l_q38" value="B"> (b) Determining whether surgery is necessary.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q38" value="C"> (c) Understanding the full impact on other organs.</label>
+                </div>
+                <div class="mcq-block" id="block-l39">
+                    <div class="mcq-question">39. What complicates early diagnosis of stomach cancer?</div>
+                    <label class="mcq-option"><input type="radio" name="l_q39" value="A"> (a) Misinterpreting symptoms as less serious conditions</label>
+                    <label class="mcq-option"><input type="radio" name="l_q39" value="B"> (b) Limited availability of advanced imaging techniques</label>
+                    <label class="mcq-option"><input type="radio" name="l_q39" value="C"> (c) The rapid progression of early-stage tumors</label>
+                </div>
+                <div class="mcq-block" id="block-l40">
+                    <div class="mcq-question">40. Evolution of treatment methods:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q40" value="A"> (a) Chemotherapy has always been primary treatment</label>
+                    <label class="mcq-option"><input type="radio" name="l_q40" value="B"> (b) New therapies have shown limited success rates</label>
+                    <label class="mcq-option"><input type="radio" name="l_q40" value="C"> (c) There has been significant progress with targeted therapies</label>
+                </div>
+                <div class="mcq-block" id="block-l41">
+                    <div class="mcq-question">41. Current survival rates for stomach cancer:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q41" value="A"> (a) Early detection greatly improves survival chances</label>
+                    <label class="mcq-option"><input type="radio" name="l_q41" value="B"> (b) Survival rates are improving across all stages.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q41" value="C"> (c) Most patients benefit from immunotherapy.</label>
+                </div>
+                <div class="mcq-block" id="block-l42">
+                    <div class="mcq-question">42. Next important development in research:</div>
+                    <label class="mcq-option"><input type="radio" name="l_q42" value="A"> (a) Enhancing the effectiveness of surgery.</label>
+                    <label class="mcq-option"><input type="radio" name="l_q42" value="B"> (b) Routine medical screening for high-risk groups</label>
+                    <label class="mcq-option"><input type="radio" name="l_q42" value="C"> (c) Avoiding all contact with livestock</label>
+                </div>
+            </section>
+            <button class="btn btn-next" onclick="startReading()">Finish Listening & Start Reading (60 Min)</button>
+        </div>
+    </div>
+
+    <!-- 3. READING SECTION -->
+    <div id="screen-reading" class="screen">
+        <div class="container" style="max-width: 100%;">
+            <div class="split-view">
+                
+                <!-- READING TEXTS (LEFT PANE) -->
+                <div class="scrollable-pane" style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                    <h2 class="part-title">READING TEXT BOOKLET <span class="cite">[cite: 17]</span></h2>
+                    
+                    <h3>PART A: Cellulitis: Texts</h3>
+                    <div class="reading-text-box">
+                        <h4>Text A — Cellulitis: definition and aetiology</h4>
+                        <p>Cellulitis is an acute bacterial infection of the dermis and subcutaneous tissue which presents with an acute onset of red, painful, hot, swollen, and tender skin, sometimes with blister formation. Fever and nausea may accompany or precede skin changes.</p>
+                        <p>By far the commonest organisms that cause cellulitis are <em>Streptococcus pyogenes</em> and <em>Staphylococcus aureus</em>. Other, less common organisms include <em>Aeromonas hydrophila</em> (caused by exposure to fresh water), <em>Pasteurella multocida</em> and anaerobes (caused by mammalian bites), <em>Vibrio vulnificus</em> (caused by exposure to salt water), and <em>Pseudomonas aeruginosa</em> (caused by use of hot tubs).</p>
+                        <p>The leg is the most commonly affected site, with unilateral presentation the norm. Bilateral leg cellulitis can occur but is extremely rare. Infection arises from an identifiable break in the skin from trauma.</p>
+                        <p>Recurrent cellulitis is more common in people who have chronic lymphoedema, especially in those with a history of venectomy for coronary artery bypass grafting, mastectomy, or pelvic surgery.</p>
+                    </div>
+
+                    <div class="reading-text-box">
+                        <h4>Text B — Severity of cellulitis</h4>
+                        <p>The Eron Classification system can help to guide admission and treatment decisions:</p>
+                        <ul>
+                            <li><strong>Class I:</strong> There are no signs of systemic toxicity, and the person has no uncontrolled co-morbidities.</li>
+                            <li><strong>Class II:</strong> The person is either systemically unwell or systemically well but with a co-morbidity, e.g., peripheral arterial disease, chronic venous insufficiency, or morbid obesity, which may complicate or delay resolution of infection.</li>
+                            <li><strong>Class III:</strong> The person has significant systemic upset such as acute confusion, tachycardia or hypotension, or a limb-threatening infection due to vascular compromise.</li>
+                            <li><strong>Class IV:</strong> The person has a severe life-threatening infection such as necrotizing fasciitis.</li>
+                        </ul>
+                        <p>In suspected cases of cellulitis, immediately hospitalise anyone with Class III or IV. In addition, anyone who is immunocompromised, has facial cellulitis, is very young (under 12 months) or elderly and frail, or whose cellulitis is rapidly deteriorating must be hospitalised.</p>
+                        <p>Note that many other common conditions, including deep vein thrombosis (DVT), share the same symptoms (unilateral redness and/or swelling) as cellulitis. The same is also true for rare, serious conditions, such as metastatic cancer.</p>
+                    </div>
+
+                    <div class="reading-text-box">
+                        <h4>Text C — Suitable drug therapy for cellulitis</h4>
+                        <h5>Suitable drug therapy for typical cellulitis</h5>
+                        <ul>
+                            <li><strong>Class I:</strong> <em>First line:</em> Flucloxacillin 500 mg 4x/day PO | <em>Penicillin allergy:</em> Clarithromycin 500 mg 2x/day PO</li>
+                            <li><strong>Class II:</strong> <em>First line:</em> Flucloxacillin 1 g 4x/day IV | <em>Penicillin allergy:</em> Clarithromycin 500 mg 2x/day IV <strong>or</strong> Clindamycin 600 mg 4x/day IV <strong>or</strong> Ceftriaxone 1 g 1x/day IV (OPAT only) <em>(Must not be used in penicillin anaphylaxis)</em></li>
+                            <li><strong>Class III:</strong> <em>First line:</em> Flucloxacillin 1 g 4x/day IV | <em>Penicillin allergy:</em> Clarithromycin 500 mg 2x/day IV <strong>or</strong> Clindamycin 600 mg 4x/day IV</li>
+                            <li><strong>Class IV:</strong> <em>First line:</em> Benzylpenicillin 2.4 g 2-4 hourly IV + Ciprofloxacin 400 mg 2x/day IV + Clindamycin 600 mg-1.2 g 4x/day IV <em>(If allergic to penicillin use Ciprofloxacin and Clindamycin only)</em> | <em>NB:</em> Discuss with local Medical Microbiology Service</li>
+                        </ul>
+                        <h5>Suitable drug therapy for atypical cellulitis</h5>
+                        <ul>
+                            <li><strong>Human bite:</strong> <em>First line:</em> Co-amoxiclav 625 mg 3x/day PO | <em>Penicillin allergy:</em> Clarithromycin 500 mg 2x/day PO <strong>or</strong> Doxycycline 100 mg 2x/day PO <strong>and</strong> Metronidazole 400 mg 3x/day PO</li>
+                            <li><strong>Cat/dog bite:</strong> <em>First line:</em> Co-amoxiclav 625 mg 3x/day PO | <em>Penicillin allergy:</em> Doxycycline 100 mg 2x/day PO <strong>and</strong> Metronidazole 400 mg 3x/day PO</li>
+                            <li><strong>Exposure to fresh water at site of skin break:</strong> <em>First line:</em> Ciprofloxacin 750 mg 2x/day PO <strong>and</strong> Clarithromycin 500 mg 2x/day PO | <em>Penicillin allergy:</em> Ciprofloxacin 750 mg 2x/day PO <strong>and</strong> Flucloxacillin 500 mg 4x/day PO</li>
+                        </ul>
+                    </div>
+
+                    <div class="reading-text-box">
+                        <h4>Text D — Management of the locally affected area</h4>
+                        <ul>
+                            <li>Prescribe analgesia to ensure pain relief. Review the appropriateness of anti-inflammatory drugs, and if initiating an anti-inflammatory is obligatory, use ibuprofen (1200 mg per day or less) or naproxen (1000 mg per day or less).</li>
+                            <li>Take account of drug interactions; for example, co-prescribing anti-inflammatories with ACE inhibitors or angiotensin receptor blockers may pose particular risks to renal function.</li>
+                            <li>Avoid the use of topical antibiotics as these are unsuitable for the management of any class of cellulitis.</li>
+                            <li>Monitor temperature and consider hydration.</li>
+                            <li>Elevate the affected limb and use a bed cradle to avoid irritation or increased pain caused by contact with sheets.</li>
+                            <li>Conduct pro-active management of blistering, including aseptic aspiration, but if in doubt, seek specialist advice.</li>
+                            <li>There may be diffuse redness or a well-demarcated edge that can be marked with a pen in order to monitor progress.</li>
+                            <li>Once the critical stage of swelling and redness has subsided, assess the patient for compression bandaging.</li>
+                        </ul>
+                    </div>
+
+                    <h3>PART B: Short Texts</h3>
+                    <div class="reading-text-box">
+                        <h4>1. NOTICE: Emergency Nurse Practitioner (ENP) Minor Injury Course</h4>
+                        <p>We are pleased to announce that the hospital's ENP service will be running a Minor Injury Course... The ENP Minor Injury Course structure has recently been changed. There will no longer be an additional clinical placement, and course applicants will therefore be required to complete all their clinical competencies in their own clinical setting with a designated mentor... Therefore, only applications from registered nurses working in a nursing role on a permanent basis in a relevant area such as the emergency department or minor injuries unit within their organisation can be considered and their place will need to be funded by their organisation, rather than self-funded.</p>
+                    </div>
+                    <div class="reading-text-box">
+                        <h4>2. Maternity Ward Guideline 4.3.7: Electric breast pumps</h4>
+                        <p>All inpatient areas that care for infants of expressing or breastfeeding mothers have been allocated electric breast pumps. These should stay on their allocated ward except for when they are being cleaned. They are exclusively for use in the infants' ward area and should not be given to parents to take to their own accommodation... Breast pumps are now all tagged to enable pumps to be tracked and found quickly. A breast pump can be shared between mothers on a ward but should be wiped down by the mother after each use...</p>
+                    </div>
+                    <div class="reading-text-box">
+                        <h4>3. Hospital Discharge Policy 4.1.5 Registered Nurse</h4>
+                        <p>Registered Nurses will have the responsibility for ensuring advice on discharge is provided to patients and, if required, relevant onward referrals are made including the booking of future outpatient appointments. The Registered Nurse must ensure that all relevant documentation is complete and accurate. Registered Nurses will ensure effective handover (both verbal and written) of patients' assessment and on-going care needs. They will also be responsible... for day-to-day co-ordination of discharge and act as a point of contact and conduit for effective communication for all members of the multi-disciplinary team...</p>
+                    </div>
+                    <div class="reading-text-box">
+                        <h4>4. NOTICE: Nasogastric tube (NGT)</h4>
+                        <p>By inserting a nasogastric tube, you are gaining access to the stomach and its contents. This enables you to drain gastric contents, decompress the stomach, obtain a specimen of the gastric contents, or introduce a passage into the GI tract... The potential for contact with a patient's blood/body fluids while starting an NG is present and increases with the inexperience of the operator. Gloves must be worn while starting an NG; and if the risk of vomiting is high, the operator should consider face and eye protection as well as a gown.</p>
+                    </div>
+                    <div class="reading-text-box">
+                        <h4>5. Clinical Guidelines</h4>
+                        <p>The development, introduction and use of guidelines is intended to ensure consistent care to all patients and reduce risks of errors... It is important to recognise that Clinical Guidelines are not mandatory and are not a substitute for clinical judgement. However, where guidelines are not followed, clinicians should be able to account for why a decision not to adhere to them has been taken. In these situations, it is good practice to record this in the patient notes...</p>
+                    </div>
+                    <div class="reading-text-box">
+                        <h4>6. Protocol for the use of Ferinject during pregnancy</h4>
+                        <p>Ferinject (Iron III carboxymaltose) has 50 mg/ml of elemental iron. It is administered by slow IV injection or infusion with no need for a test dose. It should be avoided in the first trimester... Less than 1% passes into breast milk, which is unlikely to be significant. While the rate of anaphylaxis with this preparation is low, it does carry a risk of anaphylactoid reaction. It does not require any monitoring except for a set of observations prior to administration. Oral iron should be avoided for 5 days after the administration of Ferinject...</p>
+                    </div>
+
+                    <h3>PART C: Extract 1 & 2</h3>
+                    <div class="reading-text-box">
+                        <h4>Text 1: Planning for the future</h4>
+                        <p>The esteemed clinician-scientist Professor Robert Winston sparked debate recently. He avoids hiring graduates who have achieved high first-class degrees to work in his laboratories, he said, because experience has taught him that they are less likely to be well-rounded and good team players. Many hard-working and gifted students may feel aggrieved by his approach, but it is refreshing to see public acknowledgement that recruitment strategies must assess more than just academic ability. A similar debate has also resurfaced about medical school admissions, with senior clinicians and medical educators reiterating the need for a holistic application system to identify the most promising future doctors.</p>
+                        <p>A prevailing problem is how to decide on a uniform description of the traits that should be sought in the doctors of tomorrow. After all, graduates from medical school are expected to go on to pursue careers in specialties as diverse as neurosurgery, dermatology, and microbiology. Clearly, these require different skills and personality types. So, can one single recruitment strategy identify a generic set of desirable traits for all future doctors?</p>
+                        <p>Boston University Medical School is confident that this is possible. Using applicants' interviews, essays and letters of reference to identify evidence of service engagement, cultural sensitivity and emotional resilience, they attempt to match universally important traits with elements of applicant data that reveal or predict them.</p>
+                        <p>The medical workforce, meanwhile, continues to evolve in response to the changing demographics and health needs of the population. The Centre for Workforce Intelligence is the UK authority on workforce planning and development and has recommended that reductions are needed in specialties such as general surgery, obstetrics and gynaecology, and anaesthesia, and that increases in training posts for general practice should continue. According to its analysis, an overall decrease of 167 entry-level training posts for specialties based at hospitals, and an increase of 450 in general-practice training posts, would correct current imbalances. The UK Department of Health has also vowed to tackle this specialty mismatch and has promised to make the two specialties currently under most pressure, general practice and emergency medicine, more attractive to new doctors.</p>
+                        <p>With increasing superspecialisation, practitioners in secondary-care disciplines tend to be world experts in narrow clinical areas. They may be enticed by the glamour of academia, but they often interact with relatively few patients during their careers. Generalists, meanwhile, have a far greater volume of clinical interactions and form relationships with countless patients. This has a different type of glamour, related to the unique opportunity to share everyday patient experiences. Indeed, the best general practitioners are invariably those who have mastered their unit of clinical interaction, the consultation. The very human skills of dealing with uncertainty, discussing patients' rational and irrational concerns, and developing trust, are vital to maintaining high-quality care in general practice.</p>
+                        <p>Perhaps the best way to attract doctors to this discipline is therefore to encourage the selection of future clinicians who are likely to have these traits in the first place. Although Boston University Medical School's admissions system may not be perfect, its innovation shows that, with more time and thought, medical school recruitment can be improved and made more holistic. It seems obvious that medical school admissions systems should be guided by workforce requirements. Naturally, intellectual achievements will always be important, and the pace of modern evidence-based medicine certainly demands bright and inquisitive minds. However, the problems of multimorbidity and an ageing population are very real, and there can be little doubt that future health systems will require well-rounded generalists who have the skills to deal with presentations across the biopsychosocial spectrum.</p>
+                        <p>A holistic admissions process is likely to facilitate the recruitment of suitably skilled people, who will appreciate the satisfaction of a lifetime building human relationships. So perhaps instead of coercing existing doctors towards facing the generalist challenges, the UK Department of Health would be better advised to invest in the medical school admissions process and re-evaluate recruitment to the profession altogether.</p>
+                    </div>
+
+                    <div class="reading-text-box">
+                        <h4>Text 2: Open patient records</h4>
+                        <p>In the US, the expansion of patient access to electronic medical records has been accompanied by numerous studies investigating the experiences of patients and clinicians. Starting from about 2000, the use of patient portals to display test results spread rapidly, and in 2010, 100 primary care doctors volunteered to open their free text entries to 10,000 of their patients. By 2019, more than 50 million patients in the US had access to what their clinicians wrote about their medical care. In 2021, the US federal government mandated that patients should have easy electronic access at no charge to all information held in their electronic health records. Today, patients can use readily available patient portals to access all the information a clinician might use to make decisions about their care in both inpatient and outpatient settings, including primary care and specialist notes, laboratory test results, and imaging reports. So, what might doctors in other countries whose governments are in the process of implementing transparent medical records learn from the US experience?</p>
+                        <p>US clinicians anticipated increased workloads as, from about 2000, patients gained access to test results and, a decade later, to visit notes. Primary care doctors worried about upset and confused patients contacting them or asking time-consuming questions during visits, and requesting changes to what had been written. These concerns were largely unrealised, and at the end of the year-long 2010 pilot, none of the participating doctors chose to turn off access to notes. In fact, their healthcare organisations chose instead to expand access to notes written by all clinicians. These results have been replicated in hundreds of provider organisations across the country, and follow-up studies indicate that clinicians' views of open notes become more positive over time.</p>
+                        <p>Some studies suggest clinicians are changing the way they document in the wake of open medical records. In one, around 37% of doctors reported spending at least 'some' more time writing notes, but preliminary inquiries using the timestamps from electronic health records suggest that any increase in time spent in documentation is miniscule (fractions of a second). It is likely that doctors learn to think differently about how to document, particularly when new to the practice of open medical records. Such additional cognitive burden may make it feel as if they are spending more time writing, even though direct measurements indicate no change. As doctors become accustomed to writing in this way, such strain may well ease.</p>
+                        <p>Clinicians worried initially about how transparent medical records may engender adversarial patient-clinician relationships and increase doctors' liability. Trusting relationships are known to diminish the risk of litigation, even when errors occur, and the US's overall experience suggests that open and transparent communication increases trust among patients, families, and clinicians. The movement to encourage disclosure and apology when problems arise, which has spread across US states in recent years, provides further reassurance. Studies indicate that increased transparency, disclosure, and apology may decrease the chance that patients and families will file lawsuits. Furthermore, insurers state that open medical records do not seem to increase the risk that patients will allege malpractice.</p>
+                        <p>Further challenges accompanying the rollout of open medical records remain. Clinicians have concerns about the wellbeing of their most vulnerable patients, such as those experiencing domestic violence. US regulations allow clinicians to withhold information from the patient portal if they believe it might harm an individual patient or another person. Yet it is unlikely that all doctors and patients are aware of this exception. Healthcare organisations could help ensure the safety of such vulnerable patients by providing training to clinicians and patients. Electronic health record vendors could also design provider functions that facilitate trauma informed care, including options to create confidential notes and enhanced privacy settings that allow patients greater control over what information is available on the portal.</p>
+                        <p>Another issue currently under debate in the US is when test results should be released to patients. In the past, with the common-sense expectation that clinicians would first communicate with patients, most health systems chose to delay the release of some findings, such as pathology examinations, medical imaging reports, or cardiac monitoring. In contrast, the new US rules mandate instantaneous release of virtually all results, regardless of whether they suggest bad tidings.</p>
+                        <p>Challenges such as these are not insolvable, but they will take a creative combination of cultural and technical adaptations to resolve. All new medicines are accompanied by side effects that affect some patients adversely, and for some patients, fully transparent records may be contraindicated. But in the US, the benefits of open medical records for all involved seem to well outweigh the risks. Patients consistently report clinically meaningful effects, and any potentially negative effects on practitioners have been limited and manageable.</p>
+                    </div>
+                </div>
+
+                <!-- READING QUESTIONS (RIGHT PANE) -->
+                <div class="scrollable-pane">
+                    <section class="section-card">
+                        <h3 class="part-title">READING PART A <span class="cite">[cite: 17]</span></h3>
+                        <p><em>Questions 1-8: Decide which text (A, B, C or D) the information comes from.</em></p>
+                        <div class="question-line">1. treatment for cellulitis caused by less common bacteria? <input type="text" id="r_q1" class="oet-input oet-input-short"></div>
+                        <div class="question-line">2. a reason for drawing around the area affected by cellulitis? <input type="text" id="r_q2" class="oet-input oet-input-short"></div>
+                        <div class="question-line">3. a system for determining where and how best to treat patients with cellulitis? <input type="text" id="r_q3" class="oet-input oet-input-short"></div>
+                        <div class="question-line">4. symptoms that may be experienced before the infection is visible? <input type="text" id="r_q4" class="oet-input oet-input-short"></div>
+                        <div class="question-line">5. equipment for ensuring that patients' legs are more comfortable in bed? <input type="text" id="r_q5" class="oet-input oet-input-short"></div>
+                        <div class="question-line">6. alternative medication for cellulitis patients who cannot tolerate one type of antibiotics? <input type="text" id="r_q6" class="oet-input oet-input-short"></div>
+                        <div class="question-line">7. how to deal with the infection site after the swelling has begun to reduce? <input type="text" id="r_q7" class="oet-input oet-input-short"></div>
+                        <div class="question-line">8. who should be consulted regarding pharmacotherapy for cellulitis? <input type="text" id="r_q8" class="oet-input oet-input-short"></div>
+
+                        <p><em>Questions 9-14: Answer with a word or short phrase.</em></p>
+                        <div class="question-line">9. Which antibiotic formulation is not suitable for treatment of cellulitis? <input type="text" id="r_q9" class="oet-input"></div>
+                        <div class="question-line">10. Which pre-existing weight-related condition would prompt a Class 2 categorisation? <input type="text" id="r_q10" class="oet-input"></div>
+                        <div class="question-line">11. What single dose of IV benzylpenicillin should be administered to a Class 4 patient? <input type="text" id="r_q11" class="oet-input"></div>
+                        <div class="question-line">12. What may be impaired if anti-inflammatories are given to patients who take ACE inhibitors? <input type="text" id="r_q12" class="oet-input"></div>
+                        <div class="question-line">13. What is the single dose of oral flucloxacillin recommended for the least serious category of cellulitis? <input type="text" id="r_q13" class="oet-input"></div>
+                        <div class="question-line">14. What is the maximum single dose of IV clindamycin recommended for a patient with Class 4 cellulitis? <input type="text" id="r_q14" class="oet-input"></div>
+
+                        <p><em>Questions 15-20: Complete each of the sentences.</em></p>
+                        <div class="question-line">15. It may be necessary to carry out <input type="text" id="r_q15" class="oet-input"> of blisters caused by cellulitis.</div>
+                        <div class="question-line">16. When prescribing anti-inflammatories, <input type="text" id="r_q16" class="oet-input"> may be used as an alternative to ibuprofen.</div>
+                        <div class="question-line">17. A patient may have been exposed to infection by swimming in surface water or using <input type="text" id="r_q17" class="oet-input">.</div>
+                        <div class="question-line">18. Conditions such as <input type="text" id="r_q18" class="oet-input"> or even metastatic cancer may be mistaken for cellulitis.</div>
+                        <div class="question-line">19. Patients with exacerbating cellulitis, a compromised immune system, and those with <input type="text" id="r_q19" class="oet-input"> should be hospitalised.</div>
+                        <div class="question-line">20. Patients suffering from <input type="text" id="r_q20" class="oet-input"> can experience repeat episodes of cellulitis.</div>
+
+                        <h3 class="part-title">READING PART B</h3>
+                        <div class="mcq-block" id="block-r21">
+                            <div class="mcq-question">1. According to the notice, the ENP course is only available to nurses who</div>
+                            <label class="mcq-option"><input type="radio" name="r_q21" value="A"> A) wish to apply for a hospital internship.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q21" value="B"> B) are prepared to pay for the course themselves.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q21" value="C"> C) are already employed in a related field.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r22">
+                            <div class="mcq-question">2. The guideline about breast pumps</div>
+                            <label class="mcq-option"><input type="radio" name="r_q22" value="A"> A) restricts their removal from the ward.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q22" value="B"> B) provides operating instructions.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q22" value="C"> C) indicates times of unavailability.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r23">
+                            <div class="mcq-question">3. According to the policy, what must the Registered Nurse do when a patient is discharged?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q23" value="A"> A) check the clarity of aftercare instructions</label>
+                            <label class="mcq-option"><input type="radio" name="r_q23" value="B"> B) liaise with other health professionals</label>
+                            <label class="mcq-option"><input type="radio" name="r_q23" value="C"> C) ensure easy accessibility to patient data</label>
+                        </div>
+                        <div class="mcq-block" id="block-r24">
+                            <div class="mcq-question">4. This notice provides information about</div>
+                            <label class="mcq-option"><input type="radio" name="r_q24" value="A"> A) the potential dangers that NGTs pose to patients.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q24" value="B"> B) the precautions to be followed during the procedure.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q24" value="C"> C) the correct technique for inserting a nasogastric tube.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r25">
+                            <div class="mcq-question">5. In this policy extract, what point is made about clinical guidelines?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q25" value="A"> A) Their content must be approved by all relevant staff.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q25" value="B"> B) They are a set of recommendations rather than regulations.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q25" value="C"> C) Ignoring them for no reason is likely to result in disciplinary action.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r26">
+                            <div class="mcq-question">6. The protocol instructs maternity staff administering Ferinject to</div>
+                            <label class="mcq-option"><input type="radio" name="r_q26" value="A"> A) temporarily discontinue prescribing iron tablets.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q26" value="B"> B) avoid giving it to breastfeeding women.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q26" value="C"> C) be alert for any negative reactions.</label>
+                        </div>
+
+                        <h3 class="part-title">READING PART C</h3>
+                        <p><em>Text 1: Planning for the future</em></p>
+                        <div class="mcq-block" id="block-r27">
+                            <div class="mcq-question">7. What is the writer's reaction to Professor Winston's strategy?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q27" value="A"> A) He approves of the idea behind it.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q27" value="B"> B) He is surprised by the theory it is based on.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q27" value="C"> C) He worries about the implications it may have.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q27" value="D"> D) He is disappointed by the narrowness of its focus.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r28">
+                            <div class="mcq-question">8. The writer's purpose in the second paragraph is to highlight</div>
+                            <label class="mcq-option"><input type="radio" name="r_q28" value="A"> A) the personal qualities needed for a career in medicine.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q28" value="B"> B) the difficulty of knowing which specialty fits each personality best.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q28" value="C"> C) the extensive choice of career options open to medical graduates.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q28" value="D"> D) the challenge of assessing candidates' suitability for a medical career.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r29">
+                            <div class="mcq-question">9. What does the word 'them' in the third paragraph refer to?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q29" value="A"> A) people applying for places at medical school</label>
+                            <label class="mcq-option"><input type="radio" name="r_q29" value="B"> B) aspects of medical school applicants' personalities</label>
+                            <label class="mcq-option"><input type="radio" name="r_q29" value="C"> C) documents relating to applications for medical school</label>
+                            <label class="mcq-option"><input type="radio" name="r_q29" value="D"> D) grades which applicants are likely to achieve at medical school</label>
+                        </div>
+                        <div class="mcq-block" id="block-r30">
+                            <div class="mcq-question">10. The fourth paragraph focuses on the</div>
+                            <label class="mcq-option"><input type="radio" name="r_q30" value="A"> A) predicted lack of qualified medical professionals in the UK.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q30" value="B"> B) reasons why fewer doctors are choosing to go into general practice.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q30" value="C"> C) ways to ensure the demand for certain medical professionals is met.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q30" value="D"> D) need to maintain a broad range of specialties in the medical workforce.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r31">
+                            <div class="mcq-question">11. The expression 'vowed to tackle' is used to stress</div>
+                            <label class="mcq-option"><input type="radio" name="r_q31" value="A"> A) a commitment to a certain objective.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q31" value="B"> B) an unwillingness to change direction.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q31" value="C"> C) a reaction to some unexpected criticism.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q31" value="D"> D) an acknowledgement of a miscalculation.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r32">
+                            <div class="mcq-question">12. What point does the writer make about superspecialisation?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q32" value="A"> A) Clinicians have little opportunity to develop certain valuable skills.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q32" value="B"> B) Generalist practitioners are having to deal with an increasing workload.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q32" value="C"> C) Specialists may be unaware of work carried out in other branches of medicine.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q32" value="D"> D) Some specialties attract clinicians with less interest in direct contact with patients.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r33">
+                            <div class="mcq-question">13. In the sixth paragraph, the writer says that medical schools should</div>
+                            <label class="mcq-option"><input type="radio" name="r_q33" value="A"> A) ensure that academic standards remain a priority.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q33" value="B"> B) encourage graduates to become general practitioners.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q33" value="C"> C) teach students how to build relationships with patients.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q33" value="D"> D) favour applicants who possess good interpersonal skills.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r34">
+                            <div class="mcq-question">14. What does the writer suggest about the UK Department of Health in the final paragraph?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q34" value="A"> A) It underestimates the scale of the challenge.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q34" value="B"> B) Its approach to solving the problem is misguided.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q34" value="C"> C) Its grasp of the population's healthcare needs is limited.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q34" value="D"> D) It has misunderstood the underlying causes of the situation.</label>
+                        </div>
+
+                        <p><em>Text 2: Open patient records</em></p>
+                        <div class="mcq-block" id="block-r35">
+                            <div class="mcq-question">15. In the first paragraph we learn that, in the USA, allowing patients access to their own medical records</div>
+                            <label class="mcq-option"><input type="radio" name="r_q35" value="A"> A) has been driven by doctors.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q35" value="B"> B) was prompted by targeted research.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q35" value="C"> C) was made possible by advances in technology.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q35" value="D"> D) happened over a relatively short period of time.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r36">
+                            <div class="mcq-question">16. What point does the writer make about open access medical records in the second paragraph?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q36" value="A"> A) Healthcare organisations decided to implement them more quickly than required.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q36" value="B"> B) Doctors made incorrect assumptions about the effects they would have.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q36" value="C"> C) Their implementation has affected doctors more than patients.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q36" value="D"> D) Pilot studies on them didn't go as expected.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r37">
+                            <div class="mcq-question">17. What is the writer doing in the third paragraph?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q37" value="A"> A) disputing the results of research into writing notes</label>
+                            <label class="mcq-option"><input type="radio" name="r_q37" value="B"> B) making suggestions about the best way to write notes</label>
+                            <label class="mcq-option"><input type="radio" name="r_q37" value="C"> C) offering a theory about doctors' perceptions of writing notes</label>
+                            <label class="mcq-option"><input type="radio" name="r_q37" value="D"> D) exploring the role that experience plays in writing effective notes</label>
+                        </div>
+                        <div class="mcq-block" id="block-r38">
+                            <div class="mcq-question">18. In the writer's opinion, the policy of open records has not led to an increase in lawsuits because</div>
+                            <label class="mcq-option"><input type="radio" name="r_q38" value="A"> A) knowing that patients can access their records means doctors feel compelled to apologise for errors.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q38" value="B"> B) having access to information leads people to have greater confidence in their doctors.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q38" value="C"> C) other changes in the US have made legal battles less attractive for patients.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q38" value="D"> D) sharing knowledge means doctors can learn from the mistakes of others.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r39">
+                            <div class="mcq-question">19. In the fourth paragraph, the writer believes that 'further assurance' is being given to</div>
+                            <label class="mcq-option"><input type="radio" name="r_q39" value="A"> A) patients.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q39" value="B"> B) families.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q39" value="C"> C) clinicians.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q39" value="D"> D) US states.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r40">
+                            <div class="mcq-question">20. What point does the writer make about vulnerable patients?</div>
+                            <label class="mcq-option"><input type="radio" name="r_q40" value="A"> A) Current legislation is not robust enough to protect them.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q40" value="B"> B) Keeping their data safe is not just the responsibility of doctors.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q40" value="C"> C) They are insufficiently informed about the way open records may endanger them.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q40" value="D"> D) Keeping information from them puts them more at risk than including it in their electronic records.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r41">
+                            <div class="mcq-question">21. In the sixth paragraph, the writer suggests that</div>
+                            <label class="mcq-option"><input type="radio" name="r_q41" value="A"> A) there is some news which is best given by a doctor.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q41" value="B"> B) some US health systems are trying to bypass a new rule.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q41" value="C"> C) test results should be checked by a doctor before patients get access to them.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q41" value="D"> D) new rules on access to results fail to distinguish between different types of test.</label>
+                        </div>
+                        <div class="mcq-block" id="block-r42">
+                            <div class="mcq-question">22. In the final paragraph, the phrase 'creative combination' is used to suggest that making open records work</div>
+                            <label class="mcq-option"><input type="radio" name="r_q42" value="A"> A) is the responsibility of both patients and doctors.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q42" value="B"> B) may require people and organisations to think in new ways.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q42" value="C"> C) means accepting that different groups of patients will use them differently.</label>
+                            <label class="mcq-option"><input type="radio" name="r_q42" value="D"> D) will depend on people accepting that there are both risks and benefits to using them.</label>
+                        </div>
+                    </section>
+                    <button class="btn btn-next" onclick="startWriting()">Finish Reading & Start Writing (45 Min)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. WRITING SECTION -->
+    <div id="screen-writing" class="screen">
+        <div class="container" style="max-width: 100%;">
+            <div class="split-view">
+                
+                <!-- CASE NOTES -->
+                <div class="scrollable-pane" style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                    <h2 class="part-title">WRITING SUB-TEST: MEDICINE <span class="cite">[cite: 17]</span></h2>
+                    <p><strong>Notes:</strong> Assume that today's date is 15 May 2021. You have been Ms Bennet's GP for two years and have been treating her recently following her hospitalisation for cardiac problems.</p>
+                    
+                    <h4>PATIENT DETAILS:</h4>
+                    <ul>
+                        <li><strong>Name:</strong> Eleanor Bennet</li>
+                        <li><strong>DOB:</strong> 06 Dec 1975 (45 y.o.)</li>
+                        <li><strong>Address:</strong> 32 Station Road, Oakville</li>
+                    </ul>
+
+                    <h4>Social background:</h4>
+                    <ul>
+                        <li>Commercial lawyer - frequent international travel</li>
+                        <li>Divorced - 2 daughters (18 & 16 y.o.)</li>
+                        <li>Children live mainly with children's father (custody currently contested) - Pt reports extreme stress re worries about quality of father's childcare</li>
+                        <li>Since 2019 ↑ alcohol intake from 10 → 40 units/wk; smokes 20 cigs/day</li>
+                        <li>BMI 29 (overweight) - little exercise (gym x 1/mth)</li>
+                    </ul>
+
+                    <h4>Family history:</h4>
+                    <ul>
+                        <li>Father died 53 y.o. - heart disease</li>
+                        <li>Older brother - mental health problems (2 suicide attempts in last 12 mths)</li>
+                    </ul>
+
+                    <h4>Medical history:</h4>
+                    <ul>
+                        <li><strong>08 Feb 2021, 0800 hrs:</strong> Heart attack at airport after long-haul flight (pain in jaw, nausea, SOB). Defibrillator applied by first-aider</li>
+                        <li><strong>08 Feb 2021, 0915 hrs:</strong> Emergency hospital admission (Oakville General Hospital). Balloon-expandable stent applied via groin (arm tried initially, artery too small)</li>
+                        <li><strong>15 Feb 2021:</strong> Discharged, 4 weeks off work → gradual return to work. Mother moved in to give care. Pt reports stress (poor relationship)</li>
+                    </ul>
+
+                    <h4>Medications/treatment on discharge:</h4>
+                    <ul>
+                        <li>Captopril 50mg 2x/day</li>
+                        <li>Atorvastatin 80mg daily</li>
+                        <li>Referral for cardiac rehabilitation sessions - non-attendance</li>
+                        <li>Counselling given re lifestyle changes</li>
+                    </ul>
+
+                    <h4>Presenting complaint (15 May 2021):</h4>
+                    <ul>
+                        <li>Side effects of captopril - dizziness and light-headedness, headaches, episodes of diarrhoea</li>
+                        <li>Pt reports stress from side effects</li>
+                        <li>Pt requests captopril discontinuation (side effects) - reluctant to start new meds</li>
+                    </ul>
+
+                    <h4>Plan:</h4>
+                    <ul>
+                        <li>Referral to cardiologist re review of meds and ways to encourage lifestyle changes</li>
+                    </ul>
+
+                    <div style="background: #ffebee; padding: 15px; border-left: 4px solid var(--rojo-alerta); margin-top: 20px;">
+                        <h4>Writing Task</h4>
+                        <p>Using the information given in the case notes, write a letter of referral to Dr Banerjee, consultant cardiologist. In your letter, briefly outline Ms Bennet's history and treatment so far, requesting advice and a review of her medication. Address your letter to Dr James Banerjee, Consultant Cardiologist, Sanditon City Hospital, Sanditon.</p>
+                        <p><strong>In your answer:</strong> Expand the relevant notes into complete sentences. Do not use note form. Use letter format. The body of the letter should be approximately 180-200 words.</p>
+                    </div>
+                </div>
+
+                <!-- WRITING AREA -->
+                <div>
+                    <section class="section-card">
+                        <h3 class="part-title">YOUR LETTER</h3>
+                        <textarea id="writing-response" class="writing-textarea" placeholder="Start typing your letter here..."></textarea>
+                        <button class="btn btn-next" onclick="finishExam()" style="width: 100%;">Finalize Entire Exam</button>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. RESULTS DASHBOARD -->
+    <div id="screen-results" class="screen">
+        <div class="container">
+            <section class="section-card" id="results-dashboard">
+                <img src="https://i.imgur.com/s05NqFM.png" alt="Logo" style="height: 80px; margin-bottom: 20px;">
+                <h2>Official Score Report</h2>
+                <h4 id="report-name" style="margin-bottom: 2rem; color: #555;"></h4>
+
+                <div class="split-view" style="margin-bottom: 2rem;">
+                    <div>
+                        <h3 style="color: var(--azul-primario);">Listening</h3>
+                        <div class="score-circle" id="listen-score">0/42</div>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--naranja-vibrante);">Reading</h3>
+                        <div class="score-circle" id="read-score" style="background: var(--azul-primario); box-shadow: 0 4px 15px rgba(10, 70, 140, 0.4);">0/42</div>
+                    </div>
+                </div>
+
+                <div style="text-align: left; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 2rem;">
+                    <h3 style="color: var(--azul-primario); margin-bottom: 10px;">Writing Sample Comparison <span class="cite">[cite: 17]</span></h3>
+                    <p style="color: #666; font-size: 0.9rem;">Compare your letter with the official passing sample below.</p>
+                    <div class="split-view">
+                        <div>
+                            <strong>Your Letter:</strong>
+                            <p id="student-letter" style="white-space: pre-wrap; font-size: 0.9rem;"></p>
+                        </div>
+                        <div style="border-left: 2px dashed #ccc; padding-left: 20px;">
+                            <strong>Official Sample Answer:</strong>
+                            <p style="white-space: pre-wrap; font-size: 0.9rem; color: #444;">Dr James Banerjee
+Consultant Cardiologist
+Sanditon City Hospital
+Sanditon
+15 May 2021
+
+Dear Dr Banerjee,
+Re: Ms Eleanor Bennet, DOB: 06/12/1975
+
+I am writing to refer Ms Eleanor Bennet, a 45-year-old commercial lawyer, who requires a review of her cardiac medication and further management advice.
+
+Ms Bennet experienced a myocardial infarction on 08 February 2021 following a long-haul flight. She underwent an emergency procedure for a balloon-expandable stent via the groin at Oakville General Hospital. She was discharged on Captopril 50mg twice daily and Atorvastatin 80mg daily. Although lifestyle counseling was provided and a referral for cardiac rehabilitation was made, she did not attend the sessions.
+
+Today, Ms Bennet presented with side effects attributed to Captopril, including dizziness, light-headedness, headaches, and episodes of diarrhoea. Consequently, she has requested to discontinue Captopril and is hesitant to start alternative medications. She reports significant ongoing stress regarding these side effects, compounded by severe personal stressors including contested custody of her two daughters, a difficult living situation with her mother, and a family history of premature heart disease. Furthermore, her lifestyle includes heavy smoking, high alcohol consumption, and physical inactivity.
+
+I would appreciate your expert advice and a review of her medication regime, as well as guidance on strategies to encourage her engagement with lifestyle modifications.
+
+Yours sincerely,
+Doctor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" style="background: var(--verde-exito);" onclick="window.print()">📥 Download PDF Report</button>
+            </section>
+            
+            <section class="section-card" id="full-transcript" style="display: none;"></section>
+        </div>
+    </div>
+
+    <script>
+        // NAVIGATION & TIMER LOGIC
+        let timerInterval;
+        let timeLeft = 0;
+        const screens = ['screen-login', 'screen-listening', 'screen-reading', 'screen-writing', 'screen-results'];
+        let studentName = "";
+
+        function showScreen(screenId) {
+            screens.forEach(s => document.getElementById(s).classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function runTimer(minutes, callback) {
+            clearInterval(timerInterval);
+            timeLeft = minutes * 60;
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.classList.remove('timer-warning');
+            
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                    let s = (timeLeft % 60).toString().padStart(2, '0');
+                    timerDisplay.innerText = `${m}:${s}`;
+                    if(timeLeft < 300) timerDisplay.classList.add('timer-warning');
+                } else {
+                    clearInterval(timerInterval);
+                    alert("Time's up for this section!");
+                    callback();
+                }
+            }, 1000);
+        }
+
+        function startListening() {
+            studentName = document.getElementById('student-name').value.trim();
+            if(!studentName) { alert("Please enter your name to start."); return; }
+            
+            document.getElementById('display-name').innerText = studentName;
+            document.getElementById('main-header').style.display = 'flex';
+            document.getElementById('section-title').innerText = "Listening Test (40 Min)";
+            
+            showScreen('screen-listening');
+            document.getElementById('oet-audio-player').play().catch(e => console.log("User interaction required"));
+            runTimer(40, startReading);
+        }
+
+        function startReading() {
+            document.getElementById('oet-audio-player').pause();
+            document.getElementById('section-title').innerText = "Reading Test (60 Min)";
+            showScreen('screen-reading');
+            runTimer(60, startWriting);
+        }
+
+        function startWriting() {
+            document.getElementById('section-title').innerText = "Writing Test (45 Min)";
+            showScreen('screen-writing');
+            runTimer(45, finishExam);
+        }
+
+        // GRADING LOGIC
+        function gradeSectionA(prefix, totalQs, answerKey) {
+            let score = 0;
+            for(let i=1; i<=totalQs; i++) {
+                let el = document.getElementById(prefix + '_q' + i);
+                if(!el) continue;
+                let userVal = el.value.trim().toLowerCase();
+                let correctOptions = answerKey[i].toLowerCase().split('|');
+                let isCorrect = correctOptions.some(opt => userVal === opt.trim());
+                
+                let span = document.createElement('span');
+                span.className = 'correction-span';
+                if(isCorrect && userVal !== "") {
+                    el.style.borderColor = "var(--verde-exito)";
+                    el.style.backgroundColor = "#e8f5e9";
+                    span.classList.add('correct-tag');
+                    span.innerText = "✔️";
+                    score++;
+                } else {
+                    el.style.borderColor = "var(--rojo-alerta)";
+                    el.style.backgroundColor = "#ffebee";
+                    span.classList.add('incorrect-tag');
+                    span.innerText = `❌ Ans: ${correctOptions[0]}`;
+                }
+                el.parentNode.appendChild(span);
+            }
+            return score;
+        }
+
+        function gradeSectionMCQ(prefix, start, end, answerKey) {
+            let score = 0;
+            for(let i=start; i<=end; i++) {
+                let radios = document.getElementsByName(prefix + '_q' + i);
+                let selected = "";
+                for(let r of radios) if(r.checked) selected = r.value;
+                
+                let block = document.getElementById('block-' + prefix.replace('_','') + i);
+                if(!block) continue;
+
+                let correctVal = answerKey[i];
+                if(selected === correctVal) {
+                    block.style.border = "2px solid var(--verde-exito)";
+                    block.style.backgroundColor = "#e8f5e9";
+                    score++;
+                } else {
+                    block.style.border = "2px solid var(--rojo-alerta)";
+                    block.style.backgroundColor = "#ffebee";
+                    let p = document.createElement('p');
+                    p.className = 'correction-mcq';
+                    p.innerText = `❌ Incorrect. Official Answer: ${correctVal}`;
+                    block.appendChild(p);
+                }
+            }
+            return score;
+        }
+
+        function finishExam() {
+            clearInterval(timerInterval);
+            document.getElementById('main-header').style.display = 'none';
+
+            // LISTENING KEYS
+            const lKeyA = {
+                1: "bird flu", 2: "chills", 3: "headache", 4: "shortness of breath", 5: "friend's farm",
+                6: "coop|coops", 7: "died", 8: "throat swab", 9: "blood test", 10: "isolate", 
+                11: "5 to 7 days|5-7 days|five to seven days", 12: "sick or dead", 13: "4 days|four days",
+                14: "fever", 15: "up and down", 16: "headache", 17: "stomach", 18: "runny nose",
+                19: "healthy", 20: "flu shot", 21: "co-worker|coworker", 22: "nasal", 23: "isolation|isolated", 24: "aspirin"
+            };
+            const lKeyBC = { 25:"A", 26:"C", 27:"A", 28:"C", 29:"A", 30:"C", 31:"B", 32:"C", 33:"C", 34:"A", 35:"A", 36:"B", 37:"B", 38:"A", 39:"A", 40:"C", 41:"A", 42:"B" };
+            
+            // READING KEYS
+            const rKeyA = {
+                1: "C", 2: "D", 3: "B", 4: "A", 5: "D", 6: "C", 7: "D", 8: "C",
+                9: "topical|topical antibiotics", 10: "morbid obesity", 11: "2.4 g|2.4g", 12: "renal function", 13: "500 mg|500mg", 14: "1.2 g|1.2g",
+                15: "aseptic aspiration", 16: "naproxen", 17: "hot tubs", 18: "deep vein thrombosis|dvt", 19: "facial", 20: "chronic lymphoedema|chronic lymphedema"
+            };
+            const rKeyBC = { 21:"C", 22:"A", 23:"B", 24:"B", 25:"B", 26:"A", 27:"A", 28:"D", 29:"B", 30:"C", 31:"A", 32:"A", 33:"D", 34:"B", 35:"C", 36:"B", 37:"C", 38:"B", 39:"C", 40:"B", 41:"A", 42:"B" };
+
+            // GRADING
+            let listenScore = gradeSectionA('l', 24, lKeyA) + gradeSectionMCQ('l', 25, 42, lKeyBC);
+            let readScore = gradeSectionA('r', 20, rKeyA) + gradeSectionMCQ('r', 21, 42, rKeyBC);
+
+            // RENDER RESULTS
+            document.getElementById('report-name').innerText = "Candidate: " + studentName;
+            document.getElementById('listen-score').innerText = `${listenScore}/42`;
+            document.getElementById('read-score').innerText = `${readScore}/42`;
+            document.getElementById('student-letter').innerText = document.getElementById('writing-response').value || "(No response provided)";
+
+            showScreen('screen-results');
+            
+            // Re-render hidden sections for print
+            document.getElementById('screen-listening').style.display = 'block';
+            document.getElementById('screen-reading').style.display = 'block';
+            document.getElementById('screen-writing').style.display = 'block';
+            document.querySelector('#screen-writing .btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
