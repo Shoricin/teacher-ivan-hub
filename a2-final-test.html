@@ -28,9 +28,18 @@
 
         h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; color: var(--azul-oscuro); }
 
+        #login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--gris-claro);
+            padding: 20px;
+        }
+
         #login-screen {
+            width: 100%;
             max-width: 500px;
-            margin: 100px auto;
             background: white;
             padding: 40px 50px;
             border-radius: 12px;
@@ -223,7 +232,7 @@
             .grid-2 { grid-template-columns: 1fr; gap: 15px; }
             .actions { flex-direction: column; align-items: center; }
             .btn-action { max-width: none; }
-            #login-screen { margin: 50px 10px; padding: 30px 20px; }
+            #login-screen { padding: 30px 20px; }
         }
 
         @media print {
@@ -247,26 +256,28 @@
 <body>
 
     <!-- Pantalla de Login (Agregada antes de iniciar el examen) -->
-    <div id="login-screen">
-        <h2>A2 Certification Login</h2>
-        <div class="exam-info">
-            <p><strong>Date:</strong> <span id="current-date"></span></p>
-            <p><strong>Time:</strong> <span id="current-time"></span></p>
-            <p><strong>Duration:</strong> 40 Minutes</p>
+    <div id="login-container">
+        <div id="login-screen">
+            <h2>A2 Certification Login</h2>
+            <div class="exam-info">
+                <p><strong>Date:</strong> <span id="current-date"></span></p>
+                <p><strong>Time:</strong> <span id="current-time"></span></p>
+                <p><strong>Duration:</strong> 40 Minutes</p>
+            </div>
+            
+            <div class="login-field">
+                <label for="student-name">Full Name:</label>
+                <input type="text" id="student-name" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="login-field">
+                <label for="student-dob">Date of Birth:</label>
+                <input type="date" id="student-dob" required>
+            </div>
+            
+            <button class="btn-start" onclick="startExam()">Start Exam</button>
+            <p id="login-error" style="color: var(--rojo-error); display: none; margin-top: 10px; font-weight: bold;">Please fill in all fields.</p>
         </div>
-        
-        <div class="login-field">
-            <label for="student-name">Full Name:</label>
-            <input type="text" id="student-name" placeholder="Enter your full name" required>
-        </div>
-        
-        <div class="login-field">
-            <label for="student-dob">Date of Birth:</label>
-            <input type="date" id="student-dob" required>
-        </div>
-        
-        <button class="btn-start" onclick="startExam()">Start Exam</button>
-        <p id="login-error" style="color: var(--rojo-error); display: none; margin-top: 10px; font-weight: bold;">Please fill in all fields.</p>
     </div>
 
     <!-- Interfaz principal del examen (Oculta hasta pasar el Login) -->
@@ -289,50 +300,50 @@
             </div>
 
             <div class="header">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) Countryside, forest, or mountains</option>
-                        <option value="b">B) Big cities and crowded places</option>
-                        <option value="c">C) Small islands</option>
-                    </select>
+                <h1>A2 FINAL CERTIFICATION TEST</h1>
+                <p>Listening, Reading, Grammar & Writing</p>
+                <span class="score-badge">Total Score: 100 Points</span>
+            </div>
+
+            <div class="exercise-section">
+                <h3><span>1</span> Part 1: Listening Comprehension (30 pts)</h3>
+                <p class="instructions">Listen to the audio about travel and answer the 10 questions. Each question is worth 3 points.</p>
+                
+                <div class="audio-container">
+                    <!-- Audio Track from Repository -->
+                    <audio id="exam-audio" controls controlsList="nodownload">
+                        <source src="audios/A2 English Listening Practice - Travel.m4a" type="audio/mp4">
+                        Your browser does not support the audio element.
+                    </audio>
                 </div>
-                <div class="question">4. Where did he recently take a road trip?<br>
-                    <select class="mc-select" data-answer="b">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) Through the USA</option>
-                        <option value="b">B) Tuscany, Italy</option>
-                        <option value="c">C) Portugal</option>
-                    </select>
-                </div>
-                <div class="question">5. Where did he go on a backpacking trip?<br>
-                    <select class="mc-select" data-answer="a">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) Portugal and Spain</option>
-                        <option value="b">B) France and Italy</option>
-                        <option value="c">C) The US and Mexico</option>
-                    </select>
-                </div>
-                <div class="question">6. How did they travel during their backpacking trip?<br>
-                    <select class="mc-select" data-answer="c">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) They rented a car</option>
-                        <option value="b">B) Only by airplane</option>
-                        <option value="c">C) Walking, buses, and trains</option>
-                    </select>
-                </div>
-                <div class="question">7. What bad experience did he have in Madrid?<br>
-                    <select class="mc-select" data-answer="c">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) His flight was canceled</option>
-                        <option value="b">B) He lost his backpack</option>
-                        <option value="c">C) He was bitten by bed bugs</option>
-                    </select>
-                </div>
-                <div class="question">8. Why was the bug experience worse for him?<br>
-                    <select class="mc-select" data-answer="b">
-                        <option value="">-- Select --</option>
-                        <option value="a">A) He is allergic to medicine</option>
-                        <option value="b">B) He has really sensitive skin</option>
-                        <option value="c">C) He was alone</option>
+
+                <div class="grid-2">
+                    <div class="question">1. Where did the speaker travel many times when he was young?<br>
+                        <select class="mc-select" data-answer="b">
+                            <option value="">-- Select --</option>
+                            <option value="a">A) Spain</option>
+                            <option value="b">B) Hawaii</option>
+                            <option value="c">C) Italy</option>
+                        </select>
+                    </div>
+                    <div class="question">2. How many times has he been to Hawaii?<br>
+                        <select class="mc-select" data-answer="c">
+                            <option value="">-- Select --</option>
+                            <option value="a">A) 3 or 4 times</option>
+                            <option value="b">B) Exactly 5 times</option>
+                            <option value="c">C) About 6 or 7 times</option>
+                        </select>
+                    </div>
+                    <div class="question">3. What kind of environment does he prefer in general?<br>
+                        <select class="mc-select" data-answer="a">
+                            <option value="">-- Select --</option>
+                            <option value="a">A) Countryside, forest, or mountains</option>
+                            <option value="b">B) Big cities and crowded places</option>
+                            <option value="c">C) Small islands</option>
+                        </select>
+                    </div>
+                    <div class="question">4. Where did he recently take a road trip?<br>
+                        <select class="mc-select" data-answer="b">
                     </select>
                 </div>
                 <div class="question">9. Where does he prefer to stay lately when he travels?<br>
@@ -521,7 +532,7 @@
             document.getElementById('print-date').innerText = new Date().toLocaleDateString();
 
             // Hide login, show exam
-            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('login-container').style.display = 'none';
             document.getElementById('exam-interface').style.display = 'block';
 
             // Start Timer
