@@ -623,6 +623,9 @@
             // 2. Grade Text Inputs (Grammar)
             const textInputs = document.querySelectorAll('input[type="text"]');
             textInputs.forEach(input => {
+                // Evitamos que intente calificar el input del Nombre en el Login
+                if (!input.hasAttribute('data-answer')) return; 
+
                 input.readOnly = true; 
 
                 let userAnswer = input.value.toLowerCase().trim().replace(/[\.,!]$/, '').replace(/\s+/g, ' ');
