@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business English for Motorcycle Trade - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center;
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; margin-top: 10px; }
+        .hero-title span { color: var(--naranja-vibrante); }
+        .hero-subtitle { font-size: 1.2rem; font-weight: 300; margin-top: 10px; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+        /* Game Section */
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 10px;
+        }
+        .score-board { font-size: 1.2rem; font-weight: 700; color: var(--naranja-vibrante); }
+        
+        .worksheet-section {
+            background: var(--blanco-puro); padding: 3rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 8px solid var(--naranja-vibrante);
+            position: relative;
+        }
+        
+        .question-number { font-family: var(--font-titulares); color: var(--azul-primario); font-size: 1.5rem; margin-bottom: 1rem; }
+        .question-text { font-size: 1.3rem; margin-bottom: 2rem; font-weight: 600; color: #333; }
+        
+        .options-grid { display: grid; gap: 15px; margin-bottom: 2rem; }
+        
+        .option-btn {
+            background: #f8fafc; border: 2px solid var(--gris-neutro); padding: 15px 20px;
+            border-radius: 8px; font-family: var(--font-cuerpo); font-size: 1.1rem; font-weight: 600;
+            color: var(--azul-primario); cursor: pointer; transition: all 0.3s; text-align: left;
+        }
+        .option-btn:hover:not(:disabled) { border-color: var(--naranja-vibrante); background: #fff5f0; transform: translateX(5px); }
+        
+        .option-btn.correct { background: #e8f5e9; border-color: var(--verde-exito); color: var(--verde-exito); }
+        .option-btn.wrong { background: #ffebee; border-color: var(--rojo-alerta); color: var(--rojo-alerta); text-decoration: line-through; }
+        
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+
+        /* Feedback Area */
+        .feedback-area {
+            display: none; background: #e8f5e9; padding: 20px; border-radius: 8px;
+            border-left: 5px solid var(--verde-exito); margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .feedback-area h4 { color: var(--verde-exito); margin-bottom: 10px; font-size: 1.2rem; }
+        .feedback-area p { font-size: 1.05rem; color: #333; }
+
+        .btn-next { 
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px; 
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; 
+            font-size: 1.2rem; width: 100%; display: none;
+        }
+        .btn-next:hover { background: #e05e15; transform: translateY(-2px); }
+
+        /* Completed State */
+        .completion-message { text-align: center; display: none; }
+        .completion-message h2 { color: var(--verde-exito); font-size: 2.5rem; margin-bottom: 1rem; }
+        .completion-message p { font-size: 1.2rem; color: #555; margin-bottom: 2rem; }
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1 class="hero-title">Motorcycle Parts <span>Trade in China</span></h1>
+        <p class="hero-subtitle">Business English Interactive Practice - Teacher Ivan</p>
+    </header>
+
+    <div class="container">
+        <div class="game-header" id="gameHeader">
+            <div>
+                <h3>Fielding School</h3>
+                <span style="font-size: 0.9rem; color: #666;">B1/B2 Negotiation Module</span>
+            </div>
+            <div class="score-board">
+                Score: <span id="scoreDisplay">0</span> / 30
+            </div>
+        </div>
+
+        <div class="worksheet-section" id="quizSection">
+            <div class="question-number">Question <span id="qNumber">1</span> of 30</div>
+            <div class="question-text" id="qText">Loading question...</div>
+            
+            <div class="options-grid" id="optionsContainer">
+                <!-- Buttons injected by JS -->
+            </div>
+
+            <div class="feedback-area" id="feedbackBox">
+                <h4>✔️ Correct!</h4>
+                <p id="explanationText">Explanation goes here.</p>
+            </div>
+
+            <button class="btn-next" id="nextBtn" onclick="nextQuestion()">Next Question ➔</button>
+        </div>
+
+        <div class="worksheet-section completion-message" id="completionSection">
+            <h2>🎉 Negotiation Complete!</h2>
+            <p>You have successfully finished the Motorcycle Parts Business English preparation.</p>
+            <p>Final Score: <strong id="finalScore" style="color: var(--naranja-vibrante); font-size: 1.5rem;"></strong> / 30</p>
+            <button class="btn-next" style="display: block; margin-top: 2rem;" onclick="location.reload()">Restart Practice</button>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | Fielding School - English for Business</p>
+    </footer>
+
+    <script>
+        const questionsData = [{"q": "Hello, we are interested ________ buying motorcycle parts in bulk.", "options": ["in", "on", "at"], "answer": 0, "explanation": "Grammar: Preposition combination. We always say 'interested in' + verb(-ing) or noun. 'Interested on' is incorrect."}, {"q": "Could you please send us your latest ________ for engine blocks?", "options": ["catalog", "catalogueing", "cataloged"], "answer": 0, "explanation": "Vocabulary: A 'catalog' (or catalogue) is a list of items for sale. The sentence needs a noun here, not a verb."}, {"q": "What is the Minimum Order ________ (MOQ) for the disc brakes?", "options": ["Quantity", "Quality", "Quarter"], "answer": 0, "explanation": "Vocabulary: MOQ stands for 'Minimum Order Quantity', which is the lowest number of items a supplier is willing to sell at once."}, {"q": "Are these exhaust pipes compatible ________ 150cc engines?", "options": ["with", "for", "to"], "answer": 0, "explanation": "Grammar: The adjective 'compatible' is almost always followed by the preposition 'with'."}, {"q": "If we order 1000 units, ________ you offer a discount?", "options": ["can", "do", "are"], "answer": 0, "explanation": "Grammar: First Conditional request. We use modal verbs like 'can', 'could', or 'will' to make polite requests in business."}, {"q": "The ________ time for production is usually 15 to 20 days.", "options": ["lead", "wait", "make"], "answer": 0, "explanation": "Business Vocabulary: 'Lead time' is the exact business term for the time between initiating a process and its completion."}, {"q": "Do you have these clutch cables ________ stock right now?", "options": ["in", "on", "by"], "answer": 0, "explanation": "Grammar: 'In stock' is a fixed prepositional phrase meaning the goods are available in the warehouse."}, {"q": "We would like to request a ________ before placing a large order.", "options": ["sample", "example", "model"], "answer": 0, "explanation": "Vocabulary: In manufacturing and trading, a 'sample' is a small quantity of a product sent to show what the rest will be like."}, {"q": "Our company ________ located in Sucre, Bolivia.", "options": ["is", "are", "be"], "answer": 0, "explanation": "Grammar: Subject-Verb Agreement. 'Company' is a singular collective noun, so we use 'is'."}, {"q": "We are looking for a reliable ________ of shock absorbers.", "options": ["supplier", "supply", "supplying"], "answer": 0, "explanation": "Vocabulary: A 'supplier' is a person or organization that provides something needed such as a product or service."}, {"q": "Can you give us your best price ________ FOB Guangzhou?", "options": ["based on", "based in", "base to"], "answer": 0, "explanation": "Business English: 'Based on' means calculated using. FOB (Free on Board) is a shipping term."}, {"q": "The brake pads must ________ made of high-quality ceramic.", "options": ["be", "is", "been"], "answer": 0, "explanation": "Grammar: After modal verbs like 'must', we always use the base form of the verb ('be')."}, {"q": "How long ________ it take to ship the parts to South America?", "options": ["does", "do", "is"], "answer": 0, "explanation": "Grammar: Present Simple question. We use 'does' as the auxiliary verb for 'it' (the shipping process)."}, {"q": "We will pay a 30% deposit ________ advance.", "options": ["in", "at", "on"], "answer": 0, "explanation": "Grammar: 'In advance' is a set prepositional phrase meaning before a particular time or event happens."}, {"q": "The remaining 70% balance must be paid ________ shipment.", "options": ["before", "front", "previous"], "answer": 0, "explanation": "Vocabulary: 'Before' is the correct preposition of time. 'Previous' is an adjective, not a preposition."}, {"q": "Do you accept payment ________ T/T (Telegraphic Transfer)?", "options": ["by", "with", "through"], "answer": 0, "explanation": "Grammar: We use 'by' to talk about methods of payment or transport (e.g., by credit card, by T/T, by sea)."}, {"q": "If the quality is good, we ________ order more next month.", "options": ["will", "would", "do"], "answer": 0, "explanation": "Grammar: First Conditional. 'If' + Present Simple (is), then 'will' + Base Verb (order) for future possibilities."}, {"q": "What is the warranty ________ for the engine cylinders?", "options": ["period", "time", "date"], "answer": 0, "explanation": "Vocabulary: 'Warranty period' is the standard collocation used in business to describe how long a guarantee lasts."}, {"q": "Please ________ that the packaging is strong enough for sea freight.", "options": ["ensure", "insure", "assure"], "answer": 0, "explanation": "Vocabulary: 'Ensure' means to make sure that something happens. 'Insure' is for financial insurance."}, {"q": "The customs ________ require specific documentation for the import.", "options": ["authorities", "authors", "authorized"], "answer": 0, "explanation": "Vocabulary: 'Customs authorities' are the official government staff who regulate goods entering a country."}, {"q": "Could you provide the ________ weight of the boxes?", "options": ["gross", "full", "whole"], "answer": 0, "explanation": "Business Vocabulary: 'Gross weight' is the total weight of the product including its packaging."}, {"q": "We need the spare parts ________ than the 15th of November.", "options": ["no later", "not late", "no lately"], "answer": 0, "explanation": "Grammar: 'No later than' is a set comparative phrase used to establish strict deadlines."}, {"q": "Is the original Certificate of Origin ________ in the documents?", "options": ["included", "include", "including"], "answer": 0, "explanation": "Grammar: Passive voice question. 'Is' + Subject + Past Participle ('included')."}, {"q": "We ________ doing business with you for a long time.", "options": ["look forward to", "look forward", "look forward for"], "answer": 0, "explanation": "Grammar: 'Look forward to' + verb(-ing) is the standard professional closing phrase to express excitement about the future."}, {"q": "Please send us the formal ________ (PI) so we can transfer the money.", "options": ["Proforma Invoice", "Professional Invoice", "Provisional Invoice"], "answer": 0, "explanation": "Vocabulary: A 'Proforma Invoice' is a preliminary bill of sale sent to buyers in advance of a shipment or delivery of goods."}, {"q": "These motorcycle chains are made ________ heavy-duty steel.", "options": ["of", "by", "for"], "answer": 0, "explanation": "Grammar: 'Made of' is used when the basic material has not changed its nature during the manufacturing process."}, {"q": "We can ________ the shipping costs if you increase your order to 2000 units.", "options": ["reduce", "less", "minus"], "answer": 0, "explanation": "Vocabulary: 'Reduce' is a verb meaning to make smaller or less in amount. 'Less' is an adjective/adverb."}, {"q": "The factory ________ producing these parts since 2015.", "options": ["has been", "is", "was"], "answer": 0, "explanation": "Grammar: Present Perfect Continuous ('has been producing') is used for an action that started in the past and continues to the present, especially with 'since'."}, {"q": "Can you confirm ________ the goods have been shipped?", "options": ["whether", "weather", "where"], "answer": 0, "explanation": "Grammar: 'Whether' is used to express a doubt or choice between alternatives (similar to 'if' but more formal)."}, {"q": "Thank you for your quick ________ to our inquiry.", "options": ["response", "respond", "responding"], "answer": 0, "explanation": "Grammar: After an adjective ('quick'), we need a noun ('response'). 'Respond' is a verb."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const qNumberEl = document.getElementById('qNumber');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackBox = document.getElementById('feedbackBox');
+        const explanationText = document.getElementById('explanationText');
+        const nextBtn = document.getElementById('nextBtn');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const quizSection = document.getElementById('quizSection');
+        const completionSection = document.getElementById('completionSection');
+        const gameHeader = document.getElementById('gameHeader');
+        const finalScoreEl = document.getElementById('finalScore');
+
+        function loadQuestion() {
+            // Reset state
+            feedbackBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const q = questionsData[currentQuestionIndex];
+            qNumberEl.textContent = currentQuestionIndex + 1;
+            qTextEl.textContent = q.q;
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = String.fromCharCode(65 + index) + ". " + opt; // A. option, B. option
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const q = questionsData[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedIndex === q.answer) {
+                // Correct
+                btnElement.classList.add('correct');
+                score++;
+                scoreDisplay.textContent = score;
+                
+                // Show Explanation
+                feedbackBox.style.display = 'block';
+                explanationText.innerHTML = "<strong>" + q.options[q.answer] + "</strong> is the right choice. <br><br>" + q.explanation;
+                
+                // Show Next Button
+                nextBtn.style.display = 'block';
+            } else {
+                // Incorrect
+                btnElement.classList.add('wrong');
+                btnElement.classList.add('shake');
+                
+                // Keep allowing them to click other options if wrong
+                setTimeout(() => {
+                    btnElement.classList.remove('shake');
+                    // Re-enable other non-wrong buttons
+                    buttons.forEach(b => {
+                        if(!b.classList.contains('wrong')) b.disabled = false;
+                    });
+                }, 400);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                // Finish Game
+                quizSection.style.display = 'none';
+                gameHeader.style.display = 'none';
+                completionSection.style.display = 'block';
+                finalScoreEl.textContent = score;
+            }
+        }
+
+        // Initialize game
+        loadQuestion();
+    </script>
+</body>
+</html>
