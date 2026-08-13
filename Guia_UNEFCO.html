@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía Interactiva — Extracción e IA para Evaluaciones UNEFCO</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #080f1e;
+      --bg-card: rgba(12, 26, 48, 0.75);
+      --accent: #2563eb;
+      --accent-light: #3b82f6;
+      --green: #22c55e;
+      --gold: #f59e0b;
+      --text-white: #ffffff;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --font-title: 'Sora', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+    }
+
+    /* Ambient Background Effect */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: 
+        radial-gradient(ellipse 60% 70% at 10% 10%, rgba(37,99,235,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 90% 90%, rgba(245,158,11,0.08) 0%, transparent 60%);
+      pointer-events: none; z-index: -1;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+    header h1 {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .badge-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-light);
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 700; margin-bottom: 15px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    /* Stepper Navigation */
+    .stepper {
+      display: flex; justify-content: space-between;
+      margin-bottom: 25px; gap: 8px; position: relative;
+    }
+    .step-btn {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 12px 8px;
+      border-radius: 12px;
+      font-family: var(--font-title);
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .step-btn:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      color: var(--text-white);
+    }
+    .step-btn.active {
+      background: var(--accent);
+      border-color: var(--accent-light);
+      color: var(--text-white);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Main Content Card */
+    .card-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .card-step.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-family: var(--font-title);
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--accent-light);
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .guide-list {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .guide-list li {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      font-size: 0.95rem; line-height: 1.5;
+    }
+    .guide-list li::before {
+      content: '\F26B';
+      font-family: 'bootstrap-icons';
+      position: absolute; left: 0; top: 2px;
+      color: var(--green); font-size: 0.9rem;
+    }
+
+    /* Terminal & Code Blocks */
+    .terminal-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      position: relative;
+      margin-top: 15px;
+    }
+    .btn-copy {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      padding: 5px 10px; border-radius: 6px;
+      font-size: 0.75rem; font-family: var(--font-body);
+      cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .btn-copy:hover { background: var(--accent); }
+
+    /* Key indicator UI */
+    .kbd {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--gold);
+      padding: 2px 6px; border-radius: 5px;
+      font-family: monospace; font-size: 0.85rem;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex; justify-content: space-between;
+      margin-top: 25px;
+    }
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-white);
+      padding: 10px 20px; border-radius: 10px;
+      font-family: var(--font-title); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-nav:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-nav.primary {
+      background: var(--accent); border-color: var(--accent-light);
+    }
+    .btn-nav.primary:hover {
+      background: #1d4ed8;
+    }
+
+    footer {
+      margin-top: auto; padding-top: 40px;
+      text-align: center; color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .step-btn span { display: none; }
+      .stepper { gap: 4px; }
+      .card-step { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header>
+      <div class="badge-tag"><i class="bi bi-cpu-fill"></i> Guía Interactiva</div>
+      <h1>Resolución de Evaluaciones Virtuales UNEFCO</h1>
+      <p>Extracción directa del DOM HTML e Inteligencia Artificial</p>
+    </header>
+
+    <!-- STEPPER -->
+    <div class="stepper">
+      <button class="step-btn active" onclick="setStep(0)"><i class="bi bi-door-open-fill"></i> <span>Paso 1</span></button>
+      <button class="step-btn" onclick="setStep(1)"><i class="bi bi-code-slash"></i> <span>Paso 2</span></button>
+      <button class="step-btn" onclick="setStep(2)"><i class="bi bi-robot"></i> <span>Paso 3</span></button>
+      <button class="step-btn" onclick="setStep(3)"><i class="bi bi-check-circle-fill"></i> <span>Paso 4</span></button>
+    </div>
+
+    <!-- CARDS CONTAINER -->
+    <div id="cardsContainer">
+
+      <!-- PASO 1 -->
+      <div class="card-step active">
+        <div class="step-title"><i class="bi bi-1-circle-fill"></i> Ingreso al Sistema</div>
+        <ul class="guide-list">
+          <li>Abre tu navegador de preferencia (Google Chrome, MS Edge, Brave, etc.).</li>
+          <li>Ingresa a la URL del examen de la plataforma UNEFCO asignada.</li>
+          <li>Escribe tu <strong>Número de Carnet de Identidad</strong> en la casilla vacía.</li>
+          <li>Haz clic en el botón azul de ingreso <strong>» Ingresar a la evaluación</strong> para dar inicio al temporizador.</li>
+        </ul>
+        <div class="terminal-box">
+          <span style="color: #64748b;">// Estado de la plataforma</span><br/>
+          <span style="color: var(--green);">✔ Conexión establecida</span> | Examen listo para carga de cliente.
+        </div>
+      </div>
+
+      <!-- PASO 2 -->
+      <div class="card-step">
+        <div class="step-title"><i class="bi bi-2-circle-fill"></i> Extracción del Código HTML</div>
+        <ul class="guide-list">
+          <li>Con la evaluación abierta, presiona la tecla <span class="kbd">F12</span> para abrir las herramientas de desarrollador (o haz clic derecho y elige <strong>Inspeccionar</strong>).</li>
+          <li>En el panel lateral derecho que aparecerá, dirígete a la pestaña superior <strong>Elements</strong> (Elementos).</li>
+          <li>Haz un clic primario sobre la primera línea que dice <span class="kbd">&lt;!DOCTYPE html&gt;</span> o <span class="kbd">&lt;html&gt;</span>.</li>
+          <li>Copia todo el árbol de código presionando <span class="kbd">Ctrl</span> + <span class="kbd">C</span>.</li>
+        </ul>
+        <div class="terminal-box">
+          <span style="color: var(--accent-light);">&lt;!DOCTYPE html&gt;</span><br/>
+          &lt;html lang="es"&gt;<br/>
+          &nbsp;&nbsp;&lt;body&gt; <span style="color: var(--gold);">&lt;!-- Todas las preguntas y opciones residen aquí --&gt;</span>
+        </div>
+      </div>
+
+      <!-- PASO 3 -->
+      <div class="card-step">
+        <div class="step-title"><i class="bi bi-3-circle-fill"></i> Prompting con Inteligencia Artificial</div>
+        <ul class="guide-list">
+          <li>Abre una nueva pestaña en tu navegador e ingresa a **Gemini** o **ChatGPT**.</li>
+          <li>Copia el siguiente *prompt* especializado usando el botón lateral y pégalo en el chat de la IA.</li>
+          <li>Inmediatamente después del texto, presiona <span class="kbd">Ctrl</span> + <span class="kbd">V</span> para pegar el código copiado en el Paso 2 y presiona **Enter**.</li>
+        </ul>
+        <div class="terminal-box">
+          <button class="btn-copy" onclick="copyPrompt()"><i class="bi bi-clipboard"></i> <span id="copyText">Copiar Prompt</span></button>
+          <span id="promptText" style="color: #e2e8f0;">Hola. A continuación te pegaré el código HTML completo de una evaluación en línea. Analiza el texto de las preguntas e incisos contenidos en él y proporcióname una lista precisa con la opción correcta para cada una de las 10 preguntas.</span>
+        </div>
+      </div>
+
+      <!-- PASO 4 -->
+      <div class="card-step">
+        <div class="step-title"><i class="bi bi-4-circle-fill"></i> Vaciado y Cierre de Evaluación</div>
+        <ul class="guide-list">
+          <li>Regresa a la pestaña del examen de la UNEFCO.</li>
+          <li>Revisa la lista de respuestas otorgada por la Inteligencia Artificial y marca la alternativa adecuada en cada pregunta.</li>
+          <li>Una vez marcadas las 10 preguntas, desplázate hasta el final y haz clic en el botón rojo <strong>Finalizar evaluación</strong>.</li>
+        </ul>
+        <div class="terminal-box">
+          <span style="color: var(--green);">✔ Proceso completado exitosamente.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <button class="btn-nav" id="btnPrev" onclick="prevStep()" disabled><i class="bi bi-arrow-left"></i> Anterior</button>
+      <button class="btn-nav primary" id="btnNext" onclick="nextStep()">Siguiente <i class="bi bi-arrow-right"></i></button>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Desarrollado para integración continua en GitHub Repositories | Teacher Ivan
+    </footer>
+
+  </div>
+
+  <script>
+    let currentStep = 0;
+    const totalSteps = 4;
+
+    function updateUI() {
+      // Buttons & Cards update
+      const buttons = document.querySelectorAll('.step-btn');
+      const cards = document.querySelectorAll('.card-step');
+
+      buttons.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === currentStep);
+      });
+
+      cards.forEach((card, idx) => {
+        card.classList.toggle('active', idx === currentStep);
+      });
+
+      // Controls update
+      document.getElementById('btnPrev').disabled = (currentStep === 0);
+      
+      const btnNext = document.getElementById('btnNext');
+      if (currentStep === totalSteps - 1) {
+        btnNext.innerHTML = 'Reiniciar <i class="bi bi-arrow-counterclockwise"></i>';
+      } else {
+        btnNext.innerHTML = 'Siguiente <i class="bi bi-arrow-right"></i>';
+      }
+    }
+
+    function setStep(idx) {
+      currentStep = idx;
+      updateUI();
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps - 1) {
+        currentStep++;
+      } else {
+        currentStep = 0;
+      }
+      updateUI();
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        updateUI();
+      }
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('promptText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const copyTextSpan = document.getElementById('copyText');
+        copyTextSpan.innerText = '¡Copiado!';
+        setTimeout(() => {
+          copyTextSpan.innerText = 'Copiar Prompt';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
