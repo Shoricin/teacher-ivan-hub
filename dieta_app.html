@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Alimentación - Teacher Ivan</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #81C784;
+            --background: #F5F7FA;
+            --text: #333333;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation (Scrollable horizontally for mobile) */
+        nav {
+            display: flex;
+            overflow-x: auto;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            -webkit-overflow-scrolling: touch;
+            z-index: 5;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #777;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* Content Area */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for watermark */
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Meal Cards */
+        .meal-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .meal-time {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .meal-title {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .meal-desc {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Recommendations */
+        .reco-card {
+            background-color: #E3F2FD;
+            border-left-color: #2196F3;
+        }
+        
+        .alert-card {
+            background-color: #FFF3E0;
+            border-left-color: #FF9800;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+            z-index: 100;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Plan Nutricional Activo</h1>
+        <p>1400 - 1600 kcal | Actividad Moderada</p>
+    </header>
+
+    <nav id="tabs">
+        <button class="tab-btn active" onclick="openTab('lunes')">Lunes</button>
+        <button class="tab-btn" onclick="openTab('martes')">Martes</button>
+        <button class="tab-btn" onclick="openTab('miercoles')">Miércoles</button>
+        <button class="tab-btn" onclick="openTab('jueves')">Jueves</button>
+        <button class="tab-btn" onclick="openTab('viernes')">Viernes</button>
+        <button class="tab-btn" onclick="openTab('sabado')">Sábado</button>
+        <button class="tab-btn" onclick="openTab('domingo')">Domingo</button>
+        <button class="tab-btn" onclick="openTab('consejos')">🌟 Consejos</button>
+    </nav>
+
+    <main>
+        <!-- LUNES -->
+        <div id="lunes" class="tab-content active">
+            <div class="meal-card">
+                <div class="meal-time">🕒 07:30 - Desayuno</div>
+                <div class="meal-title">Avena con Manzana</div>
+                <div class="meal-desc">1 taza de leche (semidescremada o entera) cocida con 3 cucharadas de avena, endulzada con stevia o 1 cdta de miel. Acompañada de media manzana picada.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 10:00 - Merienda</div>
+                <div class="meal-title">Fruta Fresca</div>
+                <div class="meal-desc">1 plátano pequeño o guineo.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:00 - Almuerzo</div>
+                <div class="meal-title">Pollo a la plancha con Quinua</div>
+                <div class="meal-desc">1 filete de pechuga de pollo a la plancha, media taza de quinua cocida y una porción abundante de ensalada fresca (lechuga, tomate, zanahoria rallada).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:00 - Snack Media Tarde</div>
+                <div class="meal-title">Yogur Natural</div>
+                <div class="meal-desc">1 vaso de yogur natural (sin azúcar añadida) con un puñado pequeño de pipocas de quinua.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:00 - Cena</div>
+                <div class="meal-title">Sopa Ligera de Verduras</div>
+                <div class="meal-desc">Plato de sopa de verduras (zapallo, zanahoria, espinaca) con un trozo pequeño de carne magra o pollo y un poco de fideo o arroz.</div>
+            </div>
+        </div>
+
+        <!-- MARTES -->
+        <div id="martes" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 07:30 - Desayuno</div>
+                <div class="meal-title">Pan Integral con Queso Fresco</div>
+                <div class="meal-desc">1 taza de té o infusión clara con leche. 1 rebanada de pan integral con una tajada de queso criollo (queso fresco bajo en sal).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 10:00 - Merienda</div>
+                <div class="meal-title">Cítricos</div>
+                <div class="meal-desc">1 mandarina o naranja mediana.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:00 - Almuerzo</div>
+                <div class="meal-title">Ají de Fideo Saludable</div>
+                <div class="meal-desc">Versión ligera: fideo tostado sin aceite, carne molida magra, abundante ahogado de tomate, cebolla, zanahoria y arvejas. Sin papa para controlar carbohidratos.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:00 - Snack Media Tarde</div>
+                <div class="meal-title">Pipocas (Popcorn)</div>
+                <div class="meal-desc">2 tazas de pipocas de maíz hechas en casa con una gota de aceite y poca sal.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:00 - Cena</div>
+                <div class="meal-title">Revuelto de Huevo</div>
+                <div class="meal-desc">1 huevo revuelto con tomate picado y espinaca, acompañado de media papa cocida.</div>
+            </div>
+        </div>
+
+        <!-- MIÉRCOLES -->
+        <div id="miercoles" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 07:30 - Desayuno</div>
+                <div class="meal-title">Licuado de Papaya</div>
+                <div class="meal-desc">1 vaso grande de licuado de papaya con leche y 1 galleta de agua o salvado.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 10:00 - Merienda</div>
+                <div class="meal-title">Gelatina</div>
+                <div class="meal-desc">1 porción de gelatina (preferentemente baja en azúcar).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:00 - Almuerzo</div>
+                <div class="meal-title">Pescado al Horno</div>
+                <div class="meal-desc">1 porción de pescado (trucha o pejerrey) al horno o a la plancha, 1 papa mediana hervida y ensalada de pepino y tomate.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:00 - Snack Media Tarde</div>
+                <div class="meal-title">Manzana</div>
+                <div class="meal-desc">1 manzana mediana.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:00 - Cena</div>
+                <div class="meal-title">Crema de Zapallo</div>
+                <div class="meal-desc">1 plato hondo de crema de zapallo casera (sin crema de leche, espesada con el mismo zapallo) y crutones de pan integral.</div>
+            </div>
+        </div>
+
+        <!-- JUEVES -->
+        <div id="jueves" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 07:30 - Desayuno</div>
+                <div class="meal-title">Yogur con Cereal</div>
+                <div class="meal-desc">1 vaso de yogur con 3 cucharadas de hojuelas de maíz sin azúcar o granola casera.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 10:00 - Merienda</div>
+                <div class="meal-title">Fruta Fresca</div>
+                <div class="meal-desc">Media papaya picada o sandía.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:00 - Almuerzo</div>
+                <div class="meal-title">Majadito de Pollo</div>
+                <div class="meal-desc">Porción moderada (1 taza) de arroz tostado con pollo desmenuzado, plátano de freír al horno (no frito) y 1 huevo cocido o pasado (no frito).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:00 - Snack Media Tarde</div>
+                <div class="meal-title">Frutos Secos</div>
+                <div class="meal-desc">Un puñado pequeño (10-12 piezas) de almendras o nueces.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:00 - Cena</div>
+                <div class="meal-title">Ensalada de Atún</div>
+                <div class="meal-desc">Media lata de atún en agua mezclada con lechuga, tomate y un chorrito de limón.</div>
+            </div>
+        </div>
+
+        <!-- VIERNES -->
+        <div id="viernes" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 07:30 - Desayuno</div>
+                <div class="meal-title">Leche y Tostadas</div>
+                <div class="meal-desc">1 vaso de leche tibia. 2 tostadas de pan integral con una capa fina de mermelada o palta (aguacate).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 10:00 - Merienda</div>
+                <div class="meal-title">Pera</div>
+                <div class="meal-desc">1 pera mediana.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:00 - Almuerzo</div>
+                <div class="meal-title">Sopa de Maní (Versión Ligera)</div>
+                <div class="meal-desc">Plato moderado de sopa de maní (usando maní natural licuado, sin exceso de aceite), con presita de pollo, fideo macarrón y verduras. *Evitar acompañar con papas fritas*.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:00 - Snack Media Tarde</div>
+                <div class="meal-title">Gelatina con Fruta</div>
+                <div class="meal-desc">1 porción de gelatina con trocitos de plátano adentro.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:00 - Cena</div>
+                <div class="meal-title">Pollo Desmenuzado</div>
+                <div class="meal-desc">Pollo hervido desmenuzado con ejotes (vainitas) y zanahorias al vapor.</div>
+            </div>
+        </div>
+
+        <!-- SÁBADO -->
+        <div id="sabado" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 08:30 - Desayuno</div>
+                <div class="meal-title">Panqueques de Avena</div>
+                <div class="meal-desc">2 panqueques pequeños hechos con avena, huevo y plátano aplastado (sin harina refinada).</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 11:00 - Merienda</div>
+                <div class="meal-title">Zanahoria en Palitos</div>
+                <div class="meal-desc">Bastones de zanahoria fresca con unas gotas de limón.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:30 - Almuerzo</div>
+                <div class="meal-title">Pique Macho Saludable</div>
+                <div class="meal-desc">Carne de res magra al jugo, tomate, cebolla, locoto (opcional), acompañado de papas cocidas al horno en rodajas (en lugar de fritas). Sin salchichas.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:30 - Snack Media Tarde</div>
+                <div class="meal-title">Yogur</div>
+                <div class="meal-desc">1 yogur bebible pequeño.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:30 - Cena</div>
+                <div class="meal-title">Sopa Fideítos</div>
+                <div class="meal-desc">Sopa ligera de fideo cabello de ángel con huevito pasado.</div>
+            </div>
+        </div>
+
+        <!-- DOMINGO -->
+        <div id="domingo" class="tab-content">
+            <div class="meal-card">
+                <div class="meal-time">🕒 08:30 - Desayuno</div>
+                <div class="meal-title">Huevos Revueltos</div>
+                <div class="meal-desc">1 huevo revuelto preparado con mínima grasa, 1 rodaja de tomate y 1 rebanada de pan integral. Infusión caliente.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 11:00 - Merienda</div>
+                <div class="meal-title">Fruta</div>
+                <div class="meal-desc">1 durazno o manzana.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 13:30 - Almuerzo</div>
+                <div class="meal-title">Plato Paceño Moderado</div>
+                <div class="meal-desc">1 choclo mediano, porción de habas cocidas, y 1 tajada de queso fresco cocido a la plancha (no frito en aceite abundante). Sin papa frita ni exceso de carnes fritas.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 16:30 - Snack Media Tarde</div>
+                <div class="meal-title">Galletas de Avena</div>
+                <div class="meal-desc">2 galletas de avena caseras o bajas en azúcar.</div>
+            </div>
+            <div class="meal-card">
+                <div class="meal-time">🕒 19:30 - Cena</div>
+                <div class="meal-title">Caldo de Pollo</div>
+                <div class="meal-desc">Caldo clarito de pollo con un poco de perejil y apio para asentar el estómago antes de dormir.</div>
+            </div>
+        </div>
+
+        <!-- RECOMENDACIONES -->
+        <div id="consejos" class="tab-content">
+            
+            <div class="meal-card alert-card">
+                <div class="meal-title">⚠️ Nota Médica Importante</div>
+                <div class="meal-desc">Este es un plan guía referencial. El peso (60kg) y estatura (1.39m) en una niña de 9 años indica un IMC que requiere atención profesional. <b>Es obligatorio consultar a un pediatra y nutricionista infantil</b> para asegurar que la niña reciba los nutrientes necesarios para su desarrollo sin afectar su crecimiento.</div>
+            </div>
+
+            <div class="meal-card reco-card">
+                <div class="meal-title">💧 Hidratación</div>
+                <div class="meal-desc">Asegúrate de que tome al menos 6 a 8 vasos de agua al día (1.5 - 2 litros). Evitar refrescos embotellados y jugos de sobre como Tampico o Pilfrut, ya que tienen mucha azúcar.</div>
+            </div>
+
+            <div class="meal-card reco-card">
+                <div class="meal-title">🏃‍♀️ Actividad Física</div>
+                <div class="meal-desc">Mantener la "actividad física moderada". Pueden ser clases de baile, natación, saltar la cuerda en casa, o caminatas diarias de 45 minutos. Lo ideal es que sea un juego y no un "ejercicio obligatorio".</div>
+            </div>
+
+            <div class="meal-card reco-card">
+                <div class="meal-title">🍽️ Hábitos en la Mesa</div>
+                <div class="meal-desc">
+                    <ul>
+                        <li style="margin-left: 15px; margin-bottom: 5px;">Masticar bien los alimentos.</li>
+                        <li style="margin-left: 15px; margin-bottom: 5px;">Comer sin distracciones (apagar el televisor y alejar el celular).</li>
+                        <li style="margin-left: 15px; margin-bottom: 5px;">No saltarse el desayuno; es clave para el rendimiento escolar.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="meal-card reco-card">
+                <div class="meal-title">🛒 Compras en el Mercado (Bolivia)</div>
+                <div class="meal-desc">Prioriza la compra de verduras frescas en los mercados locales. Reemplaza gradualmente el arroz blanco y fideo por quinua, lentejas y amaranto que son altamente nutritivos y accesibles.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="watermark">Teacher Ivan - Lifestyle</div>
+
+    <script>
+        function openTab(tabName) {
+            // Esconder todo el contenido
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            
+            // Quitar clase active de los botones
+            let buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            
+            // Mostrar contenido actual y añadir clase active al botón clickeado
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+            
+            // Scroll suave del menú hacia el botón seleccionado
+            event.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
