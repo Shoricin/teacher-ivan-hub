@@ -17,6 +17,7 @@
       --accent-light: #3b82f6;
       --green: #22c55e;
       --gold: #f59e0b;
+      --red: #ef4444;
       --text-white: #ffffff;
       --text-muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.1);
@@ -151,6 +152,23 @@
       color: var(--green); font-size: 0.9rem;
     }
 
+    /* Sub-sections / Tabs for Alternative Methods */
+    .method-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+    .method-header {
+      font-family: var(--font-title);
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px;
+    }
+
     /* Terminal & Code Blocks */
     .terminal-box {
       background: #020617;
@@ -162,6 +180,7 @@
       color: #e2e8f0;
       position: relative;
       margin-top: 15px;
+      line-height: 1.6;
     }
     .btn-copy {
       position: absolute; top: 10px; right: 10px;
@@ -180,8 +199,9 @@
       background: #1e293b;
       border: 1px solid #334155;
       color: var(--gold);
-      padding: 2px 6px; border-radius: 5px;
+      padding: 2px 7px; border-radius: 5px;
       font-family: monospace; font-size: 0.85rem;
+      box-shadow: 0 2px 0 #0f172a;
     }
 
     /* Controls */
@@ -259,19 +279,40 @@
         </div>
       </div>
 
-      <!-- PASO 2 -->
+      <!-- PASO 2 (DETALLADO Y REHECHO) -->
       <div class="card-step">
-        <div class="step-title"><i class="bi bi-2-circle-fill"></i> Extracción del Código HTML</div>
-        <ul class="guide-list">
-          <li>Con la evaluación abierta, presiona la tecla <span class="kbd">F12</span> para abrir las herramientas de desarrollador (o haz clic derecho y elige <strong>Inspeccionar</strong>).</li>
-          <li>En el panel lateral derecho que aparecerá, dirígete a la pestaña superior <strong>Elements</strong> (Elementos).</li>
-          <li>Haz un clic primario sobre la primera línea que dice <span class="kbd">&lt;!DOCTYPE html&gt;</span> o <span class="kbd">&lt;html&gt;</span>.</li>
-          <li>Copia todo el árbol de código presionando <span class="kbd">Ctrl</span> + <span class="kbd">C</span>.</li>
-        </ul>
+        <div class="step-title"><i class="bi bi-2-circle-fill"></i> Extracción del Código HTML de la Evaluación</div>
+        
+        <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">
+          Una vez que estés <strong>dentro del examen</strong> (donde se ven la primera pregunta y el reloj corriendo), debes copiar todo el texto del código de la página. Elige cualquiera de estos 2 métodos sencillos:
+        </p>
+
+        <!-- MÉTODO A: MÁS FÁCIL -->
+        <div class="method-box">
+          <div class="method-header"><i class="bi bi-lightning-charge-fill"></i> MÉTODO A: Ver Código Fuente (Recomendado / Más Fácil)</div>
+          <ul class="guide-list" style="margin-bottom: 0;">
+            <li>En cualquier parte vacía de la página del examen, haz <strong>clic derecho con el mouse</strong>.</li>
+            <li>En el menú contextual que aparece, selecciona <strong>"Ver código fuente de la página"</strong> (o presiona el atajo de teclado <span class="kbd">Ctrl</span> + <span class="kbd">U</span>).</li>
+            <li>Se abrirá una nueva pestaña llena de texto y líneas de código.</li>
+            <li>En esa nueva pestaña, presiona <span class="kbd">Ctrl</span> + <span class="kbd">A</span> para seleccionar <strong>absolutamente todo el texto</strong>. Verás que todo se pinta de azul.</li>
+            <li>Luego presiona <span class="kbd">Ctrl</span> + <span class="kbd">C</span> para **copiar todo**. ¡Listo, ya lo tienes en tu portapapeles!</li>
+          </ul>
+        </div>
+
+        <!-- MÉTODO B: DESARROLLADOR -->
+        <div class="method-box">
+          <div class="method-header"><i class="bi bi-terminal-fill"></i> MÉTODO B: Mediante el Inspector de Elementos</div>
+          <ul class="guide-list" style="margin-bottom: 0;">
+            <li>Presiona la tecla <span class="kbd">F12</span> (o clic derecho y selecciona <strong>"Inspeccionar"</strong>). Se abrirá un panel con código a la derecha o abajo.</li>
+            <li>Asegúrate de estar ubicado en la pestaña superior llamada <strong>Elements</strong> (o Elementos).</li>
+            <li>Sube hasta la primerísima línea de código donde dice <span class="kbd">&lt;html lang="es"&gt;</span> o <span class="kbd">&lt;!DOCTYPE html&gt;</span>.</li>
+            <li>Haz <strong>clic derecho sobre esa línea</strong> &gt; selecciona <strong>Copy</strong> (Copiar) &gt; y elige <strong>Copy element</strong> (o Copy outerHTML).</li>
+          </ul>
+        </div>
+
         <div class="terminal-box">
-          <span style="color: var(--accent-light);">&lt;!DOCTYPE html&gt;</span><br/>
-          &lt;html lang="es"&gt;<br/>
-          &nbsp;&nbsp;&lt;body&gt; <span style="color: var(--gold);">&lt;!-- Todas las preguntas y opciones residen aquí --&gt;</span>
+          <span style="color: var(--gold);">¿QUÉ ESTÁS COPIANDO EXACTAMENTE?</span><br/>
+          Estás copiando la estructura HTML interna de la página web. Ahí vienen incrustadas las 10 preguntas con sus respectivas alternativas de opción múltiple (A, B, C, D) e IDs de respuesta del sistema.
         </div>
       </div>
 
@@ -279,9 +320,9 @@
       <div class="card-step">
         <div class="step-title"><i class="bi bi-3-circle-fill"></i> Prompting con Inteligencia Artificial</div>
         <ul class="guide-list">
-          <li>Abre una nueva pestaña en tu navegador e ingresa a **Gemini** o **ChatGPT**.</li>
+          <li>Abre una nueva pestaña en tu navegador e ingresa a <strong>Gemini</strong> o <strong>ChatGPT</strong>.</li>
           <li>Copia el siguiente *prompt* especializado usando el botón lateral y pégalo en el chat de la IA.</li>
-          <li>Inmediatamente después del texto, presiona <span class="kbd">Ctrl</span> + <span class="kbd">V</span> para pegar el código copiado en el Paso 2 y presiona **Enter**.</li>
+          <li>Inmediatamente después del texto, presiona <span class="kbd">Ctrl</span> + <span class="kbd">V</span> para pegar todo el código copiado en el Paso 2 y presiona <strong>Enter</strong>.</li>
         </ul>
         <div class="terminal-box">
           <button class="btn-copy" onclick="copyPrompt()"><i class="bi bi-clipboard"></i> <span id="copyText">Copiar Prompt</span></button>
