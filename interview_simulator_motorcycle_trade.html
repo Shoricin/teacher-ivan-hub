@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Simulator - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #e2e8f0; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-puro); padding: 1.5rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 5px solid var(--naranja-vibrante);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header-title { margin: 0; font-family: var(--font-titulares); font-size: 1.5rem; text-transform: uppercase; }
+        .header-subtitle { margin: 0; font-size: 0.9rem; font-weight: 300; color: var(--azul-claro); }
+        .progress-badge {
+            background: var(--naranja-vibrante); color: white; padding: 8px 16px;
+            border-radius: 20px; font-weight: bold; font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .container {
+            flex: 1; max-width: 900px; margin: 2rem auto; padding: 0 2rem; width: 100%;
+        }
+
+        /* Teacher Card (The Prompt) */
+        .teacher-card {
+            background: var(--blanco-puro); border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-left: 8px solid var(--azul-primario);
+            margin-bottom: 2rem; position: relative;
+        }
+        .role-label {
+            position: absolute; top: -15px; left: 20px; background: var(--azul-primario);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .theme-label {
+            position: absolute; top: -15px; right: 20px; background: var(--naranja-vibrante);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem;
+            font-weight: bold; text-transform: uppercase;
+        }
+        .teacher-prompt {
+            font-family: var(--font-titulares); font-size: 1.8rem; color: var(--azul-primario);
+            line-height: 1.4; margin-top: 10px; text-align: center;
+        }
+
+        /* Instructions */
+        .instruction {
+            text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Options Grid (Valid Answers) */
+        .options-container {
+            display: grid; gap: 15px; margin-bottom: 2rem;
+        }
+        
+        .valid-option {
+            background: #f8fafc; border: 2px solid var(--gris-neutro); padding: 1.2rem;
+            border-radius: 8px; font-size: 1.2rem; color: #333; font-weight: 600;
+            display: flex; align-items: center; transition: 0.3s;
+            cursor: pointer;
+        }
+        .valid-option:hover {
+            border-color: var(--naranja-vibrante); background: #fff5f0;
+            transform: translateX(5px);
+        }
+        .valid-option::before {
+            content: "✔️"; margin-right: 15px; font-size: 1.5rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex; justify-content: space-between;
+        }
+        .btn {
+            padding: 15px 30px; font-size: 1.1rem; font-family: var(--font-titulares);
+            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-prev { background: var(--gris-neutro); color: #333; }
+        .btn-prev:hover { background: #cbd5e1; }
+        .btn-next { background: var(--naranja-vibrante); color: white; }
+        .btn-next:hover { background: #e05e15; transform: translateY(-2px); }
+
+        /* Footer */
+        .footer {
+            background: var(--azul-primario); color: white; text-align: center;
+            padding: 1.5rem; margin-top: auto;
+        }
+
+        /* Animation */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div>
+            <h1 class="header-title">Live Interview Simulator</h1>
+            <p class="header-subtitle">Fielding School - Business English for Motorcycle Parts Trade</p>
+        </div>
+        <div class="progress-badge">
+            Scenario <span id="currentCounter">1</span> / 30
+        </div>
+    </header>
+
+    <div class="container fade-in" id="mainContainer">
+        
+        <div class="teacher-card">
+            <div class="role-label">Mr. Chen (Teacher)</div>
+            <div class="theme-label" id="themeLabel">Theme</div>
+            <div class="teacher-prompt" id="teacherText">
+                Loading prompt...
+            </div>
+        </div>
+
+        <p class="instruction">Choose one of the 3 valid native-sounding responses below to answer:</p>
+
+        <div class="options-container" id="optionsContainer">
+            <!-- Options injected here -->
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()" disabled>⬅️ Previous</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">Next Scenario ➡️</button>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | Professional Business English Roleplay</p>
+    </footer>
+
+    <script>
+        const interviewData = [{"teacher_prompt": "Welcome to Guangzhou Motor Parts Ltd. I am Mr. Chen. How can I assist you today?", "options": ["Hello, we are interested in buying motorcycle parts in bulk.", "Hi Mr. Chen, we are looking to purchase motorcycle components wholesale.", "Good morning, our company wants to place a large volume order for spare parts."], "theme": "Expressing Intent"}, {"teacher_prompt": "We manufacture many different parts. Do you know what you are looking for?", "options": ["Could you please send us your latest catalog for engine blocks?", "We would appreciate it if you could share your updated product catalogue.", "Yes, do you have a digital brochure with all your available motorcycle parts?"], "theme": "Requesting a Catalog"}, {"teacher_prompt": "I will send you the catalog right now. Are you planning to buy small or large quantities?", "options": ["What is the Minimum Order Quantity (MOQ) for the disc brakes?", "Could you tell us your MOQ for standard replacement parts?", "How many units do we need to order to meet your minimum requirements?"], "theme": "Asking about MOQ"}, {"teacher_prompt": "Our MOQ is usually 500 units per item. What kind of motorcycles are these for?", "options": ["Are these exhaust pipes compatible with 150cc engines?", "Do these parts fit standard 150cc and 200cc motorcycle models?", "Can these components be used on 150cc street bikes?"], "theme": "Checking Compatibility"}, {"teacher_prompt": "Yes, they fit 150cc perfectly. How many units were you thinking of ordering?", "options": ["If we order 1000 units, can you offer a discount?", "Would you consider giving us a better price for an order of 1000 units?", "Are there volume discounts available if we purchase over 1000 pieces?"], "theme": "Negotiating Discounts"}, {"teacher_prompt": "For 1000 units, I can give you a 5% discount. Does that work for you?", "options": ["That sounds reasonable. What is the lead time for production?", "We can work with that. How long is your standard manufacturing lead time?", "Perfect. How many days will it take to manufacture the goods?"], "theme": "Asking about Lead Time"}, {"teacher_prompt": "Production usually takes 20 days. But we also have some items ready now.", "options": ["Do you have these clutch cables in stock right now?", "Are there any clutch cables currently available in your warehouse?", "Do you carry inventory for immediate dispatch?"], "theme": "Checking Inventory"}, {"teacher_prompt": "Yes, we have 3,000 clutch cables in stock. Do you want to proceed with an order?", "options": ["We would like to request a sample before placing a large order.", "Could you send us a prototype or sample first to check the quality?", "We need to evaluate a sample unit before we commit to the full batch."], "theme": "Requesting Samples"}, {"teacher_prompt": "Of course, we can send a sample via DHL. Where is your company based?", "options": ["Our company is located in Sucre, Bolivia.", "We are based in the city of Sucre, in Bolivia, South America.", "Our main headquarters and distribution center are in Sucre, Bolivia."], "theme": "Providing Location"}, {"teacher_prompt": "Ah, Bolivia! A great market. What is your main goal for this trip to China?", "options": ["We are looking for a reliable supplier of shock absorbers.", "Our goal is to find a long-term, trustworthy manufacturing partner.", "We want to establish a solid relationship with a dependable factory."], "theme": "Stating Business Goals"}, {"teacher_prompt": "We are very reliable. How would you like us to quote the prices?", "options": ["Can you give us your best price based on FOB Guangzhou?", "We prefer FOB terms. Could you quote us FOB Guangzhou?", "Please provide a price list with FOB Guangzhou shipping terms."], "theme": "Requesting Incoterms (FOB)"}, {"teacher_prompt": "I will quote FOB. Are there any specific material requirements for the brakes?", "options": ["The brake pads must be made of high-quality ceramic.", "We require the brake pads to be manufactured using premium ceramic.", "It's essential that the friction material is 100% ceramic."], "theme": "Specifying Materials"}, {"teacher_prompt": "Ceramic is our specialty. When do you need these parts to arrive?", "options": ["How long does it take to ship the parts to South America?", "What is the estimated transit time by sea to our port?", "Can you tell me the approximate shipping duration to Bolivia?"], "theme": "Checking Shipping Time"}, {"teacher_prompt": "By sea, it usually takes about 35 to 40 days. Let's discuss payment. What terms do you propose?", "options": ["We will pay a 30% deposit in advance.", "We can offer a 30% upfront payment to start production.", "Our standard procedure is a 30% down payment upon order confirmation."], "theme": "Proposing Deposit"}, {"teacher_prompt": "30% advance is fine. And when will you pay the remaining balance?", "options": ["The remaining 70% balance will be paid before shipment.", "We will clear the final 70% right before the goods leave your factory.", "The 70% balance is settled once the goods are ready for dispatch."], "theme": "Proposing Final Payment"}, {"teacher_prompt": "That is acceptable. How will you transfer the funds?", "options": ["Do you accept payment by T/T (Telegraphic Transfer)?", "Are you comfortable receiving wire transfers via T/T?", "We plan to pay via international bank transfer (T/T). Is that okay?"], "theme": "Payment Methods"}, {"teacher_prompt": "Yes, T/T is our standard. If this order goes well, will you buy more?", "options": ["If the quality is good, we will order more next month.", "Should this batch meet our standards, expect regular monthly orders.", "Once we verify the quality, we intend to place continuous bulk orders."], "theme": "Promising Future Business"}, {"teacher_prompt": "You won't regret it. Our quality is top-tier. Do you have questions about guarantees?", "options": ["What is the warranty period for the engine cylinders?", "How long is the manufacturer's warranty on these parts?", "Do you offer a standard 12-month guarantee for mechanical defects?"], "theme": "Asking about Warranty"}, {"teacher_prompt": "We give a 1-year warranty. We will pack everything securely in cartons.", "options": ["Please ensure that the packaging is strong enough for sea freight.", "Make sure the boxes are reinforced to survive the long ocean voyage.", "It's vital that the export packaging can handle rough port transit."], "theme": "Packaging Requirements"}, {"teacher_prompt": "We use 5-layer cartons and wooden pallets. Do you need any special paperwork?", "options": ["The customs authorities require specific documentation for the import.", "Our local customs office is very strict about import documents.", "We need a complete set of shipping documents for customs clearance."], "theme": "Customs Documentation"}, {"teacher_prompt": "We will prepare the Commercial Invoice and Packing List. Anything else for your logistics agent?", "options": ["Could you provide the gross weight and volume (CBM) of the boxes?", "We need the exact gross weight for our freight forwarder.", "Please send us the estimated total weight so we can calculate freight."], "theme": "Logistics Details"}, {"teacher_prompt": "I'll have the exact CBM and weight tomorrow. When is your absolute deadline?", "options": ["We need the spare parts no later than the 15th of November.", "The shipment must depart before November 15th, without fail.", "Our strict deadline for factory dispatch is November 15th."], "theme": "Setting Deadlines"}, {"teacher_prompt": "We will easily meet that deadline. Regarding the paperwork you mentioned earlier...", "options": ["Is the original Certificate of Origin included in the documents?", "Will you be providing a signed Certificate of Origin for tax purposes?", "Please confirm that the Form of Origin will be couriered to us."], "theme": "Certificate of Origin"}, {"teacher_prompt": "Yes, we will send the Certificate of Origin by DHL. Now, let's review the chain materials.", "options": ["Just to confirm, these motorcycle chains are made of heavy-duty steel, right?", "I want to verify that you use reinforced steel for the drive chains.", "Please assure us that the chains are manufactured from high-tensile steel."], "theme": "Confirming Specifications"}, {"teacher_prompt": "Absolutely, 100% heavy-duty steel. By the way, the shipping to the port is $200.", "options": ["Can you reduce the shipping costs if we increase our order to 2000 units?", "If we double the order to 2000, will you cover the inland freight?", "Is there any way to waive the local transport fee for a larger order?"], "theme": "Negotiating Perks"}, {"teacher_prompt": "If you buy 2000 units, we will cover the local transport to the Guangzhou port for free.", "options": ["Excellent. Your factory has been producing these parts since 2015, correct?", "Great. Just to be sure, you've been manufacturing these since 2015?", "That's a deal. You have over a decade of experience making these, right?"], "theme": "Verifying Experience"}, {"teacher_prompt": "Yes, we have a lot of experience! Once production is done, what happens?", "options": ["Can you confirm whether the goods have been shipped by sending photos?", "Please notify us as soon as the container is loaded onto the vessel.", "We need you to send us the Bill of Lading once the cargo is on board."], "theme": "Post-Production Steps"}, {"teacher_prompt": "I will send photos of the container loading. What is the next step to finalize this?", "options": ["Please send us the formal Proforma Invoice (PI) so we can transfer the money.", "Draft the Proforma Invoice and email it to us for the initial deposit.", "We are ready. Please issue the PI with your bank details."], "theme": "Requesting the Invoice"}, {"teacher_prompt": "I will send the PI in 10 minutes. It's a pleasure doing business with you.", "options": ["We look forward to doing business with you for a long time.", "We are excited about this partnership and future collaborations.", "We hope this is the start of a very successful mutual relationship."], "theme": "Building the Relationship"}, {"teacher_prompt": "Thank you for your trust! I have just emailed the invoice. Have a safe flight back to Bolivia!", "options": ["Thank you for your quick response and excellent hospitality.", "I appreciate your prompt assistance today. Goodbye!", "Thanks for the smooth negotiation. We'll be in touch soon!"], "theme": "Closing the Meeting"}];
+        
+        let currentIndex = 0;
+
+        const currentCounter = document.getElementById('currentCounter');
+        const themeLabel = document.getElementById('themeLabel');
+        const teacherText = document.getElementById('teacherText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const mainContainer = document.getElementById('mainContainer');
+
+        function loadScenario(index) {
+            // Trigger animation
+            mainContainer.classList.remove('fade-in');
+            void mainContainer.offsetWidth; // trigger reflow
+            mainContainer.classList.add('fade-in');
+
+            const data = interviewData[index];
+            
+            // Update Text
+            currentCounter.textContent = index + 1;
+            themeLabel.textContent = data.theme;
+            teacherText.textContent = '"' + data.teacher_prompt + '"';
+
+            // Update Options
+            optionsContainer.innerHTML = '';
+            data.options.forEach(opt => {
+                const div = document.createElement('div');
+                div.className = 'valid-option';
+                div.textContent = opt;
+                // Add a small click effect for the students
+                div.onclick = function() {
+                    document.querySelectorAll('.valid-option').forEach(el => el.style.borderColor = 'var(--gris-neutro)');
+                    this.style.borderColor = 'var(--verde-exito)';
+                    this.style.backgroundColor = '#e8f5e9';
+                };
+                optionsContainer.appendChild(div);
+            });
+
+            // Button States
+            prevBtn.disabled = index === 0;
+            if (index === interviewData.length - 1) {
+                nextBtn.innerHTML = 'Finish Interview 🎉';
+            } else {
+                nextBtn.innerHTML = 'Next Scenario ➡️';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIndex < interviewData.length - 1) {
+                currentIndex++;
+                loadScenario(currentIndex);
+            } else {
+                alert("🎉 Congratulations! You have successfully completed the 30-scenario Business Interview.");
+                currentIndex = 0;
+                loadScenario(currentIndex);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                loadScenario(currentIndex);
+            }
+        }
+
+        // Initialize
+        loadScenario(currentIndex);
+    </script>
+</body>
+</html>
