@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel English Quiz - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-neutro: #C8CDD2; 
+            --blanco-nieve: #FAFAF0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--blanco-nieve); color: var(--azul-primario);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-titulares); margin: 0; }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 2rem; background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1)), url('https://images.unsplash.com/photo-1543419918-a664e9a3b6de?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center;
+            color: var(--blanco-nieve); text-align: center; border-bottom: 5px solid var(--naranja-vibrante);
+        }
+        .hero-title { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; margin-top: 10px; }
+        .hero-title span { color: var(--naranja-vibrante); }
+        .hero-subtitle { font-size: 1.2rem; font-weight: 300; margin-top: 10px; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+        /* Game Section */
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; border-bottom: 2px solid var(--gris-neutro); padding-bottom: 10px;
+        }
+        .score-board { font-size: 1.2rem; font-weight: 700; color: var(--naranja-vibrante); }
+        
+        .worksheet-section {
+            background: var(--blanco-puro); padding: 3rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 8px solid var(--naranja-vibrante);
+            position: relative;
+        }
+        
+        .question-number { font-family: var(--font-titulares); color: var(--azul-primario); font-size: 1.5rem; margin-bottom: 1rem; }
+        .question-text { font-size: 1.3rem; margin-bottom: 2rem; font-weight: 600; color: #333; }
+        
+        .options-grid { display: grid; gap: 15px; margin-bottom: 2rem; }
+        
+        .option-btn {
+            background: #f8fafc; border: 2px solid var(--gris-neutro); padding: 15px 20px;
+            border-radius: 8px; font-family: var(--font-cuerpo); font-size: 1.1rem; font-weight: 600;
+            color: var(--azul-primario); cursor: pointer; transition: all 0.3s; text-align: left;
+        }
+        .option-btn:hover:not(:disabled) { border-color: var(--naranja-vibrante); background: #fff5f0; transform: translateX(5px); }
+        
+        .option-btn.correct { background: #e8f5e9; border-color: var(--verde-exito); color: var(--verde-exito); }
+        .option-btn.wrong { background: #ffebee; border-color: var(--rojo-alerta); color: var(--rojo-alerta); text-decoration: line-through; }
+        
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+
+        /* Feedback Area */
+        .feedback-area {
+            display: none; background: #e8f5e9; padding: 20px; border-radius: 8px;
+            border-left: 5px solid var(--verde-exito); margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .feedback-area h4 { color: var(--verde-exito); margin-bottom: 10px; font-size: 1.2rem; }
+        .feedback-area p { font-size: 1.05rem; color: #333; }
+
+        .btn-next { 
+            background: var(--naranja-vibrante); color: white; border: none; padding: 15px 30px; 
+            border-radius: 5px; font-family: var(--font-titulares); cursor: pointer; transition: 0.3s; 
+            font-size: 1.2rem; width: 100%; display: none;
+        }
+        .btn-next:hover { background: #e05e15; transform: translateY(-2px); }
+
+        /* Completed State */
+        .completion-message { text-align: center; display: none; }
+        .completion-message h2 { color: var(--verde-exito); font-size: 2.5rem; margin-bottom: 1rem; }
+        .completion-message p { font-size: 1.2rem; color: #555; margin-bottom: 2rem; }
+
+        .footer { text-align: center; padding: 2rem; background: var(--azul-primario); color: white; margin-top: 3rem; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1 class="hero-title">Travel English <span>for China</span></h1>
+        <p class="hero-subtitle">Interactive Survival Guide - Teacher Ivan</p>
+    </header>
+
+    <div class="container">
+        <div class="game-header" id="gameHeader">
+            <div>
+                <h3>Fielding School</h3>
+                <span style="font-size: 0.9rem; color: #666;">B1/B2 Travel & Logistics Module</span>
+            </div>
+            <div class="score-board">
+                Score: <span id="scoreDisplay">0</span> / 30
+            </div>
+        </div>
+
+        <div class="worksheet-section" id="quizSection">
+            <div class="question-number">Scenario <span id="qNumber">1</span> of 30</div>
+            <div class="question-text" id="qText">Loading question...</div>
+            
+            <div class="options-grid" id="optionsContainer">
+                <!-- Buttons injected by JS -->
+            </div>
+
+            <div class="feedback-area" id="feedbackBox">
+                <h4>✔️ Correct!</h4>
+                <p id="explanationText">Explanation goes here.</p>
+            </div>
+
+            <button class="btn-next" id="nextBtn" onclick="nextQuestion()">Next Scenario ➔</button>
+        </div>
+
+        <div class="worksheet-section completion-message" id="completionSection">
+            <h2>🎉 Ready for Takeoff!</h2>
+            <p>You have successfully completed the Travel Survival English preparation. You are ready to navigate airports, hotels, and taxis in China.</p>
+            <p>Final Score: <strong id="finalScore" style="color: var(--naranja-vibrante); font-size: 1.5rem;"></strong> / 30</p>
+            <button class="btn-next" style="display: block; margin-top: 2rem;" onclick="location.reload()">Restart Practice</button>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Teacher Ivan HUB | Fielding School - English for Travel</p>
+    </footer>
+
+    <script>
+        const questionsData = [{"q": "Immigration Officer: What is the purpose of your ________?", "options": ["visit", "visiting", "visited"], "answer": 0, "explanation": "Vocab: We use the noun 'visit' to describe the reason for traveling. 'Visiting' is a verb form."}, {"q": "Officer: How long do you intend to ________ in China?", "options": ["stay", "live", "wait"], "answer": 0, "explanation": "Vocab/Grammar: 'Stay' is the correct verb for a temporary visit. 'Live' implies permanent residence."}, {"q": "Customs: Do you have anything to ________?", "options": ["declare", "say", "show"], "answer": 0, "explanation": "Vocab: 'Declare' is the specific legal and travel term for reporting goods to customs."}, {"q": "Airport: Excuse me, where is the baggage ________?", "options": ["claim", "take", "get"], "answer": 0, "explanation": "Vocab: 'Baggage claim' is the standard compound noun for the area where you collect your luggage."}, {"q": "Taxi: Could you take me to this ________, please?", "options": ["address", "direction", "place"], "answer": 0, "explanation": "Vocab: You show a driver an 'address' (the exact written location). 'Direction' means the way you are facing or moving."}, {"q": "Taxi: Please turn on the ________.", "options": ["meter", "machine", "clock"], "answer": 0, "explanation": "Vocab: The device that calculates the taxi fare is called a 'meter'."}, {"q": "Hotel: Hello, I have a ________ under the name Morales.", "options": ["reservation", "book", "reserve"], "answer": 0, "explanation": "Grammar: We need a noun after the article 'a'. 'Reservation' is a noun, while 'reserve' and 'book' are verbs."}, {"q": "Hotel: Can I see your booking ________ and passport, please?", "options": ["confirmation", "confirming", "confirm"], "answer": 0, "explanation": "Grammar: We use the noun 'confirmation' to refer to the document proving your reservation."}, {"q": "Hotel: What time is ________ tomorrow?", "options": ["check-out", "checking", "check-off"], "answer": 0, "explanation": "Vocab: 'Check-out' is the official term for leaving a hotel and paying your bill."}, {"q": "Hotel: Could I have a ________ call at 6:00 AM?", "options": ["wake-up", "waking", "awake"], "answer": 0, "explanation": "Vocab: A 'wake-up call' is a fixed expression in hospitality for a scheduled morning phone call."}, {"q": "Money: Where can I ________ some money?", "options": ["exchange", "change", "switch"], "answer": 0, "explanation": "Vocab: While 'change' is understood, 'exchange' is the formal and most correct term for converting currencies."}, {"q": "Money: What is the current exchange ________ for dollars to RMB?", "options": ["rate", "price", "cost"], "answer": 0, "explanation": "Vocab: The value of one currency compared to another is always called the 'exchange rate'."}, {"q": "Directions: Excuse me, how do I ________ to the Canton Fair?", "options": ["get", "go", "arrive"], "answer": 0, "explanation": "Grammar: We use 'get to' + place to ask for directions. We do not say 'go to' when asking *how*."}, {"q": "Directions: Is the subway station within walking ________?", "options": ["distance", "space", "time"], "answer": 0, "explanation": "Vocab: 'Walking distance' is a standard collocation meaning close enough to walk to."}, {"q": "Train: I would like a ________ ticket to Shanghai.", "options": ["round-trip", "two-way", "double"], "answer": 0, "explanation": "Vocab: A 'round-trip' ticket goes to a destination and returns. 'Two-way' is rarely used for tickets."}, {"q": "Train: Which ________ does the train to Yiwu leave from?", "options": ["platform", "station", "floor"], "answer": 0, "explanation": "Vocab: Trains depart from a specific 'platform' inside the station."}, {"q": "Food: Could we have the ________, please?", "options": ["menu", "list", "paper"], "answer": 0, "explanation": "Vocab: A 'menu' is the list of food available in a restaurant."}, {"q": "Food: I am allergic ________ seafood.", "options": ["to", "with", "for"], "answer": 0, "explanation": "Grammar: The adjective 'allergic' is always followed by the preposition 'to'."}, {"q": "Food: We are finished. Can I have the ________, please?", "options": ["bill", "receipt", "note"], "answer": 0, "explanation": "Vocab: You ask for the 'bill' (or check) to pay. A 'receipt' is what you get *after* you pay."}, {"q": "Shopping: How ________ is this sample?", "options": ["much", "many", "price"], "answer": 0, "explanation": "Grammar: We use 'How much' to ask for the price of uncountable concepts or items."}, {"q": "Shopping: Can you give me a ________? I am buying in bulk.", "options": ["discount", "cheaper", "less"], "answer": 0, "explanation": "Grammar: 'Discount' is a noun. 'Cheaper' and 'less' are adjectives/adverbs and don't fit after 'a'."}, {"q": "Networking: Here is my business ________.", "options": ["card", "paper", "note"], "answer": 0, "explanation": "Vocab: 'Business card' is the fixed term for the small card with your contact info."}, {"q": "Internet: What is the password for the ________?", "options": ["Wi-Fi", "internet", "connection"], "answer": 0, "explanation": "Vocab: 'Wi-Fi' is the specific network you connect to with a password."}, {"q": "Health: Is there a ________ near here? I need some medicine.", "options": ["pharmacy", "drug", "medicine"], "answer": 0, "explanation": "Vocab: A 'pharmacy' (or drugstore) is the place where you buy medicine."}, {"q": "Emergency: I have lost my ________. I need to contact my embassy.", "options": ["passport", "pass", "document"], "answer": 0, "explanation": "Vocab: 'Passport' is the specific international travel document."}, {"q": "Transport: Where is the nearest subway ________?", "options": ["station", "stop", "place"], "answer": 0, "explanation": "Vocab: Subways and trains use 'stations'. Buses use 'stops'."}, {"q": "Airport: Your flight to Guangzhou is boarding at ________ 15.", "options": ["gate", "door", "entrance"], "answer": 0, "explanation": "Vocab: In an airport, passengers board planes through a 'gate'."}, {"q": "Flight: Would you like an aisle seat or a ________ seat?", "options": ["window", "wall", "glass"], "answer": 0, "explanation": "Vocab: The seat next to the outside of the plane is the 'window seat'."}, {"q": "Flight: Please fasten your seat ________.", "options": ["belt", "strap", "rope"], "answer": 0, "explanation": "Vocab: 'Seat belt' is the standard safety equipment on planes and cars."}, {"q": "Departure: Have a safe ________ back to Bolivia!", "options": ["flight", "fly", "flying"], "answer": 0, "explanation": "Grammar: We need a noun here. 'Flight' is the noun, 'fly' and 'flying' are verbs."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const qNumberEl = document.getElementById('qNumber');
+        const qTextEl = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackBox = document.getElementById('feedbackBox');
+        const explanationText = document.getElementById('explanationText');
+        const nextBtn = document.getElementById('nextBtn');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const quizSection = document.getElementById('quizSection');
+        const completionSection = document.getElementById('completionSection');
+        const gameHeader = document.getElementById('gameHeader');
+        const finalScoreEl = document.getElementById('finalScore');
+
+        function loadQuestion() {
+            // Reset state
+            feedbackBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const q = questionsData[currentQuestionIndex];
+            qNumberEl.textContent = currentQuestionIndex + 1;
+            qTextEl.textContent = q.q;
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = String.fromCharCode(65 + index) + ". " + opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const q = questionsData[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedIndex === q.answer) {
+                // Correct
+                btnElement.classList.add('correct');
+                score++;
+                scoreDisplay.textContent = score;
+                
+                // Show Explanation
+                feedbackBox.style.display = 'block';
+                explanationText.innerHTML = "<strong>" + q.options[q.answer] + "</strong> is the right choice. <br><br>" + q.explanation;
+                
+                // Show Next Button
+                nextBtn.style.display = 'block';
+            } else {
+                // Incorrect
+                btnElement.classList.add('wrong');
+                btnElement.classList.add('shake');
+                
+                // Keep allowing them to click other options if wrong
+                setTimeout(() => {
+                    btnElement.classList.remove('shake');
+                    // Re-enable other non-wrong buttons
+                    buttons.forEach(b => {
+                        if(!b.classList.contains('wrong')) b.disabled = false;
+                    });
+                }, 400);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                // Finish Game
+                quizSection.style.display = 'none';
+                gameHeader.style.display = 'none';
+                completionSection.style.display = 'block';
+                finalScoreEl.textContent = score;
+            }
+        }
+
+        // Initialize game
+        loadQuestion();
+    </script>
+</body>
+</html>
