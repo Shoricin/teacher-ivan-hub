@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Vocabulary Match - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-bg: #e2e8f0; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--gris-bg); color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-puro); padding: 20px; text-align: center;
+            border-bottom: 5px solid var(--naranja-vibrante);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0; font-family: var(--font-titulares); text-transform: uppercase; font-size: 2rem;}
+        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 1.1rem;}
+
+        /* Main Container */
+        .container {
+            flex: 1; max-width: 1200px; margin: 30px auto; width: 95%;
+            background: var(--blanco-puro); border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex; flex-wrap: wrap; background: #cbd5e1;
+        }
+        .tab-btn {
+            flex: 1; min-width: 200px; padding: 15px; border: none; background: #cbd5e1;
+            color: #444; font-family: var(--font-titulares); font-weight: bold;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+            border-right: 1px solid #94a3b8; border-bottom: 3px solid transparent;
+        }
+        .tab-btn:hover { background: #e2e8f0; }
+        .tab-btn.active {
+            background: var(--blanco-puro); color: var(--azul-primario);
+            border-bottom: 3px solid var(--naranja-vibrante);
+        }
+        .tab-btn.completed {
+            color: var(--verde-exito);
+        }
+        .tab-btn.completed::after { content: " ✔️"; }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 30px; display: none; animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+
+        .instructions {
+            text-align: center; margin-bottom: 20px; font-size: 1.1rem; color: #555;
+        }
+
+        /* Game Grid */
+        .game-grid {
+            display: flex; gap: 30px; flex-direction: column;
+        }
+
+        /* Words Bank */
+        .words-bank {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+            background: #f8fafc; padding: 20px; border-radius: 8px; border: 2px solid #e2e8f0;
+        }
+        .word-btn {
+            background: white; border: 2px solid var(--azul-claro); padding: 10px 20px;
+            border-radius: 20px; font-family: var(--font-titulares); font-size: 1rem;
+            color: var(--azul-primario); cursor: pointer; transition: 0.2s; font-weight: bold;
+        }
+        .word-btn:hover:not(.disabled) {
+            background: var(--azul-claro); color: white;
+        }
+        .word-btn.selected {
+            background: var(--naranja-vibrante); border-color: var(--naranja-vibrante); color: white;
+            transform: scale(1.05); box-shadow: 0 4px 10px rgba(245, 110, 30, 0.3);
+        }
+        .word-btn.disabled {
+            background: #e8f5e9; border-color: var(--verde-exito); color: var(--verde-exito);
+            opacity: 0.7; cursor: default;
+        }
+        .word-btn.wrong {
+            background: #ffebee; border-color: var(--rojo-alerta); color: var(--rojo-alerta);
+            animation: shake 0.4s;
+        }
+
+        /* Concepts Grid */
+        .concepts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;
+        }
+        .concept-card {
+            background: white; border: 2px solid #e2e8f0; padding: 15px; border-radius: 8px;
+            font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: flex;
+            align-items: center; min-height: 80px; line-height: 1.4; color: #333;
+        }
+        .concept-card:hover:not(.disabled) {
+            border-color: var(--naranja-vibrante); background: #fffaf5;
+        }
+        .concept-card.disabled {
+            background: #e8f5e9; border-color: var(--verde-exito); color: #2e7d32;
+            cursor: default; opacity: 0.8; font-weight: bold;
+        }
+        .concept-card.disabled::before {
+            content: "✔️ "; margin-right: 5px;
+        }
+
+        /* Score Screen */
+        .score-screen {
+            text-align: center; padding: 40px; background: #f0f7fa; border-radius: 12px;
+            display: none; border: 2px solid var(--verde-exito); margin-top: 20px;
+        }
+        .score-screen h2 { color: var(--verde-exito); font-family: var(--font-titulares); font-size: 2rem; margin-top:0;}
+        .score-number { font-size: 4rem; font-weight: 800; color: var(--azul-primario); margin: 10px 0; }
+
+        /* Footer */
+        .footer {
+            background: var(--azul-primario); color: white; text-align: center; padding: 15px; margin-top: auto;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Master Vocabulary Match</h1>
+        <p>Fielding School - 5 Business & Travel Modules</p>
+    </header>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs" id="tabsContainer">
+            <!-- Tabs injected by JS -->
+        </div>
+
+        <!-- Content -->
+        <div id="tabContents">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2026 Teacher Ivan HUB | Vocabulary Mastery Game
+    </footer>
+
+    <script>
+        const gameData = [{"category": "Airport & Immigration", "pairs": [{"word": "Passport", "concept": "An official government document certifying identity and citizenship."}, {"word": "Visa", "concept": "An endorsement on a passport allowing entry into a specific country."}, {"word": "Boarding Pass", "concept": "A document provided to a passenger authorizing them to enter an aircraft."}, {"word": "Luggage", "concept": "Suitcases or other bags in which to pack personal belongings for traveling."}, {"word": "Customs", "concept": "The official department that collects duties on imported goods."}, {"word": "Immigration", "concept": "The place at an airport where officials check the documents of people entering."}, {"word": "Declare", "concept": "To make a formal statement of goods brought into a country."}, {"word": "Security", "concept": "Procedures and personnel that check passengers for dangerous items."}, {"word": "Gate", "concept": "The area in an airport where passengers board their flight."}, {"word": "Terminal", "concept": "A large building at an airport where passengers arrive and depart."}, {"word": "Departure", "concept": "The action of leaving, especially to start a journey."}, {"word": "Arrival", "concept": "The action or process of reaching a destination."}, {"word": "Layover", "concept": "A period of rest or waiting before a further stage in a journey."}, {"word": "Check-in", "concept": "The process of registering one's presence at an airport or hotel."}, {"word": "Overhead bin", "concept": "A storage area above passengers' seats in an airplane."}, {"word": "Aisle", "concept": "A passage between rows of seats in an aircraft."}, {"word": "Baggage claim", "concept": "The area where arriving passengers collect their checked luggage."}, {"word": "Conveyor belt", "concept": "A continuous moving band used for transporting luggage."}, {"word": "Flight attendant", "concept": "A person whose job is to ensure the safety and comfort of passengers."}, {"word": "Itinerary", "concept": "A planned route or journey, often including flight details."}]}, {"category": "Transport & Directions", "pairs": [{"word": "Subway", "concept": "An underground electric railroad system in a city."}, {"word": "Highway", "concept": "A main road, especially one connecting major towns or cities."}, {"word": "Rush hour", "concept": "A time during each day when traffic is at its heaviest."}, {"word": "Taxi", "concept": "A car licensed to transport passengers in return for payment."}, {"word": "Fare", "concept": "The money a passenger on public transportation has to pay."}, {"word": "Meter", "concept": "A device in a taxicab that records the distance traveled and calculates the cost."}, {"word": "Transfer", "concept": "To change from one train or bus to another during a journey."}, {"word": "Platform", "concept": "A raised level surface on which people or things can stand, usually at a train station."}, {"word": "Shuttle", "concept": "A form of transportation that travels regularly between two places."}, {"word": "Route", "concept": "A way or course taken in getting from a starting point to a destination."}, {"word": "Intersection", "concept": "A point where two or more roads meet or cross."}, {"word": "Block", "concept": "The length of a street between two intersections."}, {"word": "Pedestrian", "concept": "A person walking along a road or in a developed area."}, {"word": "Traffic light", "concept": "A set of automatically operated colored lights for controlling traffic."}, {"word": "Direction", "concept": "Instructions on how to reach a destination."}, {"word": "GPS", "concept": "A satellite navigation system used to determine ground position."}, {"word": "Passenger", "concept": "A traveler on a public or private conveyance other than the driver."}, {"word": "Destination", "concept": "The place to which someone or something is going or being sent."}, {"word": "Commute", "concept": "To travel some distance between one's home and place of work on a regular basis."}, {"word": "Transit", "concept": "The carrying of people, goods, or materials from one place to another."}]}, {"category": "Hotel & Accommodation", "pairs": [{"word": "Reservation", "concept": "An arrangement whereby a room is secured in advance."}, {"word": "Reception", "concept": "The area in a hotel where guests are greeted and dealt with."}, {"word": "Check-out", "concept": "The act of leaving a hotel and paying the bill."}, {"word": "Keycard", "concept": "A plastic card containing data used to unlock a hotel door."}, {"word": "Wake-up call", "concept": "A telephone call arranged to wake a person at a specific time."}, {"word": "Bellboy", "concept": "A hotel worker who helps guests with their luggage."}, {"word": "Lobby", "concept": "A room providing a space out of which one or more other rooms or corridors lead, typically near the entrance of a public building."}, {"word": "Suite", "concept": "A set of connected rooms in a hotel, usually larger than a standard room."}, {"word": "Amenities", "concept": "Desirable or useful features or facilities of a building or place."}, {"word": "Room service", "concept": "A hotel service enabling guests to choose items of food and drink for delivery to their room."}, {"word": "Deposit", "concept": "A sum payable as a first installment on the pledge of a contract."}, {"word": "Booking", "concept": "An act of reserving accommodation, travel, etc., or of buying a ticket in advance."}, {"word": "Vacancy", "concept": "An unoccupied room in a hotel or guesthouse."}, {"word": "Housekeeping", "concept": "The department that deals with the cleaning of rooms in a hotel."}, {"word": "Elevator", "concept": "A machine for carrying people and things to different levels in a building."}, {"word": "Concierge", "concept": "A hotel employee whose job is to assist guests by booking tours, making theatre and restaurant reservations, etc."}, {"word": "Buffet", "concept": "A meal consisting of several dishes from which guests serve themselves."}, {"word": "Mattress", "concept": "A fabric case stuffed with resilient material, used for sleeping on."}, {"word": "Complimentary", "concept": "Given or supplied free of charge."}, {"word": "Receipt", "concept": "A printed statement acknowledging that something has been paid for."}]}, {"category": "Business & Negotiation", "pairs": [{"word": "MOQ", "concept": "The lowest number of items a supplier is willing to sell at once."}, {"word": "Bulk", "concept": "Goods traded in very large quantities."}, {"word": "Wholesale", "concept": "The selling of goods in large quantities to be retailed by others."}, {"word": "Quote", "concept": "An estimated price given for a specific job or service."}, {"word": "Supplier", "concept": "A person or organization that provides something needed such as a product or service."}, {"word": "FOB", "concept": "A shipping term meaning the seller pays for transportation to the port of shipment."}, {"word": "Proforma Invoice", "concept": "A preliminary bill of sale sent to buyers in advance of a shipment or delivery of goods."}, {"word": "Lead time", "concept": "The time between the initiation and completion of a production process."}, {"word": "Discount", "concept": "A deduction from the usual cost of something."}, {"word": "Warranty", "concept": "A written guarantee, issuing a promise to repair or replace it if necessary within a specified period of time."}, {"word": "Defective", "concept": "Imperfect or faulty."}, {"word": "Freight", "concept": "Goods transported in bulk by truck, train, ship, or aircraft."}, {"word": "Logistics", "concept": "The detailed coordination of a complex operation involving many people, facilities, or supplies."}, {"word": "Customization", "concept": "The action of modifying something to suit a particular individual or task."}, {"word": "Manufacturer", "concept": "A person or company that makes goods for sale."}, {"word": "Catalog", "concept": "A complete list of items, typically one in alphabetical or other systematic order."}, {"word": "Inventory", "concept": "A complete list of items such as property, goods in stock, or the contents of a building."}, {"word": "Warehouse", "concept": "A large building where raw materials or manufactured goods may be stored before their export or distribution for sale."}, {"word": "Contract", "concept": "A written or spoken agreement, especially one concerning employment, sales, or tenancy, that is intended to be enforceable by law."}, {"word": "Terms", "concept": "Conditions under which an action may be undertaken or agreement reached; stipulations."}]}, {"category": "Eating Out & Small Talk", "pairs": [{"word": "Menu", "concept": "A list of dishes available in a restaurant."}, {"word": "Appetizer", "concept": "A small dish of food or a drink taken before a meal or the main course of a meal to stimulate one's appetite."}, {"word": "Main course", "concept": "The most substantial course of a meal."}, {"word": "Dessert", "concept": "The sweet course eaten at the end of a meal."}, {"word": "Allergy", "concept": "A damaging immune response by the body to a substance, especially a particular food."}, {"word": "Spicy", "concept": "Flavored with or fragrant with spice; hot."}, {"word": "Chopsticks", "concept": "A pair of small, thin, tapered sticks of wood, ivory, or plastic, held together in one hand and used as eating utensils."}, {"word": "Napkin", "concept": "A square piece of cloth or paper used at a meal to wipe the fingers or lips and to protect garments."}, {"word": "Bill", "concept": "A printed or written statement of the money owed for goods or services."}, {"word": "Tip", "concept": "A sum of money given to someone as a reward for their services."}, {"word": "Takeout", "concept": "Food that is cooked and sold by a restaurant or store to be eaten elsewhere."}, {"word": "Beverage", "concept": "A drink, especially one other than water."}, {"word": "Vegetarian", "concept": "A person who does not eat meat, and sometimes other animal products."}, {"word": "Jet-lag", "concept": "Extreme tiredness and other physical effects felt by a person after a long flight across several time zones."}, {"word": "Colleague", "concept": "A person with whom one works, especially in a profession or business."}, {"word": "Acquaintance", "concept": "A person's knowledge or experience of something, or a person one knows slightly."}, {"word": "Hobby", "concept": "An activity done regularly in one's leisure time for pleasure."}, {"word": "Climate", "concept": "The weather conditions prevailing in an area in general or over a long period."}, {"word": "Sightseeing", "concept": "The activity of visiting places of interest in a particular location."}, {"word": "Culture", "concept": "The arts and other manifestations of human intellectual achievement regarded collectively."}]}];
+        
+        let state = {};
+        // Structure: state[categoryIndex] = { mistakes: 0, matched: 0, selectedWord: null, selectedWordEl: null }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function initGame() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const tabContents = document.getElementById('tabContents');
+
+            gameData.forEach((categoryData, index) => {
+                // Init state
+                state[index] = { mistakes: 0, matched: 0, selectedWord: null, selectedWordEl: null };
+
+                // Create Tab
+                const tabBtn = document.createElement('button');
+                tabBtn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+                tabBtn.id = `tab-btn-${index}`;
+                tabBtn.textContent = categoryData.category;
+                tabBtn.onclick = () => switchTab(index);
+                tabsContainer.appendChild(tabBtn);
+
+                // Create Content Area
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `tab-content ${index === 0 ? 'active' : ''}`;
+                contentDiv.id = `tab-content-${index}`;
+
+                contentDiv.innerHTML = `
+                    <div class="instructions"><strong>Step 1:</strong> Click a word from the blue bank. <strong>Step 2:</strong> Click its correct definition below. Match all 20!</div>
+                    <div class="game-grid">
+                        <div class="words-bank" id="words-bank-${index}"></div>
+                        <div class="concepts-grid" id="concepts-grid-${index}"></div>
+                    </div>
+                    <div class="score-screen" id="score-screen-${index}">
+                        <h2>Scenario Completed!</h2>
+                        <div class="score-number" id="score-number-${index}">100%</div>
+                        <p id="score-msg-${index}"></p>
+                    </div>
+                `;
+                tabContents.appendChild(contentDiv);
+
+                renderGameElements(index, categoryData.pairs);
+            });
+        }
+
+        function renderGameElements(index, pairs) {
+            const wordsBank = document.getElementById(`words-bank-${index}`);
+            const conceptsGrid = document.getElementById(`concepts-grid-${index}`);
+
+            // Shuffle words and concepts separately
+            const shuffledWords = shuffleArray(pairs.map(p => p.word));
+            const shuffledConcepts = shuffleArray(pairs.map(p => ({ word: p.word, concept: p.concept })));
+
+            // Render Words
+            shuffledWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.textContent = word;
+                btn.onclick = () => selectWord(index, word, btn);
+                wordsBank.appendChild(btn);
+            });
+
+            // Render Concepts
+            shuffledConcepts.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'concept-card';
+                card.textContent = item.concept;
+                card.onclick = () => selectConcept(index, item.word, card);
+                conceptsGrid.appendChild(card);
+            });
+        }
+
+        function selectWord(index, word, btnElement) {
+            if (btnElement.classList.contains('disabled')) return;
+
+            const categoryState = state[index];
+            
+            // Deselect previous
+            if (categoryState.selectedWordEl) {
+                categoryState.selectedWordEl.classList.remove('selected');
+            }
+
+            // Select new
+            categoryState.selectedWord = word;
+            categoryState.selectedWordEl = btnElement;
+            btnElement.classList.add('selected');
+        }
+
+        function selectConcept(index, correctWord, cardElement) {
+            if (cardElement.classList.contains('disabled')) return;
+
+            const categoryState = state[index];
+
+            if (!categoryState.selectedWord) {
+                alert("Please click a word from the bank first!");
+                return;
+            }
+
+            if (categoryState.selectedWord === correctWord) {
+                // Match Correct
+                categoryState.selectedWordEl.classList.remove('selected');
+                categoryState.selectedWordEl.classList.add('disabled');
+                cardElement.classList.add('disabled');
+                
+                // Show the matched word in the concept card
+                cardElement.innerHTML = `<strong>${correctWord}:</strong> ${cardElement.textContent}`;
+
+                categoryState.selectedWord = null;
+                categoryState.selectedWordEl = null;
+                categoryState.matched++;
+
+                checkCompletion(index);
+            } else {
+                // Match Incorrect
+                categoryState.mistakes++;
+                categoryState.selectedWordEl.classList.add('wrong');
+                
+                // Remove wrong animation class after it plays
+                setTimeout(() => {
+                    if(categoryState.selectedWordEl) {
+                        categoryState.selectedWordEl.classList.remove('wrong');
+                        categoryState.selectedWordEl.classList.remove('selected');
+                    }
+                    categoryState.selectedWord = null;
+                    categoryState.selectedWordEl = null;
+                }, 400);
+            }
+        }
+
+        function checkCompletion(index) {
+            const categoryState = state[index];
+            if (categoryState.matched === 20) {
+                // Hide game grid, show score
+                document.querySelector(`#tab-content-${index} .game-grid`).style.display = 'none';
+                document.querySelector(`#tab-content-${index} .instructions`).style.display = 'none';
+                const scoreScreen = document.getElementById(`score-screen-${index}`);
+                const scoreNumber = document.getElementById(`score-number-${index}`);
+                const scoreMsg = document.getElementById(`score-msg-${index}`);
+
+                // Calculate Score (100 base - 5 per mistake, min 0)
+                let score = Math.max(0, 100 - (categoryState.mistakes * 5));
+                scoreNumber.textContent = score + "%";
+                
+                if (score === 100) scoreMsg.textContent = "Perfect! Flawless vocabulary mastery.";
+                else if (score >= 80) scoreMsg.textContent = `Great job! You made ${categoryState.mistakes} mistakes.`;
+                else scoreMsg.textContent = `Good effort. You made ${categoryState.mistakes} mistakes. Keep practicing!`;
+
+                scoreScreen.style.display = 'block';
+
+                // Mark tab as completed
+                document.getElementById(`tab-btn-${index}`).classList.add('completed');
+            }
+        }
+
+        function switchTab(index) {
+            // Remove active from all
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active to selected
+            document.getElementById(`tab-btn-${index}`).classList.add('active');
+            document.getElementById(`tab-content-${index}`).classList.add('active');
+        }
+
+        // Start
+        initGame();
+    </script>
+</body>
+</html>
