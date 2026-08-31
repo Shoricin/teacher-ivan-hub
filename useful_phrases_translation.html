@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useful Phrases Translation - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-bg: #f0f2f5; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--gris-bg); color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-puro); padding: 20px; text-align: center;
+            border-bottom: 5px solid var(--naranja-vibrante);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0; font-family: var(--font-titulares); text-transform: uppercase; }
+        .header p { margin: 5px 0 0; opacity: 0.9; }
+
+        /* Main Container */
+        .container {
+            flex: 1; max-width: 900px; margin: 40px auto; width: 95%;
+            background: var(--blanco-puro); border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 40px;
+        }
+
+        /* Screens */
+        #login-screen, #exam-screen, #result-screen { display: none; }
+        #login-screen.active, #exam-screen.active, #result-screen.active { display: block; animation: fadeIn 0.4s; }
+
+        /* Login */
+        .login-box { text-align: center; }
+        .login-box h2 { color: var(--azul-primario); font-family: var(--font-titulares); margin-bottom: 20px; }
+        .login-input {
+            font-size: 1.2rem; padding: 15px; width: 80%; max-width: 400px;
+            border: 2px solid #ccc; border-radius: 8px; text-align: center;
+            font-family: var(--font-cuerpo); margin-bottom: 20px; transition: 0.3s;
+        }
+        .login-input:focus { outline: none; border-color: var(--naranja-vibrante); }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;
+            font-family: var(--font-titulares); font-size: 1.1rem; font-weight: bold;
+            transition: 0.3s; color: white; background: var(--naranja-vibrante);
+            text-transform: uppercase; display: inline-block;
+        }
+        .btn:hover { background: #e05e15; transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        .btn-hint {
+            background: #fff3e0; color: #d84315; border: 1px solid #ffcc80;
+            font-size: 0.95rem; padding: 8px 15px; border-radius: 20px;
+            margin-top: 15px; display: inline-flex; align-items: center; gap: 5px;
+            cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .btn-hint:hover { background: #ffe0b2; }
+
+        /* Exam Screen */
+        .scenario-badge {
+            background: var(--azul-primario); color: white; padding: 8px 15px;
+            border-radius: 20px; font-size: 0.9rem; font-weight: bold;
+            display: inline-block; margin-bottom: 15px; text-transform: uppercase;
+        }
+        .progress-bar { font-weight: bold; color: var(--naranja-vibrante); float: right; margin-top: 5px; }
+        
+        .prompt-section { margin-bottom: 30px; text-align: center; }
+        .instruction-text { font-weight: bold; color: #666; margin-bottom: 20px; font-size: 1.1rem; }
+        
+        .phrase-box {
+            background: #f8fafc; border: 2px solid var(--azul-claro);
+            padding: 30px 20px; border-radius: 12px; margin-bottom: 15px;
+            font-size: 1.6rem; font-weight: 700; color: var(--azul-primario);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .hint-box {
+            display: none; background: #e8f5e9; border-left: 4px solid var(--verde-exito);
+            padding: 12px; margin-top: 15px; border-radius: 4px;
+            color: #2e7d32; font-style: italic; font-weight: 600; animation: fadeIn 0.3s;
+        }
+
+        .input-section { margin-bottom: 30px; }
+        .text-area {
+            width: 100%; height: 100px; padding: 15px; font-size: 1.3rem;
+            font-family: var(--font-cuerpo); border: 2px solid #ccc; border-radius: 8px;
+            resize: none; transition: 0.3s; text-align: center;
+        }
+        .text-area:focus { outline: none; border-color: var(--naranja-vibrante); box-shadow: 0 0 10px rgba(245, 110, 30, 0.2); }
+
+        /* Results Screen */
+        .transcript-container { padding: 30px; background: white; }
+        .transcript-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--naranja-vibrante); padding-bottom: 15px; }
+        .t-scenario { font-size: 1.3rem; font-weight: bold; color: white; margin-top: 30px; margin-bottom: 15px; background: var(--azul-primario); padding: 10px 15px; border-radius: 6px;}
+        
+        .comparison-card {
+            border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px;
+            background: #f8fafc;
+        }
+        .t-es { font-size: 1.1rem; font-weight: bold; color: var(--azul-primario); margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .t-correct { color: var(--verde-exito); font-weight: bold; margin-bottom: 5px; }
+        .t-user { color: var(--naranja-vibrante); font-weight: bold; }
+
+        /* Footer */
+        .footer { background: var(--azul-primario); color: white; text-align: center; padding: 15px; margin-top: auto; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Useful Phrases Translation</h1>
+        <p>Fielding School - English to Spanish Survival Guide</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen" class="active login-box">
+            <h2>Welcome to the Translation Practice</h2>
+            <p style="margin-bottom: 30px; color: #555;">Enter your name to translate 50 useful phrases for your trip to China.</p>
+            <input type="text" id="studentName" class="login-input" placeholder="Your Name" autocomplete="off">
+            <br>
+            <button class="btn" id="startBtn" onclick="startExam()">Start Practice</button>
+        </div>
+
+        <!-- EXAM SCREEN -->
+        <div id="exam-screen">
+            <div style="overflow: hidden; margin-bottom: 20px;">
+                <div class="scenario-badge" id="scenarioBadge">Scenario</div>
+                <div class="progress-bar"><span id="qCurrent">1</span> / 50</div>
+            </div>
+            
+            <div class="prompt-section">
+                <div class="instruction-text">Translate this phrase into English:</div>
+                <div class="phrase-box" id="phraseBox">Loading phrase...</div>
+                
+                <button class="btn-hint" onclick="showHint()" id="hintBtn">💡 Need a hint? Show Keywords</button>
+                <div class="hint-box" id="hintBox"></div>
+            </div>
+
+            <div class="input-section">
+                <textarea id="answerInput" class="text-area" placeholder="Type your English translation here..." oninput="checkInput()"></textarea>
+            </div>
+
+            <div style="text-align: right;">
+                <button class="btn" id="nextBtn" onclick="submitAnswer()" disabled>Next Phrase ➔</button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: var(--verde-exito); font-family: var(--font-titulares);">Practice Completed!</h2>
+                <p style="font-size: 1.1rem; color: #555;">Review your translations below compared to the correct English phrases. Generate your PDF to study them later.</p>
+                <button class="btn" onclick="downloadPDF()">Download PDF Report</button>
+            </div>
+            
+            <!-- Hidden area for PDF generation -->
+            <div style="border: 2px solid #e2e8f0; border-radius: 8px; max-height: 500px; overflow-y: auto; background: #fff; padding: 10px;">
+                <div id="pdf-content" class="transcript-container">
+                    <div class="transcript-header">
+                        <h2>Survival Phrases Report</h2>
+                        <p><strong>Student Name:</strong> <span id="pdfStudentName"></span></p>
+                        <p><strong>Date:</strong> <span id="pdfDate"></span></p>
+                    </div>
+                    <div id="transcriptBody"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        © 2026 Teacher Ivan HUB | Fielding School Translation Tool
+    </footer>
+
+    <script>
+        const phrasesData = [{"scenario": "Airport & Immigration", "es": "\u00bfCu\u00e1l es el prop\u00f3sito de su visita?", "en": "What is the purpose of your visit?", "hint": "Keywords: purpose / visit"}, {"scenario": "Airport & Immigration", "es": "Viajo por negocios.", "en": "I am traveling for business.", "hint": "Keywords: traveling / business"}, {"scenario": "Airport & Immigration", "es": "\u00bfTiene algo que declarar?", "en": "Do you have anything to declare?", "hint": "Keywords: anything / declare"}, {"scenario": "Airport & Immigration", "es": "Aqu\u00ed est\u00e1 mi pasaporte y pase de abordar.", "en": "Here is my passport and boarding pass.", "hint": "Keywords: here / passport / boarding pass"}, {"scenario": "Airport & Immigration", "es": "\u00bfD\u00f3nde est\u00e1 el reclamo de equipaje?", "en": "Where is the baggage claim?", "hint": "Keywords: where / baggage claim"}, {"scenario": "Airport & Immigration", "es": "Mi vuelo est\u00e1 retrasado.", "en": "My flight is delayed.", "hint": "Keywords: flight / delayed"}, {"scenario": "Airport & Immigration", "es": "S\u00f3lo tengo equipaje de mano.", "en": "I only have a carry-on bag.", "hint": "Keywords: only / carry-on"}, {"scenario": "Airport & Immigration", "es": "\u00bfA qu\u00e9 hora abordamos?", "en": "What time do we board?", "hint": "Keywords: what time / board"}, {"scenario": "Airport & Immigration", "es": "Necesito una visa de entrada m\u00faltiple.", "en": "I need a multiple-entry visa.", "hint": "Keywords: need / multiple-entry"}, {"scenario": "Airport & Immigration", "es": "\u00bfD\u00f3nde est\u00e1 la puerta 15?", "en": "Where is gate 15?", "hint": "Keywords: where / gate"}, {"scenario": "Transport & Directions", "es": "Ll\u00e9veme a esta direcci\u00f3n, por favor.", "en": "Please take me to this address.", "hint": "Keywords: take me / address"}, {"scenario": "Transport & Directions", "es": "Por favor, encienda el tax\u00edmetro.", "en": "Please turn on the meter.", "hint": "Keywords: turn on / meter"}, {"scenario": "Transport & Directions", "es": "\u00bfCu\u00e1nto cuesta ir al aeropuerto?", "en": "How much is it to the airport?", "hint": "Keywords: how much / to"}, {"scenario": "Transport & Directions", "es": "\u00bfD\u00f3nde est\u00e1 la estaci\u00f3n de metro m\u00e1s cercana?", "en": "Where is the nearest subway station?", "hint": "Keywords: nearest / subway station"}, {"scenario": "Transport & Directions", "es": "Gire a la derecha en la siguiente intersecci\u00f3n.", "en": "Turn right at the next intersection.", "hint": "Keywords: turn right / next / intersection"}, {"scenario": "Transport & Directions", "es": "\u00bfPuede conducir m\u00e1s r\u00e1pido? Llego tarde.", "en": "Can you drive faster? I am late.", "hint": "Keywords: drive faster / late"}, {"scenario": "Transport & Directions", "es": "Me gustar\u00eda un boleto de ida y vuelta.", "en": "I would like a round-trip ticket.", "hint": "Keywords: would like / round-trip"}, {"scenario": "Transport & Directions", "es": "B\u00e1jeme aqu\u00ed, por favor.", "en": "Drop me off here, please.", "hint": "Keywords: drop me off / here"}, {"scenario": "Transport & Directions", "es": "\u00bfDe qu\u00e9 and\u00e9n sale el tren?", "en": "Which platform does the train leave from?", "hint": "Keywords: which platform / leave from"}, {"scenario": "Transport & Directions", "es": "Qu\u00e9dese con el cambio.", "en": "Keep the change.", "hint": "Keywords: keep / change"}, {"scenario": "Hotel & Accommodation", "es": "Tengo una reserva a nombre de Ivan.", "en": "I have a reservation under the name Ivan.", "hint": "Keywords: reservation / under the name"}, {"scenario": "Hotel & Accommodation", "es": "\u00bfA qu\u00e9 hora es el check-out?", "en": "What time is check-out?", "hint": "Keywords: what time / check-out"}, {"scenario": "Hotel & Accommodation", "es": "El Wi-Fi no funciona en mi habitaci\u00f3n.", "en": "The Wi-Fi isn't working in my room.", "hint": "Keywords: isn't working / room"}, {"scenario": "Hotel & Accommodation", "es": "Me gustar\u00eda solicitar una llamada de despertador.", "en": "I would like to request a wake-up call.", "hint": "Keywords: request / wake-up call"}, {"scenario": "Hotel & Accommodation", "es": "\u00bfEl desayuno est\u00e1 incluido?", "en": "Is breakfast included?", "hint": "Keywords: breakfast / included"}, {"scenario": "Hotel & Accommodation", "es": "\u00bfTienen servicio de lavander\u00eda?", "en": "Do you have a laundry service?", "hint": "Keywords: have / laundry service"}, {"scenario": "Hotel & Accommodation", "es": "Necesito toallas extra, por favor.", "en": "I need some extra towels, please.", "hint": "Keywords: need / extra towels"}, {"scenario": "Hotel & Accommodation", "es": "\u00bfPuedo dejar mi equipaje aqu\u00ed?", "en": "Can I leave my luggage here?", "hint": "Keywords: leave / luggage"}, {"scenario": "Hotel & Accommodation", "es": "Mi tarjeta llave no abre la puerta.", "en": "My keycard is not opening the door.", "hint": "Keywords: keycard / not opening"}, {"scenario": "Hotel & Accommodation", "es": "Me gustar\u00eda una habitaci\u00f3n m\u00e1s silenciosa.", "en": "I would like a quieter room.", "hint": "Keywords: would like / quieter"}, {"scenario": "Business & Negotiation", "es": "\u00bfCu\u00e1l es la cantidad m\u00ednima de pedido (MOQ)?", "en": "What is the minimum order quantity (MOQ)?", "hint": "Keywords: what is / minimum order quantity"}, {"scenario": "Business & Negotiation", "es": "Nos gustar\u00eda solicitar una muestra.", "en": "We would like to request a sample.", "hint": "Keywords: would like / request / sample"}, {"scenario": "Business & Negotiation", "es": "\u00bfPuede ofrecernos un descuento?", "en": "Can you offer us a discount?", "hint": "Keywords: offer / discount"}, {"scenario": "Business & Negotiation", "es": "Preferimos condiciones de env\u00edo FOB.", "en": "We prefer FOB shipping terms.", "hint": "Keywords: prefer / FOB / shipping terms"}, {"scenario": "Business & Negotiation", "es": "Pagaremos un dep\u00f3sito del 30% por adelantado.", "en": "We will pay a 30% deposit in advance.", "hint": "Keywords: pay / deposit / in advance"}, {"scenario": "Business & Negotiation", "es": "\u00bfCu\u00e1l es el tiempo de entrega para la producci\u00f3n?", "en": "What is the lead time for production?", "hint": "Keywords: what is / lead time / production"}, {"scenario": "Business & Negotiation", "es": "Env\u00edenos la factura proforma.", "en": "Please send us the proforma invoice.", "hint": "Keywords: send us / proforma invoice"}, {"scenario": "Business & Negotiation", "es": "Los productos deben ser de alta calidad.", "en": "The products must be of high quality.", "hint": "Keywords: products must be / high quality"}, {"scenario": "Business & Negotiation", "es": "Nos gustar\u00eda visitar su f\u00e1brica.", "en": "We would like to visit your factory.", "hint": "Keywords: would like / visit / factory"}, {"scenario": "Business & Negotiation", "es": "Esperamos hacer negocios con ustedes.", "en": "We look forward to doing business with you.", "hint": "Keywords: look forward to / doing business"}, {"scenario": "Eating Out & Small Talk", "es": "Una mesa para dos, por favor.", "en": "A table for two, please.", "hint": "Keywords: table / for two"}, {"scenario": "Eating Out & Small Talk", "es": "\u00bfPodr\u00eda traernos el men\u00fa?", "en": "Could you bring us the menu?", "hint": "Keywords: could you / bring / menu"}, {"scenario": "Eating Out & Small Talk", "es": "Soy muy al\u00e9rgico a los mariscos.", "en": "I am highly allergic to seafood.", "hint": "Keywords: highly allergic / seafood"}, {"scenario": "Eating Out & Small Talk", "es": "No muy picante, por favor.", "en": "Not very spicy, please.", "hint": "Keywords: not very / spicy"}, {"scenario": "Eating Out & Small Talk", "es": "\u00bfPodr\u00eda traernos la cuenta?", "en": "Could we have the bill, please?", "hint": "Keywords: could we have / bill"}, {"scenario": "Eating Out & Small Talk", "es": "Todo estuvo delicioso.", "en": "Everything was delicious.", "hint": "Keywords: everything / delicious"}, {"scenario": "Eating Out & Small Talk", "es": "Encantado de conocerle, se\u00f1or Chen.", "en": "Nice to meet you, Mr. Chen.", "hint": "Keywords: nice to meet / Mr. Chen"}, {"scenario": "Eating Out & Small Talk", "es": "\u00bfC\u00f3mo lidia con la diferencia horaria?", "en": "How do you handle the time difference?", "hint": "Keywords: how do you / handle / time difference"}, {"scenario": "Eating Out & Small Talk", "es": "Soy profesor de ingl\u00e9s en Bolivia.", "en": "I am an English teacher in Bolivia.", "hint": "Keywords: English teacher / in Bolivia"}, {"scenario": "Eating Out & Small Talk", "es": "\u00bfPodemos conectarnos por WeChat?", "en": "Can we connect on WeChat?", "hint": "Keywords: can we / connect / on WeChat"}];
+        
+        let currentQIndex = 0;
+        let studentName = "";
+        let studentAnswers = []; 
+
+        const loginScreen = document.getElementById('login-screen');
+        const examScreen = document.getElementById('exam-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const studentNameInput = document.getElementById('studentName');
+        const nextBtn = document.getElementById('nextBtn');
+        const answerInput = document.getElementById('answerInput');
+        const hintBox = document.getElementById('hintBox');
+        const hintBtn = document.getElementById('hintBtn');
+
+        studentNameInput.addEventListener("keypress", function(e) {
+            if(e.key === "Enter") startExam();
+        });
+
+        function startExam() {
+            const name = studentNameInput.value.trim();
+            if(name === "") {
+                alert("Please enter your name to start.");
+                return;
+            }
+            studentName = name;
+            loginScreen.classList.remove('active');
+            examScreen.classList.add('active');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = phrasesData[currentQIndex];
+            
+            document.getElementById('scenarioBadge').textContent = q.scenario;
+            document.getElementById('qCurrent').textContent = currentQIndex + 1;
+            
+            document.getElementById('phraseBox').textContent = q.es;
+            
+            hintBox.textContent = q.hint;
+            hintBox.style.display = 'none';
+            hintBtn.style.display = 'inline-flex';
+
+            answerInput.value = '';
+            nextBtn.disabled = true;
+            answerInput.focus();
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function checkInput() {
+            nextBtn.disabled = answerInput.value.trim() === "";
+        }
+
+        // Allow Enter key to submit
+        answerInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                if(!nextBtn.disabled) submitAnswer();
+            }
+        });
+
+        function submitAnswer() {
+            const q = phrasesData[currentQIndex];
+            const finalAnswer = answerInput.value.trim();
+
+            studentAnswers.push({
+                scenario: q.scenario,
+                es: q.es,
+                en: q.en,
+                userTranslation: finalAnswer
+            });
+
+            currentQIndex++;
+            if (currentQIndex < phrasesData.length) {
+                loadQuestion();
+            } else {
+                finishExam();
+            }
+        }
+
+        function finishExam() {
+            examScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            document.getElementById('pdfStudentName').textContent = studentName;
+            document.getElementById('pdfDate').textContent = new Date().toLocaleDateString();
+
+            const tbody = document.getElementById('transcriptBody');
+            let currentScenario = "";
+
+            studentAnswers.forEach((item, index) => {
+                if (item.scenario !== currentScenario) {
+                    const scDiv = document.createElement('div');
+                    scDiv.className = 't-scenario';
+                    scDiv.textContent = item.scenario;
+                    tbody.appendChild(scDiv);
+                    currentScenario = item.scenario;
+                }
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'comparison-card';
+                
+                cardDiv.innerHTML = `
+                    <div class="t-es">#${index + 1}: ${item.es}</div>
+                    <div class="t-correct">Correct Translation: <span style="font-weight:normal; color:#333;">${item.en}</span></div>
+                    <div class="t-user">Your Translation: <span style="font-weight:normal; color:#333;">${item.userTranslation}</span></div>
+                `;
+                
+                tbody.appendChild(cardDiv);
+            });
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin:       [10, 10, 15, 10], // top, left, bottom, right
+                filename:     `${studentName.replace(/\s+/g, '_')}_Phrases_Translation.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
