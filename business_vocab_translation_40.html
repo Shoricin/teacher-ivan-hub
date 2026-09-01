@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Vocab Translation - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-bg: #f0f2f5; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--gris-bg); color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-puro); padding: 20px; text-align: center;
+            border-bottom: 5px solid var(--naranja-vibrante);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0; font-family: var(--font-titulares); text-transform: uppercase; font-size: 1.8rem;}
+        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 1rem;}
+
+        /* Main Container */
+        .container {
+            flex: 1; max-width: 900px; margin: 40px auto; width: 95%;
+            background: var(--blanco-puro); border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 40px;
+        }
+
+        /* Screens */
+        #login-screen, #practice-screen, #result-screen { display: none; }
+        #login-screen.active, #practice-screen.active, #result-screen.active { display: block; animation: fadeIn 0.4s; }
+
+        /* Login */
+        .login-box { text-align: center; }
+        .login-box h2 { color: var(--azul-primario); font-family: var(--font-titulares); margin-bottom: 20px; }
+        .login-input {
+            font-size: 1.2rem; padding: 15px; width: 80%; max-width: 400px;
+            border: 2px solid #ccc; border-radius: 8px; text-align: center;
+            font-family: var(--font-cuerpo); margin-bottom: 20px; transition: 0.3s;
+        }
+        .login-input:focus { outline: none; border-color: var(--naranja-vibrante); }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;
+            font-family: var(--font-titulares); font-size: 1.1rem; font-weight: bold;
+            transition: 0.3s; color: white; background: var(--naranja-vibrante);
+            text-transform: uppercase; display: inline-block;
+        }
+        .btn:hover { background: #e05e15; transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        .btn-hint {
+            background: #fff3e0; color: #d84315; border: 1px solid #ffcc80;
+            font-size: 0.95rem; padding: 8px 15px; border-radius: 20px;
+            margin-top: 15px; display: inline-flex; align-items: center; gap: 5px;
+            cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .btn-hint:hover { background: #ffe0b2; }
+
+        /* Practice Screen */
+        .progress-bar { font-weight: bold; color: var(--naranja-vibrante); font-size: 1.2rem; margin-bottom: 20px; text-align: right; }
+        
+        .prompt-section { margin-bottom: 30px; text-align: center; }
+        .instruction-text { font-weight: bold; color: #666; margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .vocab-box {
+            background: #f8fafc; border: 2px solid var(--azul-claro);
+            padding: 30px 20px; border-radius: 12px; margin-bottom: 15px;
+            font-size: 2rem; font-weight: 800; color: var(--azul-primario);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-transform: capitalize;
+        }
+        
+        .hint-box {
+            display: none; background: #e8f5e9; border-left: 4px solid var(--verde-exito);
+            padding: 12px; margin-top: 15px; border-radius: 4px;
+            color: #2e7d32; font-style: italic; font-weight: 600; animation: fadeIn 0.3s;
+        }
+
+        .input-section { margin-bottom: 30px; }
+        .text-input {
+            width: 100%; padding: 20px; font-size: 1.5rem; font-weight: bold;
+            font-family: var(--font-cuerpo); border: 2px solid #ccc; border-radius: 8px;
+            transition: 0.3s; text-align: center; color: #333;
+        }
+        .text-input:focus { outline: none; border-color: var(--naranja-vibrante); box-shadow: 0 0 10px rgba(245, 110, 30, 0.2); }
+
+        /* Results Screen */
+        .transcript-container { padding: 30px; background: white; }
+        .transcript-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--naranja-vibrante); padding-bottom: 15px; }
+        
+        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .comparison-card {
+            border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px;
+            background: #f8fafc; break-inside: avoid; page-break-inside: avoid;
+        }
+        .t-es { font-size: 1.1rem; font-weight: bold; color: var(--azul-primario); margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .t-correct { color: var(--verde-exito); font-weight: bold; margin-bottom: 5px; }
+        .t-user { color: var(--naranja-vibrante); font-weight: bold; }
+
+        /* Footer */
+        .footer { background: var(--azul-primario); color: white; text-align: center; padding: 15px; margin-top: auto; font-size: 0.9rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Business Vocabulary Translation</h1>
+        <p>Fielding School - 40 Core Industry Terms</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen" class="active login-box">
+            <h2>Welcome to the Translation Drill</h2>
+            <p style="margin-bottom: 30px; color: #555;">Enter your name to translate 40 essential business and supply chain terms.</p>
+            <input type="text" id="studentName" class="login-input" placeholder="Your Name" autocomplete="off">
+            <br>
+            <button class="btn" id="startBtn" onclick="startPractice()">Start Drill</button>
+        </div>
+
+        <!-- PRACTICE SCREEN -->
+        <div id="practice-screen">
+            <div class="progress-bar">Term <span id="qCurrent">1</span> of 40</div>
+            
+            <div class="prompt-section">
+                <div class="instruction-text">Translate into English:</div>
+                <div class="vocab-box" id="vocabBox">Loading...</div>
+                
+                <button class="btn-hint" onclick="showHint()" id="hintBtn">💡 Need a hint?</button>
+                <div class="hint-box" id="hintBox"></div>
+            </div>
+
+            <div class="input-section">
+                <input type="text" id="answerInput" class="text-input" placeholder="English translation..." oninput="checkInput()" autocomplete="off">
+            </div>
+
+            <div style="text-align: right;">
+                <button class="btn" id="nextBtn" onclick="submitAnswer()" disabled>Next Term ➔</button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: var(--verde-exito); font-family: var(--font-titulares);">Drill Completed!</h2>
+                <p style="font-size: 1.1rem; color: #555;">Review your terms below and download your Official PDF Report.</p>
+                <button class="btn" onclick="downloadPDF()">Download PDF Report</button>
+            </div>
+            
+            <!-- Hidden area for PDF generation -->
+            <div style="border: 2px solid #e2e8f0; border-radius: 8px; max-height: 500px; overflow-y: auto; background: #fff; padding: 10px;">
+                <div id="pdf-content" class="transcript-container">
+                    <div class="transcript-header">
+                        <h2>Business Vocabulary Translation Report</h2>
+                        <p><strong>Student Name:</strong> <span id="pdfStudentName"></span></p>
+                        <p><strong>Date:</strong> <span id="pdfDate"></span></p>
+                        <p><strong>Total Terms:</strong> 40</p>
+                    </div>
+                    <div class="comparison-grid" id="transcriptBody"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        © 2026 Teacher Ivan HUB | Fielding School Translation Tool
+    </footer>
+
+    <script>
+        const vocabData = [{"es": "Cantidad M\u00ednima de Pedido", "en": "Minimum Order Quantity", "hint": "Often abbreviated as MOQ."}, {"es": "Factura Proforma", "en": "Proforma Invoice", "hint": "A preliminary bill of sale sent to buyers."}, {"es": "Tiempo de entrega", "en": "Lead time", "hint": "The time between placing an order and delivery."}, {"es": "Costos de env\u00edo", "en": "Shipping costs", "hint": "Money paid to transport goods."}, {"es": "Aduana", "en": "Customs", "hint": "The official department that regulates imports/exports."}, {"es": "Cotizaci\u00f3n", "en": "Quote", "hint": "Also known as a quotation."}, {"es": "Proveedor", "en": "Supplier", "hint": "A company that provides the goods you want to buy."}, {"es": "Descuento por volumen", "en": "Volume discount", "hint": "A price reduction for buying in large quantities."}, {"es": "Al por mayor", "en": "Wholesale", "hint": "Selling goods in large quantities at lower prices."}, {"es": "Al por menor", "en": "Retail", "hint": "Selling goods directly to the final consumer."}, {"es": "Almac\u00e9n", "en": "Warehouse", "hint": "A large building for storing goods."}, {"es": "Cadena de suministro", "en": "Supply chain", "hint": "The sequence of processes involved in the production and distribution of a commodity."}, {"es": "Muestra gratis", "en": "Free sample", "hint": "A small amount of a product given at no cost."}, {"es": "Cat\u00e1logo de productos", "en": "Product catalog", "hint": "A booklet or digital file showing everything a company sells."}, {"es": "Margen de beneficio", "en": "Profit margin", "hint": "The amount by which revenue from sales exceeds costs in a business."}, {"es": "Transferencia bancaria", "en": "Bank transfer", "hint": "Also known as a wire transfer or T/T."}, {"es": "Pago por adelantado", "en": "Advance payment", "hint": "Paying a portion of the total cost before production begins."}, {"es": "Saldo pendiente", "en": "Remaining balance", "hint": "The amount of money still owed after a deposit."}, {"es": "Garant\u00eda", "en": "Warranty", "hint": "A written guarantee to repair or replace a defective product."}, {"es": "Reembolso", "en": "Refund", "hint": "A repayment of a sum of money."}, {"es": "Piezas de repuesto", "en": "Spare parts", "hint": "Extra components kept for replacing broken parts."}, {"es": "Flete mar\u00edtimo", "en": "Sea freight", "hint": "Transporting goods by ocean vessels."}, {"es": "Flete a\u00e9reo", "en": "Air freight", "hint": "Transporting goods by airplane."}, {"es": "Impuestos de importaci\u00f3n", "en": "Import duties", "hint": "Taxes collected on imports by customs authorities."}, {"es": "Despacho de aduanas", "en": "Customs clearance", "hint": "The process of passing goods through customs."}, {"es": "Puerto de carga", "en": "Port of loading", "hint": "The port where the cargo is placed onto the ship."}, {"es": "Puerto de destino", "en": "Port of destination", "hint": "The port where the cargo is unloaded."}, {"es": "Certificado de Origen", "en": "Certificate of Origin", "hint": "A document declaring in which country a commodity was manufactured."}, {"es": "Lista de empaque", "en": "Packing list", "hint": "A document itemizing the contents of each package."}, {"es": "Conocimiento de embarque", "en": "Bill of Lading", "hint": "A detailed list of a ship's cargo (often abbreviated as B/L)."}, {"es": "Control de calidad", "en": "Quality control", "hint": "Maintaining standards in manufactured products by testing a sample."}, {"es": "Productos defectuosos", "en": "Defective products", "hint": "Items that have flaws or do not function properly."}, {"es": "Embalaje personalizado", "en": "Custom packaging", "hint": "Boxes or wrapping designed specifically for your brand."}, {"es": "Negociaci\u00f3n de precios", "en": "Price negotiation", "hint": "Discussing the cost to reach a mutual agreement."}, {"es": "Mercado objetivo", "en": "Target market", "hint": "A particular group of consumers at which a product or service is aimed."}, {"es": "Ventaja competitiva", "en": "Competitive advantage", "hint": "A condition that puts a company in a favorable or superior business position."}, {"es": "Empresa conjunta", "en": "Joint venture", "hint": "A commercial enterprise undertaken jointly by two or more parties."}, {"es": "Marca comercial", "en": "Trademark", "hint": "A symbol, word, or words legally registered representing a company or product."}, {"es": "Acuerdo de confidencialidad", "en": "Non-disclosure agreement", "hint": "A legal contract preventing the sharing of sensitive information (NDA)."}, {"es": "Reuni\u00f3n de negocios", "en": "Business meeting", "hint": "A gathering of two or more people to discuss company matters."}];
+        
+        let currentQIndex = 0;
+        let studentName = "";
+        let studentAnswers = []; 
+
+        const loginScreen = document.getElementById('login-screen');
+        const practiceScreen = document.getElementById('practice-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const studentNameInput = document.getElementById('studentName');
+        const nextBtn = document.getElementById('nextBtn');
+        const answerInput = document.getElementById('answerInput');
+        const hintBox = document.getElementById('hintBox');
+        const hintBtn = document.getElementById('hintBtn');
+
+        studentNameInput.addEventListener("keypress", function(e) {
+            if(e.key === "Enter") startPractice();
+        });
+
+        function startPractice() {
+            const name = studentNameInput.value.trim();
+            if(name === "") {
+                alert("Please enter your name to start.");
+                return;
+            }
+            studentName = name;
+            loginScreen.classList.remove('active');
+            practiceScreen.classList.add('active');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const item = vocabData[currentQIndex];
+            
+            document.getElementById('qCurrent').textContent = currentQIndex + 1;
+            document.getElementById('vocabBox').textContent = item.es;
+            
+            hintBox.textContent = "Hint: " + item.hint;
+            hintBox.style.display = 'none';
+            hintBtn.style.display = 'inline-flex';
+
+            answerInput.value = '';
+            nextBtn.disabled = true;
+            answerInput.focus();
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+            answerInput.focus();
+        }
+
+        function checkInput() {
+            nextBtn.disabled = answerInput.value.trim() === "";
+        }
+
+        // Allow Enter key to submit
+        answerInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                if(!nextBtn.disabled) submitAnswer();
+            }
+        });
+
+        function submitAnswer() {
+            const item = vocabData[currentQIndex];
+            const finalAnswer = answerInput.value.trim();
+
+            studentAnswers.push({
+                es: item.es,
+                en: item.en,
+                userTranslation: finalAnswer
+            });
+
+            currentQIndex++;
+            if (currentQIndex < vocabData.length) {
+                loadQuestion();
+            } else {
+                finishPractice();
+            }
+        }
+
+        function finishPractice() {
+            practiceScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            document.getElementById('pdfStudentName').textContent = studentName;
+            document.getElementById('pdfDate').textContent = new Date().toLocaleDateString();
+
+            const tbody = document.getElementById('transcriptBody');
+
+            studentAnswers.forEach((item, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'comparison-card';
+                
+                cardDiv.innerHTML = `
+                    <div class="t-es">#${index + 1}: ${item.es}</div>
+                    <div class="t-correct">Correct Term: <span style="font-weight:normal; color:#333;">${item.en}</span></div>
+                    <div class="t-user">Your Translation: <span style="font-weight:normal; color:#333;">${item.userTranslation}</span></div>
+                `;
+                
+                tbody.appendChild(cardDiv);
+            });
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin:       [10, 10, 15, 10],
+                filename:     `${studentName.replace(/\s+/g, '_')}_Vocab_Translation_Report.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
