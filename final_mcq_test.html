@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Evaluation Test - Teacher Ivan HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --azul-primario: #0A468C; 
+            --naranja-vibrante: #F56E1E; 
+            --azul-claro: #96C8E6; 
+            --gris-bg: #f8fafc; 
+            --blanco-puro: #FFFFFF;
+            --verde-exito: #4CAF50;
+            --rojo-alerta: #D32F2F;
+            --font-titulares: 'Montserrat', sans-serif; 
+            --font-cuerpo: 'Open Sans', sans-serif; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; font-family: var(--font-cuerpo);
+            background-color: var(--gris-bg); color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(10, 70, 140, 0.95), rgba(10, 70, 140, 1));
+            color: var(--blanco-puro); padding: 20px; text-align: center;
+            border-bottom: 5px solid var(--naranja-vibrante);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0; font-family: var(--font-titulares); text-transform: uppercase; font-size: 1.8rem;}
+        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 1rem;}
+
+        /* Main Container */
+        .container {
+            flex: 1; max-width: 800px; margin: 40px auto; width: 95%;
+            background: var(--blanco-puro); border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 40px;
+        }
+
+        /* Screens */
+        #login-screen, #test-screen, #result-screen { display: none; }
+        #login-screen.active, #test-screen.active, #result-screen.active { display: block; animation: fadeIn 0.4s; }
+
+        /* Login */
+        .login-box { text-align: center; }
+        .login-box h2 { color: var(--azul-primario); font-family: var(--font-titulares); margin-bottom: 20px; }
+        .login-input {
+            font-size: 1.2rem; padding: 15px; width: 80%; max-width: 400px;
+            border: 2px solid #ccc; border-radius: 8px; text-align: center;
+            font-family: var(--font-cuerpo); margin-bottom: 20px; transition: 0.3s;
+        }
+        .login-input:focus { outline: none; border-color: var(--naranja-vibrante); }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer;
+            font-family: var(--font-titulares); font-size: 1.1rem; font-weight: bold;
+            transition: 0.3s; color: white; background: var(--naranja-vibrante);
+            text-transform: uppercase; display: inline-block;
+        }
+        .btn:hover { background: #e05e15; transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+        /* Test Screen */
+        .progress-container {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px;
+        }
+        .progress-text { font-weight: bold; color: var(--naranja-vibrante); font-size: 1.2rem; }
+        .progress-bar-bg { width: 150px; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--verde-exito); width: 0%; transition: 0.3s; }
+
+        .question-box {
+            font-size: 1.5rem; font-weight: 700; color: var(--azul-primario);
+            margin-bottom: 30px; line-height: 1.4;
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        
+        .option-label {
+            display: flex; align-items: center; padding: 15px 20px; border: 2px solid #cbd5e1;
+            border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; color: #333;
+            font-size: 1.1rem; background: #f8fafc;
+        }
+        .option-label:hover { border-color: var(--azul-claro); background: #f0f7fa; }
+        .option-label.selected { border-color: var(--naranja-vibrante); background: #fff5f0; }
+        .option-label input[type="radio"] { display: none; }
+
+        /* Results Screen */
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%; border: 8px solid var(--verde-exito);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 3rem; font-weight: 800; color: var(--azul-primario);
+            margin: 0 auto 20px auto; font-family: var(--font-titulares);
+        }
+        
+        .transcript-container { padding: 30px; background: white; text-align: left; }
+        .transcript-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid var(--naranja-vibrante); padding-bottom: 15px; }
+        
+        .review-list { display: flex; flex-direction: column; gap: 15px; }
+        .review-card {
+            border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px;
+            background: #f8fafc; break-inside: avoid; page-break-inside: avoid;
+        }
+        .r-question { font-weight: bold; color: var(--azul-primario); margin-bottom: 10px; font-size: 1.1rem; }
+        .r-correct { color: var(--verde-exito); font-weight: bold; margin-bottom: 5px; }
+        .r-wrong { color: var(--rojo-alerta); font-weight: bold; margin-bottom: 5px; text-decoration: line-through; }
+
+        /* Footer */
+        .footer { background: var(--azul-primario); color: white; text-align: center; padding: 15px; margin-top: auto; font-size: 0.9rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Final Evaluation Test</h1>
+        <p>Fielding School - Business & Travel English Mastery</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen" class="active login-box">
+            <h2>Welcome to your Final Test</h2>
+            <p style="margin-bottom: 30px; color: #555;">This test consists of 40 multiple-choice questions covering all modules. Enter your name to begin.</p>
+            <input type="text" id="studentName" class="login-input" placeholder="Your Full Name" autocomplete="off">
+            <br>
+            <button class="btn" id="startBtn" onclick="startTest()">Begin Test</button>
+        </div>
+
+        <!-- TEST SCREEN -->
+        <div id="test-screen">
+            <div class="progress-container">
+                <div class="progress-text">Question <span id="qCurrent">1</span> of 40</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="question-box" id="questionText">Loading question...</div>
+            
+            <div class="options-grid" id="optionsGroup">
+                <!-- Options injected via JS -->
+            </div>
+
+            <div style="text-align: right;">
+                <button class="btn" id="nextBtn" onclick="submitAnswer()" disabled>Next ➔</button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: var(--azul-primario); font-family: var(--font-titulares);">Test Completed!</h2>
+                <div class="score-circle" id="scoreCircle">100%</div>
+                <p style="font-size: 1.2rem; color: #555;" id="scoreMessage">Great job!</p>
+                <button class="btn" onclick="downloadPDF()" style="margin-top: 15px;">Download Certificate & Report</button>
+            </div>
+            
+            <!-- Hidden area for PDF generation -->
+            <div style="border: 2px solid #e2e8f0; border-radius: 8px; max-height: 400px; overflow-y: auto; background: #fff; padding: 10px;">
+                <div id="pdf-content" class="transcript-container">
+                    <div class="transcript-header">
+                        <h2>Final Test Report</h2>
+                        <p><strong>Student:</strong> <span id="pdfStudentName"></span></p>
+                        <p><strong>Date:</strong> <span id="pdfDate"></span></p>
+                        <p><strong>Final Score:</strong> <span id="pdfScore"></span></p>
+                    </div>
+                    <div class="review-list" id="transcriptBody"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        © 2026 Teacher Ivan HUB | Fielding School Evaluation Tool
+    </footer>
+
+    <script>
+        const testData = [{"q": "What does the acronym 'MOQ' stand for in manufacturing?", "options": ["Maximum Order Quality", "Minimum Order Quantity", "Multiple Output Quota", "Minimum Order Quality"], "answer": 1}, {"q": "If a supplier says 'We will quote FOB Guangzhou', what does FOB mean?", "options": ["Free On Board", "Freight On Board", "Forwarding Order Bill", "Fee Of Business"], "answer": 0}, {"q": "What is the correct term for the time between placing an order and receiving it?", "options": ["Wait time", "Lead time", "Make time", "Process time"], "answer": 1}, {"q": "Before paying the final balance, the buyer usually asks for a preliminary bill called a:", "options": ["Provisional Bill", "Proforma Invoice", "Preliminary Receipt", "Pre-Invoice"], "answer": 1}, {"q": "If you buy goods in very large quantities to get a lower price, you are buying in:", "options": ["Bulk", "Mass", "Pile", "Group"], "answer": 0}, {"q": "What do we call the initial partial payment made before production begins?", "options": ["Deposit", "Balance", "Refund", "Discount"], "answer": 0}, {"q": "The remaining amount of money owed after the deposit is called the:", "options": ["Rest", "Debt", "Balance", "Leftover"], "answer": 2}, {"q": "If a product is broken or has flaws from the factory, it is:", "options": ["Defected", "Defective", "Default", "Defended"], "answer": 1}, {"q": "What is the standard method of international bank transfer used in China?", "options": ["T/T (Telegraphic Transfer)", "PayPal", "Western Union", "Cash on Delivery"], "answer": 0}, {"q": "A written promise from the factory to repair or replace defective parts is a:", "options": ["Warranty", "Receipt", "Permit", "Certificate"], "answer": 0}, {"q": "When you arrive at the airport, you must first go to the ________ desk to get your boarding pass.", "options": ["Check-out", "Check-in", "Security", "Customs"], "answer": 1}, {"q": "Luggage that you bring inside the airplane cabin with you is called:", "options": ["Checked bag", "Carry-on bag", "Cargo bag", "Drop-off bag"], "answer": 1}, {"q": "The official document you must show to enter a foreign country is a:", "options": ["Driver's License", "ID Card", "Passport", "Birth Certificate"], "answer": 2}, {"q": "After the plane lands, where do you go to pick up your suitcases?", "options": ["Baggage claim", "Security checkpoint", "Departure lounge", "Duty-free shop"], "answer": 0}, {"q": "If you are bringing commercial goods into the country, you must ________ them at Customs.", "options": ["Announce", "Say", "Declare", "Claim"], "answer": 2}, {"q": "A flight that has a stop in another city before the final destination has a:", "options": ["Layover", "Hangover", "Stop-out", "Wait-in"], "answer": 0}, {"q": "The area where you wait to board the airplane is called the:", "options": ["Door", "Gate", "Port", "Entrance"], "answer": 1}, {"q": "If your flight is running late, the status board will say:", "options": ["Canceled", "Delayed", "Missed", "Postponed"], "answer": 1}, {"q": "What do you call the seat next to the walkway on an airplane?", "options": ["Window seat", "Middle seat", "Aisle seat", "Front seat"], "answer": 2}, {"q": "The officers who check your passport and visa upon arrival work at:", "options": ["Immigration", "Security", "Ticketing", "Information"], "answer": 0}, {"q": "When you leave the hotel and pay your final bill, you are doing a:", "options": ["Check-in", "Check-out", "Sign-off", "Log-out"], "answer": 1}, {"q": "If you need the hotel staff to call your room at 6:00 AM, you ask for a:", "options": ["Wake-up call", "Morning ring", "Alarm call", "Get-up call"], "answer": 0}, {"q": "A small plastic card used to open your hotel room is called a:", "options": ["Keycard", "Passcard", "Unlocker", "Room key"], "answer": 0}, {"q": "When you get into a taxi, you should ask the driver to turn on the:", "options": ["Clock", "Meter", "Calculator", "Machine"], "answer": 1}, {"q": "A ticket that allows you to travel to a destination and back is a:", "options": ["One-way ticket", "Double ticket", "Round-trip ticket", "Return-only ticket"], "answer": 2}, {"q": "The underground train system in a city is usually called the:", "options": ["Subway", "Highway", "Pathway", "Skyway"], "answer": 0}, {"q": "The busy time of day when traffic is heaviest is known as:", "options": ["Busy hour", "Rush hour", "Traffic hour", "Slow hour"], "answer": 1}, {"q": "To change from one subway line to another, you must:", "options": ["Transfer", "Translate", "Transport", "Transmit"], "answer": 0}, {"q": "The money you pay for a ticket on public transport is called the:", "options": ["Fee", "Fare", "Cost", "Price"], "answer": 1}, {"q": "Where do you stand to wait for a train at the station?", "options": ["The platform", "The stage", "The deck", "The floor"], "answer": 0}, {"q": "If you cannot eat certain foods because they make you sick, you have an:", "options": ["Intolerance", "Allergy", "Illness", "Aversion"], "answer": 1}, {"q": "What is the traditional utensil used for eating in China?", "options": ["Forks", "Chopsticks", "Spoons", "Tongs"], "answer": 1}, {"q": "When you finish eating at a restaurant, what do you ask the waiter for?", "options": ["The paper", "The recipe", "The bill", "The invoice"], "answer": 2}, {"q": "Food that has a lot of chili or pepper is described as:", "options": ["Salty", "Sweet", "Sour", "Spicy"], "answer": 3}, {"q": "The extreme tiredness you feel after flying across different time zones is called:", "options": ["Flight fatigue", "Jet-lag", "Time-sickness", "Air-lag"], "answer": 1}, {"q": "A person you work with is your:", "options": ["Colleague", "Relative", "Acquaintance", "Sibling"], "answer": 0}, {"q": "When introducing yourself to a new Chinese supplier, you should hand them your:", "options": ["Credit card", "Business card", "ID card", "Postcard"], "answer": 1}, {"q": "What is the name of the popular messaging app used for business in China?", "options": ["WhatsApp", "WeChat", "Line", "Telegram"], "answer": 1}, {"q": "If a supplier says 'Keep the change', what does 'change' refer to?", "options": ["The product modifications", "The extra coins/money returned after paying", "The location of the meeting", "The business strategy"], "answer": 1}, {"q": "Which phrase is the most professional way to end a business meeting?", "options": ["See you later, bye.", "I want to do business.", "We look forward to doing business with you.", "Thanks for the stuff."], "answer": 2}];
+        
+        let currentQIndex = 0;
+        let studentName = "";
+        let studentAnswers = []; 
+        let correctCount = 0;
+
+        const loginScreen = document.getElementById('login-screen');
+        const testScreen = document.getElementById('test-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const studentNameInput = document.getElementById('studentName');
+        const nextBtn = document.getElementById('nextBtn');
+        const optionsGroup = document.getElementById('optionsGroup');
+
+        studentNameInput.addEventListener("keypress", function(e) {
+            if(e.key === "Enter") startTest();
+        });
+
+        function startTest() {
+            const name = studentNameInput.value.trim();
+            if(name === "") {
+                alert("Please enter your name to start the test.");
+                return;
+            }
+            studentName = name;
+            loginScreen.classList.remove('active');
+            testScreen.classList.add('active');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = testData[currentQIndex];
+            
+            document.getElementById('qCurrent').textContent = currentQIndex + 1;
+            document.getElementById('progressBar').style.width = `${((currentQIndex) / testData.length) * 100}%`;
+            
+            document.getElementById('questionText').textContent = `${currentQIndex + 1}. ${q.q}`;
+            
+            optionsGroup.innerHTML = '';
+            nextBtn.disabled = true;
+
+            q.options.forEach((opt, index) => {
+                const label = document.createElement('label');
+                label.className = 'option-label';
+                label.innerHTML = `<input type="radio" name="testOption" value="${index}"> ${opt}`;
+                
+                label.onclick = function() {
+                    document.querySelectorAll('.option-label').forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                    nextBtn.disabled = false;
+                };
+                
+                optionsGroup.appendChild(label);
+            });
+        }
+
+        function submitAnswer() {
+            const selectedInput = document.querySelector('input[name="testOption"]:checked');
+            if(!selectedInput) return;
+
+            const selectedIndex = parseInt(selectedInput.value);
+            const q = testData[currentQIndex];
+            const isCorrect = (selectedIndex === q.answer);
+
+            if(isCorrect) correctCount++;
+
+            studentAnswers.push({
+                question: q.q,
+                userAnswer: q.options[selectedIndex],
+                correctAnswer: q.options[q.answer],
+                isCorrect: isCorrect
+            });
+
+            currentQIndex++;
+            if (currentQIndex < testData.length) {
+                loadQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function finishTest() {
+            testScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            const scorePercentage = Math.round((correctCount / testData.length) * 100);
+            
+            document.getElementById('scoreCircle').textContent = scorePercentage + "%";
+            
+            const scoreMsg = document.getElementById('scoreMessage');
+            if(scorePercentage >= 90) scoreMsg.textContent = "Outstanding! You have mastered the material.";
+            else if(scorePercentage >= 70) scoreMsg.textContent = "Great job! You are ready for your trip.";
+            else scoreMsg.textContent = "Good effort, but you should review some vocabulary before you travel.";
+
+            // Set PDF Details
+            document.getElementById('pdfStudentName').textContent = studentName;
+            document.getElementById('pdfDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('pdfScore').textContent = `${correctCount} / ${testData.length} (${scorePercentage}%)`;
+
+            const tbody = document.getElementById('transcriptBody');
+
+            studentAnswers.forEach((item, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'review-card';
+                
+                let answerHtml = '';
+                if(item.isCorrect) {
+                    answerHtml = `<div class="r-correct">✔️ You answered: ${item.userAnswer}</div>`;
+                } else {
+                    answerHtml = `
+                        <div class="r-wrong">❌ You answered: ${item.userAnswer}</div>
+                        <div class="r-correct">Correct Answer: ${item.correctAnswer}</div>
+                    `;
+                }
+
+                cardDiv.innerHTML = `
+                    <div class="r-question">${index + 1}. ${item.question}</div>
+                    ${answerHtml}
+                `;
+                
+                tbody.appendChild(cardDiv);
+            });
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin:       [10, 10, 15, 10],
+                filename:     `${studentName.replace(/\s+/g, '_')}_Final_Test_Report.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
